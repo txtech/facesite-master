@@ -1,0 +1,144 @@
+<% layout('/layouts/default.html', {title: '商品分类管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa icon-notebook"></i> ${text('商品分类管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('product:tbProductCat:edit')){ %>
+					<a href="${ctx}/product/tbProductCat/form" class="btn btn-default btnTool" title="${text('新增商品分类')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+				<a href="#" class="btn btn-default" id="btnSetting" title="${text('设置')}"><i class="fa fa-navicon"></i></a>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${tbProductCat}" action="${ctx}/product/tbProductCat/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('分类上级ID')}：</label>
+					<div class="control-inline">
+						<#form:input path="parentId" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('分类名称')}：</label>
+					<div class="control-inline">
+						<#form:input path="name" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('英文名称')}：</label>
+					<div class="control-inline">
+						<#form:input path="enName" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('分类状态 1启用 0禁用')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control isQuick"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('排列序号')}：</label>
+					<div class="control-inline">
+						<#form:input path="sortOrder" maxlength="4" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('是否父类 1')}：</label>
+					<div class="control-inline">
+						<#form:input path="isParent" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('图标')}：</label>
+					<div class="control-inline">
+						<#form:input path="icon" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('备注')}：</label>
+					<div class="control-inline">
+						<#form:input path="remark" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('创建时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('更新时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('备注信息')}：</label>
+					<div class="control-inline">
+						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('删除标志')}：</label>
+					<div class="control-inline">
+						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("分类上级ID")}', name:'parentId', index:'a.parent_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/product/tbProductCat/form?id='+row.id+'" class="btnList" data-title="${text("编辑商品分类")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("分类名称")}', name:'name', index:'a.name', width:150, align:"left"},
+		{header:'${text("英文名称")}', name:'enName', index:'a.en_name', width:150, align:"left"},
+		{header:'${text("分类状态 1启用 0禁用")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
+		}},
+		{header:'${text("排列序号")}', name:'sortOrder', index:'a.sort_order', width:150, align:"center"},
+		{header:'${text("是否父类 1")}', name:'isParent', index:'a.is_parent', width:150, align:"center"},
+		{header:'${text("图标")}', name:'icon', index:'a.icon', width:150, align:"left"},
+		{header:'${text("备注")}', name:'remark', index:'a.remark', width:150, align:"left"},
+		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
+		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('product:tbProductCat:edit')){ %>
+				actions.push('<a href="${ctx}/product/tbProductCat/form?id='+row.id+'" class="btnList" title="${text("编辑商品分类")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				if (row.status == Global.STATUS_NORMAL){
+					actions.push('<a href="${ctx}/product/tbProductCat/disable?id='+row.id+'" class="btnList" title="${text("停用商品分类")}" data-confirm="${text("确认要停用该商品分类吗？")}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
+				} else if (row.status == Global.STATUS_DISABLE){
+					actions.push('<a href="${ctx}/product/tbProductCat/enable?id='+row.id+'" class="btnList" title="${text("启用商品分类")}" data-confirm="${text("确认要启用该商品分类吗？")}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
+				}
+				actions.push('<a href="${ctx}/product/tbProductCat/delete?id='+row.id+'" class="btnList" title="${text("删除商品分类")}" data-confirm="${text("确认要删除该商品分类吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>
