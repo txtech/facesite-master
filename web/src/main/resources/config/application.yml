@@ -494,7 +494,7 @@ shiro:
 # MyBatis 相关
 mybatis:
   # @MyBatisDao、Aliases 扫描基础包，如果多个，用“,”分隔
-  scanBasePackage: com.jeesite.modules,com.facesite.modules
+  scanBasePackage: com.jeesite.modules,com.facesite.modules.mall,com.facesite.modules.game
 
 #  # TypeHandlers 扫描基础包，如果多个，用“,”分隔
 #  scanTypeHandlersPackage: ~
