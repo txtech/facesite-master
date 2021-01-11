@@ -9,19 +9,18 @@
 		<version>2.3.4.RELEASE</version>
 	</parent>
 
+	<name>JeeSite</name>
 	<groupId>com.jeesite</groupId>
 	<artifactId>jeesite-root</artifactId>
 	<version>4.2.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>JeeSite</name>
-	<url>http://jeesite.com</url>
-	<inceptionYear>2013-Now</inceptionYear>
 
 	<modules>
         <module>common</module>
         <module>modules/core</module>
 		<module>modules/mall</module>
+		<module>modules/game</module>
         <module>web</module>
     </modules>
 

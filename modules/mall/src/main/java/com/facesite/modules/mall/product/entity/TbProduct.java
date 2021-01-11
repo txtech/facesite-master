@@ -1,12 +1,11 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.facesite.modules.product.entity;
+package com.facesite.modules.mall.product.entity;
 
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
-import com.jeesite.common.mybatis.annotation.JoinTable;
-import com.jeesite.common.mybatis.annotation.JoinTable.Type;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.jeesite.common.entity.DataEntity;
@@ -40,7 +39,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class TbProduct extends DataEntity<TbProduct> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String title;		// 商品标题
 	private String sellPoint;		// 英文标题
@@ -54,7 +53,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	private String delFlag;		// 删除标志
 	private String enTitle;		// 商品名称(英文)
 	private String enSellPoint;		// 商品买点(英文)
-	
+
 	public TbProduct() {
 		this(null);
 	}
@@ -62,7 +61,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public TbProduct(String id){
 		super(id);
 	}
-	
+
 	@Length(min=0, max=100, message="商品标题长度不能超过 100 个字符")
 	public String getTitle() {
 		return title;
@@ -71,7 +70,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	@Length(min=0, max=100, message="英文标题长度不能超过 100 个字符")
 	public String getSellPoint() {
 		return sellPoint;
@@ -80,7 +79,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setSellPoint(String sellPoint) {
 		this.sellPoint = sellPoint;
 	}
-	
+
 	public Double getPrice() {
 		return price;
 	}
@@ -88,7 +87,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-	
+
 	public Long getNum() {
 		return num;
 	}
@@ -96,7 +95,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setNum(Long num) {
 		this.num = num;
 	}
-	
+
 	public Long getLimitNum() {
 		return limitNum;
 	}
@@ -104,7 +103,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setLimitNum(Long limitNum) {
 		this.limitNum = limitNum;
 	}
-	
+
 	@Length(min=0, max=2000, message="商品图片长度不能超过 2000 个字符")
 	public String getImage() {
 		return image;
@@ -113,7 +112,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
+
 	public Long getCid() {
 		return cid;
 	}
@@ -121,7 +120,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setCid(Long cid) {
 		this.cid = cid;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -130,7 +129,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -139,7 +138,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -148,7 +147,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
 	@Length(min=0, max=255, message="商品名称长度不能超过 255 个字符")
 	public String getEnTitle() {
 		return enTitle;
@@ -157,7 +156,7 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setEnTitle(String enTitle) {
 		this.enTitle = enTitle;
 	}
-	
+
 	@Length(min=0, max=255, message="商品买点长度不能超过 255 个字符")
 	public String getEnSellPoint() {
 		return enSellPoint;
@@ -166,5 +165,5 @@ public class TbProduct extends DataEntity<TbProduct> {
 	public void setEnSellPoint(String enSellPoint) {
 		this.enSellPoint = enSellPoint;
 	}
-	
+
 }

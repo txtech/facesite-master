@@ -1,12 +1,11 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.facesite.modules.product.entity;
+package com.facesite.modules.mall.product.entity;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import com.jeesite.common.mybatis.annotation.JoinTable;
-import com.jeesite.common.mybatis.annotation.JoinTable.Type;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
@@ -36,7 +35,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class TbProductDesc extends DataEntity<TbProductDesc> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private Long itemId;		// 商品ID
 	private String itemDesc;		// 商品描述
@@ -46,7 +45,7 @@ public class TbProductDesc extends DataEntity<TbProductDesc> {
 	private Long commentCount;		// 产品品论数
 	private Long saleCount;		// 产品销量
 	private Long viewCount;		// 浏览量
-	
+
 	public TbProductDesc() {
 		this(null);
 	}
@@ -54,7 +53,7 @@ public class TbProductDesc extends DataEntity<TbProductDesc> {
 	public TbProductDesc(String id){
 		super(id);
 	}
-	
+
 	@NotNull(message="商品ID不能为空")
 	public Long getItemId() {
 		return itemId;
@@ -63,7 +62,7 @@ public class TbProductDesc extends DataEntity<TbProductDesc> {
 	public void setItemId(Long itemId) {
 		this.itemId = itemId;
 	}
-	
+
 	public String getItemDesc() {
 		return itemDesc;
 	}
@@ -71,7 +70,7 @@ public class TbProductDesc extends DataEntity<TbProductDesc> {
 	public void setItemDesc(String itemDesc) {
 		this.itemDesc = itemDesc;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -80,7 +79,7 @@ public class TbProductDesc extends DataEntity<TbProductDesc> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -89,7 +88,7 @@ public class TbProductDesc extends DataEntity<TbProductDesc> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -98,7 +97,7 @@ public class TbProductDesc extends DataEntity<TbProductDesc> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
 	public Long getCommentCount() {
 		return commentCount;
 	}
@@ -106,7 +105,7 @@ public class TbProductDesc extends DataEntity<TbProductDesc> {
 	public void setCommentCount(Long commentCount) {
 		this.commentCount = commentCount;
 	}
-	
+
 	public Long getSaleCount() {
 		return saleCount;
 	}
@@ -114,7 +113,7 @@ public class TbProductDesc extends DataEntity<TbProductDesc> {
 	public void setSaleCount(Long saleCount) {
 		this.saleCount = saleCount;
 	}
-	
+
 	public Long getViewCount() {
 		return viewCount;
 	}
@@ -122,5 +121,5 @@ public class TbProductDesc extends DataEntity<TbProductDesc> {
 	public void setViewCount(Long viewCount) {
 		this.viewCount = viewCount;
 	}
-	
+
 }

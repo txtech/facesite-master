@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.facesite.modules.product.service;
+package com.facesite.modules.mall.product.service;
 
-import java.util.List;
-
+import com.facesite.modules.mall.product.entity.TbProductCat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
-import com.facesite.modules.product.entity.TbProductCat;
-import com.facesite.modules.product.dao.TbProductCatDao;
+import com.facesite.modules.mall.product.dao.TbProductCatDao;
 import com.jeesite.modules.file.utils.FileUploadUtils;
 
 /**

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.facesite.modules.product.web;
+package com.facesite.modules.mall.product.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,8 +21,8 @@ import com.jeesite.common.entity.Page;
 import com.alibaba.fastjson.JSONValidator;
 import com.jeesite.common.codec.EncodeUtils;
 import com.jeesite.common.web.BaseController;
-import com.facesite.modules.product.entity.TbProductCat;
-import com.facesite.modules.product.service.TbProductCatService;
+import com.facesite.modules.mall.product.entity.TbProductCat;
+import com.facesite.modules.mall.product.service.TbProductCatService;
 
 /**
  * 商品分类Controller

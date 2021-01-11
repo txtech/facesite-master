@@ -1,38 +1,27 @@
-
 #======================================#
-#========== Project settings ==========#
-#======================================#
-
+#Project settings
 # 产品或项目名称、软件开发公司名称
 productName: JeeSite Demo
 companyName: ThinkGem
-
 # 产品版本、版权年份
 productVersion: V4.2
 copyrightYear: 2020
-
 #是否演示模式
 demoMode: false
 
 #======================================#
-#========== Server settings ===========#
-#======================================#
-
+#Server settings
 server:
-
   port: 8980
   servlet:
     context-path: /js
   tomcat:
     uri-encoding: UTF-8
-
   # 将请求协议转换为 https
   schemeHttps: false
 
 #======================================#
-#========== Database sttings ==========#
-#======================================#
-
+#Database sttings
 # 数据库连接
 jdbc:
   type: mysql
@@ -44,7 +33,6 @@ jdbc:
 
 #  # 连接信息加密
 #  encrypt:
-#
 #    # 加密连接用户名
 #    username: false
 #    # 加密连接密码
@@ -124,19 +112,13 @@ jdbc:
 #  tablePrefix: js_
 
 #======================================#
-#========== Spring settings ===========#
-#======================================#
-
+#Spring settings
 spring:
-
-  # 应用程序名称
   application:
     name: jeesite-web
-
   # 环境名称（注意：不可设置为 test 它是单元测试专用的名称）
   profiles:
     active: default
-
   # 打印横幅
   main:
     bannerMode: "off"

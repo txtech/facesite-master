@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.facesite.modules.product.dao;
+package com.facesite.modules.mall.product.dao;
 
+import com.facesite.modules.mall.product.entity.TbProductCat;
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
-import com.facesite.modules.product.entity.TbProductCat;
 
 /**
  * 商品分类DAO接口
@@ -14,5 +14,5 @@ import com.facesite.modules.product.entity.TbProductCat;
  */
 @MyBatisDao
 public interface TbProductCatDao extends CrudDao<TbProductCat> {
-	
+
 }

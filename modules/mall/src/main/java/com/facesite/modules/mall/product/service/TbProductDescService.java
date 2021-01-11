@@ -1,17 +1,15 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.facesite.modules.product.service;
+package com.facesite.modules.mall.product.service;
 
-import java.util.List;
-
+import com.facesite.modules.mall.product.entity.TbProductDesc;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
-import com.facesite.modules.product.entity.TbProductDesc;
-import com.facesite.modules.product.dao.TbProductDescDao;
+import com.facesite.modules.mall.product.dao.TbProductDescDao;
 
 /**
  * 商品描述Service

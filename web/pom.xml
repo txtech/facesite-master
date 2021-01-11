@@ -31,12 +31,19 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 
+		<!--商城模块-->
 		<dependency>
 			<groupId>com.jeesite</groupId>
 			<artifactId>jeesite-module-mall</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 
+		<!--游戏模块-->
+		<dependency>
+			<groupId>com.jeesite</groupId>
+			<artifactId>jeesite-module-game</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 
 		<!-- 在线文档接口 -->
 		<dependency>

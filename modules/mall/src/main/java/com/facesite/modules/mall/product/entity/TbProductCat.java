@@ -1,12 +1,11 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.facesite.modules.product.entity;
+package com.facesite.modules.mall.product.entity;
 
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
-import com.jeesite.common.mybatis.annotation.JoinTable;
-import com.jeesite.common.mybatis.annotation.JoinTable.Type;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.jeesite.common.entity.DataEntity;
@@ -38,7 +37,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class TbProductCat extends DataEntity<TbProductCat> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private Long parentId;		// 分类上级ID
 	private String name;		// 分类名称
@@ -50,7 +49,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+
 	public TbProductCat() {
 		this(null);
 	}
@@ -58,7 +57,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public TbProductCat(String id){
 		super(id);
 	}
-	
+
 	public Long getParentId() {
 		return parentId;
 	}
@@ -66,7 +65,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public void setParentId(Long parentId) {
 		this.parentId = parentId;
 	}
-	
+
 	@Length(min=0, max=50, message="分类名称长度不能超过 50 个字符")
 	public String getName() {
 		return name;
@@ -75,7 +74,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@Length(min=0, max=255, message="英文名称长度不能超过 255 个字符")
 	public String getEnName() {
 		return enName;
@@ -84,7 +83,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public void setEnName(String enName) {
 		this.enName = enName;
 	}
-	
+
 	public Integer getSortOrder() {
 		return sortOrder;
 	}
@@ -92,7 +91,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public void setSortOrder(Integer sortOrder) {
 		this.sortOrder = sortOrder;
 	}
-	
+
 	public Integer getIsParent() {
 		return isParent;
 	}
@@ -100,7 +99,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public void setIsParent(Integer isParent) {
 		this.isParent = isParent;
 	}
-	
+
 	@Length(min=0, max=255, message="图标长度不能超过 255 个字符")
 	public String getIcon() {
 		return icon;
@@ -109,7 +108,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
-	
+
 	@Length(min=0, max=255, message="备注长度不能超过 255 个字符")
 	public String getRemark() {
 		return remark;
@@ -118,7 +117,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -127,7 +126,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -136,7 +135,7 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -145,5 +144,5 @@ public class TbProductCat extends DataEntity<TbProductCat> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
 }
