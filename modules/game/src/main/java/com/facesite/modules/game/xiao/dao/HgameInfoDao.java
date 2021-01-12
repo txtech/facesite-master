@@ -10,7 +10,7 @@ import com.facesite.modules.game.xiao.entity.HgameInfo;
 /**
  * 游戏信息DAO接口
  * @author nada
- * @version 2021-01-11
+ * @version 2021-01-12
  */
 @MyBatisDao
 public interface HgameInfoDao extends CrudDao<HgameInfo> {

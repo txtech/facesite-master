@@ -25,7 +25,7 @@ import com.facesite.modules.game.xiao.service.HgameUserRefService;
 /**
  * 用户游戏记录Controller
  * @author nada
- * @version 2021-01-11
+ * @version 2021-01-12
  */
 @Controller
 @RequestMapping(value = "${adminPath}/xiao/hgameUserRef")

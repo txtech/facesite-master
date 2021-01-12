@@ -3,7 +3,7 @@
  */
 package com.facesite.modules.game.xiao.entity;
 
-import com.alibaba.fastjson.JSONObject;
+import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import com.jeesite.common.mybatis.annotation.JoinTable;
@@ -18,13 +18,13 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户游戏记录Entity
  * @author nada
- * @version 2021-01-11
+ * @version 2021-01-12
  */
 @Table(name="h_game_user_ref", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
-		@Column(name="game_id", attrName="gameId", label="父ID"),
-		@Column(name="user_id", attrName="userId", label="用户ID"),
-		@Column(name="status", attrName="status", label="游戏状态 1", comment="游戏状态 1:离线 2:在线 3:战局中", isUpdate=false),
+		@Column(name="game_id", attrName="gameId", label="父ID", isUpdate=false),
+		@Column(name="user_id", attrName="userId", label="用户ID", isUpdate=false),
+		@Column(name="status", attrName="status", label="游戏状态 1", comment="游戏状态 1:离线 2:在线 3:战局中"),
 		@Column(name="levels_completed", attrName="levelsCompleted", label="完成等级"),
 		@Column(name="total_score", attrName="totalScore", label="游戏分数"),
 		@Column(name="gole", attrName="gole", label="游戏金币"),
@@ -35,9 +35,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="start_time", attrName="startTime", label="创建时间"),
 		@Column(name="end_time", attrName="endTime", label="更新时间"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
-		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
+		@Column(name="create_by", attrName="createBy", label="创建人", isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
-		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="del_flag", attrName="delFlag", label="删除标志", isQuery=false),
 	}, orderBy="a.id DESC"
 )
 public class HgameUserRef extends DataEntity<HgameUserRef> {
@@ -56,34 +56,15 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	private Date endTime;		// 更新时间
 	private String delFlag;		// 删除标志
 
-	public static HgameUserRef initGameUserRef(Long gameId,Long userId){
-		HgameUserRef userRef = new HgameUserRef();
-		userRef.setGameId(gameId);
-		userRef.setUserId(userId);
-		userRef.setStatus("1");
-		userRef.setLevelsCompleted(0L);
-		userRef.setTotalScore(0L);
-		userRef.setGole(0L);
-		userRef.setBoostersCount("[0,0,0,0,0,0]"); // 骰子:200,定时器:200,闪电:150,丘比特:250,太阳:200
-		userRef.setStarsPerLevel("[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]");
-		return userRef;
-	}
-
 	public HgameUserRef() {
 		this(null);
-	}
-
-	public static HgameUserRef getGameUserRefUserId(Long userId) {
-		HgameUserRef userRef = new HgameUserRef();
-		userRef.setUserId(userId);
-		userRef.setStatus("1");
-		return userRef;
 	}
 
 	public HgameUserRef(String id){
 		super(id);
 	}
 
+	@NotNull(message="父ID不能为空")
 	public Long getGameId() {
 		return gameId;
 	}
@@ -92,6 +73,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 		this.gameId = gameId;
 	}
 
+	@NotNull(message="用户ID不能为空")
 	public Long getUserId() {
 		return userId;
 	}
@@ -186,4 +168,5 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
+
 }

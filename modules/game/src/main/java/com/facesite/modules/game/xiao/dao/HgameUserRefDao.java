@@ -10,7 +10,7 @@ import com.facesite.modules.game.xiao.entity.HgameUserRef;
 /**
  * 用户游戏记录DAO接口
  * @author nada
- * @version 2021-01-11
+ * @version 2021-01-12
  */
 @MyBatisDao
 public interface HgameUserRefDao extends CrudDao<HgameUserRef> {

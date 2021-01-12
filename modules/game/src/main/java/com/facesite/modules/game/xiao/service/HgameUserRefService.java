@@ -16,7 +16,7 @@ import com.facesite.modules.game.xiao.dao.HgameUserRefDao;
 /**
  * 用户游戏记录Service
  * @author nada
- * @version 2021-01-11
+ * @version 2021-01-12
  */
 @Service
 @Transactional(readOnly=true)

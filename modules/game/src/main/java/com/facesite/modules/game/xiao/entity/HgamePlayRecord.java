@@ -3,6 +3,7 @@
  */
 package com.facesite.modules.game.xiao.entity;
 
+import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import com.jeesite.common.mybatis.annotation.JoinTable;
@@ -17,7 +18,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 玩游戏记录Entity
  * @author nada
- * @version 2021-01-11
+ * @version 2021-01-12
  */
 @Table(name="h_game_play_record", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
@@ -39,7 +40,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
-		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="del_flag", attrName="delFlag", label="删除标志", isQuery=false),
 	}, orderBy="a.id DESC"
 )
 public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
@@ -69,6 +70,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 		super(id);
 	}
 	
+	@NotNull(message="父ID不能为空")
 	public Long getGameId() {
 		return gameId;
 	}
@@ -77,6 +79,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 		this.gameId = gameId;
 	}
 	
+	@NotNull(message="用户ID不能为空")
 	public Long getUserId() {
 		return userId;
 	}

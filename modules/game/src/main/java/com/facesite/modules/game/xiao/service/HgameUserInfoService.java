@@ -16,12 +16,12 @@ import com.facesite.modules.game.xiao.dao.HgameUserInfoDao;
 /**
  * 用户信息Service
  * @author nada
- * @version 2021-01-11
+ * @version 2021-01-12
  */
 @Service
 @Transactional(readOnly=true)
 public class HgameUserInfoService extends CrudService<HgameUserInfoDao, HgameUserInfo> {
-
+	
 	/**
 	 * 获取单条数据
 	 * @param hgameUserInfo
@@ -31,17 +31,18 @@ public class HgameUserInfoService extends CrudService<HgameUserInfoDao, HgameUse
 	public HgameUserInfo get(HgameUserInfo hgameUserInfo) {
 		return super.get(hgameUserInfo);
 	}
-
+	
 	/**
 	 * 查询分页数据
 	 * @param hgameUserInfo 查询条件
+	 * @param hgameUserInfo.page 分页对象
 	 * @return
 	 */
 	@Override
 	public Page<HgameUserInfo> findPage(HgameUserInfo hgameUserInfo) {
 		return super.findPage(hgameUserInfo);
 	}
-
+	
 	/**
 	 * 保存数据（插入或更新）
 	 * @param hgameUserInfo
@@ -51,7 +52,7 @@ public class HgameUserInfoService extends CrudService<HgameUserInfoDao, HgameUse
 	public void save(HgameUserInfo hgameUserInfo) {
 		super.save(hgameUserInfo);
 	}
-
+	
 	/**
 	 * 更新状态
 	 * @param hgameUserInfo
@@ -61,7 +62,7 @@ public class HgameUserInfoService extends CrudService<HgameUserInfoDao, HgameUse
 	public void updateStatus(HgameUserInfo hgameUserInfo) {
 		super.updateStatus(hgameUserInfo);
 	}
-
+	
 	/**
 	 * 删除数据
 	 * @param hgameUserInfo
@@ -71,5 +72,5 @@ public class HgameUserInfoService extends CrudService<HgameUserInfoDao, HgameUse
 	public void delete(HgameUserInfo hgameUserInfo) {
 		super.delete(hgameUserInfo);
 	}
-
+	
 }

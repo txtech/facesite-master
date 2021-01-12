@@ -17,12 +17,6 @@
 			<#form:form id="searchForm" model="${hgameUserInfo}" action="${ctx}/xiao/hgameUserInfo/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('父ID')}：</label>
-					<div class="control-inline">
-						<#form:input path="parentId" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('用户状态')}：</label>
 					<div class="control-inline width-120">
 						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control isQuick"/>
@@ -65,18 +59,6 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('登陆token')}：</label>
-					<div class="control-inline">
-						<#form:input path="token" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('用户头像')}：</label>
-					<div class="control-inline">
-						<#form:input path="photo" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('用户性别')}：</label>
 					<div class="control-inline">
 						<#form:input path="sex" maxlength="2" class="form-control width-120"/>
@@ -91,27 +73,11 @@
 				<div class="form-group">
 					<label class="control-label">${text('创建时间')}：</label>
 					<div class="control-inline">
-						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						<#form:input path="created_gte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm" data-done="created_lte.click()"/>
+						&nbsp;-&nbsp;
+						<#form:input path="created_lte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('更新时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('备注信息')}：</label>
-					<div class="control-inline">
-						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('删除标志')}：</label>
-					<div class="control-inline">
-						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -130,11 +96,8 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("父ID")}', name:'parentId', index:'a.parent_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+		{header:'${text("用户状态")}', name:'status', index:'a.status', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/xiao/hgameUserInfo/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户信息")}">'+(val||row.id)+'</a>';
-		}},
-		{header:'${text("用户状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
-			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
 		}},
 		{header:'${text("用户类型")}', name:'type', index:'a.type', width:150, align:"center"},
 		{header:'${text("手机号码")}', name:'mobile', index:'a.mobile', width:150, align:"left"},
@@ -142,14 +105,9 @@ $('#dataGrid').dataGrid({
 		{header:'${text("用户名称")}', name:'username', index:'a.username', width:150, align:"left"},
 		{header:'${text("用户呵豆")}', name:'hbeans', index:'a.hbeans', width:150, align:"center"},
 		{header:'${text("用户乐豆")}', name:'lbeans', index:'a.lbeans', width:150, align:"center"},
-		{header:'${text("登陆token")}', name:'token', index:'a.token', width:150, align:"left"},
-		{header:'${text("用户头像")}', name:'photo', index:'a.photo', width:150, align:"left"},
 		{header:'${text("用户性别")}', name:'sex', index:'a.sex', width:150, align:"left"},
 		{header:'${text("用户年龄")}', name:'age', index:'a.age', width:150, align:"center"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
-		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('xiao:hgameUserInfo:edit')){ %>

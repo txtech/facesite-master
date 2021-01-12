@@ -10,6 +10,7 @@ import com.facesite.modules.game.xiao.dao.HgameUserRefDao;
 import com.facesite.modules.game.xiao.entity.HgameUserInfo;
 import com.facesite.modules.game.xiao.entity.HgameUserRef;
 import com.facesite.modules.game.xiao.utils.BaseGameContact;
+import com.facesite.modules.game.xiao.utils.DbGameContact;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.CrudService;
@@ -48,25 +49,25 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				HgameUserInfo initUserInfo = null;
 				if(!isOk){
 					//初始化游客玩家
-					initUserInfo = HgameUserInfo.initVisitorUserInfo(token);
+					initUserInfo = DbGameContact.initVisitorUserInfo(token);
 				}else{
 					//会员玩家同步信息
 					JSONObject resData = result.getJSONObject("result");
-					HgameUserInfo params = HgameUserInfo.getUserInfoParent(resData.getString("userInfo_ID"));
+					HgameUserInfo params = DbGameContact.getUserInfoParent(resData.getString("userInfo_ID"));
 					HgameUserInfo hgameUserInfo = hgameUserInfoDao.getByEntity(params);
 					if(hgameUserInfo !=null){
 						Long userId = Long.valueOf(hgameUserInfo.getId());
 						HgameUserRef hgameUserRef = this.getGameDb(userId);
-						return HgameUserInfo.getGameUserInfo(hgameUserInfo,hgameUserRef);
+						return DbGameContact.getGameUserInfo(hgameUserInfo,hgameUserRef);
 					}
 					//初始化会员玩家
-					initUserInfo = HgameUserInfo.saveUserInfo(token,resData,HgameUserInfo.TYPE_MEMBER);
+					initUserInfo = DbGameContact.saveUserInfo(token,resData,DbGameContact.TYPE_MEMBER);
 				}
 				HgameUserRef hgameUserRef = this.initGameDb(initUserInfo);
 				if(hgameUserRef == null){
 					return BaseGameContact.failed("init userinfo failed");
 				}
-				return BaseGameContact.success(HgameUserInfo.getGameUserInfo(initUserInfo,hgameUserRef));
+				return BaseGameContact.success(DbGameContact.getGameUserInfo(initUserInfo,hgameUserRef));
 			}
 		} catch (Exception e) {
 			Console.log("获取用户信息异常",e);
@@ -82,12 +83,12 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	@Transactional(readOnly=false)
 	public HgameUserRef getGameDb(Long userId){
 		try {
-			HgameUserRef userRefparams = HgameUserRef.getGameUserRefUserId(userId);
+			HgameUserRef userRefparams = DbGameContact.getGameUserRefUserId(userId);
 			HgameUserRef hgameUserRef = hgameUserRefDao.getByEntity(userRefparams);
 			if(hgameUserRef != null){
 				return hgameUserRef;
 			}
-			hgameUserRef = HgameUserRef.initGameUserRef(1L,userId);
+			hgameUserRef = DbGameContact.initGameUserRef(1L,userId);
 			long db2 = hgameUserRefDao.insert(hgameUserRef);
 			if(!BaseGameContact.isOkDb(db2)){
 				return null;
@@ -112,7 +113,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				return null;
 			}
 			Long userId = Long.valueOf(initUserInfo.getId());
-			HgameUserRef hgameUserRef = HgameUserRef.initGameUserRef(1L,userId);
+			HgameUserRef hgameUserRef = DbGameContact.initGameUserRef(1L,userId);
 			long db2 = hgameUserRefDao.insert(hgameUserRef);
 			if(!BaseGameContact.isOkDb(db2)){
 				return null;

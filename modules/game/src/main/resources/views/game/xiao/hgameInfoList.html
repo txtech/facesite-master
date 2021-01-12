@@ -53,22 +53,12 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('游戏配置')}：</label>
-					<div class="control-inline">
-						<#form:input path="config" maxlength="1024" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('创建时间')}：</label>
 					<div class="control-inline">
-						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('更新时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						<#form:input path="created_gte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm" data-done="created_lte.click()"/>
+						&nbsp;-&nbsp;
+						<#form:input path="created_lte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 					</div>
 				</div>
@@ -76,12 +66,6 @@
 					<label class="control-label">${text('备注信息')}：</label>
 					<div class="control-inline">
 						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('删除标志')}：</label>
-					<div class="control-inline">
-						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -112,9 +96,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text("游戏输了")}', name:'lose', index:'a.lose', width:150, align:"center"},
 		{header:'${text("游戏配置")}', name:'config', index:'a.config', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
-		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('xiao:hgameInfo:edit')){ %>
