@@ -3,6 +3,7 @@
  */
 package com.facesite.modules.game.xiao.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import com.jeesite.common.mybatis.annotation.JoinTable;
@@ -40,7 +41,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class HgameUserRef extends DataEntity<HgameUserRef> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private Long gameId;		// 父ID
 	private Long userId;		// 用户ID
@@ -54,15 +55,39 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	private Date startTime;		// 创建时间
 	private Date endTime;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+
+	public static HgameUserRef saveGameUserRef(JSONObject resData, int type){
+		HgameUserRef userRef = new HgameUserRef();
+		return userRef;
+	}
+
+	public static HgameUserRef initGameUserRef(Long gameId,Long userId){
+		HgameUserRef userRef = new HgameUserRef();
+		userRef.setGameId(gameId);
+		userRef.setUserId(userId);
+		userRef.setStatus("1");
+		userRef.setLevelsCompleted(0L);
+		userRef.setTotalScore(0L);
+		userRef.setGole(0L);
+		userRef.setBoostersCount("[0,0,0,0,0,0]"); // 骰子:200,定时器:200,闪电:150,丘比特:250,太阳:200
+		userRef.setStarsPerLevel("[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]");
+		return userRef;
+	}
+
 	public HgameUserRef() {
 		this(null);
+	}
+
+	public static HgameUserRef getGameUserRefUserId(Long userId) {
+		HgameUserRef userRef = new HgameUserRef();
+		userRef.setUserId(userId);
+		return userRef;
 	}
 
 	public HgameUserRef(String id){
 		super(id);
 	}
-	
+
 	public Long getGameId() {
 		return gameId;
 	}
@@ -70,7 +95,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setGameId(Long gameId) {
 		this.gameId = gameId;
 	}
-	
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -78,7 +103,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-	
+
 	public Long getLevelsCompleted() {
 		return levelsCompleted;
 	}
@@ -86,7 +111,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setLevelsCompleted(Long levelsCompleted) {
 		this.levelsCompleted = levelsCompleted;
 	}
-	
+
 	public Long getTotalScore() {
 		return totalScore;
 	}
@@ -94,7 +119,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setTotalScore(Long totalScore) {
 		this.totalScore = totalScore;
 	}
-	
+
 	public Long getGole() {
 		return gole;
 	}
@@ -102,7 +127,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setGole(Long gole) {
 		this.gole = gole;
 	}
-	
+
 	@Length(min=0, max=255, message="游戏道具长度不能超过 255 个字符")
 	public String getBoostersCount() {
 		return boostersCount;
@@ -111,7 +136,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setBoostersCount(String boostersCount) {
 		this.boostersCount = boostersCount;
 	}
-	
+
 	@Length(min=0, max=255, message="游戏道具长度不能超过 255 个字符")
 	public String getStarsPerLevel() {
 		return starsPerLevel;
@@ -120,7 +145,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setStarsPerLevel(String starsPerLevel) {
 		this.starsPerLevel = starsPerLevel;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -129,7 +154,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -138,7 +163,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getStartTime() {
 		return startTime;
@@ -147,7 +172,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getEndTime() {
 		return endTime;
@@ -156,7 +181,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -165,5 +190,4 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
 }
