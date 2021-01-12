@@ -135,6 +135,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 
 	public static HgameUserInfo getUserInfoParent(String parentId) {
 		HgameUserInfo userInfo = new HgameUserInfo();
+		userInfo.setStatus("1");
 		userInfo.setParentId(parentId);
 		return userInfo;
 	}

@@ -56,11 +56,6 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	private Date endTime;		// 更新时间
 	private String delFlag;		// 删除标志
 
-	public static HgameUserRef saveGameUserRef(JSONObject resData, int type){
-		HgameUserRef userRef = new HgameUserRef();
-		return userRef;
-	}
-
 	public static HgameUserRef initGameUserRef(Long gameId,Long userId){
 		HgameUserRef userRef = new HgameUserRef();
 		userRef.setGameId(gameId);
@@ -81,6 +76,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public static HgameUserRef getGameUserRefUserId(Long userId) {
 		HgameUserRef userRef = new HgameUserRef();
 		userRef.setUserId(userId);
+		userRef.setStatus("1");
 		return userRef;
 	}
 
