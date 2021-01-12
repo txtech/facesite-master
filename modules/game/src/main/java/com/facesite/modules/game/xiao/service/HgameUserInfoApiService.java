@@ -58,7 +58,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					if(hgameUserInfo !=null){
 						Long userId = Long.valueOf(hgameUserInfo.getId());
 						HgameUserRef hgameUserRef = this.getGameDb(userId);
-						return DbGameContact.getGameUserInfo(hgameUserInfo,hgameUserRef);
+						return BaseGameContact.success(DbGameContact.getGameUserInfo(hgameUserInfo,hgameUserRef));
 					}
 					//初始化会员玩家
 					initUserInfo = DbGameContact.saveUserInfo(token,resData,DbGameContact.TYPE_MEMBER);

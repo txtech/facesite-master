@@ -8,6 +8,7 @@ import com.jeesite.common.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @version 2021-01-11
  */
 @Controller
+@CrossOrigin("*")
 @RequestMapping(value = "${frontPath}/xiao/hgameapi")
 public class HgameApiController extends BaseController {
 

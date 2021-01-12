@@ -58,7 +58,7 @@ public class DbGameContact {
         result.put("hbeans",userInfo.getHbeans());
         result.put("levelsCompleted", hgameUserRef.getLevelsCompleted());
         result.put("totalScore",hgameUserRef.getTotalScore());
-        result.put("gole",hgameUserRef.getGole());
+        result.put("gold",hgameUserRef.getGole());
         result.put("boostersCount",hgameUserRef.getBoostersCount());
         result.put("starsPerLevel",hgameUserRef.getStarsPerLevel());
         return result;
@@ -66,7 +66,7 @@ public class DbGameContact {
 
     public static HgameUserInfo getUserInfoParent(String parentId) {
         HgameUserInfo userInfo = new HgameUserInfo();
-        userInfo.setStatus("1");
+        userInfo.setStatus("0");
         userInfo.setParentId(parentId);
         return userInfo;
     }
