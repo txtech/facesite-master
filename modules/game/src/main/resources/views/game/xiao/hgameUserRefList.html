@@ -17,9 +17,9 @@
 			<#form:form id="searchForm" model="${hgameUserRef}" action="${ctx}/xiao/hgameUserRef/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('父ID')}：</label>
+					<label class="control-label">${text('用户名称')}：</label>
 					<div class="control-inline">
-						<#form:input path="gameId" maxlength="20" class="form-control width-120"/>
+						<#form:input path="hgameUserInfo.id" maxlength="20" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -114,11 +114,9 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("父ID")}', name:'gameId', index:'a.game_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/xiao/hgameUserRef/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户游戏记录")}">'+(val||row.id)+'</a>';
-		}},
-		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"center"},
-		{header:'${text("游戏状态 1")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+		{header:'${text("用户名称")}', name:'hgameUserInfo.username', index:'a.user_id', width:150, align:"center"},
+		{header:'${text("游戏名称")}', name:'hgameInfo.name', index:'a.game_id', width:150, align:"center"},
+		{header:'${text("游戏状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
 			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
 		}},
 		{header:'${text("完成等级")}', name:'levelsCompleted', index:'a.levels_completed', width:150, align:"center"},
@@ -128,8 +126,6 @@ $('#dataGrid').dataGrid({
 		{header:'${text("游戏道具")}', name:'starsPerLevel', index:'a.stars_per_level', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("创建时间")}', name:'startTime', index:'a.start_time', width:150, align:"center"},
-		{header:'${text("更新时间")}', name:'endTime', index:'a.end_time', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
@@ -147,7 +143,7 @@ $('#dataGrid').dataGrid({
 	],
 	// 加载成功后执行事件
 	ajaxSuccess: function(data){
-		
+
 	}
 });
 </script>

@@ -1,18 +1,6 @@
 
 ## 技术交流
 
-* 交流 QQ 群（千人大群）：`127515876`、`209330483`、`223507718`、`709534275`、`730390092`、`1373527`、`183903863(外包)`
-* 问题反馈：<https://gitee.com/thinkgem/jeesite4/issues> 　[【新手必读】](https://gitee.com/thinkgem/jeesite4/issues/I18ARR)
-* 码云Gitee：<https://gitee.com/thinkgem/jeesite4>
-* GitHub：<https://github.com/thinkgem/jeesite4>
-* 作者博客：<https://my.oschina.net/thinkgem>
-* **技术服务：**<http://s.jeesite.com>
-* 官方网站：<http://jeesite.com>
-* 官方论坛：<http://jeesite.net>
-* 关注微信公众号，了解最新动态：
-
-![JeeSite4微信公众号](https://images.gitee.com/uploads/images/2020/0727/091951_a3ab258c_6732.jpeg "JeeSite4微信公众号")
-
 ## 平台介绍
 
 JeeSite 快速开发平台，不仅仅是一个后台开发框架，它是一个企业级快速开发解决方案，基于经典技术组合（Spring Boot、Spring MVC、Apache Shiro、MyBatis、Beetl、Bootstrap、AdminLTE）采用经典开发模式，让初学者能够更快的入门并投入到团队开发中去。在线代码生成功能，包括模块如：组织机构、角色用户、菜单及按钮授权、数据权限、系统参数、内容管理、工作流等。采用松耦合设计，模块增减便捷；界面无刷新，一键换肤；众多账号安全设置，密码策略；文件在线预览；消息推送；多元化第三方登录；在线定时任务配置；支持集群，支持SAAS；支持多数据源；支持读写分离、分库分表；支持微服务应用。
@@ -35,8 +23,6 @@ JeeSite 是一个低代码开发平台，具有较高的封装度、扩展性，
 
 发展至今 JeeSite 平台架构已经非常稳定，JeeSite 是一个专业的平台，是一个让你使用放心的平台。
 
-### v4 架构特点、安全方面等等的优势：<http://jeesite.com/docs/feature/>
-
 ## 技术选型
 
 * 主框架：Spring Boot 2.2、Spring Framework 5.2、Apache Shiro 1.6、J2Cache
@@ -44,18 +30,9 @@ JeeSite 是一个低代码开发平台，具有较高的封装度、扩展性，
 * 视图层：Spring MVC 5.2、Beetl 3.1（替换JSP）、Bootstrap 3.3、AdminLTE 2.4
 * 前端组件：jQuery 3.4、jqGrid 4.7、layer 3.1、zTree 3.5、jquery validation
 * 工作流引擎：Flowable 6.5、符合 BPMN 规范、在线流程设计器、中国式工作流
-* 技术选型详情：<http://jeesite.com/docs/technology/>
-
 ## 内置功能
 
-* <http://jeesite.com/docs/function/>
-
 ## 生态系统
-
-* 分布式微服务系统（Spring Cloud）：<https://gitee.com/thinkgem/jeesite4-cloud>
-* JFlow工作流引擎：<https://gitee.com/thinkgem/jeesite4-jflow> ：<http://ccflow.org>
-* Flowable业务流程模块（BPM）：<http://jeesite.com/docs/bpm/>
-* 内容管理模块（CMS）：<https://gitee.com/thinkgem/jeesite4-cms>
 
 ## 快速体验
 
@@ -72,17 +49,10 @@ JeeSite 是一个低代码开发平台，具有较高的封装度、扩展性，
 3. 打开文件：`/web/src/main/resources/config/application.yml` 配置JDBC连接
 4. 执行脚本：`/web/bin/init-data.bat` 初始化数据库
 5. 执行脚本：`/web/bin/run-tomcat.bat` 启动服务即可
-6. 浏览器访问：<http://127.0.0.1:8980/js/>  账号 system 密码 admin
-7. 部署常见问题：<http://jeesite.com/docs/faq/>
 
 ### 开发环境
 
-1. 部署运行文档：<http://jeesite.com/docs/install-deploy/>
-2. 部署常见问题：<http://jeesite.com/docs/faq/>
-
 ## 在线文档
-
-* 在线文档学习地址：<http://docs.jeesite.com>
 
 ## 授权协议声明
 
@@ -108,8 +78,6 @@ JeeSite 是一个低代码开发平台，具有较高的封装度、扩展性，
 尽量不修改 web 项目以外的源码项目，如 jeesite-common、jeesite-modele-core，如果修改了，请 Pull Requests 上来，否则代码与官方不同步，会将对你的日后升级增加难度。
 
 如果您修改了依赖模块代码，也没关系，这时你需要利用 Git 版本控制工具，与官方仓库代码进行同步，合并代码即可。
-
-每个版本升级，我们都会附带详细更新日志：<http://jeesite.com/docs/upgrade/>。
 
 在这里，你可以看到 JeeSite 新增哪些新功能和改进，在每个版本下都有对应升级方法。
 

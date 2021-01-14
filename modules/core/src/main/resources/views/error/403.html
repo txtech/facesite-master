@@ -1,4 +1,4 @@
-<%/* Copyright (c) 2013-Now http://jeesite.com All rights reserved. */
+<%
 @servlet.getResponse().setStatus(403);
 
 var message = @ObjectUtils.toString(@request.getAttribute("message"));
@@ -34,10 +34,6 @@ else {
 		<p>${text('sys.error.403.message.p1')}</p>
 		<button type="button" class="btn btn-warning btn-sm" onclick="history.go(-1);"><i
 			class="fa fa-reply-all"></i> ${text('sys.error.returnButton')}</button>
-	</div>
-	<div class="copyright">
-		&copy; ${@DateUtils.getYear()} ${@Global.getConfig('productName')} - Powered By <a
-			href="http://jeesite.com">JeeSite ${@Global.getProperty('jeesiteVersion')}</a>
 	</div>
 </div>
 <% } %>

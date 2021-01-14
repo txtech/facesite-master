@@ -9,12 +9,12 @@
 		<version>4.2.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jeesite-web</artifactId>
+	<artifactId>jeesite-game</artifactId>
 	<packaging>war</packaging>
-	<name>JeeSite Web</name>
+	<name>JeeSite game</name>
 
 	<properties>
-		<finalName>web</finalName>
+		<finalName>game</finalName>
 		<start-class>com.jeesite.modules.Application</start-class>
 		<!--<eclipse-plugin-download-sources>false</eclipse-plugin-download-sources>
 		<eclipse-plugin-download-javadocs>false</eclipse-plugin-download-javadocs>-->

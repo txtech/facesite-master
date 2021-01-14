@@ -12,6 +12,7 @@
 		<#form:form id="inputForm" model="${hgameUserInfo}" action="${ctx}/xiao/hgameUserInfo/save" method="post" class="form-horizontal">
 			<div class="box-body">
 				<div class="form-unit">${text('基本信息')}</div>
+				<#form:hidden path="id"/>
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -73,15 +74,6 @@
 								<span class="required hide">*</span> ${text('用户乐豆')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="lbeans" maxlength="20" class="form-control digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('登陆token')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="token" maxlength="255" class="form-control"/>
 							</div>
 						</div>
 					</div>

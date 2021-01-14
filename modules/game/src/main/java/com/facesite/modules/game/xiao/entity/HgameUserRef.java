@@ -38,11 +38,22 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志", isQuery=false),
-	}, orderBy="a.id DESC"
+	},
+	joinTable={
+			@JoinTable(type=Type.LEFT_JOIN, entity=HgameInfo.class, alias="g",
+					on="g.id = a.game_id", attrName="hgameInfo",
+					columns={@Column(includeEntity=HgameInfo.class)}),
+			@JoinTable(type=Type.LEFT_JOIN, entity=HgameUserInfo.class, alias="u",
+					on="u.id = a.user_id", attrName="hgameUserInfo",
+					columns={@Column(includeEntity=HgameUserInfo.class)}),
+	},
+	orderBy="a.id DESC"
 )
 public class HgameUserRef extends DataEntity<HgameUserRef> {
 
 	private static final long serialVersionUID = 1L;
+	private HgameInfo hgameInfo;
+	private HgameUserInfo hgameUserInfo;
 	private Long gameId;		// 父ID
 	private Long userId;		// 用户ID
 	private Long levelsCompleted;		// 完成等级
@@ -169,4 +180,20 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 		this.delFlag = delFlag;
 	}
 
+
+	public HgameInfo getHgameInfo() {
+		return hgameInfo;
+	}
+
+	public void setHgameInfo(HgameInfo hgameInfo) {
+		this.hgameInfo = hgameInfo;
+	}
+
+	public HgameUserInfo getHgameUserInfo() {
+		return hgameUserInfo;
+	}
+
+	public void setHgameUserInfo(HgameUserInfo hgameUserInfo) {
+		this.hgameUserInfo = hgameUserInfo;
+	}
 }

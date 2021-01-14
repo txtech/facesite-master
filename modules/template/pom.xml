@@ -22,7 +22,6 @@
 	<packaging>jar</packaging>
 
 	<name>JeeSite Module Template</name>
-	<url>http://jeesite.com</url>
 	<inceptionYear>2013-Now</inceptionYear>
 
 	<properties>

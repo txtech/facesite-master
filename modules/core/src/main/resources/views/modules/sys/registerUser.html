@@ -19,7 +19,7 @@
 			<% if(@Global.isUseCorpModel()){ %>
 			<div class="form-group has-feedback">
 				<#form:treeselect id="reg_corp" title="${text('选择租户')}" allowClear="true"
-					name="corpCode" value="0" labelName="corpName" labelValue="JeeSite" 
+					name="corpCode" value="0" labelName="corpName" labelValue="JeeSite"
 					url="${ctx}/sys/corpAdmin/treeData?isShowCode=true"
 					class="required" data-msg-required="请选择所属租户."
 					placeholder="${text('所属租户')}"/>
@@ -70,8 +70,8 @@
 					placeholder="再填一次登录密码" />
 			</div>
 			<div class="form-group has-feedback icheck">
-				<label title="${text('公共场所慎用,下次不需要再填写帐号')}"><input type="checkbox" name="reg_terms" 
-					class="form-control required" data-msg-required="请阅读并同意我们的服务条款."> 我已阅读并同意协议内容 </label> &nbsp; 
+				<label title="${text('公共场所慎用,下次不需要再填写帐号')}"><input type="checkbox" name="reg_terms"
+					class="form-control required" data-msg-required="请阅读并同意我们的服务条款."> 我已阅读并同意协议内容 </label> &nbsp;
 				<a href="https://gitee.com/thinkgem/jeesite4/blob/master/README.md" target="_blank">查看协议</a>
 			</div>
 			<div class="row">
@@ -86,11 +86,6 @@
 			</div>
 			<div class="clearfix"></div>
 		</form>
-	</div>
-	<div class="login-copyright">
-		&copy; ${@DateUtils.getYear()} ${@Global.getConfig('productName')} - Powered By <a
-			id="loginKey" data-key="${@Global.getConfig('shiro.loginSubmit.secretKey')}"
-			href="http://jeesite.com" >JeeSite ${@Global.getProperty('jeesiteVersion')}</a>
 	</div>
 </div>
 <% } %>

@@ -1,4 +1,4 @@
-<%/* Copyright (c) 2013-Now http://jeesite.com All rights reserved. */
+<%
 @servlet.getResponse().setStatus(400);
 
 var message = @ObjectUtils.toString(@request.getAttribute('message'));
@@ -50,7 +50,7 @@ else {
 	</div>
 	<div class="copyright">
 		&copy; ${@DateUtils.getYear()} ${@Global.getConfig('productName')} - Powered By <a
-			href="http://jeesite.com">JeeSite ${@Global.getProperty('jeesiteVersion')}</a>
+			href="">Nada ${@Global.getProperty('jeesiteVersion')}</a>
 	</div>
 </div>
 <% } %>

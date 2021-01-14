@@ -96,8 +96,9 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("用户状态")}', name:'status', index:'a.status', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/xiao/hgameUserInfo/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户信息")}">'+(val||row.id)+'</a>';
+		{header:'${text("用户名称1")}', name:'username', index:'a.username', width:150, align:"left"},
+		{header:'${text("用户状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
 		}},
 		{header:'${text("用户类型")}', name:'type', index:'a.type', width:150, align:"center"},
 		{header:'${text("手机号码")}', name:'mobile', index:'a.mobile', width:150, align:"left"},
@@ -124,7 +125,7 @@ $('#dataGrid').dataGrid({
 	],
 	// 加载成功后执行事件
 	ajaxSuccess: function(data){
-		
+
 	}
 });
 </script>
