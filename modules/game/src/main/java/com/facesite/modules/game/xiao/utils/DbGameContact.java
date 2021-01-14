@@ -1,6 +1,8 @@
 package com.facesite.modules.game.xiao.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.facesite.modules.game.xiao.entity.GameData;
+import com.facesite.modules.game.xiao.entity.HgamePlayRecord;
 import com.facesite.modules.game.xiao.entity.HgameUserInfo;
 import com.facesite.modules.game.xiao.entity.HgameUserRef;
 
@@ -35,7 +37,7 @@ public class DbGameContact {
 
     public static HgameUserInfo initVisitorUserInfo(String token){
         HgameUserInfo userInfo = new HgameUserInfo();
-        userInfo.setParentId(token);
+        userInfo.setParentId(UUID.randomUUID().toString());
         userInfo.setType(TYPE_VISITOR);
         userInfo.setToken(token);
         userInfo.setStatus("0");
@@ -53,7 +55,7 @@ public class DbGameContact {
     public static JSONObject getGameUserInfo(HgameUserInfo userInfo, HgameUserRef hgameUserRef){
         JSONObject result = new JSONObject();
         result.put("gid",hgameUserRef.getGameId());
-        result.put("uid",userInfo.getParentId());
+        result.put("uid",hgameUserRef.getUserId());
         result.put("type",userInfo.getType());
         result.put("hbeans",userInfo.getHbeans());
         result.put("levelsCompleted", hgameUserRef.getLevelsCompleted());
@@ -89,5 +91,20 @@ public class DbGameContact {
         userRef.setUserId(userId);
         userRef.setStatus("0");
         return userRef;
+    }
+
+    public static HgamePlayRecord initRecord(GameData gameData){
+        HgamePlayRecord record = new HgamePlayRecord();
+        record.setStart(0L);
+        record.setSymbol(0);
+        record.setLbeans(0L);
+        record.setUpdateBeans(0L);
+        record.setGameId(gameData.getGid());
+        record.setUserId(gameData.getUid());
+        record.setPlayerId(gameData.getPlayId());
+        record.setHbeans(gameData.getGole());
+        record.setLevel(gameData.getLevel());
+        record.setScore(gameData.getScore());
+        return record;
     }
 }

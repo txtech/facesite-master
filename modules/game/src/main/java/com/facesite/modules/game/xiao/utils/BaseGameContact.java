@@ -22,7 +22,8 @@ public class BaseGameContact {
     private static final String updatebean_url = "http://test.hehelegou.com/Api/api/happygame/updateAccount";
 
     public static void main(String[] args) {
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySWQiOiI1ZWI4ZTdhZi04ZmRiLTQ1NjgtYjVhZC1jMmFiM2YyOGY5MmMiLCJNb2JpbGUiOiIxMzYwNzEyMzcxNyIsIlVzZXJUeXBlIjoiNmMwZmYyNDktM2RhOC00NDk5LThkODEtNGZhNTgwNzIyMGQ4IiwiZXhwIjoxNjEwNDkyOTUwLjB9.vrdkMHVjZ54Xcf7XBMfeatSdCc6fAXO5AKQ4EHPUlUU";
+        //postUserLogin();
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySWQiOiJjM2JmMzM0MC05M2FjLTRmNmQtYmVjNC1kYmI1YThlYmE1MjQiLCJNb2JpbGUiOiIxMzg3MTExNTkxOSIsIlVzZXJUeXBlIjoiNmMwZmYyNDktM2RhOC00NDk5LThkODEtNGZhNTgwNzIyMGQ4IiwiZXhwIjoxNjEwNzMzMjM3LjB9.bP2AlSpnnti4hLaUGb61JzpmVzXu7a0aYb2C1ZzdFbw";
         Long hBeans = 0L;
         String tage = "赢得游戏";
         postUpdateAccount(token,hBeans,tage);
@@ -35,7 +36,7 @@ public class BaseGameContact {
      */
     public static void postUserLogin(){
         JSONObject retJson = new JSONObject();
-        retJson.put("Phone", "13607123717");
+        retJson.put("Phone", "13871115919");
         retJson.put("Pwd", "123456");
         retJson.put("Code", "123456");
         String result = HttpRequest.post(login_url).header("Content-Type", "application/json").body(retJson.toJSONString()).execute().body();
@@ -99,7 +100,7 @@ public class BaseGameContact {
         }
     }
 
-    public static JSONObject success(JSONObject result){
+    public static JSONObject success(Object result){
         JSONObject response = new JSONObject();
         response.put("ok",true);
         response.put("code",1);

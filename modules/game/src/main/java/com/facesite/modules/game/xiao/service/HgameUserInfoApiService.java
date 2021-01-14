@@ -5,8 +5,10 @@ package com.facesite.modules.game.xiao.service;
 
 import cn.hutool.core.lang.Console;
 import com.alibaba.fastjson.JSONObject;
+import com.facesite.modules.game.xiao.dao.HgamePlayRecordDao;
 import com.facesite.modules.game.xiao.dao.HgameUserInfoDao;
 import com.facesite.modules.game.xiao.dao.HgameUserRefDao;
+import com.facesite.modules.game.xiao.entity.GameData;
 import com.facesite.modules.game.xiao.entity.HgameUserInfo;
 import com.facesite.modules.game.xiao.entity.HgameUserRef;
 import com.facesite.modules.game.xiao.utils.BaseGameContact;
@@ -31,6 +33,46 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	HgameUserInfoDao hgameUserInfoDao;
 	@Autowired
 	HgameUserRefDao hgameUserRefDao;
+	@Autowired
+	HgamePlayRecordDao hgamePlayRecordDao;
+
+	/**
+	 * @desc 游戏开始记录
+	 * @author nada
+	 * @create 2021/1/14 7:37 下午
+	*/
+	@Transactional(readOnly=false)
+	public JSONObject updateGameStart(GameData gameData) {
+		try {
+			Long dbIndex = hgamePlayRecordDao.insert(DbGameContact.initRecord(gameData));
+			if(dbIndex > 0){
+				return BaseGameContact.success(true);
+			}
+			return BaseGameContact.failed("Save game start log failed");
+		} catch (Exception e) {
+			logger.error("游戏开始记录异常",e);
+			return BaseGameContact.failed("Save game start log error");
+		}
+	}
+
+	/**
+	 * @desc 游戏升级记录
+	 * @author nada
+	 * @create 2021/1/14 7:37 下午
+	*/
+	@Transactional(readOnly=false)
+	public JSONObject updateGamelevelUp(GameData gameData) {
+		try {
+			Long dbIndex = hgamePlayRecordDao.insert(DbGameContact.initRecord(gameData));
+			if(dbIndex > 0){
+				return BaseGameContact.success(true);
+			}
+			return BaseGameContact.failed("Save game level up log failed");
+		} catch (Exception e) {
+			logger.error("游戏升级记录异常",e);
+			return BaseGameContact.failed("Save game level up log error");
+		}
+	}
 
 	/***
 	 * @desc获取用户信息
@@ -38,8 +80,9 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	 * @create 2021/1/12 5:51 下午
 	*/
 	@Transactional(readOnly=false)
-	public JSONObject getUserInfo(String token) {
+	public JSONObject getUserInfo(GameData gameData) {
 		try {
+			String token = gameData.getToken();
 			if(StringUtils.isEmpty(token)){
 				return BaseGameContact.failed("token parameter is empty");
 			}

@@ -44,11 +44,11 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private Long gameId;		// 父ID
 	private Long userId;		// 用户ID
-	private Integer symbol;		// 游戏运算符：1+，2-，3*，4/
+	private Integer symbol;		// 游戏运算符：0 1+，2-，3*，4/
 	private Long updateBeans;		// 修改豆值
 	private Long hbeans;		// 用户呵豆
 	private Long lbeans;		// 用户乐豆
@@ -57,11 +57,14 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	private Long score;		// 游戏分数
 	private Long start;		// 游戏星级
 	private Long time;		// 游戏时间
+	private String playerId;		// 游戏时间
+
 	private String boosters;		// 游戏道具
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+
+
 	public HgamePlayRecord() {
 		this(null);
 	}
@@ -69,7 +72,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public HgamePlayRecord(String id){
 		super(id);
 	}
-	
+
 	@NotNull(message="父ID不能为空")
 	public Long getGameId() {
 		return gameId;
@@ -78,7 +81,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setGameId(Long gameId) {
 		this.gameId = gameId;
 	}
-	
+
 	@NotNull(message="用户ID不能为空")
 	public Long getUserId() {
 		return userId;
@@ -87,7 +90,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-	
+
 	public Integer getSymbol() {
 		return symbol;
 	}
@@ -95,7 +98,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setSymbol(Integer symbol) {
 		this.symbol = symbol;
 	}
-	
+
 	public Long getUpdateBeans() {
 		return updateBeans;
 	}
@@ -103,7 +106,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setUpdateBeans(Long updateBeans) {
 		this.updateBeans = updateBeans;
 	}
-	
+
 	public Long getHbeans() {
 		return hbeans;
 	}
@@ -111,7 +114,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setHbeans(Long hbeans) {
 		this.hbeans = hbeans;
 	}
-	
+
 	public Long getLbeans() {
 		return lbeans;
 	}
@@ -119,7 +122,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setLbeans(Long lbeans) {
 		this.lbeans = lbeans;
 	}
-	
+
 	public Long getGole() {
 		return gole;
 	}
@@ -127,7 +130,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setGole(Long gole) {
 		this.gole = gole;
 	}
-	
+
 	public Long getLevel() {
 		return level;
 	}
@@ -135,7 +138,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setLevel(Long level) {
 		this.level = level;
 	}
-	
+
 	public Long getScore() {
 		return score;
 	}
@@ -143,7 +146,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setScore(Long score) {
 		this.score = score;
 	}
-	
+
 	public Long getStart() {
 		return start;
 	}
@@ -151,7 +154,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setStart(Long start) {
 		this.start = start;
 	}
-	
+
 	public Long getTime() {
 		return time;
 	}
@@ -159,7 +162,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setTime(Long time) {
 		this.time = time;
 	}
-	
+
 	@Length(min=0, max=255, message="游戏道具长度不能超过 255 个字符")
 	public String getBoosters() {
 		return boosters;
@@ -168,7 +171,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setBoosters(String boosters) {
 		this.boosters = boosters;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -177,7 +180,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -186,7 +189,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -195,5 +198,12 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
+	public String getPlayerId() {
+		return playerId;
+	}
+
+	public void setPlayerId(String playerId) {
+		this.playerId = playerId;
+	}
 }
