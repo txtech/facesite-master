@@ -23,7 +23,7 @@ public class GameData {
     // 游戏分数
     private Long totalScore;
     // 游戏金币
-    private Long gole;
+    private Long gold;
     // 游戏道具
     private String boostersCount;
     // 游戏星级
@@ -59,14 +59,6 @@ public class GameData {
 
     public void setTotalScore(Long totalScore) {
         this.totalScore = totalScore;
-    }
-
-    public Long getGole() {
-        return gole;
-    }
-
-    public void setGole(Long gole) {
-        this.gole = gole;
     }
 
     public String getBoostersCount() {
@@ -115,5 +107,13 @@ public class GameData {
 
     public void setGid(String gid) {
         this.gid = gid;
+    }
+
+    public Long getGold() {
+        return gold;
+    }
+
+    public void setGold(Long gold) {
+        this.gold = gold;
     }
 }

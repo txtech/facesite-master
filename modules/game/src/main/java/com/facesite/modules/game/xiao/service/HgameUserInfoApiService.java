@@ -9,16 +9,20 @@ import com.facesite.modules.game.xiao.dao.HgamePlayRecordDao;
 import com.facesite.modules.game.xiao.dao.HgameUserInfoDao;
 import com.facesite.modules.game.xiao.dao.HgameUserRefDao;
 import com.facesite.modules.game.xiao.entity.GameData;
+import com.facesite.modules.game.xiao.entity.HgamePlayRecord;
 import com.facesite.modules.game.xiao.entity.HgameUserInfo;
 import com.facesite.modules.game.xiao.entity.HgameUserRef;
 import com.facesite.modules.game.xiao.utils.BaseGameContact;
 import com.facesite.modules.game.xiao.utils.DbGameContact;
+import com.facesite.modules.game.xiao.utils.HttpGameContact;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 用户信息Service
@@ -44,7 +48,13 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	@Transactional(readOnly=false)
 	public JSONObject updateGameStart(GameData gameData) {
 		try {
-			Long dbIndex = hgamePlayRecordDao.insert(DbGameContact.initRecord(gameData));
+			HgamePlayRecord hgamePlayRecord = DbGameContact.initRecord(gameData,DbGameContact.PLAY_TYPE_2);
+			HgamePlayRecord parms = DbGameContact.getUniqueRecord(hgamePlayRecord);
+			List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(parms);
+			if(list !=null && list.size() > 0){
+				return BaseGameContact.success(true);
+			}
+			Long dbIndex = hgamePlayRecordDao.insert(hgamePlayRecord);
 			if(dbIndex > 0){
 				return BaseGameContact.success(true);
 			}
@@ -63,11 +73,29 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	@Transactional(readOnly=false)
 	public JSONObject updateGamelevelUp(GameData gameData) {
 		try {
-			Long dbIndex = hgamePlayRecordDao.insert(DbGameContact.initRecord(gameData));
-			if(dbIndex > 0){
-				return BaseGameContact.success(true);
+			synchronized (gameData.getUid()) {
+				HgamePlayRecord hgamePlayRecord = DbGameContact.initRecord(gameData,DbGameContact.PLAY_TYPE_3);
+				HgamePlayRecord parms = DbGameContact.getUniqueRecord(hgamePlayRecord);
+				List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(parms);
+				if(list !=null && list.size() > 0){
+					return BaseGameContact.success(true);
+				}
+				Long dbIndex = hgamePlayRecordDao.insert(hgamePlayRecord);
+				if(dbIndex < 1){
+					return BaseGameContact.success(true);
+				}
+				String token = gameData.getToken();
+				JSONObject postUpdateResult = HttpGameContact.postUpdateAccount(token,hgamePlayRecord.getGold(),"");
+				Boolean isOk = BaseGameContact.isOk(postUpdateResult);
+				if(!isOk){
+					return BaseGameContact.failed("update game gold failed");
+				}
+				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(hgamePlayRecord));
+				if(dbIndex > 0){
+					return BaseGameContact.success(true);
+				}
+				return BaseGameContact.failed("Save game level up log failed");
 			}
-			return BaseGameContact.failed("Save game level up log failed");
 		} catch (Exception e) {
 			logger.error("游戏升级记录异常",e);
 			return BaseGameContact.failed("Save game level up log error");
@@ -87,7 +115,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				return BaseGameContact.failed("token parameter is empty");
 			}
 			synchronized (token){
-				JSONObject result = BaseGameContact.getUserInfo(token);
+				JSONObject result = HttpGameContact.getUserInfo(token);
 				Boolean isOk = BaseGameContact.isOk(result);
 				HgameUserInfo initUserInfo = null;
 				if(!isOk){

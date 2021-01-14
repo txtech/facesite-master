@@ -27,7 +27,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="status", attrName="status", label="游戏状态 1", comment="游戏状态 1:离线 2:在线 3:战局中"),
 		@Column(name="levels_completed", attrName="levelsCompleted", label="完成等级"),
 		@Column(name="total_score", attrName="totalScore", label="游戏分数"),
-		@Column(name="gole", attrName="gole", label="游戏金币"),
+		@Column(name="gold", attrName="gold", label="游戏金币"),
 		@Column(name="boosters_count", attrName="boostersCount", label="游戏道具"),
 		@Column(name="stars_per_level", attrName="starsPerLevel", label="游戏道具"),
 		@Column(name="created", attrName="created", label="创建时间"),
@@ -54,11 +54,12 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	private static final long serialVersionUID = 1L;
 	private HgameInfo hgameInfo;
 	private HgameUserInfo hgameUserInfo;
+
 	private String gameId;		// 父ID
 	private String userId;		// 用户ID
 	private Long levelsCompleted;		// 完成等级
 	private Long totalScore;		// 游戏分数
-	private Long gole;		// 游戏金币
+	private Long gold;		// 游戏金币
 	private String boostersCount;		// 游戏道具
 	private String starsPerLevel;		// 游戏道具
 	private Date created;		// 创建时间
@@ -66,6 +67,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	private Date startTime;		// 创建时间
 	private Date endTime;		// 更新时间
 	private String delFlag;		// 删除标志
+
 
 	public HgameUserRef() {
 		this(null);
@@ -107,14 +109,6 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 
 	public void setTotalScore(Long totalScore) {
 		this.totalScore = totalScore;
-	}
-
-	public Long getGole() {
-		return gole;
-	}
-
-	public void setGole(Long gole) {
-		this.gole = gole;
 	}
 
 	@Length(min=0, max=255, message="游戏道具长度不能超过 255 个字符")
@@ -180,6 +174,13 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 		this.delFlag = delFlag;
 	}
 
+	public Long getGold() {
+		return gold;
+	}
+
+	public void setGold(Long gold) {
+		this.gold = gold;
+	}
 
 	public HgameInfo getHgameInfo() {
 		return hgameInfo;

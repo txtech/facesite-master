@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.facesite.modules.game.xiao.dao.HgameUserRefDao">
-	
+
 	<!-- 查询数据
 	<select id="findList" resultType="HgameUserRef">
 		SELECT ${sqlMap.column.toSql()}
@@ -11,5 +11,30 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+
+	<update id="updateGameUserRef" parameterType="com.facesite.modules.game.xiao.entity.HgameUserRef">
+		update h_game_user_ref
+		<set>
+			<if test="levelsCompleted != null ">
+				levels_completed = levels_completed + #{levelsCompleted},
+			</if>
+			<if test="totalScore != null ">
+				total_score = total_score + #{totalScore},
+			</if>
+			<if test="gold != null ">
+				gold = gold + #{gold},
+			</if>
+			<if test="boostersCount != null and boostersCount !='' ">
+				boosters_count = #{boostersCount},
+			</if>
+			<if test="starsPerLevel != null and starsPerLevel !='' ">
+				stars_per_level = #{starsPerLevel},
+			</if>
+			updated = sysdate()
+		</set>
+		where
+		game_id = #{gameId} and  user_id = #{userId} and DEL_FLAG=0
+		and (levels_completed + #{levelsCompleted})>0 and (total_score + #{totalScore}) > 0 and (gold + #{gold})>0
+	</update>
+
 </mapper>
