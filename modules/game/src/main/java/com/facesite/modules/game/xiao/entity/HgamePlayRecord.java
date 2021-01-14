@@ -26,6 +26,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="game_id", attrName="gameId", label="父ID"),
 		@Column(name="user_id", attrName="userId", label="用户ID"),
 		@Column(name="status", attrName="status", label="游戏状态 1", comment="游戏状态 1:输 2:赢", isUpdate=false),
+		@Column(name="type", attrName="type", label="记录类型", comment="记录类型", isUpdate=false),
 		@Column(name="symbol", attrName="symbol", label="游戏运算符", comment="游戏运算符：1+，2-，3*，4/"),
 		@Column(name="update_beans", attrName="updateBeans", label="修改豆值"),
 		@Column(name="hbeans", attrName="hbeans", label="用户呵豆"),
@@ -68,7 +69,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	private Long score;		// 游戏分数
 	private Long start;		// 游戏星级
 	private String playId;		// 游戏时间
-
+	private Integer type; //类型：1:准备 2:开始 3:升级 4:完成 5:结束
 	private String boosters;		// 游戏道具
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
