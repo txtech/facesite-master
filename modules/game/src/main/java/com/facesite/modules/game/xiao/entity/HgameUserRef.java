@@ -54,8 +54,8 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	private static final long serialVersionUID = 1L;
 	private HgameInfo hgameInfo;
 	private HgameUserInfo hgameUserInfo;
-	private Long gameId;		// 父ID
-	private Long userId;		// 用户ID
+	private String gameId;		// 父ID
+	private String userId;		// 用户ID
 	private Long levelsCompleted;		// 完成等级
 	private Long totalScore;		// 游戏分数
 	private Long gole;		// 游戏金币
@@ -76,20 +76,20 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	}
 
 	@NotNull(message="父ID不能为空")
-	public Long getGameId() {
+	public String getGameId() {
 		return gameId;
 	}
 
-	public void setGameId(Long gameId) {
+	public void setGameId(String gameId) {
 		this.gameId = gameId;
 	}
 
 	@NotNull(message="用户ID不能为空")
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

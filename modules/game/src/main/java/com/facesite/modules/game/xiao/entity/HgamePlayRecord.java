@@ -57,8 +57,8 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	private static final long serialVersionUID = 1L;
 	private HgameInfo hgameInfo;
 	private HgameUserInfo hgameUserInfo;
-	private Long gameId;		// 父ID
-	private Long userId;		// 用户ID
+	private String gameId;		// 父ID
+	private String userId;		// 用户ID
 	private Integer symbol;		// 游戏运算符：0 1+，2-，3*，4/
 	private Long updateBeans;		// 修改豆值
 	private Long hbeans;		// 用户呵豆
@@ -84,20 +84,20 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	}
 
 	@NotNull(message="父ID不能为空")
-	public Long getGameId() {
+	public String getGameId() {
 		return gameId;
 	}
 
-	public void setGameId(Long gameId) {
+	public void setGameId(String gameId) {
 		this.gameId = gameId;
 	}
 
 	@NotNull(message="用户ID不能为空")
-	public Long getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

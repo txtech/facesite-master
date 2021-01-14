@@ -38,8 +38,8 @@ public class HgamePlayRecordController extends BaseController {
 	 * 获取数据
 	 */
 	@ModelAttribute
-	public HgamePlayRecord get(Long id, boolean isNewRecord) {
-		return hgamePlayRecordService.get(String.valueOf(id), isNewRecord);
+	public HgamePlayRecord get(String id, boolean isNewRecord) {
+		return hgamePlayRecordService.get(id, isNewRecord);
 	}
 
 	/**

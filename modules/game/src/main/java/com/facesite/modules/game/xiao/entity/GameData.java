@@ -15,8 +15,8 @@ public class GameData {
     private String token;
     private Long score;
     private Long level;
-    private Long uid;
-    private Long gid;
+    private String uid;
+    private String gid;
     private String playId;
     // 完成等级
     private Long levelsCompleted;
@@ -101,19 +101,19 @@ public class GameData {
         this.level = level;
     }
 
-    public Long getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(Long uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 
-    public Long getGid() {
+    public String getGid() {
         return gid;
     }
 
-    public void setGid(Long gid) {
+    public void setGid(String gid) {
         this.gid = gid;
     }
 }

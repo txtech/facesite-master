@@ -73,7 +73,7 @@ public class DbGameContact {
         return userInfo;
     }
 
-    public static HgameUserRef initGameUserRef(Long gameId,Long userId){
+    public static HgameUserRef initGameUserRef(String gameId,String userId){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setGameId(gameId);
         userRef.setUserId(userId);
@@ -86,7 +86,7 @@ public class DbGameContact {
         return userRef;
     }
 
-    public static HgameUserRef getGameUserRefUserId(Long userId) {
+    public static HgameUserRef getGameUserRefUserId(String userId) {
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
         userRef.setStatus("0");

@@ -38,8 +38,8 @@ public class HgameUserInfoController extends BaseController {
 	 * 获取数据
 	 */
 	@ModelAttribute
-	public HgameUserInfo get(Long id, boolean isNewRecord) {
-		return hgameUserInfoService.get(String.valueOf(id), isNewRecord);
+	public HgameUserInfo get(String id, boolean isNewRecord) {
+		return hgameUserInfoService.get(id, isNewRecord);
 	}
 
 	/**
