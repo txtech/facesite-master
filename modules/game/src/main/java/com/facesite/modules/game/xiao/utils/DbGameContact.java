@@ -101,7 +101,7 @@ public class DbGameContact {
         record.setUpdateBeans(0L);
         record.setGameId(gameData.getGid());
         record.setUserId(gameData.getUid());
-        record.setPlayerId(gameData.getPlayId());
+        record.setPlayId(gameData.getPlayId());
         record.setHbeans(gameData.getGole());
         record.setLevel(gameData.getLevel());
         record.setScore(gameData.getScore());

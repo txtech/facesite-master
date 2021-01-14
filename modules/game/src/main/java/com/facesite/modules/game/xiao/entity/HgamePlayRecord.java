@@ -22,6 +22,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  */
 @Table(name="h_game_play_record", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
+		@Column(name="play_id", attrName="playId", label="玩局ID"),
 		@Column(name="game_id", attrName="gameId", label="父ID"),
 		@Column(name="user_id", attrName="userId", label="用户ID"),
 		@Column(name="status", attrName="status", label="游戏状态 1", comment="游戏状态 1:输 2:赢", isUpdate=false),
@@ -33,7 +34,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="level", attrName="level", label="游戏等级"),
 		@Column(name="score", attrName="score", label="游戏分数"),
 		@Column(name="start", attrName="start", label="游戏星级"),
-		@Column(name="time", attrName="time", label="游戏时间"),
 		@Column(name="boosters", attrName="boosters", label="游戏道具"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
@@ -41,11 +41,22 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志", isQuery=false),
-	}, orderBy="a.id DESC"
+	},
+	joinTable={
+			@JoinTable(type=Type.LEFT_JOIN, entity=HgameInfo.class, alias="g",
+					on="g.id = a.game_id", attrName="hgameInfo",
+					columns={@Column(includeEntity=HgameInfo.class)}),
+			@JoinTable(type=Type.LEFT_JOIN, entity=HgameUserInfo.class, alias="u",
+					on="u.id = a.user_id", attrName="hgameUserInfo",
+					columns={@Column(includeEntity=HgameUserInfo.class)}),
+	},
+	orderBy="a.created DESC"
 )
 public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 
 	private static final long serialVersionUID = 1L;
+	private HgameInfo hgameInfo;
+	private HgameUserInfo hgameUserInfo;
 	private Long gameId;		// 父ID
 	private Long userId;		// 用户ID
 	private Integer symbol;		// 游戏运算符：0 1+，2-，3*，4/
@@ -56,8 +67,7 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	private Long level;		// 游戏等级
 	private Long score;		// 游戏分数
 	private Long start;		// 游戏星级
-	private Long time;		// 游戏时间
-	private String playerId;		// 游戏时间
+	private String playId;		// 游戏时间
 
 	private String boosters;		// 游戏道具
 	private Date created;		// 创建时间
@@ -155,14 +165,6 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 		this.start = start;
 	}
 
-	public Long getTime() {
-		return time;
-	}
-
-	public void setTime(Long time) {
-		this.time = time;
-	}
-
 	@Length(min=0, max=255, message="游戏道具长度不能超过 255 个字符")
 	public String getBoosters() {
 		return boosters;
@@ -199,11 +201,27 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 		this.delFlag = delFlag;
 	}
 
-	public String getPlayerId() {
-		return playerId;
+	public HgameInfo getHgameInfo() {
+		return hgameInfo;
 	}
 
-	public void setPlayerId(String playerId) {
-		this.playerId = playerId;
+	public void setHgameInfo(HgameInfo hgameInfo) {
+		this.hgameInfo = hgameInfo;
+	}
+
+	public HgameUserInfo getHgameUserInfo() {
+		return hgameUserInfo;
+	}
+
+	public void setHgameUserInfo(HgameUserInfo hgameUserInfo) {
+		this.hgameUserInfo = hgameUserInfo;
+	}
+
+	public String getPlayId() {
+		return playId;
+	}
+
+	public void setPlayId(String playId) {
+		this.playId = playId;
 	}
 }

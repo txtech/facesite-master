@@ -21,7 +21,7 @@ import com.facesite.modules.game.xiao.dao.HgamePlayRecordDao;
 @Service
 @Transactional(readOnly=true)
 public class HgamePlayRecordService extends CrudService<HgamePlayRecordDao, HgamePlayRecord> {
-	
+
 	/**
 	 * 获取单条数据
 	 * @param hgamePlayRecord
@@ -31,18 +31,17 @@ public class HgamePlayRecordService extends CrudService<HgamePlayRecordDao, Hgam
 	public HgamePlayRecord get(HgamePlayRecord hgamePlayRecord) {
 		return super.get(hgamePlayRecord);
 	}
-	
+
 	/**
 	 * 查询分页数据
 	 * @param hgamePlayRecord 查询条件
-	 * @param hgamePlayRecord.page 分页对象
 	 * @return
 	 */
 	@Override
 	public Page<HgamePlayRecord> findPage(HgamePlayRecord hgamePlayRecord) {
 		return super.findPage(hgamePlayRecord);
 	}
-	
+
 	/**
 	 * 保存数据（插入或更新）
 	 * @param hgamePlayRecord
@@ -52,7 +51,7 @@ public class HgamePlayRecordService extends CrudService<HgamePlayRecordDao, Hgam
 	public void save(HgamePlayRecord hgamePlayRecord) {
 		super.save(hgamePlayRecord);
 	}
-	
+
 	/**
 	 * 更新状态
 	 * @param hgamePlayRecord
@@ -62,7 +61,7 @@ public class HgamePlayRecordService extends CrudService<HgamePlayRecordDao, Hgam
 	public void updateStatus(HgamePlayRecord hgamePlayRecord) {
 		super.updateStatus(hgamePlayRecord);
 	}
-	
+
 	/**
 	 * 删除数据
 	 * @param hgamePlayRecord
@@ -72,5 +71,5 @@ public class HgamePlayRecordService extends CrudService<HgamePlayRecordDao, Hgam
 	public void delete(HgamePlayRecord hgamePlayRecord) {
 		super.delete(hgamePlayRecord);
 	}
-	
+
 }

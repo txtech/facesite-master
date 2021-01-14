@@ -12,7 +12,7 @@ demoMode: false
 #======================================#
 #Server settings
 server:
-  port: 9988
+  port: 9998
   servlet:
     context-path: /game
   tomcat:

@@ -47,7 +47,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 					on="u.id = a.user_id", attrName="hgameUserInfo",
 					columns={@Column(includeEntity=HgameUserInfo.class)}),
 	},
-	orderBy="a.id DESC"
+	orderBy="a.created DESC"
 )
 public class HgameUserRef extends DataEntity<HgameUserRef> {
 

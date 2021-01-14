@@ -35,12 +35,6 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('用户昵称')}：</label>
-					<div class="control-inline">
-						<#form:input path="nickname" maxlength="50" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('用户名称')}：</label>
 					<div class="control-inline">
 						<#form:input path="username" maxlength="50" class="form-control width-120"/>
@@ -50,24 +44,6 @@
 					<label class="control-label">${text('用户呵豆')}：</label>
 					<div class="control-inline">
 						<#form:input path="hbeans" maxlength="20" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('用户乐豆')}：</label>
-					<div class="control-inline">
-						<#form:input path="lbeans" maxlength="20" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('用户性别')}：</label>
-					<div class="control-inline">
-						<#form:input path="sex" maxlength="2" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('用户年龄')}：</label>
-					<div class="control-inline">
-						<#form:input path="age" maxlength="2" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -96,29 +72,25 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("用户名称1")}', name:'username', index:'a.username', width:150, align:"left"},
+		{header:'${text("用户名称")}', name:'username', index:'a.username', width:150, align:"left"},
 		{header:'${text("用户状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
 			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
 		}},
 		{header:'${text("用户类型")}', name:'type', index:'a.type', width:150, align:"center"},
 		{header:'${text("手机号码")}', name:'mobile', index:'a.mobile', width:150, align:"left"},
-		{header:'${text("用户昵称")}', name:'nickname', index:'a.nickname', width:150, align:"left"},
 		{header:'${text("用户名称")}', name:'username', index:'a.username', width:150, align:"left"},
 		{header:'${text("用户呵豆")}', name:'hbeans', index:'a.hbeans', width:150, align:"center"},
-		{header:'${text("用户乐豆")}', name:'lbeans', index:'a.lbeans', width:150, align:"center"},
-		{header:'${text("用户性别")}', name:'sex', index:'a.sex', width:150, align:"left"},
-		{header:'${text("用户年龄")}', name:'age', index:'a.age', width:150, align:"center"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('xiao:hgameUserInfo:edit')){ %>
-				actions.push('<a href="${ctx}/xiao/hgameUserInfo/form?id='+row.id+'" class="btnList" title="${text("编辑用户信息")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/xiao/hgameUserInfo/form?id='+row.id+'" class="btnList" title="${text("编辑用户")}"><i class="fa fa-pencil"></i></a>&nbsp;');
 				if (row.status == Global.STATUS_NORMAL){
-					actions.push('<a href="${ctx}/xiao/hgameUserInfo/disable?id='+row.id+'" class="btnList" title="${text("停用用户信息")}" data-confirm="${text("确认要停用该用户信息吗？")}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
+					actions.push('<a href="${ctx}/xiao/hgameUserInfo/disable?id='+row.id+'" class="btnList" title="${text("停用用户")}" data-confirm="${text("确认要停用该用户吗？")}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
 				} else if (row.status == Global.STATUS_DISABLE){
-					actions.push('<a href="${ctx}/xiao/hgameUserInfo/enable?id='+row.id+'" class="btnList" title="${text("启用用户信息")}" data-confirm="${text("确认要启用该用户信息吗？")}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
+					actions.push('<a href="${ctx}/xiao/hgameUserInfo/enable?id='+row.id+'" class="btnList" title="${text("启用用户")}" data-confirm="${text("确认要启用该用户吗？")}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
 				}
-				actions.push('<a href="${ctx}/xiao/hgameUserInfo/delete?id='+row.id+'" class="btnList" title="${text("删除用户信息")}" data-confirm="${text("确认要删除该用户信息吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/xiao/hgameUserInfo/delete?id='+row.id+'" class="btnList" title="${text("删除用户")}" data-confirm="${text("确认要删除该用户吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
 			<% } %>
 			return actions.join('');
 		}}
