@@ -14,12 +14,10 @@
 	<name>JeeSite Web</name>
 
 	<properties>
-		<finalName>web</finalName><!-- war or jar 包的名称 -->
+		<finalName>web</finalName>
 		<start-class>com.jeesite.modules.Application</start-class>
-		<!-- environment setting -->
-		<eclipse-plugin-download-sources>false</eclipse-plugin-download-sources>
-		<eclipse-plugin-download-javadocs>false</eclipse-plugin-download-javadocs>
-		<!-- docker setting -->
+		<!--<eclipse-plugin-download-sources>false</eclipse-plugin-download-sources>
+		<eclipse-plugin-download-javadocs>false</eclipse-plugin-download-javadocs>-->
         <docker.run.port>8980:8980</docker.run.port>
 	</properties>
 
@@ -46,33 +44,29 @@
 		</dependency>
 
 		<!-- 在线文档接口 -->
-		<dependency>
+		<!--<dependency>
 			<groupId>com.jeesite</groupId>
 			<artifactId>jeesite-module-swagger</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-
+		</dependency>-->
 		<!-- 文件管理共享（个人版）
 		<dependency>
 			<groupId>com.jeesite</groupId>
 			<artifactId>jeesite-module-filemanager</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency> -->
-
 		<!-- 文件在线预览（个人版）
 		<dependency>
 			<groupId>com.jeesite</groupId>
 			<artifactId>jeesite-module-filepreview</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency> -->
-
 		<!-- Spring Boot -->
 		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
 		</dependency>-->
-
 		<!-- 自定义jar依赖包演示
 		<dependency>
 			<groupId>com.jeesite</groupId>
@@ -81,14 +75,12 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/test-core-1.0.jar</systemPath>
 		</dependency> -->
-
 	</dependencies>
 
 	<build>
 		<finalName>${finalName}</finalName>
 		<outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/classes/</outputDirectory>
 		<plugins>
-
 			<!-- Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -118,7 +110,7 @@
 			</plugin>
 
 			<!-- Eclipse 插件 -->
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<configuration>
@@ -128,7 +120,7 @@
 					<wtpversion>2.0</wtpversion>
 					<jeeversion>6.0</jeeversion>
 				</configuration>
-			</plugin>
+			</plugin>-->
 
 		</plugins>
 	</build>

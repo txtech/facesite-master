@@ -23,7 +23,7 @@ public class BaseGameContact {
 
     public static void main(String[] args) {
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySWQiOiI1ZWI4ZTdhZi04ZmRiLTQ1NjgtYjVhZC1jMmFiM2YyOGY5MmMiLCJNb2JpbGUiOiIxMzYwNzEyMzcxNyIsIlVzZXJUeXBlIjoiNmMwZmYyNDktM2RhOC00NDk5LThkODEtNGZhNTgwNzIyMGQ4IiwiZXhwIjoxNjEwNDkyOTUwLjB9.vrdkMHVjZ54Xcf7XBMfeatSdCc6fAXO5AKQ4EHPUlUU";
-        Long hBeans = 1L;
+        Long hBeans = 0L;
         String tage = "赢得游戏";
         postUpdateAccount(token,hBeans,tage);
         getUserInfo(token);
@@ -84,6 +84,7 @@ public class BaseGameContact {
             retJson.put("HBeans",hBeans);
             retJson.put("Stage",tage);
             String result = HttpRequest.post(updatebean_url).header("Content-Type", "application/json").header("token",token).body(retJson.toJSONString()).execute().body();
+            Console.log(result);
             JSONObject resData = JSONObject.parseObject(result);
             if(resData == null || resData.isEmpty()){
                 return BaseGameContact.failed("get userinfo empty!");

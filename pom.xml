@@ -24,6 +24,38 @@
         <module>web</module>
     </modules>
 
+	<dependencyManagement>
+		<dependencies>
+			<!-- 核心模块 -->
+			<dependency>
+				<groupId>com.jeesite</groupId>
+				<artifactId>jeesite-common</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+
+			<!-- 核心模块 -->
+			<dependency>
+				<groupId>com.jeesite</groupId>
+				<artifactId>jeesite-module-core</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+
+			<!--商城模块-->
+			<dependency>
+				<groupId>com.jeesite</groupId>
+				<artifactId>jeesite-module-mall</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+
+			<!--游戏模块-->
+			<dependency>
+				<groupId>com.jeesite</groupId>
+				<artifactId>jeesite-module-game</artifactId>
+				<version>${project.parent.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<properties>
 		<!-- common version setting -->
 		<commons-io.version>2.7</commons-io.version>
@@ -62,7 +94,6 @@
 		<!-- jdbc setting -->
 		<!-- <mysql.version>5.1.47</mysql.version> -->
 		<mysql.version>8.0.11</mysql.version>
-
 		<!-- environment setting -->
 		<java.version>1.8</java.version>
 		<!-- <tomcat.version>9.0.31</tomcat.version> -->
@@ -70,37 +101,32 @@
 		<maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version><!-- 降级到该版本，新版本可能会出现VM崩溃 -->
 		<eclipse-plugin-download-sources>false</eclipse-plugin-download-sources>
 		<eclipse-plugin-download-javadocs>false</eclipse-plugin-download-javadocs>
-
 		<!-- docker setting -->
 		<docker.dockerHost>http://192.168.56.102:2375</docker.dockerHost>
 		<docker.imageName>${project.groupId}/${project.artifactId}:4.2</docker.imageName>
-
 	</properties>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
-
 		<plugins>
-
 			<!-- Compiler 插件, 设定JDK版本 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<showWarnings>true</showWarnings>
-					<!-- 					<compilerArguments> -->
-					<!-- 						<verbose /> 输出有关编译器正在执行的操作的消息 -->
-					<!-- 						<bootclasspath>${JAVA_HOME}\jre\lib\rt.jar;${JAVA_HOME}\jre\lib\jce.jar</bootclasspath> -->
-					<!-- 					</compilerArguments> -->
+					<!--<compilerArguments>
+						<verbose/> 输出有关编译器正在执行的操作的消息
+						<bootclasspath>${JAVA_HOME}\jre\lib\rt.jar;${JAVA_HOME}\jre\lib\jce.jar</bootclasspath>
+					</compilerArguments>
+					-->
 				</configuration>
 			</plugin>
 
@@ -116,17 +142,21 @@
 				</configuration>
 				<executions>
 					<execution>
-						<!-- <phase>prepare-package</phase>
+						<!--
+						<phase>prepare-package</phase>
 						<goals>
 							<goal>jar</goal>
-						</goals> -->
+						</goals>
+						-->
 						<configuration>
-							<!-- <classesDirectory>${project.outputDirectory}</classesDirectory>
+							<!--
+							<classesDirectory>${project.outputDirectory}</classesDirectory>
 							<finalName>${finalName}</finalName>
 							<outputDirectory>${project.build.directory}/${project.artifactId}/WEB-INF/lib</outputDirectory>
 							<includes>
 								<include>com/thinkgem/jeesite/**</include>
-							</includes> -->
+							</includes>
+							-->
 							<archive>
 								<manifest>
 									<!-- Add directory entries -->
@@ -175,13 +205,10 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 			</plugin>
-
 		</plugins>
 
 		<pluginManagement>
-
 			<plugins>
-
 				<!-- 打包插件, war包名称不带版本号 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -196,30 +223,6 @@
 						<archive>
 							<addMavenDescriptor>false</addMavenDescriptor>
 						</archive>
-					</configuration>
-				</plugin>
-
-				<!-- Eclipse 插件 -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-eclipse-plugin</artifactId>
-					<version>2.10</version>
-					<configuration>
-						<downloadSources>${eclipse-plugin-download-sources}</downloadSources>
-						<downloadJavadocs>${eclipse-plugin-download-javadocs}</downloadJavadocs>
-						<wtpversion>2.0</wtpversion>
-						<jeeversion>6.0</jeeversion>
-						<additionalConfig>
-							<file>
-								<name>.settings/org.eclipse.core.resources.prefs</name>
-								<content>
-									<![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=${project.build.sourceEncoding}${line.separator}]]>
-								</content>
-							</file>
-						</additionalConfig>
-						<additionalProjectnatures>
-							<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
-						</additionalProjectnatures>
 					</configuration>
 				</plugin>
 
@@ -269,65 +272,7 @@
 						</excludes>
 					</configuration>
 				</plugin>
-
-				<!-- 依赖插件
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-dependency-plugin</artifactId>
-										<versionRange>[1.0.0,)</versionRange>
-										<goals>
-											<goal>copy-dependencies</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin> -->
-
-				<!-- Docker 插件 -->
-				<plugin>
-					<groupId>io.fabric8</groupId>
-					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.33.0</version>
-					<configuration>
-						<dockerHost>${docker.dockerHost}</dockerHost>
-						<verbose>true</verbose>
-						<images>
-							<image>
-								<name>${docker.imageName}</name>
-								<alias>${project.artifactId}</alias>
-								<build>
-									<dockerFile>${project.basedir}/bin/docker/Dockerfile</dockerFile>
-									<assembly>
-										<descriptorRef>artifact</descriptorRef>
-									</assembly>
-								</build>
-								<run>
-									<ports>
-										<port>${docker.run.port}</port>
-									</ports>
-									<network>
-										<mode>host</mode>
-									</network>
-								</run>
-							</image>
-						</images>
-					</configuration>
-				</plugin>
-
 			</plugins>
-
 		</pluginManagement>
 
 		<!-- 资源文件配置 -->
@@ -345,7 +290,6 @@
 				</excludes>
 			</resource>
 		</resources>
-
 	</build>
 
 	<repositories>
@@ -374,7 +318,7 @@
 	</pluginRepositories>
 
 	<profiles>
-
+		<!--
 		<profile>
 			<id>javadoc</id>
 			<build>
@@ -416,6 +360,7 @@
 				</snapshotRepository>
 			</distributionManagement>
 		</profile>
+		-->
 	</profiles>
 
 </project>
