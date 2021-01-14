@@ -101,7 +101,7 @@ public class DbGameContact {
         return userRef;
     }
 
-    public static HgamePlayRecord initRecord(GameData gameData,int type){
+    public static HgamePlayRecord initRecord(HgameUserRef oldGameUserRef,GameData gameData,int type){
         HgamePlayRecord record = new HgamePlayRecord();
         switch (type) {
             case 2:
@@ -121,14 +121,14 @@ public class DbGameContact {
             case 3:
                 record.setStart(0L);
                 record.setLbeans(0L);
-                record.setHbeans(gameData.getGold());
                 record.setType(type);
-                record.setGold(gameData.getGold());
                 record.setUpdateBeans(gameData.getGold());
                 record.setGameId(gameData.getGid());
                 record.setUserId(gameData.getUid());
                 record.setPlayId(gameData.getPlayId());
-                record.setScore(gameData.getScore());
+                record.setHbeans(gameData.getGold()+oldGameUserRef.getGold());
+                record.setGold(gameData.getGold()+oldGameUserRef.getGold());
+                record.setScore(gameData.getScore()+oldGameUserRef.getTotalScore());
                 record.setLevel(PLAY_TYPE_3 == type ? gameData.getLevel() +1 : gameData.getLevel());
                 record.setSymbol(getSymbol(gameData.getGold()));
                 return record;
@@ -169,9 +169,14 @@ public class DbGameContact {
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(hgamePlayRecord.getUserId());
         userRef.setGameId(hgamePlayRecord.getGameId());
-        userRef.setTotalScore(hgamePlayRecord.getScore()+oldGameUserRef.getTotalScore());
         userRef.setLevelsCompleted(hgamePlayRecord.getLevel());
-        userRef.setGold(hgamePlayRecord.getGold()+oldGameUserRef.getGold());
+        if(oldGameUserRef !=null){
+            userRef.setGold(hgamePlayRecord.getGold()+oldGameUserRef.getGold());
+            userRef.setTotalScore(hgamePlayRecord.getScore()+oldGameUserRef.getTotalScore());
+        }else {
+            userRef.setGold(hgamePlayRecord.getGold());
+            userRef.setTotalScore(hgamePlayRecord.getScore());
+        }
         return userRef;
     }
 }

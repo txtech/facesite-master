@@ -48,7 +48,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	@Transactional(readOnly=false)
 	public JSONObject updateGameStart(GameData gameData) {
 		try {
-			HgamePlayRecord hgamePlayRecord = DbGameContact.initRecord(gameData,DbGameContact.PLAY_TYPE_2);
+			HgamePlayRecord hgamePlayRecord = DbGameContact.initRecord(null,gameData,DbGameContact.PLAY_TYPE_2);
 			HgamePlayRecord parms = DbGameContact.getUniqueRecord(hgamePlayRecord);
 			List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(parms);
 			if(list !=null && list.size() > 0){
@@ -74,7 +74,11 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	public JSONObject updateGamelevelUp(GameData gameData) {
 		try {
 			synchronized (gameData.getUid()) {
-				HgamePlayRecord hgamePlayRecord = DbGameContact.initRecord(gameData,DbGameContact.PLAY_TYPE_3);
+				HgameUserRef oldGameUserRef = hgameUserRefDao.getByEntity(DbGameContact.getGameUserRefUserId(gameData.getUid()));
+				if(oldGameUserRef == null){
+					return BaseGameContact.failed("get user game info failed");
+				}
+				HgamePlayRecord hgamePlayRecord = DbGameContact.initRecord(oldGameUserRef,gameData,DbGameContact.PLAY_TYPE_3);
 				HgamePlayRecord parms = DbGameContact.getUniqueRecord(hgamePlayRecord);
 				List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(parms);
 				if(list !=null && list.size() > 0){
@@ -84,21 +88,16 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(!BaseGameContact.isOkDb(dbIndex)){
 					return BaseGameContact.failed("save game record failed");
 				}
-				HgameUserRef oldGameUserRef = hgameUserRefDao.getByEntity(DbGameContact.getGameUserRefUserId(gameData.getUid()));
-				if(oldGameUserRef == null){
-					return BaseGameContact.failed("get user game info failed");
-				}
-				HgameUserRef updateGameUserRef = DbGameContact.updateGameUserRef(oldGameUserRef,hgamePlayRecord);
 				String token = gameData.getToken();
 				JSONObject postUpdateResult = HttpGameContact.postUpdateAccount(token,hgamePlayRecord.getGold(),"游戏升级结算:"+hgamePlayRecord.getGold());
 				Boolean isOk = BaseGameContact.isOk(postUpdateResult);
 				if(isOk){
-					dbIndex = hgameUserRefDao.updateGameUserGold(updateGameUserRef);
+					dbIndex = hgameUserRefDao.updateGameUserGold(DbGameContact.updateGameUserRef(null,hgamePlayRecord));
 					if(!BaseGameContact.isOkDb(dbIndex)){
 						return BaseGameContact.failed("update game gold failed");
 					}
 				}
-				dbIndex = hgameUserRefDao.updateGameUserRef(updateGameUserRef);
+				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(oldGameUserRef,hgamePlayRecord));
 				if(BaseGameContact.isOkDb(dbIndex)){
 					return BaseGameContact.success(true);
 				}
