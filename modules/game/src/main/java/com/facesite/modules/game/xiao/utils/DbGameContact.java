@@ -101,20 +101,58 @@ public class DbGameContact {
         return userRef;
     }
 
-    public static HgamePlayRecord initRecord(GameData gameData,Integer type){
+    public static HgamePlayRecord initRecord(GameData gameData,int type){
         HgamePlayRecord record = new HgamePlayRecord();
-        record.setStart(0L);
-        record.setSymbol(0);
-        record.setLbeans(0L);
-        record.setUpdateBeans(0L);
-        record.setType(type);
-        record.setGameId(gameData.getGid());
-        record.setUserId(gameData.getUid());
-        record.setPlayId(gameData.getPlayId());
-        record.setHbeans(gameData.getGold());
-        record.setLevel(gameData.getLevel());
-        record.setScore(gameData.getScore());
+        switch (type) {
+            case 2:
+                record.setStart(0L);
+                record.setLbeans(0L);
+                record.setSymbol(0);
+                record.setUpdateBeans(0L);
+                record.setType(type);
+                record.setHbeans(gameData.getGold());
+                record.setGold(gameData.getGold());
+                record.setGameId(gameData.getGid());
+                record.setUserId(gameData.getUid());
+                record.setPlayId(gameData.getPlayId());
+                record.setScore(gameData.getScore());
+                record.setLevel(gameData.getLevel());
+                return record;
+            case 3:
+                record.setStart(0L);
+                record.setLbeans(0L);
+                record.setHbeans(gameData.getGold());
+                record.setType(type);
+                record.setGold(gameData.getGold());
+                record.setUpdateBeans(gameData.getGold());
+                record.setGameId(gameData.getGid());
+                record.setUserId(gameData.getUid());
+                record.setPlayId(gameData.getPlayId());
+                record.setScore(gameData.getScore());
+                record.setLevel(PLAY_TYPE_3 == type ? gameData.getLevel() +1 : gameData.getLevel());
+                record.setSymbol(getSymbol(gameData.getGold()));
+                return record;
+        }
         return record;
+    }
+
+    /**
+     * @desc 0 1+，2-，3*，4/
+     * @author nada
+     * @create 2021/1/14 10:59 下午
+    */
+    public static Integer getSymbol(Long gold){
+        if(gold == null){
+            return 0;
+        }else if(gold > 0){
+            return  1;
+        }else if(gold < 0){
+            return  2;
+        }else if(gold  == 0){
+            return  0;
+        }else{
+            return 0;
+        }
     }
 
     public static HgamePlayRecord getUniqueRecord(HgamePlayRecord hgamePlayRecord){
@@ -127,13 +165,13 @@ public class DbGameContact {
         return record;
     }
 
-    public static HgameUserRef updateGameUserRef(HgamePlayRecord hgamePlayRecord){
+    public static HgameUserRef updateGameUserRef(HgameUserRef oldGameUserRef,HgamePlayRecord hgamePlayRecord){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(hgamePlayRecord.getUserId());
         userRef.setGameId(hgamePlayRecord.getGameId());
-        userRef.setTotalScore(hgamePlayRecord.getScore());
+        userRef.setTotalScore(hgamePlayRecord.getScore()+oldGameUserRef.getTotalScore());
         userRef.setLevelsCompleted(hgamePlayRecord.getLevel());
-        userRef.setGold(hgamePlayRecord.getGold());
+        userRef.setGold(hgamePlayRecord.getGold()+oldGameUserRef.getGold());
         return userRef;
     }
 }

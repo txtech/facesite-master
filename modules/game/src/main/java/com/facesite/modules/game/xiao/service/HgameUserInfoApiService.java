@@ -81,17 +81,25 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					return BaseGameContact.success(true);
 				}
 				Long dbIndex = hgamePlayRecordDao.insert(hgamePlayRecord);
-				if(dbIndex < 1){
-					return BaseGameContact.success(true);
+				if(!BaseGameContact.isOkDb(dbIndex)){
+					return BaseGameContact.failed("save game record failed");
 				}
+				HgameUserRef oldGameUserRef = hgameUserRefDao.getByEntity(DbGameContact.getGameUserRefUserId(gameData.getUid()));
+				if(oldGameUserRef == null){
+					return BaseGameContact.failed("get user game info failed");
+				}
+				HgameUserRef updateGameUserRef = DbGameContact.updateGameUserRef(oldGameUserRef,hgamePlayRecord);
 				String token = gameData.getToken();
-				JSONObject postUpdateResult = HttpGameContact.postUpdateAccount(token,hgamePlayRecord.getGold(),"");
+				JSONObject postUpdateResult = HttpGameContact.postUpdateAccount(token,hgamePlayRecord.getGold(),"游戏升级结算:"+hgamePlayRecord.getGold());
 				Boolean isOk = BaseGameContact.isOk(postUpdateResult);
-				if(!isOk){
-					return BaseGameContact.failed("update game gold failed");
+				if(isOk){
+					dbIndex = hgameUserRefDao.updateGameUserGold(updateGameUserRef);
+					if(!BaseGameContact.isOkDb(dbIndex)){
+						return BaseGameContact.failed("update game gold failed");
+					}
 				}
-				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(hgamePlayRecord));
-				if(dbIndex > 0){
+				dbIndex = hgameUserRefDao.updateGameUserRef(updateGameUserRef);
+				if(BaseGameContact.isOkDb(dbIndex)){
 					return BaseGameContact.success(true);
 				}
 				return BaseGameContact.failed("Save game level up log failed");

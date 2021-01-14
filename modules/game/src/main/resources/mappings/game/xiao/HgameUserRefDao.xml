@@ -12,6 +12,13 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 
+	<update id="updateGameUserGold" parameterType="com.facesite.modules.game.xiao.entity.HgameUserRef">
+		update
+			h_game_user_ref set gold = gold + #{gold},updated = sysdate()
+		where
+			game_id = #{gameId} and  user_id = #{userId} and DEL_FLAG=0 and (gold + #{gold})>=0
+	</update>
+
 	<update id="updateGameUserRef" parameterType="com.facesite.modules.game.xiao.entity.HgameUserRef">
 		update h_game_user_ref
 		<set>
@@ -20,9 +27,6 @@
 			</if>
 			<if test="totalScore != null ">
 				total_score = total_score + #{totalScore},
-			</if>
-			<if test="gold != null ">
-				gold = gold + #{gold},
 			</if>
 			<if test="boostersCount != null and boostersCount !='' ">
 				boosters_count = #{boostersCount},
@@ -33,8 +37,7 @@
 			updated = sysdate()
 		</set>
 		where
-		game_id = #{gameId} and  user_id = #{userId} and DEL_FLAG=0
-		and (levels_completed + #{levelsCompleted})>0 and (total_score + #{totalScore}) > 0 and (gold + #{gold})>0
+		game_id = #{gameId} and  user_id = #{userId} and DEL_FLAG=0 and  (total_score + #{totalScore}) > 0
 	</update>
 
 </mapper>

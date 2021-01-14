@@ -96,6 +96,9 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	}
 
 	public Long getLevelsCompleted() {
+		if(levelsCompleted ==null){
+			return 0L;
+		}
 		return levelsCompleted;
 	}
 
@@ -104,6 +107,9 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	}
 
 	public Long getTotalScore() {
+		if(totalScore ==null){
+			return 0L;
+		}
 		return totalScore;
 	}
 
@@ -175,6 +181,9 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	}
 
 	public Long getGold() {
+		if(gold == null){
+			return 0L;
+		}
 		return gold;
 	}
 

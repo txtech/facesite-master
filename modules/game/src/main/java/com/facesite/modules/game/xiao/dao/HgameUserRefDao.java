@@ -15,5 +15,8 @@ import com.facesite.modules.game.xiao.entity.HgameUserRef;
 @MyBatisDao
 public interface HgameUserRefDao extends CrudDao<HgameUserRef> {
 
+
+	public Long updateGameUserGold(HgameUserRef hgameUserRef);
+
 	public Long updateGameUserRef(HgameUserRef hgameUserRef);
 }
