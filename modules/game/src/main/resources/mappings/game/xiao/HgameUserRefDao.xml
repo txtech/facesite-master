@@ -37,7 +37,10 @@
 			updated = sysdate()
 		</set>
 		where
-		game_id = #{gameId} and  user_id = #{userId} and DEL_FLAG=0 and  (total_score + #{totalScore}) > 0
+		game_id = #{gameId} and  user_id = #{userId} and DEL_FLAG=0
+		<if test="totalScore != null and totalScore !='' ">
+			and  (total_score + #{totalScore}) > 0
+		</if>
 	</update>
 
 </mapper>

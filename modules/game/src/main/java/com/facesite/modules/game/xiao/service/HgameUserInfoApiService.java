@@ -135,7 +135,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				newRecord = score - oldScore;
 				//更新用户游戏信息
 				Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.resetGameUserRef(oldRecord.getUserId(),oldRecord.getGameId(),oldTotalScore,newRecord));
-				if(BaseGameContact.isOkDb(dbIndex)){
+				if(!BaseGameContact.isOkDb(dbIndex)){
 					logger.error("更新用户游戏信息失败:{}",dbIndex);
 					return false;
 				}
