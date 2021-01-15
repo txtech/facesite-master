@@ -13,17 +13,18 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class GameData {
     private String token;
-    private Long score;
-    private Long level;
     private String uid;
     private String gid;
     private String playId;
+
+    private Long gold;
+    private Long score;
+    private Long level;
+    private Long start;
     // 完成等级
     private Long levelsCompleted;
     // 游戏分数
     private Long totalScore;
-    // 游戏金币
-    private Long gold;
     // 游戏道具
     private String boostersCount;
     // 游戏星级
@@ -115,5 +116,13 @@ public class GameData {
 
     public void setGold(Long gold) {
         this.gold = gold;
+    }
+
+    public Long getStart() {
+        return start;
+    }
+
+    public void setStart(Long start) {
+        this.start = start;
     }
 }

@@ -23,10 +23,10 @@
 		update h_game_user_ref
 		<set>
 			<if test="levelsCompleted != null ">
-				levels_completed = levels_completed,
+				levels_completed =  #{levelsCompleted},
 			</if>
 			<if test="totalScore != null ">
-				total_score = total_score + #{totalScore},
+				total_score = #{totalScore},
 			</if>
 			<if test="boostersCount != null and boostersCount !='' ">
 				boosters_count = #{boostersCount},

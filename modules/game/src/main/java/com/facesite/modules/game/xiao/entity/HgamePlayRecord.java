@@ -27,8 +27,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="user_id", attrName="userId", label="用户ID"),
 		@Column(name="status", attrName="status", label="游戏状态", comment="游戏状态 1:输 2:赢", isUpdate=false),
 		@Column(name="type", attrName="type", label="记录类型", comment="记录类型", isUpdate=false),
-		@Column(name="symbol", attrName="symbol", label="游戏运算符", comment="游戏运算符：1+，2-，3*，4/"),
-		@Column(name="update_beans", attrName="updateBeans", label="修改豆值"),
 		@Column(name="hbeans", attrName="hbeans", label="用户呵豆"),
 		@Column(name="lbeans", attrName="lbeans", label="用户乐豆"),
 		@Column(name="gold", attrName="gold", label="游戏金币"),
@@ -60,8 +58,6 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	private HgameUserInfo hgameUserInfo;
 	private String gameId;		// 父ID
 	private String userId;		// 用户ID
-	private Integer symbol;		// 游戏运算符：0 1+，2-，3*，4/
-	private Long updateBeans;		// 修改豆值
 	private Long hbeans;		// 用户呵豆
 	private Long lbeans;		// 用户乐豆
 	private Long gold;		// 游戏金币
@@ -100,22 +96,6 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	public Integer getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(Integer symbol) {
-		this.symbol = symbol;
-	}
-
-	public Long getUpdateBeans() {
-		return updateBeans;
-	}
-
-	public void setUpdateBeans(Long updateBeans) {
-		this.updateBeans = updateBeans;
 	}
 
 	public Long getHbeans() {

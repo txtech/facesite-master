@@ -23,7 +23,7 @@ public class HttpGameContact {
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySWQiOiJjM2JmMzM0MC05M2FjLTRmNmQtYmVjNC1kYmI1YThlYmE1MjQiLCJNb2JpbGUiOiIxMzg3MTExNTkxOSIsIlVzZXJUeXBlIjoiNmMwZmYyNDktM2RhOC00NDk5LThkODEtNGZhNTgwNzIyMGQ4IiwiZXhwIjoxNjEwNzMzMjM3LjB9.bP2AlSpnnti4hLaUGb61JzpmVzXu7a0aYb2C1ZzdFbw";
         Long hBeans = 0L;
         String tage = "赢得游戏";
-        postUpdateAccount(token,hBeans,tage);
+        updateAppGold(token,hBeans,tage);
         getUserInfo(token);
     }
     /**
@@ -76,7 +76,7 @@ public class HttpGameContact {
      * {"Message":"","Status":1,"Result":"","ServerTime":"2021-01-11 23:21:15"}
      * @create 2021/1/11 10:47 下午
      */
-    public static JSONObject postUpdateAccount(String token,Long hBeans,String tage){
+    public static JSONObject updateAppGold(String token,Long hBeans,String tage){
         try {
             JSONObject retJson = new JSONObject();
             retJson.put("HBeans",hBeans);

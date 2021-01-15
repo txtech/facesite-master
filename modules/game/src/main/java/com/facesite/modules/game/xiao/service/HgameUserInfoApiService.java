@@ -18,6 +18,7 @@ import com.facesite.modules.game.xiao.utils.HttpGameContact;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.service.CrudService;
+import com.jeesite.common.service.system.L;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,31 +42,6 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	HgamePlayRecordDao hgamePlayRecordDao;
 
 	/**
-	 * @desc 游戏开始记录
-	 * @author nada
-	 * @create 2021/1/14 7:37 下午
-	*/
-	@Transactional(readOnly=false)
-	public JSONObject updateGameStart(GameData gameData) {
-		try {
-			HgamePlayRecord hgamePlayRecord = DbGameContact.initRecord(null,gameData,DbGameContact.PLAY_TYPE_2);
-			HgamePlayRecord parms = DbGameContact.getUniqueRecord(hgamePlayRecord);
-			List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(parms);
-			if(list !=null && list.size() > 0){
-				return BaseGameContact.success(true);
-			}
-			Long dbIndex = hgamePlayRecordDao.insert(hgamePlayRecord);
-			if(dbIndex > 0){
-				return BaseGameContact.success(true);
-			}
-			return BaseGameContact.failed("Save game start log failed");
-		} catch (Exception e) {
-			logger.error("游戏开始记录异常",e);
-			return BaseGameContact.failed("Save game start log error");
-		}
-	}
-
-	/**
 	 * @desc 游戏升级记录
 	 * @author nada
 	 * @create 2021/1/14 7:37 下午
@@ -73,31 +49,47 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	@Transactional(readOnly=false)
 	public JSONObject updateGamelevelUp(GameData gameData) {
 		try {
-			synchronized (gameData.getUid()) {
-				HgameUserRef oldGameUserRef = hgameUserRefDao.getByEntity(DbGameContact.getGameUserRefUserId(gameData.getUid()));
+			Long start = gameData.getStart();
+			Long gold = gameData.getGold();
+			Long score = gameData.getScore();
+			Long level = gameData.getLevel() + 1;
+			String userId = gameData.getUid();
+			String gameId = gameData.getGid();
+			String token = gameData.getToken();
+			String playId = gameData.getPlayId();
+			Integer type = DbGameContact.PLAY_TYPE_3;
+			synchronized (userId){
+				HgameUserRef oldGameUserRef = hgameUserRefDao.getByEntity(DbGameContact.getGameUserRefUser(userId,gameId));
 				if(oldGameUserRef == null){
 					return BaseGameContact.failed("get user game info failed");
 				}
-				HgamePlayRecord hgamePlayRecord = DbGameContact.initRecord(oldGameUserRef,gameData,DbGameContact.PLAY_TYPE_3);
-				HgamePlayRecord parms = DbGameContact.getUniqueRecord(hgamePlayRecord);
-				List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(parms);
+				Long oldTotalScore = oldGameUserRef.getTotalScore();
+				//战绩重置
+				List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(DbGameContact.uniqueRecord(type,userId,gameId,level));
 				if(list !=null && list.size() > 0){
-					return BaseGameContact.success(true);
+					HgamePlayRecord oldRecord = list.get(0);
+					Boolean isOk = this.updateBestGameRecord(oldRecord,oldTotalScore,token,level,gold,score,start);
+					logger.info("修改战绩最好的游戏战局:{}",isOk);
+					return BaseGameContact.success(isOk);
 				}
-				Long dbIndex = hgamePlayRecordDao.insert(hgamePlayRecord);
+
+				//app和本地乐豆同步
+				String tag = "游戏升级结算:"+gold;
+				Boolean isSync = this.synAppGold(token,userId,gameId,gold,tag);
+				if(!isSync){
+					logger.error("app和本地乐豆同步失败:{}",isSync);
+					return BaseGameContact.failed("update app user gold failed");
+				}
+
+				//初始化战局
+				HgamePlayRecord newRecord = DbGameContact.initRecord(userId,gameId,playId,type,level,gold,score,start,tag);
+				Long dbIndex = hgamePlayRecordDao.insert(newRecord);
 				if(!BaseGameContact.isOkDb(dbIndex)){
-					return BaseGameContact.failed("save game record failed");
+					return BaseGameContact.failed("save init game record failed");
 				}
-				String token = gameData.getToken();
-				JSONObject postUpdateResult = HttpGameContact.postUpdateAccount(token,hgamePlayRecord.getGold(),"游戏升级结算:"+hgamePlayRecord.getGold());
-				Boolean isOk = BaseGameContact.isOk(postUpdateResult);
-				if(isOk){
-					dbIndex = hgameUserRefDao.updateGameUserGold(DbGameContact.updateGameUserRef(null,hgamePlayRecord));
-					if(!BaseGameContact.isOkDb(dbIndex)){
-						return BaseGameContact.failed("update game gold failed");
-					}
-				}
-				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(oldGameUserRef,hgamePlayRecord));
+
+				//更新用户游戏信息
+				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,score,oldTotalScore));
 				if(BaseGameContact.isOkDb(dbIndex)){
 					return BaseGameContact.success(true);
 				}
@@ -107,6 +99,84 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			logger.error("游戏升级记录异常",e);
 			return BaseGameContact.failed("Save game level up log error");
 		}
+	}
+
+	/**
+	 * @desc 修改战绩最好的游戏战局
+	 * @author nada
+	 * @create 2021/1/15 9:42 上午
+	*/
+	@Transactional(readOnly=false)
+	public Boolean updateBestGameRecord(HgamePlayRecord oldRecord,Long oldTotalScore,String token,Long level, Long gold, Long score,Long start) {
+		try {
+			Long oldGold = oldRecord.getGold();
+			Long oldScore = oldRecord.getScore();
+			Long oldLevel = oldRecord.getLevel();
+			Long oldStart = oldRecord.getStart();
+			if(!(level).equals(oldLevel)){
+				return false;
+			}
+			Long newRecord = 0L;
+			Boolean isUpdate = false;
+			if(gold > oldGold){
+				isUpdate = true;
+				oldRecord.setGold(gold);
+				Long newGold = gold - oldGold;
+				String tag = "游戏重玩结算:"+gold;
+				Boolean isSync = this.synAppGold(token,oldRecord.getUserId(),oldRecord.getGameId(),newGold,tag);
+				if(!isSync){
+					logger.error("app和本地乐豆同步失败:{}",isSync);
+					return false;
+				}
+			}
+			if(score > oldScore){
+				isUpdate = true;
+				oldRecord.setScore(score);
+				newRecord = score - oldScore;
+				//更新用户游戏信息
+				Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.resetGameUserRef(oldRecord.getUserId(),oldRecord.getGameId(),oldTotalScore,newRecord));
+				if(BaseGameContact.isOkDb(dbIndex)){
+					logger.error("更新用户游戏信息失败:{}",dbIndex);
+					return false;
+				}
+			}
+			if(start > oldStart){
+				isUpdate = true;
+				oldRecord.setStart(start);
+			}
+			if(!isUpdate){
+				return false;
+			}
+			Long dbIndex = hgamePlayRecordDao.update(oldRecord);
+			Boolean isOk = BaseGameContact.isOkDb(dbIndex);
+			if(!isOk){
+				return false;
+			}
+			return BaseGameContact.isOkDb(dbIndex);
+		} catch (Exception e) {
+			logger.error("修改战绩最好的游戏战局异常",e);
+			return false;
+		}
+	}
+
+
+	/**
+	 * @desc app和本地乐豆同步
+	 * @author nada
+	 * @create 2021/1/15 10:05 上午
+	 */
+	@Transactional(readOnly=false)
+	public Boolean synAppGold(String token,String userId,String gameId, Long gold,String tag) {
+		JSONObject result = HttpGameContact.updateAppGold(token,gold,tag);
+		Boolean isOk = BaseGameContact.isOk(result);
+		if(!isOk){
+			return false;
+		}
+		Long dbIndex = hgameUserRefDao.updateGameUserGold(DbGameContact.updateGameUserGold(userId,gameId,gold));
+		if(BaseGameContact.isOkDb(dbIndex)){
+			return true;
+		}
+		return false;
 	}
 
 	/***

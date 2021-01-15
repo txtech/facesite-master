@@ -37,13 +37,6 @@ public class HgameApiController extends BaseController {
 		return userInfoApiService.getUserInfo(gameData);
 	}
 
-	@RequestMapping(value = {"updateGameStart"})
-	@ResponseBody
-	public JSONObject updateGameStart(@RequestBody GameData gameData) {
-
-		return userInfoApiService.updateGameStart(gameData);
-	}
-
 	@RequestMapping(value = {"updateGamelevelUp"})
 	@ResponseBody
 	public JSONObject updateGamelevelUp(@RequestBody GameData gameData) {
