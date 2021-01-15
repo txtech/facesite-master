@@ -172,7 +172,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 		JSONObject result = HttpGameContact.updateAppGold(token,gold,tag);
 		Boolean isOk = BaseGameContact.isOk(result);
 		if(!isOk){
-			return false;
+			// return false;
 		}
 		Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRefGold(userId,gameId,gold));
 		if(BaseGameContact.isOkDb(dbIndex)){
