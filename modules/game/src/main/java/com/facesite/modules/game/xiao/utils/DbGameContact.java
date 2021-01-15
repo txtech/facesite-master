@@ -70,15 +70,15 @@ public class DbGameContact {
      * @author nada
      * @create 2021/1/15 11:26 上午
     */
-    public static HgameUserInfo initVisitorUserInfo(String token){
+    public static HgameUserInfo initVisitorUserInfo(String ip,String token){
         HgameUserInfo userInfo = new HgameUserInfo();
         userInfo.setParentId(UUID.randomUUID().toString());
         userInfo.setType(TYPE_VISITOR);
         userInfo.setToken(token);
         userInfo.setStatus("0");
         userInfo.setMobile("123456");
-        userInfo.setNickname("游客");
-        userInfo.setUsername("游客");
+        userInfo.setNickname("游客:"+ip);
+        userInfo.setUsername("游客:"+ip);
         userInfo.setHbeans(0L);
         userInfo.setLbeans(0L);
         userInfo.setPhoto("");
@@ -149,6 +149,12 @@ public class DbGameContact {
         hgameInfo.setStatus("0");
         hgameInfo.setType(type);
         return hgameInfo;
+    }
+    public static HgameUserInfo paramsGameUserToken(String token) {
+        HgameUserInfo userInfo = new HgameUserInfo();
+        userInfo.setStatus("0");
+        userInfo.setToken(token);
+        return userInfo;
     }
     public static HgameUserInfo paramsGameUserInfo(String parentId) {
         HgameUserInfo userInfo = new HgameUserInfo();

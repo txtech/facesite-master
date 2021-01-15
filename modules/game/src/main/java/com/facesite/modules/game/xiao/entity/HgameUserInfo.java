@@ -30,7 +30,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="username", attrName="username", label="用户名称", queryType=QueryType.LIKE),
 		@Column(name="hbeans", attrName="hbeans", label="用户呵豆"),
 		@Column(name="lbeans", attrName="lbeans", label="用户乐豆"),
-		@Column(name="token", attrName="token", label="登陆token", isQuery=false),
+		@Column(name="token", attrName="token", label="登陆token"),
 		@Column(name="photo", attrName="photo", label="用户头像", isQuery=false),
 		@Column(name="sex", attrName="sex", label="用户性别"),
 		@Column(name="age", attrName="age", label="用户年龄"),
@@ -43,7 +43,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class HgameUserInfo extends DataEntity<HgameUserInfo> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String parentId;		// 父ID
 	private Integer type;		// 用户类型
@@ -59,7 +59,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+
 	public HgameUserInfo() {
 		this(null);
 	}
@@ -67,7 +67,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public HgameUserInfo(String id){
 		super(id);
 	}
-	
+
 	@Length(min=0, max=255, message="父ID长度不能超过 255 个字符")
 	public String getParentId() {
 		return parentId;
@@ -76,7 +76,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
-	
+
 	@NotNull(message="用户类型不能为空")
 	public Integer getType() {
 		return type;
@@ -85,7 +85,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setType(Integer type) {
 		this.type = type;
 	}
-	
+
 	@Length(min=0, max=50, message="手机号码长度不能超过 50 个字符")
 	public String getMobile() {
 		return mobile;
@@ -94,7 +94,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	
+
 	@Length(min=0, max=50, message="用户昵称长度不能超过 50 个字符")
 	public String getNickname() {
 		return nickname;
@@ -103,7 +103,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-	
+
 	@Length(min=0, max=50, message="用户名称长度不能超过 50 个字符")
 	public String getUsername() {
 		return username;
@@ -112,7 +112,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public Long getHbeans() {
 		return hbeans;
 	}
@@ -120,7 +120,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setHbeans(Long hbeans) {
 		this.hbeans = hbeans;
 	}
-	
+
 	public Long getLbeans() {
 		return lbeans;
 	}
@@ -128,7 +128,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setLbeans(Long lbeans) {
 		this.lbeans = lbeans;
 	}
-	
+
 	@Length(min=0, max=255, message="登陆token长度不能超过 255 个字符")
 	public String getToken() {
 		return token;
@@ -137,7 +137,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	
+
 	@Length(min=0, max=255, message="用户头像长度不能超过 255 个字符")
 	public String getPhoto() {
 		return photo;
@@ -146,7 +146,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
-	
+
 	@Length(min=0, max=2, message="用户性别长度不能超过 2 个字符")
 	public String getSex() {
 		return sex;
@@ -155,7 +155,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	
+
 	public Integer getAge() {
 		return age;
 	}
@@ -163,7 +163,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setAge(Integer age) {
 		this.age = age;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -172,7 +172,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -181,7 +181,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -190,7 +190,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
 	public Date getCreated_gte() {
 		return sqlMap.getWhere().getValue("created", QueryType.GTE);
 	}
@@ -198,7 +198,7 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setCreated_gte(Date created) {
 		sqlMap.getWhere().and("created", QueryType.GTE, created);
 	}
-	
+
 	public Date getCreated_lte() {
 		return sqlMap.getWhere().getValue("created", QueryType.LTE);
 	}
@@ -206,5 +206,5 @@ public class HgameUserInfo extends DataEntity<HgameUserInfo> {
 	public void setCreated_lte(Date created) {
 		sqlMap.getWhere().and("created", QueryType.LTE, created);
 	}
-	
+
 }

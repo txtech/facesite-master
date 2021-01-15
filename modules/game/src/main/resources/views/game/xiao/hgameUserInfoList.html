@@ -76,7 +76,9 @@ $('#dataGrid').dataGrid({
 		{header:'${text("用户状态")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
 			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
 		}},
-		{header:'${text("用户类型")}', name:'type', index:'a.type', width:150, align:"center"},
+		{header:'${text("用户类型")}', name:'type', index:'a.type', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('nada_game_user_type')}, val, '${text("未知")}', true);
+		}},
 		{header:'${text("手机号码")}', name:'mobile', index:'a.mobile', width:150, align:"left"},
 		{header:'${text("用户名称")}', name:'username', index:'a.username', width:150, align:"left"},
 		{header:'${text("用户呵豆")}', name:'hbeans', index:'a.hbeans', width:150, align:"center"},

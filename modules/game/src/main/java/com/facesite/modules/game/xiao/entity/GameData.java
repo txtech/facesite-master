@@ -22,6 +22,7 @@ public class GameData {
     private Long level;
     private Long start;
     private String boosters;
+    private String ipAddress;
 
     public String getToken() {
         return token;
@@ -93,5 +94,13 @@ public class GameData {
 
     public void setBoosters(String boosters) {
         this.boosters = boosters;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 }
