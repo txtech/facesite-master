@@ -21,14 +21,7 @@ public class GameData {
     private Long score;
     private Long level;
     private Long start;
-    // 完成等级
-    private Long levelsCompleted;
-    // 游戏分数
-    private Long totalScore;
-    // 游戏道具
-    private String boostersCount;
-    // 游戏星级
-    private String starsPerLevel;
+    private String boosters;
 
     public String getToken() {
         return token;
@@ -44,38 +37,6 @@ public class GameData {
 
     public void setPlayId(String playId) {
         this.playId = playId;
-    }
-
-    public Long getLevelsCompleted() {
-        return levelsCompleted;
-    }
-
-    public void setLevelsCompleted(Long levelsCompleted) {
-        this.levelsCompleted = levelsCompleted;
-    }
-
-    public Long getTotalScore() {
-        return totalScore;
-    }
-
-    public void setTotalScore(Long totalScore) {
-        this.totalScore = totalScore;
-    }
-
-    public String getBoostersCount() {
-        return boostersCount;
-    }
-
-    public void setBoostersCount(String boostersCount) {
-        this.boostersCount = boostersCount;
-    }
-
-    public String getStarsPerLevel() {
-        return starsPerLevel;
-    }
-
-    public void setStarsPerLevel(String starsPerLevel) {
-        this.starsPerLevel = starsPerLevel;
     }
 
     public Long getScore() {
@@ -124,5 +85,13 @@ public class GameData {
 
     public void setStart(Long start) {
         this.start = start;
+    }
+
+    public String getBoosters() {
+        return boosters;
+    }
+
+    public void setBoosters(String boosters) {
+        this.boosters = boosters;
     }
 }
