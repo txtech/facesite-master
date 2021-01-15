@@ -64,10 +64,11 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					return BaseGameContact.failed("get user game info failed");
 				}
 				//战绩重置
+				String oldStarsPerLevel = oldGameUserRef.getStarsPerLevel();
 				List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(DbGameContact.paramsGamePlayRecord(type,userId,gameId,level));
 				if(list !=null && list.size() > 0){
 					HgamePlayRecord oldRecord = list.get(0);
-					Boolean isOk = this.updateBestGameRecord(oldRecord,token,level,gold,score,start);
+					Boolean isOk = this.updateBestGameRecord(oldRecord,token,level,gold,score,start,oldStarsPerLevel);
 					logger.info("修改战绩最好的游戏战局:{}",isOk);
 					return BaseGameContact.success(isOk);
 				}
@@ -88,7 +89,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				}
 
 				//更新用户游戏信息
-				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,score));
+				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,score,start,oldStarsPerLevel));
 				if(BaseGameContact.isOkDb(dbIndex)){
 					return BaseGameContact.success(true);
 				}
@@ -106,7 +107,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	 * @create 2021/1/15 9:42 上午
 	*/
 	@Transactional(readOnly=false)
-	public Boolean updateBestGameRecord(HgamePlayRecord oldRecord,String token,Long level, Long gold, Long score,Long start) {
+	public Boolean updateBestGameRecord(HgamePlayRecord oldRecord,String token,Long level, Long gold, Long score,Long start,String oldStarsPerLevel) {
 		try {
 			String userId = oldRecord.getUserId();
 			String gameId = oldRecord.getGameId();
@@ -144,7 +145,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				return false;
 			}
 			//更新用户游戏信息
-			Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.resetGameUserRef(userId,gameId,newScore));
+			Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,newScore,start,oldStarsPerLevel));
 			if(!BaseGameContact.isOkDb(dbIndex)){
 				logger.error("更新用户游戏信息失败:{}",dbIndex);
 				return false;

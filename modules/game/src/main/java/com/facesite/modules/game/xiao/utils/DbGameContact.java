@@ -1,7 +1,9 @@
 package com.facesite.modules.game.xiao.utils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.facesite.modules.game.xiao.entity.*;
+import com.jeesite.common.lang.StringUtils;
 
 import java.util.UUID;
 
@@ -115,17 +117,6 @@ public class DbGameContact {
     }
 
 
-
-
-    public static HgameUserRef resetGameUserRef(String userId,String gameId,Long newScore){
-        HgameUserRef userRef = new HgameUserRef();
-        userRef.setUserId(userId);
-        userRef.setGameId(gameId);
-        if(newScore > 0){
-            userRef.setTotalScore(newScore);
-        }
-        return userRef;
-    }
     public static HgameUserRef updateGameUserRefGold(String userId,String gameId,Long gold){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
@@ -133,12 +124,21 @@ public class DbGameContact {
         userRef.setGold(gold);
         return userRef;
     }
-    public static HgameUserRef updateGameUserRef(String userId,String gameId,Long level,Long score){
+    public static HgameUserRef updateGameUserRef(String userId,String gameId,Long level,Long score,Long start,String oldStarsPerLevel){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
         userRef.setGameId(gameId);
         userRef.setLevelsCompleted(level);
-        userRef.setTotalScore(score);
+        if(score > 0){
+            userRef.setTotalScore(score);
+        }
+        if(level > 0 && start >0 && StringUtils.isNotBlank(oldStarsPerLevel)){
+            JSONArray array = JSONArray.parseArray(oldStarsPerLevel);
+            int index = level.intValue() - 1;
+            array.add(index,start);
+            String newStarsPerLevel = array.toString();
+            userRef.setStarsPerLevel(newStarsPerLevel);
+        }
         return userRef;
     }
 
