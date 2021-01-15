@@ -3,6 +3,7 @@ package com.facesite.modules.game.xiao.utils;
 import cn.hutool.core.lang.Console;
 import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
@@ -20,12 +21,22 @@ public class HttpGameContact {
 
     public static void main(String[] args) {
         //postUserLogin();
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySWQiOiJjM2JmMzM0MC05M2FjLTRmNmQtYmVjNC1kYmI1YThlYmE1MjQiLCJNb2JpbGUiOiIxMzg3MTExNTkxOSIsIlVzZXJUeXBlIjoiNmMwZmYyNDktM2RhOC00NDk5LThkODEtNGZhNTgwNzIyMGQ4IiwiZXhwIjoxNjEwNzMzMjM3LjB9.bP2AlSpnnti4hLaUGb61JzpmVzXu7a0aYb2C1ZzdFbw";
+        /*String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySWQiOiJjM2JmMzM0MC05M2FjLTRmNmQtYmVjNC1kYmI1YThlYmE1MjQiLCJNb2JpbGUiOiIxMzg3MTExNTkxOSIsIlVzZXJUeXBlIjoiNmMwZmYyNDktM2RhOC00NDk5LThkODEtNGZhNTgwNzIyMGQ4IiwiZXhwIjoxNjEwNzMzMjM3LjB9.bP2AlSpnnti4hLaUGb61JzpmVzXu7a0aYb2C1ZzdFbw";
         Long hBeans = 0L;
         String tage = "赢得游戏";
         updateAppGold(token,hBeans,tage);
-        getUserInfo(token);
+        getUserInfo(token);*/
+        test();
     }
+
+    public static void test(){
+        String a = "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]";
+        JSONArray array = JSONArray.parseArray(a);
+        System.out.println("原始数组："+array);
+        array.add(6,2);
+        System.out.println("修改数组："+array);
+    }
+
     /**
      * @desc 用户登陆
      * @author nada

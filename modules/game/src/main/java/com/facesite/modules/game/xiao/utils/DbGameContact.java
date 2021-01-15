@@ -117,14 +117,13 @@ public class DbGameContact {
 
 
 
-    public static HgameUserRef resetGameUserRef(String userId,String gameId,Long oldTotalScore,Long newScore){
+    public static HgameUserRef resetGameUserRef(String userId,String gameId,Long newScore){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
         userRef.setGameId(gameId);
-        if(newScore < 1){
-            return userRef;
+        if(newScore > 0){
+            userRef.setTotalScore(newScore);
         }
-        userRef.setTotalScore(oldTotalScore + newScore);
         return userRef;
     }
     public static HgameUserRef updateGameUserRefGold(String userId,String gameId,Long gold){
@@ -134,12 +133,12 @@ public class DbGameContact {
         userRef.setGold(gold);
         return userRef;
     }
-    public static HgameUserRef updateGameUserRef(String userId,String gameId,Long level,Long score,long oldTotalScore){
+    public static HgameUserRef updateGameUserRef(String userId,String gameId,Long level,Long score){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
         userRef.setGameId(gameId);
         userRef.setLevelsCompleted(level);
-        userRef.setTotalScore(score+oldTotalScore);
+        userRef.setTotalScore(score);
         return userRef;
     }
 
