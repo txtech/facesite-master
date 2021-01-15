@@ -200,7 +200,9 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(hgameUserRef == null){
 					return BaseGameContact.failed("init userinfo failed");
 				}
-				return BaseGameContact.success(DbGameContact.responseGameUserInfo(hgameInfo,hgameUserRef));
+				JSONObject response = DbGameContact.responseGameUserInfo(hgameInfo,hgameUserRef);
+				logger.info("获取用户信息:{}",response);
+				return BaseGameContact.success(response);
 			}
 		} catch (Exception e) {
 			Console.log("获取用户信息异常",e);
