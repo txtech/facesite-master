@@ -88,9 +88,9 @@ $('#dataGrid').dataGrid({
 			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
 		}},*/
 		{header:'${text("游戏闯关")}', name:'level', index:'a.level', width:150, align:"center"},
-		{header:'${text("战局类型")}', name:'type', index:'a.type', width:150, align:"center", formatter: function(val, obj, row, act){
+		/*{header:'${text("战局类型")}', name:'type', index:'a.type', width:150, align:"center", formatter: function(val, obj, row, act){
 				return js.getDictLabel(${@DictUtils.getDictListJson('nada_game_play_type')}, val, '${text("未知")}', true);
-		}},
+		}},*/
 		{header:'${text("唯一战局")}', name:'playId', index:'a.play_id', width:150, align:"center"},
 		{header:'${text("用户呵豆")}', name:'hbeans', index:'a.hbeans', width:150, align:"center"},
 		{header:'${text("游戏金币")}', name:'gold', index:'a.gold', width:150, align:"center"},
