@@ -22,7 +22,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  */
 @Table(name="h_game_user_info", alias="a", columns={
 		@Column(name="id", attrName="id", label="id", isPK=true),
-		@Column(name="parent_id", attrName="parentId", label="父ID", isQuery=false),
+		@Column(name="parent_id", attrName="parentId", label="父ID", queryType=QueryType.EQ),
 		@Column(name="status", attrName="status", label="用户状态", queryType=QueryType.EQ),
 		@Column(name="type", attrName="type", label="用户类型", queryType=QueryType.EQ),
 		@Column(name="mobile", attrName="mobile", label="手机号码", queryType=QueryType.LIKE),

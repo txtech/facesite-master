@@ -21,12 +21,12 @@ public class HttpGameContact {
 
     public static void main(String[] args) {
         //postUserLogin();
-        /*String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySWQiOiJjM2JmMzM0MC05M2FjLTRmNmQtYmVjNC1kYmI1YThlYmE1MjQiLCJNb2JpbGUiOiIxMzg3MTExNTkxOSIsIlVzZXJUeXBlIjoiNmMwZmYyNDktM2RhOC00NDk5LThkODEtNGZhNTgwNzIyMGQ4IiwiZXhwIjoxNjEwNzMzMjM3LjB9.bP2AlSpnnti4hLaUGb61JzpmVzXu7a0aYb2C1ZzdFbw";
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySWQiOiIxMzA3MTAwNy00NzQyLTRlOTQtOTc0OC1kMWEyOGRkOWZmZmMiLCJNb2JpbGUiOiIxODE2MTg1NjAzMCIsIlVzZXJUeXBlIjoiNmMwZmYyNDktM2RhOC00NDk5LThkODEtNGZhNTgwNzIyMGQ4IiwiZXhwIjoxNjEwOTIyMjg5LjB9.vH5aHYZtkxuMxbIMcoWYVerv8uu2zlACdHR33PVdSOw";
         Long hBeans = 0L;
         String tage = "赢得游戏";
         updateAppGold(token,hBeans,tage);
-        getUserInfo(token);*/
-        test();
+        getUserInfo(token);
+       /* test();*/
     }
 
     public static void test(){
@@ -47,7 +47,7 @@ public class HttpGameContact {
      */
     public static void postUserLogin(){
         JSONObject retJson = new JSONObject();
-        retJson.put("Phone", "13871115919");
+        retJson.put("Phone", "18161856030");
         retJson.put("Pwd", "123456");
         retJson.put("Code", "123456");
         String result = HttpRequest.post(login_url).header("Content-Type", "application/json").body(retJson.toJSONString()).execute().body();
