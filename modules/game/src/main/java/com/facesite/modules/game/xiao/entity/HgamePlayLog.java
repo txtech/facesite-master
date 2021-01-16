@@ -57,7 +57,7 @@ public class HgamePlayLog extends DataEntity<HgamePlayLog> {
 	private Long gole;		// 游戏金币
 	private Long score;		// 游戏分数
 	private Long start;		// 游戏星级
-	private String boosters;		// 游戏道具
+	private Long boosters;		// 游戏道具
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
@@ -110,15 +110,6 @@ public class HgamePlayLog extends DataEntity<HgamePlayLog> {
 		this.start = start;
 	}
 
-	@Length(min=0, max=255, message="游戏道具长度不能超过 255 个字符")
-	public String getBoosters() {
-		return boosters;
-	}
-
-	public void setBoosters(String boosters) {
-		this.boosters = boosters;
-	}
-
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -164,6 +155,14 @@ public class HgamePlayLog extends DataEntity<HgamePlayLog> {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public Long getBoosters() {
+		return boosters;
+	}
+
+	public void setBoosters(Long boosters) {
+		this.boosters = boosters;
 	}
 
 	public void setHgameUserInfo(HgameUserInfo hgameUserInfo) {

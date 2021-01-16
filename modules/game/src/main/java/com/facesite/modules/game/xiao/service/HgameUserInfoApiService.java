@@ -71,9 +71,8 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(BaseGameContact.isOkDb(dbIndex)){
 					Long gole = 0L;
 					Long score = 0L;
-					String boosters = String.valueOf(bootserId);
-					String remarks = "使用道具:"+bootserId;
-					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,boosters,remarks));
+					String remarks = "使用道具:"+bootserId+1;
+					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
 					return BaseGameContact.success(true);
 				}
 				return BaseGameContact.failed("Save game level up log failed");
@@ -139,9 +138,8 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(BaseGameContact.isOkDb(dbIndex)){
 					Long gole = -needGold;
 					Long score = 0L;
-					String boosters = String.valueOf(bootserId);
 					String remarks = "购买道具:"+bootserId;
-					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,boosters,remarks));
+					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
 					return BaseGameContact.success(true);
 				}
 				return BaseGameContact.failed("Save game level up log failed");
@@ -208,7 +206,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,score,start,oldStarsPerLevel,isSync));
 				if(BaseGameContact.isOkDb(dbIndex)){
 					String remarks = "闯关升级:"+score;
-					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,level,score,score,"",remarks));
+					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,level,score,score,0L,remarks));
 					return BaseGameContact.success(true);
 				}
 				return BaseGameContact.failed("Save game level up log failed");
@@ -262,7 +260,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					return false;
 				}
 				String remarks = "重新闯关:"+newGold;
-				hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,level,newGold,newGold,"",remarks));
+				hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,level,newGold,newGold,0L,remarks));
 			}
 			if(!isUpdate){
 				return false;
@@ -295,15 +293,14 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 		if(userType != null && userType ==2){
 			JSONObject result = HttpGameContact.updateAppGold(token,gold,tag);
 			Boolean isOk = BaseGameContact.isOk(result);
+			String remarks = "";
 			if(!isOk){
 				logger.error("app和本地乐豆同步失败:{}",result);
-				String remarks = "同步呵豆失败:"+gold;
-				hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_1,userId,gameId,level,gold,gold,"",remarks));
-				// return false;
+				remarks = "同步呵豆失败:"+gold;
 			}else{
-				String remarks = "同步呵豆成功:"+gold;
-				hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_1,userId,gameId,level,gold,gold,"",remarks));
+				remarks = "同步呵豆成功:"+gold;
 			}
+			hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_1,userId,gameId,level,gold,gold,0L,remarks));
 		}
 		Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRefGold(userId,gameId,gold));
 		if(BaseGameContact.isOkDb(dbIndex)){

@@ -129,7 +129,7 @@ public class DbGameContact {
         record.setRemarks(tag);
         return record;
     }
-    public static HgamePlayLog saveLog(Integer type,String userId,String gameId,Long level,Long gole,Long score,String boosters,String remarks){
+    public static HgamePlayLog saveLog(Integer type,String userId,String gameId,Long level,Long gole,Long score,Long boosters,String remarks){
         HgamePlayLog hgamePlayLog = new HgamePlayLog();
         hgamePlayLog.setUserId(userId);
         hgamePlayLog.setGameId(gameId);
