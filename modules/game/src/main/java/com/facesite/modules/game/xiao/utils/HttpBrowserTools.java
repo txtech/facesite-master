@@ -47,7 +47,7 @@ public class HttpBrowserTools {
             }
             return "";
         } catch (Exception e) {
-            Console.log(e);
+            Console.error(e);
             return "";
         }
     }
@@ -81,6 +81,7 @@ public class HttpBrowserTools {
             }
             return ip;
         } catch (Exception e) {
+            Console.error(e);
             return "";
         }
     }
