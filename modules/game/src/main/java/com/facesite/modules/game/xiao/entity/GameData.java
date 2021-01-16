@@ -12,7 +12,6 @@ import com.alibaba.fastjson.JSONObject;
  * @Version 1.0
  */
 public class GameData {
-    private String token;
     private String uid;
     private String gid;
     private String playId;
@@ -26,14 +25,6 @@ public class GameData {
     private Long start;
     private String boosters;
     private String ipAddress;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public String getPlayId() {
         return playId;

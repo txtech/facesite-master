@@ -213,6 +213,12 @@ public class DbGameContact {
         hgameInfo.setType(type);
         return hgameInfo;
     }
+    public static HgameUserInfo paramsGameUserId(String id) {
+        HgameUserInfo userInfo = new HgameUserInfo();
+        userInfo.setStatus("0");
+        userInfo.setId(id);
+        return userInfo;
+    }
     public static HgameUserInfo paramsGameUserToken(String token) {
         HgameUserInfo userInfo = new HgameUserInfo();
         userInfo.setStatus("0");
@@ -223,6 +229,12 @@ public class DbGameContact {
         HgameUserInfo userInfo = new HgameUserInfo();
         userInfo.setStatus("0");
         userInfo.setParentId(parentId);
+        return userInfo;
+    }
+    public static HgameUserInfo paramsGameUserInfoUpdate(String userId,String token) {
+        HgameUserInfo userInfo = new HgameUserInfo();
+        userInfo.setId(userId);
+        userInfo.setToken(token);
         return userInfo;
     }
     public static HgamePlayRecord paramsGamePlayRecord(int type,String userId,String gameId,Long level){

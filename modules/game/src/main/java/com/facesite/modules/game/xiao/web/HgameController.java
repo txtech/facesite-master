@@ -24,16 +24,21 @@ import javax.servlet.http.HttpServletResponse;
  * @author nada
  * @version 2021-01-11
  */
+//http://47.110.43.93/game/f/h5/index
 @Controller
 @CrossOrigin("*")
 @RequestMapping(value = "${frontPath}/h5")
 public class HgameController extends BaseController {
 
+	@Autowired
+	private HgameUserInfoApiService userInfoApiService;
+
 	@RequestMapping(value = "index")
 	public String getUserInfo(RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) {
-		String url = "redirect:http://test88.prxgg.cn/game/8/index.html";
-		attr.addAttribute("token", "a");
-		attr.addAttribute("userID", "b");
+		String ip = HttpBrowserTools.getIpAddr(request);
+		String token = request.getParameter("tokne");
+		String uid = userInfoApiService.initUid(token,ip);
+		String url = "redirect:http://test88.prxgg.cn/game/8/index.html?uid="+uid;
 		return url;
 	}
 }
