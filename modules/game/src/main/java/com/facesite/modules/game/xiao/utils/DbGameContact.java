@@ -70,20 +70,21 @@ public class DbGameContact {
      * @author nada
      * @create 2021/1/15 11:26 上午
     */
-    public static HgameUserInfo initVisitorUserInfo(String ip,String token){
+    public static HgameUserInfo initVisitorUserInfo(Long seqId,String ip,String token){
         HgameUserInfo userInfo = new HgameUserInfo();
         userInfo.setParentId(UUID.randomUUID().toString());
         userInfo.setType(TYPE_VISITOR);
         userInfo.setToken(token);
         userInfo.setStatus("0");
-        userInfo.setMobile("123456");
-        userInfo.setNickname("游客:"+ip);
-        userInfo.setUsername("游客:"+ip);
+        userInfo.setMobile("15188888888");
+        userInfo.setNickname(ip);
+        userInfo.setUsername("游客:"+seqId);
         userInfo.setHbeans(0L);
         userInfo.setLbeans(0L);
         userInfo.setPhoto("");
         userInfo.setSex("1");
         userInfo.setAge(1);
+        userInfo.setRemarks(HttpBrowserTools.getAlibaba(ip));
         return userInfo;
     }
     public static HgameUserRef initGameUserRef(HgameInfo hgameInfo,String userId){

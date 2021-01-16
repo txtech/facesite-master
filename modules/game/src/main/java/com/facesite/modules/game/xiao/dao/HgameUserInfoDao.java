@@ -14,5 +14,9 @@ import com.facesite.modules.game.xiao.entity.HgameUserInfo;
  */
 @MyBatisDao
 public interface HgameUserInfoDao extends CrudDao<HgameUserInfo> {
-	
+
+    public  int addSequence();
+
+    public  Long getNextSequence();
+
 }

@@ -241,7 +241,9 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				//游客玩家
 				HgameUserInfo hgameUserInfo = hgameUserInfoDao.getByEntity(DbGameContact.paramsGameUserToken(token));
 				if(hgameUserInfo == null || StringUtils.isEmpty(hgameUserInfo.getId())){
-					HgameUserInfo initUserInfo = DbGameContact.initVisitorUserInfo(ip,token);
+					Long seqId = hgameUserInfoDao.getNextSequence();
+					HgameUserInfo initUserInfo = DbGameContact.initVisitorUserInfo(seqId,ip,token);
+					hgameUserInfoDao.addSequence();
 					HgameUserRef hgameUserRef = this.initGameDb(initUserInfo,hgameInfo);
 					return hgameUserRef;
 				}

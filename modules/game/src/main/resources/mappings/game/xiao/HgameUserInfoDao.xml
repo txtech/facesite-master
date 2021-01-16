@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.facesite.modules.game.xiao.dao.HgameUserInfoDao">
-	
+
 	<!-- 查询数据
 	<select id="findList" resultType="HgameUserInfo">
 		SELECT ${sqlMap.column.toSql()}
@@ -11,5 +11,13 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+
+	<insert id="addSequence">
+     insert into h_game_user_sequence ( name ) values (  0 )
+    </insert>
+
+	<select id="getNextSequence" resultType="java.lang.Long">
+		select IFNULL(max(id),0) from h_game_user_sequence
+	</select>
+
 </mapper>
