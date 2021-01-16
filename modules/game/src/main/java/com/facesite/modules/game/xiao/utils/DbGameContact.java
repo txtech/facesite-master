@@ -124,7 +124,7 @@ public class DbGameContact {
         userRef.setGold(gold);
         return userRef;
     }
-    public static HgameUserRef updateGameUserRef(String userId,String gameId,Long level,Long score,Long start,String oldStarsPerLevel){
+    public static HgameUserRef updateGameUserRef(String userId,String gameId,Long level,Long score,Long start,String oldStarsPerLevel,Boolean isSync){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
         userRef.setGameId(gameId);
@@ -138,6 +138,9 @@ public class DbGameContact {
             array.add(index,start);
             String newStarsPerLevel = array.toString();
             userRef.setStarsPerLevel(newStarsPerLevel);
+        }
+        if(!isSync){
+            userRef.setRemarks(level+":同步失败");
         }
         return userRef;
     }

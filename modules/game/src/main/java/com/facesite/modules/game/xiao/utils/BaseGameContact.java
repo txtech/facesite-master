@@ -16,6 +16,13 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
  */
 public class BaseGameContact {
 
+    public static Long getLong(Long v){
+        if(v == null){
+            return 0L;
+        }
+        return v;
+    }
+
     public static JSONObject success(Object result){
         JSONObject response = new JSONObject();
         response.put("ok",true);
