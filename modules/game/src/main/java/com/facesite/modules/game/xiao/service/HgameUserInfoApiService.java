@@ -71,7 +71,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(BaseGameContact.isOkDb(dbIndex)){
 					Long gole = 0L;
 					Long score = 0L;
-					String remarks = "使用道具:"+bootserId+1;
+					String remarks = "使用道具:"+(bootserId+1);
 					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
 					return BaseGameContact.success(true);
 				}
@@ -138,7 +138,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(BaseGameContact.isOkDb(dbIndex)){
 					Long gole = -needGold;
 					Long score = 0L;
-					String remarks = "购买道具:"+bootserId;
+					String remarks = "购买道具:"+(bootserId+1);
 					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
 					return BaseGameContact.success(true);
 				}
