@@ -42,6 +42,9 @@ public class DbGameContact {
         result.put("levelsCompleted", hgameUserRef.getLevelsCompleted());
         result.put("boostersCount",hgameUserRef.getBoostersCount());
         result.put("starsPerLevel",hgameUserRef.getStarsPerLevel());
+        if(hgameUserRef.getHgameUserInfo() != null){
+            result.put("name",hgameUserRef.getHgameUserInfo().getUsername());
+        }
         return result;
     }
     /**
