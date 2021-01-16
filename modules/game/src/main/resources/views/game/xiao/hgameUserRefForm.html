@@ -13,34 +13,9 @@
 			<div class="box-body">
 				<div class="form-unit">${text('基本信息')}</div>
 				<#form:hidden path="id"/>
+				<#form:hidden path="gameId"/>
+				<#form:input path="userId"/>
 				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('父ID')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="gameId" maxlength="20" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('用户ID')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="userId" maxlength="20" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('游戏状态 1')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control digits" />
-							</div>
-						</div>
-					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
@@ -73,56 +48,16 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> ${text('游戏道具')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="boostersCount" maxlength="255" class="form-control"/>
+								<#form:input path="boostersCount" readonly="true" maxlength="255" class="form-control"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('游戏道具')}：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> ${text('游戏星级数')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="starsPerLevel" maxlength="255" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('创建时间')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('更新时间')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('创建时间')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="startTime" readonly="true" maxlength="20" class="form-control laydate"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('更新时间')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="endTime" readonly="true" maxlength="20" class="form-control laydate"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+								<#form:input path="starsPerLevel" readonly="true" maxlength="255" class="form-control"/>
 							</div>
 						</div>
 					</div>

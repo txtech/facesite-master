@@ -24,17 +24,17 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="id", attrName="id", label="id", isPK=true),
 		@Column(name="game_id", attrName="gameId", label="父ID", isUpdate=false),
 		@Column(name="user_id", attrName="userId", label="用户ID", isUpdate=false),
-		@Column(name="status", attrName="status", label="游戏状态 1", comment="游戏状态 1:离线 2:在线 3:战局中"),
+		@Column(name="status", attrName="status", label="游戏状态", comment="游戏状态 1:离线 2:在线 3:战局中"),
 		@Column(name="levels_completed", attrName="levelsCompleted", label="完成等级"),
 		@Column(name="total_score", attrName="totalScore", label="游戏分数"),
 		@Column(name="gold", attrName="gold", label="游戏金币"),
 		@Column(name="boosters_count", attrName="boostersCount", label="游戏道具"),
 		@Column(name="stars_per_level", attrName="starsPerLevel", label="游戏道具"),
+		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
 		@Column(name="start_time", attrName="startTime", label="创建时间"),
 		@Column(name="end_time", attrName="endTime", label="更新时间"),
-		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
 		@Column(name="create_by", attrName="createBy", label="创建人", isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志", isQuery=false),
@@ -197,4 +197,21 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	public void setHgameUserInfo(HgameUserInfo hgameUserInfo) {
 		this.hgameUserInfo = hgameUserInfo;
 	}
+
+	public Date getCreated_gte() {
+		return sqlMap.getWhere().getValue("created", QueryType.GTE);
+	}
+
+	public void setCreated_gte(Date created) {
+		sqlMap.getWhere().and("created", QueryType.GTE, created);
+	}
+
+	public Date getCreated_lte() {
+		return sqlMap.getWhere().getValue("created", QueryType.LTE);
+	}
+
+	public void setCreated_lte(Date created) {
+		sqlMap.getWhere().and("created", QueryType.LTE, created);
+	}
+
 }

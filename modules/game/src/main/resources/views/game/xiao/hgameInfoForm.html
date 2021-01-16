@@ -28,7 +28,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> ${text('游戏类型：')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="type" maxlength="3" class="form-control digits"/>
+								<#form:select path="type" dictType="nada_game_info_type" class="form-control required digits" />
 							</div>
 						</div>
 					</div>

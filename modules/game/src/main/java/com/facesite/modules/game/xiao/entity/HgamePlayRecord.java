@@ -213,4 +213,20 @@ public class HgamePlayRecord extends DataEntity<HgamePlayRecord> {
 	public void setGold(Long gold) {
 		this.gold = gold;
 	}
+	public Date getCreated_gte() {
+		return sqlMap.getWhere().getValue("created", QueryType.GTE);
+	}
+
+	public void setCreated_gte(Date created) {
+		sqlMap.getWhere().and("created", QueryType.GTE, created);
+	}
+
+	public Date getCreated_lte() {
+		return sqlMap.getWhere().getValue("created", QueryType.LTE);
+	}
+
+	public void setCreated_lte(Date created) {
+		sqlMap.getWhere().and("created", QueryType.LTE, created);
+	}
+
 }

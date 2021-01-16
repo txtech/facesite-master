@@ -30,24 +30,14 @@
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('游戏类型')}：</label>
-					<div class="control-inline">
-						<#form:input path="type" maxlength="2" class="form-control width-120"/>
+					<div class="control-inline width-120">
+						<#form:select path="type" dictType="nada_game_info_type" blankOption="true" class="form-control isQuick"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('游戏版本')}：</label>
 					<div class="control-inline">
 						<#form:input path="version" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('创建时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="created_gte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm" data-done="created_lte.click()"/>
-						&nbsp;-&nbsp;
-						<#form:input path="created_lte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 					</div>
 				</div>
 				<div class="form-group">

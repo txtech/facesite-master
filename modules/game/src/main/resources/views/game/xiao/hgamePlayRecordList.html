@@ -47,23 +47,19 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('创建时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('更新时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('备注信息')}：</label>
 					<div class="control-inline">
 						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('创建时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="created_gte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm" data-done="created_lte.click()"/>
+						&nbsp;-&nbsp;
+						<#form:input path="created_lte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -91,7 +87,7 @@ $('#dataGrid').dataGrid({
 		/*{header:'${text("战局类型")}', name:'type', index:'a.type', width:150, align:"center", formatter: function(val, obj, row, act){
 				return js.getDictLabel(${@DictUtils.getDictListJson('nada_game_play_type')}, val, '${text("未知")}', true);
 		}},*/
-		{header:'${text("唯一战局")}', name:'playId', index:'a.play_id', width:150, align:"center"},
+		/*{header:'${text("唯一战局")}', name:'playId', index:'a.play_id', width:150, align:"center"},*/
 		{header:'${text("用户呵豆")}', name:'hbeans', index:'a.hbeans', width:150, align:"center"},
 		{header:'${text("游戏金币")}', name:'gold', index:'a.gold', width:150, align:"center"},
 		{header:'${text("游戏得数")}', name:'score', index:'a.score', width:150, align:"center"},
