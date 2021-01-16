@@ -204,7 +204,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				//更新用户游戏信息
 				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,score,start,oldStarsPerLevel,isSync));
 				if(BaseGameContact.isOkDb(dbIndex)){
-					String remarks = "闯关升级:"+score;
+					String remarks = "闯关升级:"+gold;
 					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,level,gold,score,0L,remarks));
 					return BaseGameContact.success(true);
 				}
