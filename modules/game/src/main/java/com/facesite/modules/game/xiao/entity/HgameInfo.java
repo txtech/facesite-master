@@ -29,6 +29,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="win", attrName="win", label="赢得游戏"),
 		@Column(name="lose", attrName="lose", label="游戏输了"),
 		@Column(name="config", attrName="config", label="游戏配置"),
+		@Column(name="boosters", attrName="boosters", label="游戏道具"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间", isQuery=false),
@@ -45,6 +46,7 @@ public class HgameInfo extends DataEntity<HgameInfo> {
 	private String version;		// 游戏版本
 	private Long win;		// 赢得游戏
 	private Long lose;		// 游戏输了
+	private String boosters;		// 游戏道具
 	private String config;		// 游戏配置
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
@@ -133,8 +135,17 @@ public class HgameInfo extends DataEntity<HgameInfo> {
 		return delFlag;
 	}
 
+
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+
+	public String getBoosters() {
+		return boosters;
+	}
+
+	public void setBoosters(String boosters) {
+		this.boosters = boosters;
 	}
 
 	public Date getCreated_gte() {
