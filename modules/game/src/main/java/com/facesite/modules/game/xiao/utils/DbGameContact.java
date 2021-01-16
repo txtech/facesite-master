@@ -25,6 +25,11 @@ public class DbGameContact {
     public static int PLAY_TYPE_5 = 5;
     public static int PLAY_TYPE_6 = 6;
 
+    // 1:同步日志 2:金币日志 3:道具日志
+    public static int LOG_TYPE_1 = 1;
+    public static int LOG_TYPE_2 = 2;
+    public static int LOG_TYPE_3 = 3;
+
     /**
      * @desc 响应游戏信息
      * @author nada
@@ -124,7 +129,18 @@ public class DbGameContact {
         record.setRemarks(tag);
         return record;
     }
-
+    public static HgamePlayLog saveLog(Integer type,String userId,String gameId,Long level,Long gole,Long score,String boosters,String remarks){
+        HgamePlayLog hgamePlayLog = new HgamePlayLog();
+        hgamePlayLog.setUserId(userId);
+        hgamePlayLog.setGameId(gameId);
+        hgamePlayLog.setType(type);
+        hgamePlayLog.setLevel(level);
+        hgamePlayLog.setGole(gole);
+        hgamePlayLog.setScore(score);
+        hgamePlayLog.setRemarks(remarks);
+        hgamePlayLog.setBoosters(boosters);
+        return hgamePlayLog;
+    }
 
     public static HgameUserRef updateGameUserRefGold(String userId,String gameId,Long gold){
         HgameUserRef userRef = new HgameUserRef();
@@ -154,8 +170,24 @@ public class DbGameContact {
         }
         return userRef;
     }
-
-    public static HgameUserRef updateGameUserRefboosters(String userId,String gameId,Long bootserId,String olBboostersCount,Boolean isSync){
+    public static HgameUserRef spendGameUserRefboosters(String userId,String gameId,Long bootserId,String olBboostersCount){
+        HgameUserRef userRef = new HgameUserRef();
+        userRef.setUserId(userId);
+        userRef.setGameId(gameId);
+        if(bootserId >=0 && StringUtils.isNotBlank(olBboostersCount)){
+            JSONArray array = JSONArray.parseArray(olBboostersCount);
+            int index = bootserId.intValue();
+            Long value = array.getLongValue(index);
+            if(value > 0){
+                array.remove(index);
+                array.add(index,value-1);
+                String newBoostersCount = array.toString();
+                userRef.setBoostersCount(newBoostersCount);
+            }
+        }
+        return userRef;
+    }
+    public static HgameUserRef addGameUserRefboosters(String userId,String gameId,Long bootserId,String olBboostersCount,Boolean isSync){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
         userRef.setGameId(gameId);
