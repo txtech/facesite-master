@@ -61,7 +61,7 @@ public class HgameUserRef extends DataEntity<HgameUserRef> {
 	private Long totalScore;		// 游戏分数
 	private Long gold;		// 游戏金币
 	private String boostersCount;		// 游戏道具
-	private String starsPerLevel;		// 游戏道具
+	private String starsPerLevel;		// 游戏星级
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private Date startTime;		// 创建时间

@@ -30,10 +30,13 @@ public class HttpGameContact {
     }
 
     public static void test(){
-        String a = "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]";
+        String a = "[0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]";
         JSONArray array = JSONArray.parseArray(a);
         System.out.println("原始数组："+array);
-        array.add(6,2);
+        Long value = array.getLongValue(6);
+        System.out.println("修改数组："+value);
+        array.remove(6);
+        array.add(6,value+1);
         System.out.println("修改数组："+array);
     }
 

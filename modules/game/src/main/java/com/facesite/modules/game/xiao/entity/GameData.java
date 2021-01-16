@@ -17,6 +17,9 @@ public class GameData {
     private String gid;
     private String playId;
 
+    private Long boosterId;
+    private Long needGold;
+
     private Long gold;
     private Long score;
     private Long level;
@@ -102,5 +105,21 @@ public class GameData {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public Long getBoosterId() {
+        return boosterId;
+    }
+
+    public void setBoosterId(Long boosterId) {
+        this.boosterId = boosterId;
+    }
+
+    public Long getNeedGold() {
+        return needGold;
+    }
+
+    public void setNeedGold(Long needGold) {
+        this.needGold = needGold;
     }
 }

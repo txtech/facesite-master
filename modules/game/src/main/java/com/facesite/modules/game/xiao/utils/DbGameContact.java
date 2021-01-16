@@ -143,6 +143,7 @@ public class DbGameContact {
         if(level > 0 && start >0 && StringUtils.isNotBlank(oldStarsPerLevel)){
             JSONArray array = JSONArray.parseArray(oldStarsPerLevel);
             int index = level.intValue() - 1;
+            array.remove(index);
             array.add(index,start);
             String newStarsPerLevel = array.toString();
             userRef.setStarsPerLevel(newStarsPerLevel);
@@ -153,6 +154,24 @@ public class DbGameContact {
         return userRef;
     }
 
+    public static HgameUserRef updateGameUserRefboosters(String userId,String gameId,Long bootserId,String olBboostersCount,Boolean isSync){
+        HgameUserRef userRef = new HgameUserRef();
+        userRef.setUserId(userId);
+        userRef.setGameId(gameId);
+        if(bootserId > 0 && bootserId >0 && StringUtils.isNotBlank(olBboostersCount)){
+            JSONArray array = JSONArray.parseArray(olBboostersCount);
+            int index = bootserId.intValue();
+            Long value = array.getLongValue(index);
+            array.remove(index);
+            array.add(index,value+1);
+            String newBoostersCount = array.toString();
+            userRef.setBoostersCount(newBoostersCount);
+        }
+        if(!isSync){
+            userRef.setRemarks(bootserId+":道具更新失败");
+        }
+        return userRef;
+    }
 
 
     public static HgameInfo paramsGameInfo(Integer type) {

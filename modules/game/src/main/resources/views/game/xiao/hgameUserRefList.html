@@ -50,6 +50,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('游戏道具')}：</label>
+					<div class="control-inline">
+						<#form:input path="boostersCount" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('创建时间')}：</label>
 					<div class="control-inline">
 						<#form:input path="created_gte" readonly="true" maxlength="20" class="form-control laydate width-datetime"

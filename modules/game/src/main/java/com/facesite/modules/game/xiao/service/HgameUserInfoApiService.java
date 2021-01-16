@@ -42,6 +42,57 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	HgameInfoDao hgameInfoDao;
 
 	/**
+	 * @desc 修改道具接口
+	 * @author nada
+	 * @create 2021/1/16 4:38 下午
+	*/
+	@Transactional(readOnly=false)
+	public JSONObject updateBooster(GameData gameData) {
+		try {
+			Long bootserId = BaseGameContact.getLong(gameData.getBoosterId());
+			Long needGold = BaseGameContact.getLong(gameData.getNeedGold());
+			Long level = BaseGameContact.getLong(gameData.getLevel()) + 1;
+			String userId = gameData.getUid();
+			String gameId = gameData.getGid();
+			String token = gameData.getToken();
+			if(StringUtils.isAnyEmpty(userId,gameId,token)){
+				return BaseGameContact.failed("paramers is empty");
+			}
+			synchronized (userId){
+				HgameUserRef oldGameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(userId,gameId));
+				if(oldGameUserRef == null || oldGameUserRef.getHgameUserInfo() == null){
+					return BaseGameContact.failed("get user game info failed");
+				}
+				Long oldGold = oldGameUserRef.getGold();
+				if(needGold < 1 || needGold > oldGold){
+					return BaseGameContact.failed("user gold not enough");
+				}
+				String olBboostersCount = oldGameUserRef.getBoostersCount();
+				Integer userType = oldGameUserRef.getHgameUserInfo().getType();
+
+				//app和本地乐豆同步
+				String tag = "购买道具:"+bootserId;
+				Boolean isSync = this.syncAppGold(userType,token,userId,gameId,-needGold,tag);
+				if(!isSync){
+					logger.error("app和本地乐豆同步失败:{}",isSync);
+					return BaseGameContact.failed("update app user gold failed");
+				}
+
+				//更新用户游戏信息
+				Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRefboosters(userId,gameId,bootserId,olBboostersCount,isSync));
+				if(BaseGameContact.isOkDb(dbIndex)){
+					return BaseGameContact.success(true);
+				}
+				return BaseGameContact.failed("Save game level up log failed");
+			}
+		} catch (Exception e) {
+			logger.error("游戏升级记录异常",e);
+			return BaseGameContact.failed("Save game level up log error");
+		}
+	}
+
+
+	/**
 	 * @desc 游戏升级记录
 	 * @author nada
 	 * @create 2021/1/14 7:37 下午
