@@ -52,6 +52,9 @@ public class HgameInfo extends DataEntity<HgameInfo> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	//["MOVES", "TIME", "BOMB", "LOLIPOP", "5", "4"]
+	//树形箭头：200
+	//BOOSTERS_COUNT= [步数:200,定时器:200,闪电:150,丘比特:250,太阳:200]
 	private String boostersGold; //道具购买金币
 
 	public HgameInfo() {

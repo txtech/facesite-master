@@ -159,7 +159,7 @@ public class DbGameContact {
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
         userRef.setGameId(gameId);
-        if(bootserId > 0 && bootserId >0 && StringUtils.isNotBlank(olBboostersCount)){
+        if(bootserId >=0 && StringUtils.isNotBlank(olBboostersCount)){
             JSONArray array = JSONArray.parseArray(olBboostersCount);
             int index = bootserId.intValue();
             Long value = array.getLongValue(index);

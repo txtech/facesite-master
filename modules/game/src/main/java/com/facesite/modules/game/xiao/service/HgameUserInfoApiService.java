@@ -4,6 +4,7 @@
 package com.facesite.modules.game.xiao.service;
 
 import cn.hutool.core.lang.Console;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.facesite.modules.game.xiao.dao.HgameInfoDao;
 import com.facesite.modules.game.xiao.dao.HgamePlayRecordDao;
@@ -66,6 +67,19 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				Long oldGold = oldGameUserRef.getGold();
 				if(needGold < 1 || needGold > oldGold){
 					return BaseGameContact.failed("user gold not enough");
+				}
+				HgameInfo hgameInfo = oldGameUserRef.getHgameInfo();
+				if(hgameInfo == null){
+					return BaseGameContact.failed("get game info failed");
+				}
+				String bootersGolds = hgameInfo.getBoostersGold();
+				if(StringUtils.isEmpty(bootersGolds)){
+					return BaseGameContact.failed("get game booters gold failed");
+				}
+				JSONArray array = JSONArray.parseArray(bootersGolds);
+				Long value = array.getLongValue(bootserId.intValue());
+				if(!needGold.equals(value)){
+					return BaseGameContact.failed("update game booters gold failed");
 				}
 				String olBboostersCount = oldGameUserRef.getBoostersCount();
 				Integer userType = oldGameUserRef.getHgameUserInfo().getType();
