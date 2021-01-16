@@ -86,16 +86,20 @@ public class DbGameContact {
         userInfo.setAge(1);
         return userInfo;
     }
-    public static HgameUserRef initGameUserRef(String gameId,String userId){
+    public static HgameUserRef initGameUserRef(HgameInfo hgameInfo,String userId){
         HgameUserRef userRef = new HgameUserRef();
-        userRef.setGameId(gameId);
+        userRef.setGameId(hgameInfo.getId());
         userRef.setUserId(userId);
         userRef.setStatus("0");
         userRef.setLevelsCompleted(0L);
         userRef.setTotalScore(0L);
         userRef.setGold(0L);
         // 骰子:200,定时器:200,闪电:150,丘比特:250,太阳:200
-        userRef.setBoostersCount("[0,0,0,0,0,0]");
+        if(StringUtils.isNotEmpty(hgameInfo.getBoosters())){
+            userRef.setBoostersCount(hgameInfo.getBoosters());
+        }else{
+            userRef.setBoostersCount("[0,0,0,0,0,0]");
+        }
         userRef.setStarsPerLevel("[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]");
         return userRef;
     }

@@ -212,7 +212,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			}
 			HgameInfo hgameInfo = hgameInfoList.get(0);
 			synchronized (token){
-				HgameUserRef hgameUserRef = this.syncGetAppUserInfo(ip,token,hgameInfo.getId());
+				HgameUserRef hgameUserRef = this.syncGetAppUserInfo(ip,token,hgameInfo);
 				if(hgameUserRef == null){
 					return BaseGameContact.failed("init userinfo failed");
 				}
@@ -232,17 +232,17 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	 * @create 2021/1/15 11:24 上午
 	*/
 	@Transactional(readOnly=false)
-	public HgameUserRef syncGetAppUserInfo(String ip,String token,String gameId) {
+	public HgameUserRef syncGetAppUserInfo(String ip,String token,HgameInfo hgameInfo) {
 		try {
+			String userId = "";
 			JSONObject result = HttpGameContact.getUserInfo(token);
 			Boolean isOk = BaseGameContact.isOk(result);
-			String userId = "";
 			if(!isOk){
 				//游客玩家
 				HgameUserInfo hgameUserInfo = hgameUserInfoDao.getByEntity(DbGameContact.paramsGameUserToken(token));
 				if(hgameUserInfo == null || StringUtils.isEmpty(hgameUserInfo.getId())){
 					HgameUserInfo initUserInfo = DbGameContact.initVisitorUserInfo(ip,token);
-					HgameUserRef hgameUserRef = this.initGameDb(initUserInfo,gameId);
+					HgameUserRef hgameUserRef = this.initGameDb(initUserInfo,hgameInfo);
 					return hgameUserRef;
 				}
 				userId = hgameUserInfo.getId();
@@ -253,14 +253,14 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				HgameUserInfo hgameUserInfo = hgameUserInfoDao.getByEntity(DbGameContact.paramsGameUserInfo(parentId));
 				if(hgameUserInfo == null || StringUtils.isEmpty(hgameUserInfo.getId())){
 					HgameUserInfo initUserInfo = DbGameContact.initMemberUserInfo(token,resData,DbGameContact.TYPE_MEMBER);
-					HgameUserRef hgameUserRef = this.initGameDb(initUserInfo,gameId);
+					HgameUserRef hgameUserRef = this.initGameDb(initUserInfo,hgameInfo);
 					return hgameUserRef;
 				}
 				userId = hgameUserInfo.getId();
 			}
 			HgameUserRef hgameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(userId));
 			if(hgameUserRef == null){
-				hgameUserRef = DbGameContact.initGameUserRef(gameId,userId);
+				hgameUserRef = DbGameContact.initGameUserRef(hgameInfo,userId);
 				long db2 = hgameUserRefDao.insert(hgameUserRef);
 				if(!BaseGameContact.isOkDb(db2)){
 					return null;
@@ -279,14 +279,14 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	 * @create 2021/1/12 7:25 下午
 	*/
 	@Transactional(readOnly=false)
-	public HgameUserRef initGameDb(HgameUserInfo initUserInfo,String gameId){
+	public HgameUserRef initGameDb(HgameUserInfo initUserInfo,HgameInfo hgameInfo){
 		try {
 			long db1 = hgameUserInfoDao.insert(initUserInfo);
 			if(!BaseGameContact.isOkDb(db1)){
 				return null;
 			}
 			String userId = initUserInfo.getId();
-			HgameUserRef hgameUserRef = DbGameContact.initGameUserRef(gameId,userId);
+			HgameUserRef hgameUserRef = DbGameContact.initGameUserRef(hgameInfo,userId);
 			long db2 = hgameUserRefDao.insert(hgameUserRef);
 			if(!BaseGameContact.isOkDb(db2)){
 				return null;
