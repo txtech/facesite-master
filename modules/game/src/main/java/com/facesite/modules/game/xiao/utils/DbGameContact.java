@@ -96,14 +96,14 @@ public class DbGameContact {
         userInfo.setRemarks(HttpBrowserTools.getAlibaba(ip));
         return userInfo;
     }
-    public static HgameUserRef initGameUserRef(HgameInfo hgameInfo,String userId){
+    public static HgameUserRef initGameUserRef(HgameInfo hgameInfo,String userId,Long gold){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setGameId(hgameInfo.getId());
         userRef.setUserId(userId);
         userRef.setStatus("0");
         userRef.setLevelsCompleted(0L);
         userRef.setTotalScore(0L);
-        userRef.setGold(0L);
+        userRef.setGold(gold);
         // 骰子:200,定时器:200,闪电:150,丘比特:250,太阳:200
         if(StringUtils.isNotEmpty(hgameInfo.getBoosters())){
             userRef.setBoostersCount(hgameInfo.getBoosters());
@@ -142,6 +142,13 @@ public class DbGameContact {
         return hgamePlayLog;
     }
 
+    public static HgameUserRef syncGameUserRefGold(String userId,String gameId,Long gold){
+        HgameUserRef userRef = new HgameUserRef();
+        userRef.setUserId(userId);
+        userRef.setGameId(gameId);
+        userRef.setGold(gold);
+        return userRef;
+    }
     public static HgameUserRef updateGameUserRefGold(String userId,String gameId,Long gold){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
@@ -233,10 +240,11 @@ public class DbGameContact {
         userInfo.setParentId(parentId);
         return userInfo;
     }
-    public static HgameUserInfo paramsGameUserInfoUpdate(String userId,String token) {
+    public static HgameUserInfo paramsGameUserInfoUpdate(String userId,String token,Long hBeans) {
         HgameUserInfo userInfo = new HgameUserInfo();
         userInfo.setId(userId);
         userInfo.setToken(token);
+        userInfo.setHbeans(hBeans);
         return userInfo;
     }
     public static HgamePlayRecord paramsGamePlayRecord(int type,String userId,String gameId,Long level){
