@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.facesite.modules.game.xiao.entity.GameData;
 import com.facesite.modules.game.xiao.service.HgameUserInfoApiService;
 import com.facesite.modules.game.xiao.utils.HttpBrowserTools;
+import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,10 +36,17 @@ public class HgameController extends BaseController {
 
 	@RequestMapping(value = "index")
 	public String getUserInfo(RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) {
-		String ip = HttpBrowserTools.getIpAddr(request);
-		String token = request.getParameter("tokne");
-		String uid = userInfoApiService.initUid(token,ip);
-		String url = "redirect:http://test88.prxgg.cn/game/8/index.html?uid="+uid;
-		return url;
+		try {
+			String ip = HttpBrowserTools.getIpAddr(request);
+			String token = request.getParameter("tokne");
+			GameData gameData = userInfoApiService.initUid(token,ip);
+			if(gameData == null || StringUtils.isEmpty(gameData.getUrl())){
+				return "faile";
+			}
+			return "redirect:"+gameData.getUrl()+gameData.getUid();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
 	}
 }

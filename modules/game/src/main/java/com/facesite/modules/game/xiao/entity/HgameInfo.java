@@ -26,6 +26,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="status", attrName="status", label="游戏状态", comment="游戏状态 1:启用 2:停用"),
 		@Column(name="type", attrName="type", label="游戏类型", comment="游戏类型：1:新人福利场 2:欢乐场 3:竞技场"),
 		@Column(name="version", attrName="version", label="游戏版本"),
+		@Column(name="url", attrName="url", label="游戏地址"),
 		@Column(name="win", attrName="win", label="赢得游戏"),
 		@Column(name="lose", attrName="lose", label="游戏输了"),
 		@Column(name="config", attrName="config", label="游戏配置"),
@@ -52,6 +53,7 @@ public class HgameInfo extends DataEntity<HgameInfo> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private String url;		// 游戏地址
 	//["MOVES", "TIME", "BOMB", "LOLIPOP", "5", "4"]
 	//树形箭头：200
 	//BOOSTERS_COUNT= [步数:200,定时器:200,闪电:150,丘比特:250,太阳:200]
@@ -175,5 +177,13 @@ public class HgameInfo extends DataEntity<HgameInfo> {
 
 	public void setBoostersGold(String boostersGold) {
 		this.boostersGold = boostersGold;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 }

@@ -25,6 +25,7 @@ public class GameData {
     private Long start;
     private String boosters;
     private String ipAddress;
+    private String url;
 
     public String getPlayId() {
         return playId;
@@ -112,5 +113,13 @@ public class GameData {
 
     public void setNeedGold(Long needGold) {
         this.needGold = needGold;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

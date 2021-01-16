@@ -355,24 +355,28 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	 * @create 2021/1/16 9:19 下午
 	*/
 	@Transactional(readOnly=false)
-	public String initUid(String token,String ip) {
+	public GameData initUid(String token,String ip) {
 		try {
-			if(StringUtils.isEmpty(token)){
-				return "";
-			}
 			List<HgameInfo> hgameInfoList = hgameInfoDao.findList(DbGameContact.paramsGameInfo(2));
 			if(hgameInfoList == null || hgameInfoList.size() < 1){
-				return "";
+				return null;
 			}
 			HgameInfo hgameInfo = hgameInfoList.get(0);
+
+			GameData gameData = new GameData();
+			gameData.setUrl(hgameInfo.getUrl());
+			if(StringUtils.isEmpty(token)){
+				return gameData;
+			}
 			String userId = this.syncGetAppUserInfo(ip,token,hgameInfo);
 			if(StringUtils.isNotEmpty(userId)){
 				hgameUserInfoDao.update(DbGameContact.paramsGameUserInfoUpdate(userId,token));
 			}
-			return userId;
+			gameData.setUid(userId);
+			return gameData;
 		} catch (Exception e) {
 			Console.log("获取用户信息异常",e);
-			return "";
+			return null;
 		}
 	}
 
