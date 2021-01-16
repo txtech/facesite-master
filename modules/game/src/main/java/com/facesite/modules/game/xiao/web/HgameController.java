@@ -39,6 +39,7 @@ public class HgameController extends BaseController {
 		try {
 			String ip = HttpBrowserTools.getIpAddr(request);
 			String token = request.getParameter("tokne");
+			logger.info("获取token:{}",token);
 			GameData gameData = userInfoApiService.initUid(token,ip);
 			if(gameData == null || StringUtils.isEmpty(gameData.getUrl())){
 				return "faile";
