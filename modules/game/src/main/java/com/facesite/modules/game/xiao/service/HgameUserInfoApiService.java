@@ -392,10 +392,10 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(!BaseGameContact.isOkDb(dbIndex) || oldBeans.equals(hBeans)){
 					return gameData;
 				}
-				String remarks = "进游戏同步呵豆:"+oldBeans+">"+hBeans;
-				dbIndex = hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_1,userId,gameId,0L,hBeans,0L,0L,remarks));
+				String remarks = "进游戏呵豆:"+oldBeans+">"+hBeans;
+				dbIndex = hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,0L,hBeans,0L,0L,remarks));
 				if(BaseGameContact.isOkDb(dbIndex)){
-					hgameUserRefDao.update(DbGameContact.syncGameUserRefGold(userId,gameId,hBeans));
+					hgameUserRefDao.updateResetGameUserRef(DbGameContact.syncGameUserRefGold(userId,gameId,hBeans));
 				}
 				return gameData;
 			}

@@ -12,6 +12,36 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 
+	<update id="updateResetGameUserRef" parameterType="com.facesite.modules.game.xiao.entity.HgameUserRef">
+		update h_game_user_ref
+		<set>
+			<if test="gold != null ">
+				gold = #{gold},
+			</if>
+			<if test="totalScore != null and totalScore >0 ">
+				total_score = #{totalScore},
+			</if>
+			<if test="levelsCompleted != null and levelsCompleted> 0">
+				levels_completed =  #{levelsCompleted},
+			</if>
+			<if test="boostersCount != null and boostersCount !='' ">
+				boosters_count = #{boostersCount},
+			</if>
+			<if test="starsPerLevel != null and starsPerLevel !='' ">
+				stars_per_level = #{starsPerLevel},
+			</if>
+			updated = sysdate()
+		</set>
+		where
+		game_id = #{gameId} and  user_id = #{userId} and DEL_FLAG=0
+		<if test="totalScore != null">
+			and  (total_score + #{totalScore}) >= 0
+		</if>
+		<if test="gold != null">
+			and  (gold + #{gold}) >= 0
+		</if>
+	</update>
+
 	<update id="updateGameUserRef" parameterType="com.facesite.modules.game.xiao.entity.HgameUserRef">
 		update h_game_user_ref
 		<set>

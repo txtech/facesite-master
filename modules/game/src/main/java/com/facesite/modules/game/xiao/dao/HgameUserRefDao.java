@@ -16,4 +16,6 @@ import com.facesite.modules.game.xiao.entity.HgameUserRef;
 public interface HgameUserRefDao extends CrudDao<HgameUserRef> {
 
 	public Long updateGameUserRef(HgameUserRef hgameUserRef);
+
+	public Long updateResetGameUserRef(HgameUserRef hgameUserRef);
 }
