@@ -118,6 +118,10 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				JSONArray array = JSONArray.parseArray(bootersGolds);
 				Long value = array.getLongValue(bootserId.intValue());
 				if(!needGold.equals(value)){
+					Long gole = -needGold;
+					Long score = 0L;
+					String remarks = "道具违规:"+value+">"+needGold;
+					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
 					return BaseGameContact.failed("update game booters gold failed");
 				}
 				String olBboostersCount = oldGameUserRef.getBoostersCount();

@@ -39,7 +39,6 @@ public class DbGameContact {
         JSONObject result = new JSONObject();
         result.put("gid",hgameUserRef.getGameId());
         result.put("uid",hgameUserRef.getUserId());
-        result.put("hbeans",hgameUserRef.getGold());
         result.put("gold",hgameUserRef.getGold());
         result.put("winGold",hgameInfo.getWin());
         result.put("loseGold",hgameInfo.getLose());
@@ -48,9 +47,7 @@ public class DbGameContact {
         result.put("boostersCount",hgameUserRef.getBoostersCount());
         result.put("boostersGold",hgameInfo.getBoostersGold());
         result.put("starsPerLevel",hgameUserRef.getStarsPerLevel());
-        if(hgameUserRef.getHgameUserInfo() != null){
-            result.put("name",hgameUserRef.getHgameUserInfo().getUsername());
-        }
+        result.put("name",hgameUserRef.getHgameUserInfo() != null ? hgameUserRef.getHgameUserInfo().getUsername() : "");
         return result;
     }
     /**
