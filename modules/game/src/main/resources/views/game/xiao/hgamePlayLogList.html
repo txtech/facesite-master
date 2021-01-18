@@ -84,6 +84,7 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
+		{header:'${text("游戏名称")}', name:'hgameInfo.name', width:150, align:"center"},
 		{header:'${text("用户名称")}', name:'hgameUserInfo.username', index:'a.user_id', width:150, align:"center"},
 		{header:'${text("记录类型")}', name:'type', index:'a.type', width:150, align:"center", formatter: function(val, obj, row, act){
 				return js.getDictLabel(${@DictUtils.getDictListJson('nada_game_log_type')}, val, '${text("未知")}', true);

@@ -49,6 +49,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 public class HgamePlayLog extends DataEntity<HgamePlayLog> {
 
 	private static final long serialVersionUID = 1L;
+	private HgameInfo hgameInfo;
 	private HgameUserInfo hgameUserInfo;
 	private String gameId;		// 父ID
 	private String userId;		// 用户ID
@@ -182,5 +183,13 @@ public class HgamePlayLog extends DataEntity<HgamePlayLog> {
 
 	public void setCreated_lte(Date created) {
 		sqlMap.getWhere().and("created", QueryType.LTE, created);
+	}
+
+	public HgameInfo getHgameInfo() {
+		return hgameInfo;
+	}
+
+	public void setHgameInfo(HgameInfo hgameInfo) {
+		this.hgameInfo = hgameInfo;
 	}
 }
