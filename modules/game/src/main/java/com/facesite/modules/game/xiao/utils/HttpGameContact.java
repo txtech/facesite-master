@@ -21,12 +21,18 @@ public class HttpGameContact {
 
     public static void main(String[] args) {
         //postUserLogin();
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySWQiOiIxMzA3MTAwNy00NzQyLTRlOTQtOTc0OC1kMWEyOGRkOWZmZmMiLCJNb2JpbGUiOiIxODE2MTg1NjAzMCIsIlVzZXJUeXBlIjoiNmMwZmYyNDktM2RhOC00NDk5LThkODEtNGZhNTgwNzIyMGQ4IiwiZXhwIjoxNjEwOTIyMjg5LjB9.vH5aHYZtkxuMxbIMcoWYVerv8uu2zlACdHR33PVdSOw";
+       /* String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJVc2VySWQiOiIxMzA3MTAwNy00NzQyLTRlOTQtOTc0OC1kMWEyOGRkOWZmZmMiLCJNb2JpbGUiOiIxODE2MTg1NjAzMCIsIlVzZXJUeXBlIjoiNmMwZmYyNDktM2RhOC00NDk5LThkODEtNGZhNTgwNzIyMGQ4IiwiZXhwIjoxNjEwOTIyMjg5LjB9.vH5aHYZtkxuMxbIMcoWYVerv8uu2zlACdHR33PVdSOw";
         Long hBeans = 0L;
         String tage = "赢得游戏";
         updateAppGold(token,hBeans,tage);
-        getUserInfo(token);
+        getUserInfo(token);*/
        /* test();*/
+        Long a = 1L;
+        if( a != 0){
+            System.out.println("1111：");
+        }else{
+            System.out.println("22222：");
+        }
     }
 
     public static void test(){

@@ -169,6 +169,7 @@ public class DbGameContact {
         userRef.setGold(gold);
         return userRef;
     }
+
     public static HgameUserRef updateGameUserRef(String userId,String gameId,Long level,Long score,Long start,String oldStarsPerLevel,Boolean isSync){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);

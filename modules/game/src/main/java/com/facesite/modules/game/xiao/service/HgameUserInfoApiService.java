@@ -40,6 +40,8 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	HgameInfoDao hgameInfoDao;
 	@Autowired
 	HgamePlayLogDao hgamePlayLogDao;
+	@Autowired
+	HgameUserInfoHelpService helpService;
 
 	/**
 	 * @desc 使用道具
@@ -49,10 +51,10 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	@Transactional(readOnly=false)
 	public JSONObject spendBooster(GameData gameData) {
 		try {
-			Long bootserId = BaseGameContact.getLong(gameData.getBoosterId());
-			Long level = BaseGameContact.getLong(gameData.getLevel()) + 1;
 			String userId = gameData.getUid();
 			String gameId = gameData.getGid();
+			Long bootserId = BaseGameContact.getLong(gameData.getBoosterId());
+			Long level = BaseGameContact.getLong(gameData.getLevel()) + 1;
 			if(StringUtils.isAnyEmpty(userId,gameId)){
 				return BaseGameContact.failed("paramers is empty");
 			}
@@ -90,11 +92,11 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	@Transactional(readOnly=false)
 	public JSONObject addBooster(GameData gameData) {
 		try {
+			String userId = gameData.getUid();
+			String gameId = gameData.getGid();
 			Long bootserId = BaseGameContact.getLong(gameData.getBoosterId());
 			Long needGold = BaseGameContact.getLong(gameData.getNeedGold());
 			Long level = BaseGameContact.getLong(gameData.getLevel()) + 1;
-			String userId = gameData.getUid();
-			String gameId = gameData.getGid();
 			if(StringUtils.isAnyEmpty(userId,gameId)){
 				return BaseGameContact.failed("paramers is empty");
 			}
@@ -124,13 +126,14 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
 					return BaseGameContact.failed("update game booters gold failed");
 				}
+
 				String olBboostersCount = oldGameUserRef.getBoostersCount();
 				Integer userType = oldGameUserRef.getHgameUserInfo().getType();
 				String token = oldGameUserRef.getHgameUserInfo().getToken();
 
 				//app和本地乐豆同步
 				String tag = "购买道具:"+bootserId;
-				Boolean isSync = this.syncAppGold(level,userType,token,userId,gameId,-needGold,0L,tag);
+				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,-needGold,0L,tag);
 				if(!isSync){
 					logger.error("app和本地乐豆同步失败:{}",isSync);
 					return BaseGameContact.failed("update app user gold failed");
@@ -153,7 +156,6 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 		}
 	}
 
-
 	/**
 	 * @desc 游戏升级记录
 	 * @author nada
@@ -162,13 +164,13 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	@Transactional(readOnly=false)
 	public JSONObject updateGamelevelUp(GameData gameData) {
 		try {
+			String userId = gameData.getUid();
+			String gameId = gameData.getGid();
+			String playId = gameData.getPlayId();
 			Long start = BaseGameContact.getLong(gameData.getStart());
 			Long gold = BaseGameContact.getLong(gameData.getGold());
 			Long score = BaseGameContact.getLong(gameData.getScore());
 			Long level = BaseGameContact.getLong(gameData.getLevel()) + 1;
-			String userId = gameData.getUid();
-			String gameId = gameData.getGid();
-			String playId = gameData.getPlayId();
 			if(StringUtils.isAnyEmpty(userId,gameId)){
 				return BaseGameContact.failed("paramers is empty");
 			}
@@ -181,7 +183,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				Integer type = DbGameContact.PLAY_TYPE_3;
 				String oldStarsPerLevel = oldGameUserRef.getStarsPerLevel();
 				Integer userType = oldGameUserRef.getHgameUserInfo().getType();
-				String token = oldGameUserRef.getHgameUserInfo().getToken();
+				String  token = oldGameUserRef.getHgameUserInfo().getToken();
 				List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(DbGameContact.paramsGamePlayRecord(type,userId,gameId,level));
 				if(list !=null && list.size() > 0){
 					HgamePlayRecord oldRecord = list.get(0);
@@ -199,7 +201,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				}
 
 				//app和本地乐豆同步
-				Boolean isSync = this.syncAppGold(level,userType,token,userId,gameId,gold,score,tag);
+				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,gold,score,tag);
 				if(!isSync){
 					logger.error("app和本地乐豆同步失败:{}",isSync);
 					return BaseGameContact.failed("update app user gold failed");
@@ -237,9 +239,6 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			if(!(level).equals(oldLevel)){
 				return false;
 			}
-			if(StringUtils.isAnyEmpty(userId,gameId)){
-				return false;
-			}
 			Boolean isSync = false;
 			Boolean isUpdate = false;
 			Long newScore = 0L;
@@ -257,7 +256,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				oldRecord.setGold(gold);
 				Long newGold = gold - oldGold;
 				String tag = "重玩"+level+"关结算:"+newGold;
-				isSync = this.syncAppGold(level,userType,token,userId,gameId,newGold,newScore,tag);
+				isSync = helpService.syncAppGold(level,userType,token,userId,gameId,newGold,newScore,tag);
 				if(!isSync){
 					logger.error("app和本地乐豆同步失败:{}",isSync);
 					return false;
@@ -286,32 +285,6 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 		}
 	}
 
-	/**
-	 * @desc app和本地乐豆同步
-	 * @author nada
-	 * @create 2021/1/15 10:05 上午
-	 */
-	@Transactional(readOnly=false)
-	public Boolean syncAppGold(Long level,Integer userType,String token,String userId,String gameId, Long gold,Long socre,String tag) {
-		if(userType != null && userType ==2){
-			JSONObject result = HttpGameContact.updateAppGold(token,gold,tag);
-			Boolean isOk = BaseGameContact.isOk(result);
-			String remarks = "";
-			if(!isOk){
-				logger.error("app和本地乐豆同步失败:{}",result);
-				remarks = "同步呵豆失败:"+gold;
-			}else{
-				remarks = "同步呵豆成功:"+gold;
-			}
-			hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_1,userId,gameId,level,gold,socre,0L,remarks));
-		}
-		Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRefGold(userId,gameId,gold));
-		if(BaseGameContact.isOkDb(dbIndex)){
-			return true;
-		}
-		return false;
-	}
-
 	/***
 	 * @desc获取用户信息
 	 * @author nada
@@ -326,39 +299,40 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			if(StringUtils.isEmpty(uid)){
 				return BaseGameContact.failed("token parameter is empty");
 			}
-			List<HgameInfo> hgameInfoList = null;
-			if(StringUtils.isNotEmpty(gid)){
-				hgameInfoList = hgameInfoDao.findList(DbGameContact.paramsGameInfo(gid));
-			}
-			if(hgameInfoList == null || hgameInfoList.size() < 1){
-				hgameInfoList = hgameInfoDao.findList(DbGameContact.paramsGameInfo(1));
-			}
-			if(hgameInfoList == null || hgameInfoList.size() < 1){
-				return BaseGameContact.failed("get gameinfo failed");
-			}
-			HgameInfo hgameInfo = hgameInfoList.get(0);
-			String gameId = hgameInfo.getId();
-			HgameUserRef hgameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(uid,gameId));
-			if(hgameUserRef != null){
+			synchronized (uid) {
+				HgameInfo hgameInfo =  helpService.getDefaultGameInfo(gid);
+				if(hgameInfo == null){
+					return BaseGameContact.failed("get gameinfo failed");
+				}
+
+				String gameId = hgameInfo.getId();
+				HgameUserRef hgameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(uid,gameId));
+				if(hgameUserRef != null){
+					JSONObject response = DbGameContact.responseGameUserInfo(hgameInfo,hgameUserRef);
+					logger.info("获取用户信息:{}",response);
+					return BaseGameContact.success(response);
+				}
+
+				HgameUserInfo hgameUserInfo = hgameUserInfoDao.getByEntity(DbGameContact.paramsGameUserId(uid));
+				if (hgameUserInfo == null) {
+					//游客玩家
+					Long seqId = hgameUserInfoDao.getNextSequence();
+					HgameUserInfo initUserInfo = DbGameContact.initVisitorUserInfo(seqId, ip,uid);
+					hgameUserInfoDao.addSequence();
+					hgameUserRef = helpService.initGamUserRefe(initUserInfo, hgameInfo);
+				}
+				Long hBeans = hgameUserInfo.getHbeans();
+				if(hgameUserRef == null){
+					hgameUserRef = DbGameContact.initGameUserRef(hgameInfo,uid,BaseGameContact.getLong(hBeans));
+					long db2 = hgameUserRefDao.insert(hgameUserRef);
+					if(!BaseGameContact.isOkDb(db2)){
+						return BaseGameContact.failed("init game user info failed");
+					}
+				}
 				JSONObject response = DbGameContact.responseGameUserInfo(hgameInfo,hgameUserRef);
 				logger.info("获取用户信息:{}",response);
 				return BaseGameContact.success(response);
 			}
-			//游客玩家
-			HgameUserInfo hgameUserInfo = hgameUserInfoDao.getByEntity(DbGameContact.paramsGameUserId(uid));
-			if (hgameUserInfo == null || StringUtils.isEmpty(hgameUserInfo.getId())) {
-				Long seqId = hgameUserInfoDao.getNextSequence();
-				HgameUserInfo initUserInfo = DbGameContact.initVisitorUserInfo(seqId, ip,uid);
-				hgameUserInfoDao.addSequence();
-				hgameUserRef = this.initGamUserRefe(initUserInfo, hgameInfo);
-			}
-			if(hgameUserRef == null && hgameUserInfo !=null){
-				this.saveGamUserRefe(hgameUserInfo, hgameInfo);
-				hgameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(uid,gameId));
-			}
-			JSONObject response = DbGameContact.responseGameUserInfo(hgameInfo,hgameUserRef);
-			logger.info("获取用户信息:{}",response);
-			return BaseGameContact.success(response);
 		} catch (Exception e) {
 			logger.error("获取用户信息异常",e);
 			return BaseGameContact.failed("get userinfo error");
@@ -371,25 +345,26 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	 * @create 2021/1/16 9:19 下午
 	*/
 	@Transactional(readOnly=false)
-	public GameData initUid(String token,Integer type) {
+	public GameData init(String token,Integer type) {
 		try {
 			if(type == null || type < 1){
 				type = 1;
 			}
-			List<HgameInfo> hgameInfoList = hgameInfoDao.findList(DbGameContact.paramsGameInfo(type));
-			if(hgameInfoList == null || hgameInfoList.size() < 1){
-				return null;
-			}
-			HgameInfo hgameInfo = hgameInfoList.get(0);
-			String gameId = hgameInfo.getId();
-			GameData gameData = new GameData();
-			gameData.setUrl(hgameInfo.getUrl());
-			gameData.setGid(hgameInfo.getId());
-			gameData.setMinLimit(hgameInfo.getMinLimit());
-			if(StringUtils.isEmpty(token)){
-				return gameData;
-			}
 			synchronized (token) {
+				List<HgameInfo> hgameInfoList = hgameInfoDao.findList(DbGameContact.paramsGameInfo(type));
+				if(hgameInfoList == null || hgameInfoList.isEmpty()){
+					return null;
+				}
+
+				HgameInfo hgameInfo = hgameInfoList.get(0);
+				String gameId = hgameInfo.getId();
+				GameData gameData = new GameData();
+				gameData.setUrl(hgameInfo.getUrl());
+				gameData.setGid(hgameInfo.getId());
+				gameData.setMinLimit(hgameInfo.getMinLimit());
+				if(StringUtils.isEmpty(token)){
+					return gameData;
+				}
 				JSONObject result = HttpGameContact.getUserInfo(token);
 				Boolean isOk = BaseGameContact.isOk(result);
 				if (!isOk) {
@@ -400,28 +375,29 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				String parentId = resData.getString("userInfo_ID");
 				Long hBeans = BaseGameContact.getLong(resData.getLong("userInfo_HBeans"));
 				gameData.setGold(hBeans);
+				//第一次访问会员信息初始化
 				HgameUserInfo hgameUserInfo = hgameUserInfoDao.getByEntity(DbGameContact.paramsGameUserInfo(parentId));
-				if (hgameUserInfo == null || StringUtils.isEmpty(hgameUserInfo.getId())) {
+				if (hgameUserInfo == null) {
 					HgameUserInfo initUserInfo = DbGameContact.initMemberUserInfo(token, resData, DbGameContact.TYPE_MEMBER);
-					HgameUserRef hgameUserRef = this.initGamUserRefe(initUserInfo, hgameInfo);
-					gameData.setUid(hgameUserRef.getUserId());
+					helpService.initGamUserRefe(initUserInfo, hgameInfo);
+					gameData.setUid(initUserInfo.getId());
 					return gameData;
 				}
+
+				//老会员玩家，从app同步信息
 				String userId = hgameUserInfo.getId();
-				gameData.setUid(userId);
 				Long oldBeans = BaseGameContact.getLong(hgameUserInfo.getHbeans());
+				gameData.setUid(userId);
 				Long dbIndex = hgameUserInfoDao.update(DbGameContact.paramsGameUserInfoUpdate(userId,token,hBeans));
-				if(!BaseGameContact.isOkDb(dbIndex) || oldBeans.equals(hBeans)){
+				if(!BaseGameContact.isOkDb(dbIndex)){
 					return gameData;
 				}
-				HgameUserRef hgameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(userId,gameId));
-				if(hgameUserRef == null){
-					this.saveGamUserRefe(hgameUserInfo, hgameInfo);
-				}
-				String remarks = "进游戏呵豆:"+oldBeans+">"+hBeans;
-				dbIndex = hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,0L,hBeans,0L,0L,remarks));
-				if(BaseGameContact.isOkDb(dbIndex)){
-					hgameUserRefDao.updateResetGameUserRef(DbGameContact.updateGameUserRefGold(userId,gameId,hBeans));
+				if(!oldBeans.equals(hBeans) && hgameUserInfo.getType() == DbGameContact.TYPE_MEMBER){
+					String remarks = "进游戏呵豆:"+oldBeans+">"+hBeans;
+					dbIndex = hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,0L,hBeans,0L,0L,remarks));
+					if(BaseGameContact.isOkDb(dbIndex)){
+						hgameUserRefDao.updateResetGameUserRef(DbGameContact.updateGameUserRefGold(userId,gameId,hBeans));
+					}
 				}
 				return gameData;
 			}
@@ -431,51 +407,4 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 		}
 	}
 
-	/**
-	 * @desc 会员玩家初始化游戏
-	 * @author nada
-	 * @create 2021/1/12 7:25 下午
-	*/
-	@Transactional(readOnly=false)
-	public HgameUserRef initGamUserRefe(HgameUserInfo initUserInfo,HgameInfo hgameInfo){
-		try {
-			long db1 = hgameUserInfoDao.insert(initUserInfo);
-			if(!BaseGameContact.isOkDb(db1)){
-				return null;
-			}
-			String userId = initUserInfo.getId();
-			Long gold = BaseGameContact.getLong(initUserInfo.getHbeans());
-			HgameUserRef hgameUserRef = DbGameContact.initGameUserRef(hgameInfo,userId,gold);
-			long db2 = hgameUserRefDao.insert(hgameUserRef);
-			if(!BaseGameContact.isOkDb(db2)){
-				return null;
-			}
-			return hgameUserRef;
-		} catch (Exception e) {
-			logger.error("初始化游戏异常",e);
-			return null;
-		}
-	}
-
-	/**
-	 * @desc 保存
-	 * @author nada
-	 * @create 2021/1/18 2:33 下午
-	*/
-	@Transactional(readOnly=false)
-	public HgameUserRef saveGamUserRefe(HgameUserInfo initUserInfo,HgameInfo hgameInfo){
-		try {
-			String userId = initUserInfo.getId();
-			Long gold = BaseGameContact.getLong(initUserInfo.getHbeans());
-			HgameUserRef hgameUserRef = DbGameContact.initGameUserRef(hgameInfo,userId,gold);
-			long db2 = hgameUserRefDao.insert(hgameUserRef);
-			if(!BaseGameContact.isOkDb(db2)){
-				return null;
-			}
-			return hgameUserRef;
-		} catch (Exception e) {
-			logger.error("初始化游戏异常",e);
-			return null;
-		}
-	}
 }

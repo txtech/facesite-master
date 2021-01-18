@@ -44,7 +44,7 @@ public class HgameController extends BaseController {
 			String ip = HttpBrowserTools.getIpAddr(request);
 			String token = request.getParameter("tokne");
 			logger.info("请求IP:{},获取token:{},type:{}",ip,token,type);
-			GameData gameData = userInfoApiService.initUid(token,type);
+			GameData gameData = userInfoApiService.init(token,type);
 			if(gameData == null || StringUtils.isEmpty(gameData.getUrl())){
 				model.addAttribute("msg","游戏暂停啦，敬请等待哦");
 				return "game/xiao/failed";
