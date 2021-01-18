@@ -352,11 +352,15 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				hgameUserInfoDao.addSequence();
 				hgameUserRef = this.initGamUserRefe(initUserInfo, hgameInfo);
 			}
+			if(hgameUserRef == null && hgameUserInfo !=null){
+				this.saveGamUserRefe(hgameUserInfo, hgameInfo);
+				hgameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(uid,gameId));
+			}
 			JSONObject response = DbGameContact.responseGameUserInfo(hgameInfo,hgameUserRef);
 			logger.info("获取用户信息:{}",response);
 			return BaseGameContact.success(response);
 		} catch (Exception e) {
-			Console.log("获取用户信息异常",e);
+			logger.error("获取用户信息异常",e);
 			return BaseGameContact.failed("get userinfo error");
 		}
 	}
@@ -408,6 +412,10 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(!BaseGameContact.isOkDb(dbIndex) || oldBeans.equals(hBeans)){
 					return gameData;
 				}
+				HgameUserRef hgameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(userId,gameId));
+				if(hgameUserRef == null){
+					this.saveGamUserRefe(hgameUserInfo, hgameInfo);
+				}
 				String remarks = "进游戏呵豆:"+oldBeans+">"+hBeans;
 				dbIndex = hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,0L,hBeans,0L,0L,remarks));
 				if(BaseGameContact.isOkDb(dbIndex)){
@@ -416,7 +424,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				return gameData;
 			}
 		} catch (Exception e) {
-			Console.log("获取用户信息异常",e);
+			logger.error("获取用户信息异常",e);
 			return null;
 		}
 	}
@@ -442,7 +450,29 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			}
 			return hgameUserRef;
 		} catch (Exception e) {
-			Console.log("初始化游戏异常",e);
+			logger.error("初始化游戏异常",e);
+			return null;
+		}
+	}
+
+	/**
+	 * @desc 保存
+	 * @author nada
+	 * @create 2021/1/18 2:33 下午
+	*/
+	@Transactional(readOnly=false)
+	public HgameUserRef saveGamUserRefe(HgameUserInfo initUserInfo,HgameInfo hgameInfo){
+		try {
+			String userId = initUserInfo.getId();
+			Long gold = BaseGameContact.getLong(initUserInfo.getHbeans());
+			HgameUserRef hgameUserRef = DbGameContact.initGameUserRef(hgameInfo,userId,gold);
+			long db2 = hgameUserRefDao.insert(hgameUserRef);
+			if(!BaseGameContact.isOkDb(db2)){
+				return null;
+			}
+			return hgameUserRef;
+		} catch (Exception e) {
+			logger.error("初始化游戏异常",e);
 			return null;
 		}
 	}

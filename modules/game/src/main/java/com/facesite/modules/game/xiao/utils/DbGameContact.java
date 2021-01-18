@@ -73,6 +73,7 @@ public class DbGameContact {
         userInfo.setSex(resData.getString("userInfo_Sex"));
         return userInfo;
     }
+
     /**
      * @desc 初始化游客玩家
      * @author nada
