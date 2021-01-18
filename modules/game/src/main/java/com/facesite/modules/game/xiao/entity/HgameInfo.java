@@ -30,6 +30,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="win", attrName="win", label="赢得游戏"),
 		@Column(name="lose", attrName="lose", label="游戏输了"),
 		@Column(name="config", attrName="config", label="游戏配置"),
+		@Column(name="min_limit", attrName="minLimit", label="游戏要求"),
 		@Column(name="boosters", attrName="boosters", label="游戏道具"),
 		@Column(name="boosters_gold", attrName="boostersGold", label="道具购买"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
@@ -48,6 +49,7 @@ public class HgameInfo extends DataEntity<HgameInfo> {
 	private String version;		// 游戏版本
 	private Long win;		// 赢得游戏
 	private Long lose;		// 游戏输了
+	private Long minLimit; //游戏最小要求
 	private String boosters;		// 游戏道具
 	private String config;		// 游戏配置
 	private Date created;		// 创建时间
@@ -185,5 +187,13 @@ public class HgameInfo extends DataEntity<HgameInfo> {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public Long getMinLimit() {
+		return minLimit;
+	}
+
+	public void setMinLimit(Long minLimit) {
+		this.minLimit = minLimit;
 	}
 }

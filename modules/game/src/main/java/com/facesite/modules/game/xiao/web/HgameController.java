@@ -11,6 +11,7 @@ import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -32,27 +33,35 @@ public class HgameController extends BaseController {
 	@Autowired
 	private HgameUserInfoApiService userInfoApiService;
 
+	/**
+	 * @desc http://localhost:9998/game/f/h5/1?tokne=12313
+	 * @author nada
+	 * @create 2021/1/18 8:16 下午
+	*/
 	@RequestMapping(value = "{type}")
-	public String getUserInfo(@PathVariable Integer type,RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) {
+	public String getUserInfo(@PathVariable Integer type,RedirectAttributes attr, HttpServletRequest request, Model model) {
 		try {
-			try {
-				String ip = HttpBrowserTools.getIpAddr(request);
-				String token = request.getParameter("tokne");
-				logger.info("请求IP:{},获取token:{},type:{}",ip,token,type);
-				GameData gameData = userInfoApiService.initUid(token,type);
-				if(gameData == null || StringUtils.isEmpty(gameData.getUrl())){
-					return "faile";
-				}
-				attr.addAttribute("uid",gameData.getUid());
-				attr.addAttribute("gid",gameData.getGid());
-				return "redirect:"+gameData.getUrl();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return "error";
+			String ip = HttpBrowserTools.getIpAddr(request);
+			String token = request.getParameter("tokne");
+			logger.info("请求IP:{},获取token:{},type:{}",ip,token,type);
+			GameData gameData = userInfoApiService.initUid(token,type);
+			if(gameData == null || StringUtils.isEmpty(gameData.getUrl())){
+				model.addAttribute("msg","游戏暂停啦，敬请等待哦");
+				return "game/xiao/failed";
 			}
+			Long minLimit = BaseGameContact.getLong(gameData.getMinLimit());
+			Long hBeans = BaseGameContact.getLong(gameData.getGold());
+			if(hBeans < minLimit){
+				model.addAttribute("msg","您的和逗不足:"+minLimit+"，无法进入游戏哦");
+				return "game/xiao/failed";
+			}
+			attr.addAttribute("uid",gameData.getUid());
+			attr.addAttribute("gid",gameData.getGid());
+			return "redirect:"+gameData.getUrl();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "error";
+			model.addAttribute("msg","亲爱的服务器开小差啦，请联系管理员哦");
+			return "game/xiao/failed";
 		}
 	}
 }

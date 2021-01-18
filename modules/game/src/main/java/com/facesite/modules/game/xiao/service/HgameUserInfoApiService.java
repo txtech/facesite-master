@@ -385,6 +385,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			GameData gameData = new GameData();
 			gameData.setUrl(hgameInfo.getUrl());
 			gameData.setGid(hgameInfo.getId());
+			gameData.setMinLimit(hgameInfo.getMinLimit());
 			if(StringUtils.isEmpty(token)){
 				return gameData;
 			}
@@ -398,6 +399,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				JSONObject resData = result.getJSONObject("result");
 				String parentId = resData.getString("userInfo_ID");
 				Long hBeans = BaseGameContact.getLong(resData.getLong("userInfo_HBeans"));
+				gameData.setGold(hBeans);
 				HgameUserInfo hgameUserInfo = hgameUserInfoDao.getByEntity(DbGameContact.paramsGameUserInfo(parentId));
 				if (hgameUserInfo == null || StringUtils.isEmpty(hgameUserInfo.getId())) {
 					HgameUserInfo initUserInfo = DbGameContact.initMemberUserInfo(token, resData, DbGameContact.TYPE_MEMBER);

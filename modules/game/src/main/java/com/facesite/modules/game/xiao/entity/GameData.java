@@ -26,6 +26,7 @@ public class GameData {
     private String boosters;
     private String ipAddress;
     private String url;
+    private Long minLimit;
 
     public String getPlayId() {
         return playId;
@@ -121,5 +122,13 @@ public class GameData {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Long getMinLimit() {
+        return minLimit;
+    }
+
+    public void setMinLimit(Long minLimit) {
+        this.minLimit = minLimit;
     }
 }
