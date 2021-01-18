@@ -5,6 +5,7 @@ package com.facesite.modules.game.xiao.web;
 import com.alibaba.fastjson.JSONObject;
 import com.facesite.modules.game.xiao.entity.GameData;
 import com.facesite.modules.game.xiao.service.HgameUserInfoApiService;
+import com.facesite.modules.game.xiao.utils.BaseGameContact;
 import com.facesite.modules.game.xiao.utils.HttpBrowserTools;
 import com.jeesite.common.lang.StringUtils;
 import com.jeesite.common.web.BaseController;
@@ -37,14 +38,22 @@ public class HgameController extends BaseController {
 	@RequestMapping(value = "index")
 	public String getUserInfo(RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			String ip = HttpBrowserTools.getIpAddr(request);
-			String token = request.getParameter("tokne");
-			logger.info("获取token:{}",token);
-			GameData gameData = userInfoApiService.initUid(token,ip);
-			if(gameData == null || StringUtils.isEmpty(gameData.getUrl())){
-				return "faile";
+			try {
+				String ip = HttpBrowserTools.getIpAddr(request);
+				String token = request.getParameter("tokne");
+				Integer type = BaseGameContact.getInteger(request.getParameter("type"));
+				logger.info("请求IP:{},获取token:{},type:{}",ip,token,type);
+				GameData gameData = userInfoApiService.initUid(token,type);
+				if(gameData == null || StringUtils.isEmpty(gameData.getUrl())){
+					return "faile";
+				}
+				attr.addAttribute("uid",gameData.getUid());
+				attr.addAttribute("gid",gameData.getGid());
+				return "redirect:"+gameData.getUrl();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "error";
 			}
-			return "redirect:"+gameData.getUrl()+gameData.getUid();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "error";

@@ -320,17 +320,25 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	@Transactional(readOnly=false)
 	public JSONObject getUserInfo(GameData gameData) {
 		try {
-			String ip = gameData.getIpAddress();
 			String uid = gameData.getUid();
+			String gid = gameData.getGid();
+			String ip = gameData.getIpAddress();
 			if(StringUtils.isEmpty(uid)){
 				return BaseGameContact.failed("token parameter is empty");
 			}
-			List<HgameInfo> hgameInfoList = hgameInfoDao.findList(DbGameContact.paramsGameInfo(2));
+			List<HgameInfo> hgameInfoList = null;
+			if(StringUtils.isNotEmpty(gid)){
+				hgameInfoList = hgameInfoDao.findList(DbGameContact.paramsGameInfo(gid));
+			}
+			if(hgameInfoList == null || hgameInfoList.size() < 1){
+				hgameInfoList = hgameInfoDao.findList(DbGameContact.paramsGameInfo(1));
+			}
 			if(hgameInfoList == null || hgameInfoList.size() < 1){
 				return BaseGameContact.failed("get gameinfo failed");
 			}
 			HgameInfo hgameInfo = hgameInfoList.get(0);
-			HgameUserRef hgameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(uid));
+			String gameId = hgameInfo.getId();
+			HgameUserRef hgameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(uid,gameId));
 			if(hgameUserRef != null){
 				JSONObject response = DbGameContact.responseGameUserInfo(hgameInfo,hgameUserRef);
 				logger.info("获取用户信息:{}",response);
@@ -359,9 +367,12 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	 * @create 2021/1/16 9:19 下午
 	*/
 	@Transactional(readOnly=false)
-	public GameData initUid(String token,String ip) {
+	public GameData initUid(String token,Integer type) {
 		try {
-			List<HgameInfo> hgameInfoList = hgameInfoDao.findList(DbGameContact.paramsGameInfo(2));
+			if(type == null || type < 1){
+				type = 1;
+			}
+			List<HgameInfo> hgameInfoList = hgameInfoDao.findList(DbGameContact.paramsGameInfo(type));
 			if(hgameInfoList == null || hgameInfoList.size() < 1){
 				return null;
 			}
@@ -369,6 +380,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			String gameId = hgameInfo.getId();
 			GameData gameData = new GameData();
 			gameData.setUrl(hgameInfo.getUrl());
+			gameData.setGid(hgameInfo.getId());
 			if(StringUtils.isEmpty(token)){
 				return gameData;
 			}
@@ -399,7 +411,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				String remarks = "进游戏呵豆:"+oldBeans+">"+hBeans;
 				dbIndex = hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,0L,hBeans,0L,0L,remarks));
 				if(BaseGameContact.isOkDb(dbIndex)){
-					hgameUserRefDao.updateResetGameUserRef(DbGameContact.syncGameUserRefGold(userId,gameId,hBeans));
+					hgameUserRefDao.updateResetGameUserRef(DbGameContact.updateGameUserRefGold(userId,gameId,hBeans));
 				}
 				return gameData;
 			}

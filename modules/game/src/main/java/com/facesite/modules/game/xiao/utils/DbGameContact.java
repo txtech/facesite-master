@@ -47,6 +47,7 @@ public class DbGameContact {
         result.put("boostersCount",hgameUserRef.getBoostersCount());
         result.put("boostersGold",hgameInfo.getBoostersGold());
         result.put("starsPerLevel",hgameUserRef.getStarsPerLevel());
+        result.put("gname",hgameUserRef.getHgameInfo() != null ? hgameUserRef.getHgameInfo().getName() : "");
         result.put("name",hgameUserRef.getHgameUserInfo() != null ? hgameUserRef.getHgameUserInfo().getUsername() : "");
         return result;
     }
@@ -93,9 +94,15 @@ public class DbGameContact {
         userInfo.setRemarks(HttpBrowserTools.getAlibaba(ip));
         return userInfo;
     }
+    /**
+     * @desc 初始化玩家游戏
+     * @author nada
+     * @create 2021/1/18 12:22 下午
+    */
     public static HgameUserRef initGameUserRef(HgameInfo hgameInfo,String userId,Long gold){
+        String gameId = hgameInfo.getId();
         HgameUserRef userRef = new HgameUserRef();
-        userRef.setGameId(hgameInfo.getId());
+        userRef.setGameId(gameId);
         userRef.setUserId(userId);
         userRef.setStatus("0");
         userRef.setLevelsCompleted(0L);
@@ -110,6 +117,11 @@ public class DbGameContact {
         userRef.setStarsPerLevel("[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]");
         return userRef;
     }
+    /**
+     * @desc 初始化玩家游戏记录
+     * @author nada
+     * @create 2021/1/18 12:22 下午
+     */
     public static HgamePlayRecord initGamePlayRecord(String userId,String gameId,String playId,int type,Long level,Long gold,Long score,Long start,String tag){
         HgamePlayRecord record = new HgamePlayRecord();
         record.setStart(0L);
@@ -126,6 +138,11 @@ public class DbGameContact {
         record.setRemarks(tag);
         return record;
     }
+    /**
+     * @desc 保存游戏日志
+     * @author nada
+     * @create 2021/1/18 12:22 下午
+    */
     public static HgamePlayLog saveLog(Integer type,String userId,String gameId,Long level,Long gole,Long score,Long boosters,String remarks){
         HgamePlayLog hgamePlayLog = new HgamePlayLog();
         hgamePlayLog.setUserId(userId);
@@ -138,14 +155,11 @@ public class DbGameContact {
         hgamePlayLog.setBoosters(boosters);
         return hgamePlayLog;
     }
-
-    public static HgameUserRef syncGameUserRefGold(String userId,String gameId,Long gold){
-        HgameUserRef userRef = new HgameUserRef();
-        userRef.setUserId(userId);
-        userRef.setGameId(gameId);
-        userRef.setGold(gold);
-        return userRef;
-    }
+    /**
+     * @desc 同步游戏金币
+     * @author nada
+     * @create 2021/1/18 12:23 下午
+    */
     public static HgameUserRef updateGameUserRefGold(String userId,String gameId,Long gold){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
@@ -176,6 +190,11 @@ public class DbGameContact {
         }
         return userRef;
     }
+    /**
+     * @desc 使用道具
+     * @author nada
+     * @create 2021/1/18 12:24 下午
+    */
     public static HgameUserRef spendGameUserRefboosters(String userId,String gameId,Long bootserId,String olBboostersCount){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
@@ -193,6 +212,11 @@ public class DbGameContact {
         }
         return userRef;
     }
+    /**
+     * @desc 购买道具
+     * @author nada
+     * @create 2021/1/18 12:24 下午
+    */
     public static HgameUserRef addGameUserRefboosters(String userId,String gameId,Long bootserId,String olBboostersCount,Boolean isSync){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
@@ -213,6 +237,13 @@ public class DbGameContact {
     }
 
 
+
+    public static HgameInfo paramsGameInfo(String id) {
+        HgameInfo hgameInfo = new HgameInfo();
+        hgameInfo.setStatus("0");
+        hgameInfo.setId(id);
+        return hgameInfo;
+    }
     public static HgameInfo paramsGameInfo(Integer type) {
         HgameInfo hgameInfo = new HgameInfo();
         hgameInfo.setStatus("0");
@@ -223,12 +254,6 @@ public class DbGameContact {
         HgameUserInfo userInfo = new HgameUserInfo();
         userInfo.setStatus("0");
         userInfo.setId(id);
-        return userInfo;
-    }
-    public static HgameUserInfo paramsGameUserToken(String token) {
-        HgameUserInfo userInfo = new HgameUserInfo();
-        userInfo.setStatus("0");
-        userInfo.setToken(token);
         return userInfo;
     }
     public static HgameUserInfo paramsGameUserInfo(String parentId) {
@@ -246,18 +271,12 @@ public class DbGameContact {
     }
     public static HgamePlayRecord paramsGamePlayRecord(int type,String userId,String gameId,Long level){
         HgamePlayRecord record = new HgamePlayRecord();
-        record.setStatus("0");
-        record.setType(type);
         record.setUserId(userId);
         record.setGameId(gameId);
+        record.setStatus("0");
+        record.setType(type);
         record.setLevel(level);
         return record;
-    }
-    public static HgameUserRef paramsGameUserRef(String userId) {
-        HgameUserRef userRef = new HgameUserRef();
-        userRef.setUserId(userId);
-        userRef.setStatus("0");
-        return userRef;
     }
     public static HgameUserRef paramsGameUserRef(String userId,String gameId) {
         HgameUserRef userRef = new HgameUserRef();

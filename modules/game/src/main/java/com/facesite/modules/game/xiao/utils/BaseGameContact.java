@@ -5,6 +5,7 @@ import cn.hutool.http.HttpException;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.facesite.modules.game.xiao.service.HgameInfoService;
+import com.jeesite.common.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
@@ -21,6 +22,18 @@ public class BaseGameContact {
             return 0L;
         }
         return v;
+    }
+
+    public static Integer getInteger(String v){
+        try {
+            if(StringUtils.isEmpty(v)){
+                return 0;
+            }
+            return Integer.valueOf(v);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     public static JSONObject success(Object result){
