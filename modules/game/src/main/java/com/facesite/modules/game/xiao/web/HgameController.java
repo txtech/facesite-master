@@ -52,7 +52,7 @@ public class HgameController extends BaseController {
 			Long minLimit = BaseGameContact.getLong(gameData.getMinLimit());
 			Long hBeans = BaseGameContact.getLong(gameData.getGold());
 			if(hBeans < minLimit){
-				model.addAttribute("msg","您的和逗不足:"+minLimit+"，无法进入游戏哦");
+				model.addAttribute("msg","您的呵逗不足:"+minLimit+"，无法进入游戏哦");
 				return "game/xiao/failed";
 			}
 			attr.addAttribute("uid",gameData.getUid());
