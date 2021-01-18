@@ -123,6 +123,23 @@
 			</plugin>-->
 
 		</plugins>
+		<!--<resources>
+			<resource>
+				&lt;!&ndash; 要打包的文件所在的目录 &ndash;&gt;
+				<directory>src/main/resources/userfiles</directory>
+				&lt;!&ndash; includes 和 excludes 都可以独立配置，也可以同时配置 &ndash;&gt;
+				&lt;!&ndash; 指定要打包的文件 &ndash;&gt;
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+				&lt;!&ndash; 或者也可以剔除不需要打包的文件 &ndash;&gt;
+				&lt;!&ndash;<excludes>
+					<exclude>**/*.jsp</exclude>
+				</excludes>&ndash;&gt;
+				&lt;!&ndash; 指定打包到目的文件夹 &ndash;&gt;
+				<targetPath>META-INF</targetPath>
+			</resource>
+		</resources>-->
 	</build>
 
 	<repositories>
