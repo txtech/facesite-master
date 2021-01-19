@@ -25,7 +25,7 @@ public class DbGameContact {
     public static int PLAY_TYPE_5 = 5;
     public static int PLAY_TYPE_6 = 6;
 
-    // 1:同步日志 2:金币日志 3:道具日志
+    // 1:同步呵豆日志 2:金币日志 3:道具日志
     public static int LOG_TYPE_1 = 1;
     public static int LOG_TYPE_2 = 2;
     public static int LOG_TYPE_3 = 3;

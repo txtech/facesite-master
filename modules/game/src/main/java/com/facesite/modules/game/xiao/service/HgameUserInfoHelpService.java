@@ -44,16 +44,16 @@ public class HgameUserInfoHelpService extends CrudService<HgameUserInfoDao, Hgam
 	 * @create 2021/1/15 10:05 上午
 	 */
 	@Transactional(readOnly=false)
-	public Boolean syncAppGold(Long level,Integer userType,String token,String userId,String gameId, Long gold,Long socre,String tag) {
+	public Boolean syncAppGold(Long level,Integer userType,String token,String userId,String gameId, Long gold,Long socre,String tag,Long oldHbeans) {
 		if(DbGameContact.TYPE_MEMBER == userType  && gold !=0 ){
 			JSONObject result = HttpGameContact.updateAppGold(token,gold,tag);
 			Boolean isOk = BaseGameContact.isOk(result);
 			String remarks = "";
 			if(!isOk){
 				logger.error("app和本地乐豆同步失败:{}",result);
-				remarks = "同步呵豆失败:"+gold;
+				remarks = "同步呵豆失败:"+ (oldHbeans);
 			}else{
-				remarks = "同步呵豆成功:"+gold;
+				remarks = "同步呵豆成功:"+ (oldHbeans + gold);
 			}
 			hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_1,userId,gameId,level,gold,socre,0L,remarks));
 		}
