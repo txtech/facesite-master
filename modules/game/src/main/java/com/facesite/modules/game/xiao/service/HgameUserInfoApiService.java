@@ -129,10 +129,9 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				JSONArray array = JSONArray.parseArray(bootersGolds);
 				Long value = array.getLongValue(bootserId.intValue());
 				if(!needGold.equals(value)){
-					Long gole = -needGold;
 					Long score = 0L;
 					String remarks = "道具违规:"+value+">"+needGold;
-					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
+					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,-needGold,score,bootserId+1,remarks));
 					logger.error("购买道具违规:{},{}",userId,gameId);
 					return BaseGameContact.failed("update game booters gold failed");
 				}
@@ -152,10 +151,9 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				//更新用户游戏信息
 				Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.addGameUserRefboosters(userId,gameId,bootserId,olBboostersCount,isSync));
 				if(BaseGameContact.isOkDb(dbIndex)){
-					Long gole = -needGold;
 					Long score = 0L;
 					String remarks = "购买道具:"+(bootserId+1);
-					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
+					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,-needGold,score,bootserId+1,remarks));
 					return BaseGameContact.success(true);
 				}
 				logger.error("购买道具升级失败:{},{}",userId,gameId);
@@ -223,7 +221,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 
 				//更新用户游戏信息
 				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,score,start,oldStarsPerLevel,isSync));
-				if(BaseGameContact.isOkDb(dbIndex)){
+				if(BaseGameContact.isOkDb(dbIndex) && gold != 0){
 					String remarks = "闯关升级:"+gold;
 					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,level,gold,score,0L,remarks));
 					return BaseGameContact.success(true);
@@ -409,7 +407,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(!BaseGameContact.isOkDb(dbIndex)){
 					return gameData;
 				}
-				if(!oldBeans.equals(hBeans) && hgameUserInfo.getType() == DbGameContact.TYPE_MEMBER){
+				if(!oldBeans.equals(hBeans) && hBeans !=0  && hgameUserInfo.getType() == DbGameContact.TYPE_MEMBER){
 					String remarks = "进游戏呵豆:"+oldBeans+">"+hBeans;
 					dbIndex = hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,0L,hBeans,0L,0L,remarks));
 					if(BaseGameContact.isOkDb(dbIndex) && hBeans > oldBeans){
