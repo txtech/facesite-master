@@ -20,4 +20,12 @@
 		select IFNULL(max(id),0) from h_game_user_sequence
 	</select>
 
+	<update id="updateUserHbeans" parameterType="com.facesite.modules.game.xiao.entity.HgameUserInfo">
+		update h_game_user_info set hbeans = hbeans + #{hbeans},updated = sysdate() where id = #{id} and DEL_FLAG=0 and (hbeans + #{hbeans}) > 0
+	</update>
+
+	<update id="updateRestartUserHbeans" parameterType="com.facesite.modules.game.xiao.entity.HgameUserInfo">
+		update h_game_user_info set hbeans = #{hbeans},updated = sysdate() where id = #{id} and DEL_FLAG=0 and #{hbeans} > 0
+	</update>
+
 </mapper>

@@ -73,7 +73,6 @@ public class DbGameContact {
         userInfo.setSex(resData.getString("userInfo_Sex"));
         return userInfo;
     }
-
     /**
      * @desc 初始化游客玩家
      * @author nada
@@ -95,6 +94,17 @@ public class DbGameContact {
         userInfo.setAge(1);
         userInfo.setRemarks(HttpBrowserTools.getAlibaba(ip));
         return userInfo;
+    }
+    /**
+     * @desc 更新用户呵豆
+     * @author nada
+     * @create 2021/1/19 10:00 下午
+    */
+    public static HgameUserInfo updateGameUserInfo(String userId,Long hBeans){
+        HgameUserInfo hgameUserInfo = new HgameUserInfo();
+        hgameUserInfo.setId(userId);
+        hgameUserInfo.setHbeans(hBeans);
+        return hgameUserInfo;
     }
     /**
      * @desc 初始化玩家游戏
@@ -124,7 +134,7 @@ public class DbGameContact {
      * @author nada
      * @create 2021/1/18 12:22 下午
      */
-    public static HgamePlayRecord initGamePlayRecord(String userId,String gameId,String playId,int type,Long level,Long gold,Long score,Long start,String tag){
+    public static HgamePlayRecord initGamePlayRecord(String userId,String gameId,String playId,int type,Long level,Long gold,Long score,Long start,String remarks){
         HgamePlayRecord record = new HgamePlayRecord();
         record.setStart(0L);
         record.setLbeans(0L);
@@ -137,7 +147,7 @@ public class DbGameContact {
         record.setScore(score);
         record.setLevel(level);
         record.setStart(start);
-        record.setRemarks(tag);
+        record.setRemarks(remarks);
         return record;
     }
     /**
@@ -238,7 +248,6 @@ public class DbGameContact {
         }
         return userRef;
     }
-
 
 
     public static HgameInfo paramsGameInfo(String id) {

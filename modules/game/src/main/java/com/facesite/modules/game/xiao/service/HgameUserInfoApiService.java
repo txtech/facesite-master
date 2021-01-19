@@ -55,6 +55,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			String gameId = gameData.getGid();
 			Long bootserId = BaseGameContact.getLong(gameData.getBoosterId());
 			Long level = BaseGameContact.getLong(gameData.getLevel()) + 1;
+
 			if(StringUtils.isAnyEmpty(userId,gameId)){
 				logger.error("使用道具参数为空:{},{}",userId,gameId);
 				return BaseGameContact.failed("paramers is empty");
@@ -65,18 +66,15 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					logger.error("使用道具获取用户ref为空:{}",userId);
 					return BaseGameContact.failed("get user game info failed");
 				}
+
 				String olBboostersCount = oldGameUserRef.getBoostersCount();
 				if(StringUtils.isEmpty(olBboostersCount)){
 					logger.error("使用道具获取道具数组为空:{}",userId);
 					return BaseGameContact.failed("get game booters gold failed");
 				}
-				//更新用户游戏信息
 				Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.spendGameUserRefboosters(userId,gameId,bootserId,olBboostersCount));
 				if(BaseGameContact.isOkDb(dbIndex)){
-					Long gole = 0L;
-					Long score = 0L;
-					String remarks = "使用道具:"+(bootserId+1);
-					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
+					helpService.saveSpendBootserLog(userId,gameId,level,bootserId+1);
 					return BaseGameContact.success(true);
 				}
 				logger.error("使用道具失败:{}",userId);
@@ -112,16 +110,17 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					return BaseGameContact.failed("get user game info failed");
 				}
 				Long oldGold = oldGameUserRef.getGold();
+				HgameInfo hgameInfo = oldGameUserRef.getHgameInfo();
+				String bootersGolds = hgameInfo.getBoostersGold();
+
 				if(needGold < 1 || needGold > oldGold){
 					logger.error("购买道具金币不足:{},{},{},{}",userId,gameId,oldGold,needGold);
 					return BaseGameContact.failed("user gold not enough");
 				}
-				HgameInfo hgameInfo = oldGameUserRef.getHgameInfo();
 				if(hgameInfo == null){
 					logger.error("购买道具游戏信息为空:{},{}",userId,gameId);
 					return BaseGameContact.failed("get game info failed");
 				}
-				String bootersGolds = hgameInfo.getBoostersGold();
 				if(StringUtils.isEmpty(bootersGolds)){
 					logger.error("购买道具游戏金币数组为空:{},{}",userId,gameId);
 					return BaseGameContact.failed("get game booters gold failed");
@@ -129,9 +128,8 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				JSONArray array = JSONArray.parseArray(bootersGolds);
 				Long value = array.getLongValue(bootserId.intValue());
 				if(!needGold.equals(value)){
-					Long score = 0L;
 					String remarks = "道具违规:"+value+">"+needGold;
-					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,-needGold,score,bootserId+1,remarks));
+					helpService.saveAddBootserLog(userId,gameId,level,-needGold,bootserId+1,remarks);
 					logger.error("购买道具违规:{},{}",userId,gameId);
 					return BaseGameContact.failed("update game booters gold failed");
 				}
@@ -142,8 +140,8 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				String token = oldGameUserRef.getHgameUserInfo().getToken();
 
 				//app和本地乐豆同步
-				String tag = "购买道具:"+bootserId;
-				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,-needGold,0L,tag,oldHbeans);
+				String tag = "购买道具呵豆";
+				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,-needGold,tag,oldHbeans);
 				if(!isSync){
 					logger.error("购买道具app和本地乐豆同步失败:{},{},{}",isSync,userId,gameId);
 					return BaseGameContact.failed("update app user gold failed");
@@ -152,9 +150,8 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				//更新用户游戏信息
 				Long dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.addGameUserRefboosters(userId,gameId,bootserId,olBboostersCount,isSync));
 				if(BaseGameContact.isOkDb(dbIndex)){
-					Long score = 0L;
 					String remarks = "购买道具:"+(bootserId+1);
-					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,-needGold,score,bootserId+1,remarks));
+					helpService.saveAddBootserLog(userId,gameId,level,-needGold,bootserId+1,remarks);
 					return BaseGameContact.success(true);
 				}
 				logger.error("购买道具升级失败:{},{}",userId,gameId);
@@ -191,13 +188,14 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					logger.error("游戏升级游戏信息为空失败:{},{}",userId,gameId);
 					return BaseGameContact.failed("get user game info failed");
 				}
-				//战绩重置
 				Integer type = DbGameContact.PLAY_TYPE_3;
 				Long oldGold = oldGameUserRef.getGold();
 				String oldStarsPerLevel = oldGameUserRef.getStarsPerLevel();
 				Integer userType = oldGameUserRef.getHgameUserInfo().getType();
 				Long oldHbeans = oldGameUserRef.getHgameUserInfo().getHbeans();
 				String  token = oldGameUserRef.getHgameUserInfo().getToken();
+
+				//战绩重置
 				List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(DbGameContact.paramsGamePlayRecord(type,userId,gameId,level));
 				if(list !=null && list.size() > 0){
 					HgamePlayRecord oldRecord = list.get(0);
@@ -207,8 +205,8 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				}
 
 				//初始化战局
-				String tag = "闯"+level+"关结算:"+gold;
-				HgamePlayRecord newRecord = DbGameContact.initGamePlayRecord(userId,gameId,playId,type,level,gold,score,start,tag);
+				String remarks = "闯"+level+"关结算:"+gold;
+				HgamePlayRecord newRecord = DbGameContact.initGamePlayRecord(userId,gameId,playId,type,level,gold,score,start,remarks);
 				Long dbIndex = hgamePlayRecordDao.insert(newRecord);
 				if(!BaseGameContact.isOkDb(dbIndex)){
 					logger.error("游戏升级游戏保存记录失败:{},{}",userId,gameId);
@@ -216,7 +214,8 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				}
 
 				//app和本地乐豆同步
-				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,gold,score,tag,oldHbeans);
+				String tag = "闯"+level+"关结算呵豆";
+				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,gold,tag,oldHbeans);
 				if(!isSync){
 					logger.error("游戏升级app和本地乐豆同步失败:{},{}",userId,gameId);
 					return BaseGameContact.failed("update app user gold failed");
@@ -225,8 +224,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				//更新用户游戏信息
 				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,score,start,oldStarsPerLevel,isSync));
 				if(BaseGameContact.isOkDb(dbIndex) && gold != 0){
-					String remarks = "闯关升级:"+ (oldGold+gold);
-					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,level,gold,score,0L,remarks));
+					helpService.saveGamelevelUpLog(userId,gameId,level,gold,score,oldGold);
 					return BaseGameContact.success(true);
 				}
 				logger.error("游戏升级失败:{},{}",userId,gameId);
@@ -271,14 +269,13 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				isUpdate = true;
 				oldRecord.setGold(gold);
 				Long newGold = gold - oldGold;
-				String tag = "重玩"+level+"关结算:"+newGold;
-				isSync = helpService.syncAppGold(level,userType,token,userId,gameId,newGold,newScore,tag,oldHbeans);
+				String tag = "重玩"+level+"关结算呵豆";
+				isSync = helpService.syncAppGold(level,userType,token,userId,gameId,newGold,tag,oldHbeans);
 				if(!isSync){
 					logger.error("app和本地乐豆同步失败:{}",isSync);
 					return false;
 				}
-				String remarks = "重玩:"+(oldGold+ newGold);
-				hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,level,newGold,newScore,0L,remarks));
+				helpService.saveGameRestartLog(userId,gameId,level,newGold,newScore,oldGold);
 			}
 			if(!isUpdate){
 				return false;
@@ -410,12 +407,13 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(!BaseGameContact.isOkDb(dbIndex)){
 					return gameData;
 				}
-				if(!oldBeans.equals(hBeans) && hBeans !=0  && hgameUserInfo.getType() == DbGameContact.TYPE_MEMBER){
-					String remarks = "进游戏重置:"+hBeans;
-					dbIndex = hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,0L,hBeans,0L,0L,remarks));
-					if(BaseGameContact.isOkDb(dbIndex) && hBeans > oldBeans){
-						hgameUserRefDao.updateResetGameUserRef(DbGameContact.updateGameUserRefGold(userId,gameId,hBeans));
-					}
+				if(hgameUserInfo.getType() != DbGameContact.TYPE_MEMBER){
+					return gameData;
+				}
+				if(!oldBeans.equals(hBeans) && hBeans !=0 && hBeans > oldBeans){
+					helpService.saveGameInitLog(userId,gameId,hBeans);
+					hgameUserRefDao.updateResetGameUserRef(DbGameContact.updateGameUserRefGold(userId,gameId,hBeans));
+					hgameUserInfoDao.updateRestartUserHbeans(DbGameContact.updateGameUserInfo(userId,hBeans));
 				}
 				return gameData;
 			}

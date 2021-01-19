@@ -15,7 +15,17 @@ import com.facesite.modules.game.xiao.entity.HgameUserRef;
 @MyBatisDao
 public interface HgameUserRefDao extends CrudDao<HgameUserRef> {
 
+	/**
+	 * @desc 根据ID更新
+	 * @author nada
+	 * @create 2021/1/19 9:53 下午
+	*/
 	public Long updateGameUserRef(HgameUserRef hgameUserRef);
 
+	/**
+	 * @desc 根据userID和gameID更新
+	 * @author nada
+	 * @create 2021/1/19 9:54 下午
+	*/
 	public Long updateResetGameUserRef(HgameUserRef hgameUserRef);
 }
