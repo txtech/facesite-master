@@ -395,7 +395,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				if(!oldBeans.equals(hBeans) && hgameUserInfo.getType() == DbGameContact.TYPE_MEMBER){
 					String remarks = "进游戏呵豆:"+oldBeans+">"+hBeans;
 					dbIndex = hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,0L,hBeans,0L,0L,remarks));
-					if(BaseGameContact.isOkDb(dbIndex)){
+					if(BaseGameContact.isOkDb(dbIndex) && hBeans > oldBeans){
 						hgameUserRefDao.updateResetGameUserRef(DbGameContact.updateGameUserRefGold(userId,gameId,hBeans));
 					}
 				}
