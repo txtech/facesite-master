@@ -277,7 +277,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					logger.error("app和本地乐豆同步失败:{}",isSync);
 					return false;
 				}
-				String remarks = "重新闯关:"+(oldGold+ newGold);
+				String remarks = "重玩:"+(oldGold+ newGold);
 				hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,level,newGold,newScore,0L,remarks));
 			}
 			if(!isUpdate){
