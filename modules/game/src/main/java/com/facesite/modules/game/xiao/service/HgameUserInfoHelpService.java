@@ -51,9 +51,9 @@ public class HgameUserInfoHelpService extends CrudService<HgameUserInfoDao, Hgam
 			String remarks = "";
 			if(!isOk){
 				logger.error("app和本地乐豆同步失败:{}",result);
-				remarks = "同步呵豆失败:"+ (oldHbeans);
+				remarks = "同步失败:"+ (oldHbeans);
 			}else{
-				remarks = "同步呵豆成功:"+ (oldHbeans + gold);
+				remarks = "同步呵豆:"+ (oldHbeans + gold);
 			}
 			hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_1,userId,gameId,level,gold,socre,0L,remarks));
 		}
