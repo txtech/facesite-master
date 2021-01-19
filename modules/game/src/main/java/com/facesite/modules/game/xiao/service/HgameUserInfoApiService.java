@@ -56,15 +56,18 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			Long bootserId = BaseGameContact.getLong(gameData.getBoosterId());
 			Long level = BaseGameContact.getLong(gameData.getLevel()) + 1;
 			if(StringUtils.isAnyEmpty(userId,gameId)){
+				logger.error("使用道具参数为空:{},{}",userId,gameId);
 				return BaseGameContact.failed("paramers is empty");
 			}
 			synchronized (userId){
 				HgameUserRef oldGameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(userId,gameId));
 				if(oldGameUserRef == null || oldGameUserRef.getHgameUserInfo() == null){
+					logger.error("使用道具获取用户ref为空:{}",userId);
 					return BaseGameContact.failed("get user game info failed");
 				}
 				String olBboostersCount = oldGameUserRef.getBoostersCount();
 				if(StringUtils.isEmpty(olBboostersCount)){
+					logger.error("使用道具获取道具数组为空:{}",userId);
 					return BaseGameContact.failed("get game booters gold failed");
 				}
 				//更新用户游戏信息
@@ -76,10 +79,11 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
 					return BaseGameContact.success(true);
 				}
+				logger.error("使用道具失败:{}",userId);
 				return BaseGameContact.failed("Save game level up log failed");
 			}
 		} catch (Exception e) {
-			logger.error("游戏升级记录异常",e);
+			logger.error("使用道具异常",e);
 			return BaseGameContact.failed("Save game level up log error");
 		}
 	}
@@ -98,23 +102,28 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			Long needGold = BaseGameContact.getLong(gameData.getNeedGold());
 			Long level = BaseGameContact.getLong(gameData.getLevel()) + 1;
 			if(StringUtils.isAnyEmpty(userId,gameId)){
+				logger.error("购买道具参数为空:{},{}",userId,gameId);
 				return BaseGameContact.failed("paramers is empty");
 			}
 			synchronized (userId){
 				HgameUserRef oldGameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(userId,gameId));
 				if(oldGameUserRef == null || oldGameUserRef.getHgameUserInfo() == null){
+					logger.error("购买道具用户ref为空:{},{}",userId,gameId);
 					return BaseGameContact.failed("get user game info failed");
 				}
 				Long oldGold = oldGameUserRef.getGold();
 				if(needGold < 1 || needGold > oldGold){
+					logger.error("购买道具用户需要金币不一致:{},{}",userId,gameId);
 					return BaseGameContact.failed("user gold not enough");
 				}
 				HgameInfo hgameInfo = oldGameUserRef.getHgameInfo();
 				if(hgameInfo == null){
+					logger.error("购买道具游戏信息为空:{},{}",userId,gameId);
 					return BaseGameContact.failed("get game info failed");
 				}
 				String bootersGolds = hgameInfo.getBoostersGold();
 				if(StringUtils.isEmpty(bootersGolds)){
+					logger.error("购买道具游戏金币数组为空:{},{}",userId,gameId);
 					return BaseGameContact.failed("get game booters gold failed");
 				}
 				JSONArray array = JSONArray.parseArray(bootersGolds);
@@ -124,6 +133,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					Long score = 0L;
 					String remarks = "道具违规:"+value+">"+needGold;
 					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
+					logger.error("购买道具违规:{},{}",userId,gameId);
 					return BaseGameContact.failed("update game booters gold failed");
 				}
 
@@ -135,7 +145,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				String tag = "购买道具:"+bootserId;
 				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,-needGold,0L,tag);
 				if(!isSync){
-					logger.error("app和本地乐豆同步失败:{}",isSync);
+					logger.error("购买道具app和本地乐豆同步失败:{},{},{}",isSync,userId,gameId);
 					return BaseGameContact.failed("update app user gold failed");
 				}
 
@@ -148,6 +158,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks));
 					return BaseGameContact.success(true);
 				}
+				logger.error("购买道具升级失败:{},{}",userId,gameId);
 				return BaseGameContact.failed("Save game level up log failed");
 			}
 		} catch (Exception e) {
@@ -172,11 +183,13 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			Long score = BaseGameContact.getLong(gameData.getScore());
 			Long level = BaseGameContact.getLong(gameData.getLevel()) + 1;
 			if(StringUtils.isAnyEmpty(userId,gameId)){
+				logger.error("游戏升级参数为空失败:{},{}",userId,gameId);
 				return BaseGameContact.failed("paramers is empty");
 			}
 			synchronized (userId){
 				HgameUserRef oldGameUserRef = hgameUserRefDao.getByEntity(DbGameContact.paramsGameUserRef(userId,gameId));
 				if(oldGameUserRef == null || oldGameUserRef.getHgameUserInfo() == null){
+					logger.error("游戏升级游戏信息为空失败:{},{}",userId,gameId);
 					return BaseGameContact.failed("get user game info failed");
 				}
 				//战绩重置
@@ -197,13 +210,14 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				HgamePlayRecord newRecord = DbGameContact.initGamePlayRecord(userId,gameId,playId,type,level,gold,score,start,tag);
 				Long dbIndex = hgamePlayRecordDao.insert(newRecord);
 				if(!BaseGameContact.isOkDb(dbIndex)){
+					logger.error("游戏升级游戏保存记录失败:{},{}",userId,gameId);
 					return BaseGameContact.failed("save init game record failed");
 				}
 
 				//app和本地乐豆同步
 				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,gold,score,tag);
 				if(!isSync){
-					logger.error("app和本地乐豆同步失败:{}",isSync);
+					logger.error("游戏升级app和本地乐豆同步失败:{},{}",userId,gameId);
 					return BaseGameContact.failed("update app user gold failed");
 				}
 
@@ -214,6 +228,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					hgamePlayLogDao.insert(DbGameContact.saveLog(DbGameContact.LOG_TYPE_2,userId,gameId,level,gold,score,0L,remarks));
 					return BaseGameContact.success(true);
 				}
+				logger.error("游戏升级失败:{},{}",userId,gameId);
 				return BaseGameContact.failed("Save game level up log failed");
 			}
 		} catch (Exception e) {
@@ -275,7 +290,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			//更新用户游戏信息
 			dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,newScore,start,oldStarsPerLevel,isSync));
 			if(!BaseGameContact.isOkDb(dbIndex)){
-				logger.error("更新用户游戏信息失败:{}",dbIndex);
+				logger.error("更新用户游戏信息失败:{},{}",userId,gameId);
 				return false;
 			}
 			return BaseGameContact.isOkDb(dbIndex);

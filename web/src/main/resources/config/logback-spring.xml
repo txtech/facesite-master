@@ -3,13 +3,14 @@
 
 	<!-- Log file path -->
 	<property name="log.path" value="${logPath:-${java.io.tmpdir:-.}}/logs" />
-	
+
 	<!-- Framework level setting -->
 	<include resource="config/logger-core.xml"/>
-	
+
 	<!-- Project level setting -->
 <!-- 	<logger name="your.package" level="DEBUG" /> -->
-	
+	<logger name="com.facesite.modules.game" level="INFO" />
+
 	<!-- Console log output -->
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
