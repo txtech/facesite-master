@@ -55,6 +55,7 @@ public class HgameController extends BaseController {
 				model.addAttribute("msg","您的呵逗不足:"+minLimit+"，无法进入游戏哦");
 				return "game/xiao/failed";
 			}
+			attr.addAttribute("v",gameData.getVersion());
 			attr.addAttribute("uid",gameData.getUid());
 			attr.addAttribute("gid",gameData.getGid());
 			return "redirect:"+gameData.getUrl();

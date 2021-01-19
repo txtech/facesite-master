@@ -376,6 +376,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				GameData gameData = new GameData();
 				gameData.setUrl(hgameInfo.getUrl());
 				gameData.setGid(hgameInfo.getId());
+				gameData.setVersion(hgameInfo.getVersion());
 				gameData.setMinLimit(hgameInfo.getMinLimit());
 				if(StringUtils.isEmpty(token)){
 					return gameData;
