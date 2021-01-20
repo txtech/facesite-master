@@ -140,7 +140,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				String token = oldGameUserRef.getHgameUserInfo().getToken();
 
 				//app和本地乐豆同步
-				String tag = "购买道具呵豆";
+				String tag = "买道具";
 				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,-needGold,tag,oldHbeans);
 				if(!isSync){
 					logger.error("购买道具app和本地乐豆同步失败:{},{},{}",isSync,userId,gameId);
@@ -199,7 +199,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(DbGameContact.paramsGamePlayRecord(type,userId,gameId,level));
 				if(list !=null && list.size() > 0){
 					HgamePlayRecord oldRecord = list.get(0);
-					Boolean isOk = this.updateBestGameRecord(oldRecord,userType,token,level,gold,score,start,oldStarsPerLevel,oldHbeans);
+					Boolean isOk = this.updateBestGameRecord(oldRecord,userType,token,level,gold,score,start,oldStarsPerLevel,oldHbeans,oldGold);
 					logger.info("修改战绩最好的游戏战局:{}",isOk);
 					return BaseGameContact.success(isOk);
 				}
@@ -214,7 +214,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				}
 
 				//app和本地乐豆同步
-				String tag = "闯"+level+"关结算呵豆";
+				String tag = "闯"+level+"关";
 				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,gold,tag,oldHbeans);
 				if(!isSync){
 					logger.error("游戏升级app和本地乐豆同步失败:{},{}",userId,gameId);
@@ -242,7 +242,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	 * @create 2021/1/15 9:42 上午
 	*/
 	@Transactional(readOnly=false)
-	public Boolean updateBestGameRecord(HgamePlayRecord oldRecord,Integer userType,String token,Long level, Long gold, Long score,Long start,String oldStarsPerLevel,Long oldHbeans) {
+	public Boolean updateBestGameRecord(HgamePlayRecord oldRecord,Integer userType,String token,Long level, Long gold, Long score,Long start,String oldStarsPerLevel,Long oldHbeans,Long oldRefGold) {
 		try {
 			String userId = oldRecord.getUserId();
 			String gameId = oldRecord.getGameId();
@@ -269,13 +269,13 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				isUpdate = true;
 				oldRecord.setGold(gold);
 				Long newGold = gold - oldGold;
-				String tag = "重玩"+level+"关结算呵豆";
+				String tag = "重玩"+level+"关";
 				isSync = helpService.syncAppGold(level,userType,token,userId,gameId,newGold,tag,oldHbeans);
 				if(!isSync){
 					logger.error("app和本地乐豆同步失败:{}",isSync);
 					return false;
 				}
-				helpService.saveGameRestartLog(userId,gameId,level,newGold,newScore,oldGold);
+				helpService.saveGameRestartLog(userId,gameId,level,newGold,newScore,oldRefGold);
 			}
 			if(!isUpdate){
 				return false;

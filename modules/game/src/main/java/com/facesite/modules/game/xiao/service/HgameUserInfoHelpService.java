@@ -53,7 +53,7 @@ public class HgameUserInfoHelpService extends CrudService<HgameUserInfoDao, Hgam
 				logger.error("app和本地乐豆同步失败:{}",result);
 				remarks = tag+"失败:"+ (oldHbeans);
 			}else{
-				remarks = tag+"成功:"+ (oldHbeans + hBeans);
+				remarks = tag+"呵豆:"+ (oldHbeans + hBeans);
 			}
 			this.saveSyncGoldHbeanLog(userId,gameId,level,hBeans,remarks);
 		}
