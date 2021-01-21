@@ -187,7 +187,8 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 					return BaseGameContact.failed("get user game info failed");
 				}
 				Integer type = DbGameContact.PLAY_TYPE_3;
-				Long oldGold = oldGameUserRef.getGold();
+				Long  oldGold = oldGameUserRef.getGold();
+				Long  levelsCompleted = oldGameUserRef.getLevelsCompleted();
 				String oldStarsPerLevel = oldGameUserRef.getStarsPerLevel();
 				Integer userType = oldGameUserRef.getHgameUserInfo().getType();
 				Long oldHbeans = oldGameUserRef.getHgameUserInfo().getHbeans();
@@ -197,7 +198,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				List<HgamePlayRecord>  list = hgamePlayRecordDao.findList(DbGameContact.paramsGamePlayRecord(type,userId,gameId,level));
 				if(list !=null && list.size() > 0){
 					HgamePlayRecord oldRecord = list.get(0);
-					Boolean isOk = this.updateBestGameRecord(oldRecord,userType,token,level,gold,score,start,oldStarsPerLevel,oldHbeans,oldGold);
+					Boolean isOk = this.updateBestGameRecord(oldRecord,userType,token,level,gold,score,start,oldStarsPerLevel,oldHbeans,oldGold,levelsCompleted);
 					logger.info("修改战绩最好的游戏战局:{}",isOk);
 					return BaseGameContact.success(isOk);
 				}
@@ -220,7 +221,11 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				}
 
 				//更新用户游戏信息
-				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,score,start,oldStarsPerLevel,isSync));
+				Boolean isLevelUp = false;
+				if(start > 0){
+					isLevelUp = true;
+				}
+				dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,score,start,oldStarsPerLevel,isLevelUp));
 				if(BaseGameContact.isOkDb(dbIndex) && gold != 0){
 					helpService.saveGamelevelUpLog(userId,gameId,level,gold,score,oldGold);
 					return BaseGameContact.success(true);
@@ -240,7 +245,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	 * @create 2021/1/15 9:42 上午
 	*/
 	@Transactional(readOnly=false)
-	public Boolean updateBestGameRecord(HgamePlayRecord oldRecord,Integer userType,String token,Long level, Long gold, Long score,Long start,String oldStarsPerLevel,Long oldHbeans,Long oldRefGold) {
+	public Boolean updateBestGameRecord(HgamePlayRecord oldRecord,Integer userType,String token,Long level, Long gold, Long score,Long start,String oldStarsPerLevel,Long oldHbeans,Long oldRefGold,Long levelsCompleted) {
 		try {
 			String userId = oldRecord.getUserId();
 			String gameId = oldRecord.getGameId();
@@ -251,7 +256,6 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			if(!(level).equals(oldLevel)){
 				return false;
 			}
-			Boolean isSync = false;
 			Boolean isUpdate = false;
 			Long newScore = 0L;
 			if(score > oldScore){
@@ -268,7 +272,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				oldRecord.setGold(gold);
 				Long newGold = gold - oldGold;
 				String tag = "重玩"+level+"关";
-				isSync = helpService.syncAppGold(level,userType,token,userId,gameId,newGold,tag,oldHbeans);
+				Boolean isSync = helpService.syncAppGold(level,userType,token,userId,gameId,newGold,tag,oldHbeans);
 				if(!isSync){
 					logger.error("app和本地乐豆同步失败:{}",isSync);
 					return false;
@@ -285,7 +289,11 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				return false;
 			}
 			//更新用户游戏信息
-			dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,newScore,start,oldStarsPerLevel,isSync));
+			Boolean isLevelUp = false;
+			if(levelsCompleted < level){
+				isLevelUp = true;
+			}
+			dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,newScore,start,oldStarsPerLevel,isLevelUp));
 			if(!BaseGameContact.isOkDb(dbIndex)){
 				logger.error("更新用户游戏信息失败:{},{}",userId,gameId);
 				return false;

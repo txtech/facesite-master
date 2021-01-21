@@ -180,11 +180,11 @@ public class DbGameContact {
         return userRef;
     }
 
-    public static HgameUserRef updateGameUserRef(String userId,String gameId,Long level,Long score,Long start,String oldStarsPerLevel,Boolean isSync){
+    public static HgameUserRef updateGameUserRef(String userId,String gameId,Long level,Long score,Long start,String oldStarsPerLevel,Boolean isLevelUp){
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
         userRef.setGameId(gameId);
-        if(start >0 && score > 0){
+        if(isLevelUp){
             userRef.setLevelsCompleted(level);
         }
         if(score > 0){
@@ -198,8 +198,8 @@ public class DbGameContact {
             String newStarsPerLevel = array.toString();
             userRef.setStarsPerLevel(newStarsPerLevel);
         }
-        if(!isSync){
-            userRef.setRemarks(level+":同步失败");
+        if(isLevelUp){
+            userRef.setRemarks("打赢升级:"+level);
         }
         return userRef;
     }

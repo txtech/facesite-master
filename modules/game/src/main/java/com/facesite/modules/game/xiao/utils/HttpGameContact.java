@@ -27,12 +27,16 @@ public class HttpGameContact {
         updateAppGold(token,hBeans,tage);
         getUserInfo(token);*/
        /* test();*/
-        Long a = 1L;
+
+        JSONArray array = JSONArray.parseArray("[200,200,200,100,200,250,250]");
+        Long value = array.getLongValue(5);
+        System.out.println("原始数组："+value);
+       /* Long a = 1L;
         if( a != 0){
             System.out.println("1111：");
         }else{
             System.out.println("22222：");
-        }
+        }*/
     }
 
     public static void test(){
