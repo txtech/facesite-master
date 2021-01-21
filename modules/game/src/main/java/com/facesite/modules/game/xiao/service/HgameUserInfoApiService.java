@@ -290,7 +290,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			}
 			//更新用户游戏信息
 			Boolean isLevelUp = false;
-			if(levelsCompleted < level){
+			if(levelsCompleted < level && start > 0){
 				isLevelUp = true;
 			}
 			dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,newScore,start,oldStarsPerLevel,isLevelUp));

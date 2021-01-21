@@ -184,7 +184,7 @@ public class DbGameContact {
         HgameUserRef userRef = new HgameUserRef();
         userRef.setUserId(userId);
         userRef.setGameId(gameId);
-        if(isLevelUp){
+        if(isLevelUp && start>0){
             userRef.setLevelsCompleted(level);
         }
         if(score > 0){
