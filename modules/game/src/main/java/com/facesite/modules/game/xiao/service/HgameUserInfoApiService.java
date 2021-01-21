@@ -85,7 +85,7 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 	}
 
 	/**
-	 * @desc 购买道具
+	 * @desc 购买道具  ["MOVES", "TIME", "BOMB", "LOLIPOP", "5", "4"]
 	 * @author nada
 	 * @create 2021/1/16 4:38 下午
 	*/

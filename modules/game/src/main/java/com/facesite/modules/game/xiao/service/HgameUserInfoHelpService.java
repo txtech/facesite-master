@@ -144,7 +144,7 @@ public class HgameUserInfoHelpService extends CrudService<HgameUserInfoDao, Hgam
 	public Boolean saveAddBootserLog(String userId,String gameId,Long level,Long gole,Long bootserId,String remarks){
 		try {
 			Long score = 0L;
-			return this.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks);
+			return this.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId,remarks);
 		} catch (Exception e) {
 			logger.error("保存购买道具日志异常",e);
 			return false;
@@ -161,8 +161,8 @@ public class HgameUserInfoHelpService extends CrudService<HgameUserInfoDao, Hgam
 		try {
 			Long gole = 0L;
 			Long score = 0L;
-			String remarks = "使用道具:"+(bootserId+1);
-			return this.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId+1,remarks);
+			String remarks = "使用道具:"+(bootserId);
+			return this.saveLog(DbGameContact.LOG_TYPE_3,userId,gameId,level,gole,score,bootserId,remarks);
 		} catch (Exception e) {
 			logger.error("保存使用道具日志日志异常",e);
 			return false;
