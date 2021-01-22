@@ -199,7 +199,7 @@ public class DbGameContact {
             userRef.setStarsPerLevel(newStarsPerLevel);
         }
         if(isLevelUp){
-            userRef.setRemarks("打赢升级:"+level);
+            userRef.setRemarks("升级:"+level);
         }
         return userRef;
     }

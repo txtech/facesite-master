@@ -60,6 +60,9 @@
 			<if test="starsPerLevel != null and starsPerLevel !='' ">
 				stars_per_level = #{starsPerLevel},
 			</if>
+			<if test="remarks != null and remarks !='' ">
+				remarks = #{remarks},
+			</if>
 			updated = sysdate()
 		</set>
 		where

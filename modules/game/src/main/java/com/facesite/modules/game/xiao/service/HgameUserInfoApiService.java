@@ -279,6 +279,12 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 				}
 				helpService.saveGameRestartLog(userId,gameId,level,newGold,newScore,oldRefGold);
 			}
+			//更新用户游戏信息
+			Boolean isLevelUp = false;
+			if(levelsCompleted < level && start > 0){
+				isUpdate = true;
+				isLevelUp = true;
+			}
 			if(!isUpdate){
 				return false;
 			}
@@ -287,11 +293,6 @@ public class HgameUserInfoApiService extends CrudService<HgameUserInfoDao, Hgame
 			if(!isOk){
 				logger.error("更新用户游戏记录失败:{},{}",userId,gameId);
 				return false;
-			}
-			//更新用户游戏信息
-			Boolean isLevelUp = false;
-			if(levelsCompleted < level && start > 0){
-				isLevelUp = true;
 			}
 			dbIndex = hgameUserRefDao.updateGameUserRef(DbGameContact.updateGameUserRef(userId,gameId,level,newScore,start,oldStarsPerLevel,isLevelUp));
 			if(!BaseGameContact.isOkDb(dbIndex)){
