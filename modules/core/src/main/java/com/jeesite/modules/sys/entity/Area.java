@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.entity;
 
@@ -31,7 +31,7 @@ public class Area extends TreeEntity<Area> {
 	private String areaCode;		// 区域代码
 	private String areaName;		// 区域名称
 	private String areaType; 		// 区域类型（1：国家；2：省份、直辖市；3：地市；4：区县）
-	
+
 	public Area(){
 		this(null);
 	}
@@ -39,7 +39,7 @@ public class Area extends TreeEntity<Area> {
 	public Area(String id){
 		super(id);
 	}
-	
+
 	@Override
 	public Area getParent() {
 		return parent;
@@ -67,7 +67,7 @@ public class Area extends TreeEntity<Area> {
 	public void setAreaName(String areaName) {
 		this.areaName = areaName;
 	}
-	
+
 	@NotBlank(message="类型不能为空")
 	@Length(min=0, max=1, message="类型长度不能超过 1 个字符")
 	public String getAreaType() {
@@ -77,10 +77,10 @@ public class Area extends TreeEntity<Area> {
 	public void setAreaType(String areaType) {
 		this.areaType = areaType;
 	}
-	
+
 	@Override
 	public String toString() {
 		return areaCode;
 	}
-	
+
 }

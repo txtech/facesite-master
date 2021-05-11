@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.exec;
 
@@ -19,7 +19,7 @@ public class CommandUtils {
 	public static String execute(String command) throws IOException {
 		return execute(command, "GBK");
 	}
-	
+
 	public static String execute(String command, String charsetName) throws IOException {
 		Process process = Runtime.getRuntime().exec(command);
 		// 记录dos命令的返回信息
@@ -38,5 +38,5 @@ public class CommandUtils {
 		reader.close();
 		return stringBuffer.toString();
 	}
-	
+
 }

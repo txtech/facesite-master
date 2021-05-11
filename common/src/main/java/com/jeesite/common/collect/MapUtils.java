@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.collect;
 
@@ -94,7 +94,7 @@ public class MapUtils extends org.apache.commons.collections.MapUtils {
 		}
 		return retList;
 	}
-	
+
 	/**
 	 * 将Map转换为Object
 	 * @param clazz 目标对象的类
@@ -141,7 +141,7 @@ public class MapUtils extends org.apache.commons.collections.MapUtils {
 		BeanUtils.populate(object, map);
 		return object;
 	}
-	
+
 	/**
 	 * 对象转Map
 	 * @param object 目标对象

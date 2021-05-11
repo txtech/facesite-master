@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.reflect;
 
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
  * @version 2016-4-28
  */
 public class ClassUtils {
-	
+
 	/*
 	 * An instance of Log to use for logging in this class.
 	 */
@@ -55,7 +55,7 @@ public class ClassUtils {
 
 	/**
 	 * 查询实现类，继承与parentType，并不是当前类，不是抽象类。
-	 * 
+	 *
 	 * A Test that checks to see if each class is assignable to the provided class. Note
 	 * that this test will match the parent type itself if it is presented for matching.
 	 */
@@ -83,7 +83,7 @@ public class ClassUtils {
 
 	/**
 	 * 查询设置此注解的类。
-	 * 
+	 *
 	 * A Test that checks to see if each class is annotated with a specific annotation. If it
 	 * is, then the test returns true, otherwise false.
 	 */
@@ -148,7 +148,7 @@ public class ClassUtils {
 
 	/**
 	 * 查询实现类，继承与parentType，并不是当前类，不是抽象类。
-	 * 
+	 *
 	 * Attempts to discover classes that are assignable to the type provided. In the case
 	 * that an interface is provided this method will collect implementations. In the case
 	 * of a non-interface class, subclasses will be collected.  Accumulated classes can be
@@ -171,10 +171,10 @@ public class ClassUtils {
 
 	/**
 	 * 查询设置此注解的类。
-	 * 
+	 *
 	 * Attempts to discover classes that are annotated with the annotation. Accumulated
 	 * classes can be accessed by calling {@link #getClasses()}.
-	 * 
+	 *
 	 * @param annotation the annotation that should be present on matching classes
 	 * @param packageNames one or more package names to scan (including subpackages) for classes
 	 */
@@ -220,7 +220,7 @@ public class ClassUtils {
 	/**
 	 * Converts a Java package name to a path that can be looked up with a call to
 	 * {@link ClassLoader#getResources(String)}.
-	 * 
+	 *
 	 * @param packageName The Java package name to convert to a path
 	 */
 	protected String getPackagePath(String packageName) {
@@ -245,7 +245,7 @@ public class ClassUtils {
 				matches.add((Class<?>) type);
 			}
 		} catch (Exception t) {
-			log.warn("Could not examine class '" + fqn + "'" + " due to a " 
+			log.warn("Could not examine class '" + fqn + "'" + " due to a "
 					+ t.getClass().getName() + " with message: " + t.getMessage());
 		}
 	}
@@ -253,7 +253,7 @@ public class ClassUtils {
 
 /**
  * Provides a very simple API for accessing resources within an application server.
- * 
+ *
  * @author Ben Gunter
  */
 abstract class VFS {
@@ -306,7 +306,7 @@ abstract class VFS {
 	/**
 	 * Adds the specified class to the list of {@link VFS} implementations. Classes added in this
 	 * manner are tried in the order they are added and before any of the built-in implementations.
-	 * 
+	 *
 	 * @param clazz The {@link VFS} implementation class to add.
 	 */
 	public static void addImplClass(Class<? extends VFS> clazz) {
@@ -328,7 +328,7 @@ abstract class VFS {
 
 	/**
 	 * Get a method by name and parameter types. If the method is not found then return null.
-	 * 
+	 *
 	 * @param clazz The class to which the method belongs.
 	 * @param methodName The name of the method.
 	 * @param parameterTypes The types of the parameters accepted by the method.
@@ -351,7 +351,7 @@ abstract class VFS {
 
 	/**
 	 * Invoke a method on an object and return whatever it returns.
-	 * 
+	 *
 	 * @param method The method to invoke.
 	 * @param object The instance or class (for static methods) on which to invoke the method.
 	 * @param parameters The parameters to pass to the method.
@@ -379,7 +379,7 @@ abstract class VFS {
 	/**
 	 * Get a list of {@link URL}s from the context classloader for all the resources found at the
 	 * specified path.
-	 * 
+	 *
 	 * @param path The resource path.
 	 * @return A list of {@link URL}s, as returned by {@link ClassLoader#getResources(String)}.
 	 * @throws IOException If I/O errors occur
@@ -394,7 +394,7 @@ abstract class VFS {
 	/**
 	 * Recursively list the full resource path of all the resources that are children of the
 	 * resource identified by a URL.
-	 * 
+	 *
 	 * @param url The URL that identifies the resource to list.
 	 * @param forPath The path to the resource that is identified by the URL. Generally, this is the
 	 *            value passed to {@link #getResources(String)} to get the resource URL.
@@ -406,7 +406,7 @@ abstract class VFS {
 	/**
 	 * Recursively list the full resource path of all the resources that are children of all the
 	 * resources found at the specified path.
-	 * 
+	 *
 	 * @param path The path of the resource(s) to list.
 	 * @return A list containing the names of the child resources.
 	 * @throws IOException If I/O errors occur
@@ -422,7 +422,7 @@ abstract class VFS {
 
 /**
  * A default implementation of {@link VFS} that works for most application servers.
- * 
+ *
  * @author Ben Gunter
  */
 class DefaultVFS extends VFS {
@@ -483,7 +483,7 @@ class DefaultVFS extends VFS {
 									break;
 								}
 							}
-	
+
 							if (!lines.isEmpty()) {
 								log.debug("Listing " + url);
 								children.addAll(lines);
@@ -537,7 +537,7 @@ class DefaultVFS extends VFS {
 	/**
 	 * List the names of the entries in the given {@link JarInputStream} that begin with the
 	 * specified {@code path}. Entries will match with or without a leading slash.
-	 * 
+	 *
 	 * @param jar The JAR input stream
 	 * @param path The leading path to match
 	 * @return The names of all the matching entries
@@ -577,7 +577,7 @@ class DefaultVFS extends VFS {
 	 * by the URL. That is, assuming the URL references a JAR entry, this method will return a URL
 	 * that references the JAR file containing the entry. If the JAR cannot be located, then this
 	 * method returns null.
-	 * 
+	 *
 	 * @param url The URL of the JAR entry.
 	 * @return The URL of the JAR file, if one is found. Null if not.
 	 * @throws MalformedURLException
@@ -645,7 +645,7 @@ class DefaultVFS extends VFS {
 	/**
 	 * Converts a Java package name to a path that can be looked up with a call to
 	 * {@link ClassLoader#getResources(String)}.
-	 * 
+	 *
 	 * @param packageName The Java package name to convert to a path
 	 */
 	protected String getPackagePath(String packageName) {
@@ -654,7 +654,7 @@ class DefaultVFS extends VFS {
 
 	/**
 	 * Returns true if the resource located at the given URL is a JAR file.
-	 * 
+	 *
 	 * @param url The URL of the resource to test.
 	 */
 	protected boolean isJar(URL url) {
@@ -663,7 +663,7 @@ class DefaultVFS extends VFS {
 
 	/**
 	 * Returns true if the resource located at the given URL is a JAR file.
-	 * 
+	 *
 	 * @param url The URL of the resource to test.
 	 * @param buffer A buffer into which the first few bytes of the resource are read. The buffer
 	 *            must be at least the size of {@link #JAR_MAGIC}. (The same buffer may be reused
@@ -686,7 +686,7 @@ class DefaultVFS extends VFS {
 					is.close();
 				}
 			} catch (Exception e) {
-				
+
 			}
 		}
 
@@ -696,7 +696,7 @@ class DefaultVFS extends VFS {
 
 /**
  * A {@link VFS} implementation that works with the VFS API provided by JBoss 6.
- * 
+ *
  * @author Ben Gunter
  */
 class JBoss6VFS extends VFS {
@@ -772,7 +772,7 @@ class JBoss6VFS extends VFS {
 	/**
 	 * Verifies that the provided object reference is null. If it is null, then this VFS is marked
 	 * as invalid for the current environment.
-	 * 
+	 *
 	 * @param object The object reference to check for null.
 	 */
 	protected static <T> T checkNotNull(T object) {
@@ -785,7 +785,7 @@ class JBoss6VFS extends VFS {
 	/**
 	 * Verifies that the return type of a method is what it is expected to be. If it is not, then
 	 * this VFS is marked as invalid for the current environment.
-	 * 
+	 *
 	 * @param method The method whose return type is to be checked.
 	 * @param expected A type to which the method's return type must be assignable.
 	 * @see Class#isAssignableFrom(Class)

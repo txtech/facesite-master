@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.entity;
 
@@ -18,11 +18,11 @@ import com.jeesite.common.mybatis.annotation.Table;
 	}, orderBy=""
 )
 public class EmployeePost extends DataEntity<EmployeePost> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String empCode;		// 员工编码
 	private String postCode;	// 岗位编码
-	
+
 	public EmployeePost() {
 		this(null, null);
 	}
@@ -31,7 +31,7 @@ public class EmployeePost extends DataEntity<EmployeePost> {
 		this.empCode = empCode;
 		this.postCode = postCode;
 	}
-	
+
 	public String getEmpCode() {
 		return empCode;
 	}
@@ -39,7 +39,7 @@ public class EmployeePost extends DataEntity<EmployeePost> {
 	public void setEmpCode(String empCode) {
 		this.empCode = empCode;
 	}
-	
+
 	public String getPostCode() {
 		return postCode;
 	}
@@ -47,5 +47,5 @@ public class EmployeePost extends DataEntity<EmployeePost> {
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
 	}
-	
+
 }

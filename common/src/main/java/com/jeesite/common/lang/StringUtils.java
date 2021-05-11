@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.lang;
 
@@ -18,10 +18,10 @@ import com.jeesite.common.collect.ListUtils;
  * @version 2018-1-6
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
-	
+
     private static final char SEPARATOR = '_';
     private static final String CHARSET_NAME = "UTF-8";
-    
+
     /**
      * 转换为字节数组
      * @param str
@@ -38,7 +38,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     		return null;
     	}
     }
-    
+
     /**
      * 转换为字节数组
      * @param str
@@ -51,7 +51,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 			return EMPTY;
 		}
     }
-    
+
     /**
      * 是否包含字符串
      * @param str 验证字符串
@@ -68,7 +68,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     	}
     	return false;
     }
-    
+
     /**
      * 是否包含字符串
      * @param str 验证字符串
@@ -85,7 +85,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     	}
     	return false;
     }
-    
+
     /**
      * 去除左右空格（包含中文空格）
      * @param str
@@ -93,7 +93,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     public static String trim2(final String str) {
         return str == null ? null : str.replaceAll("^[\\s|　| ]*|[\\s|　| ]*$", "");
     }
-	
+
 	/**
 	 * 替换掉HTML标签方法
 	 */
@@ -108,7 +108,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		String s = m.replaceAll("");
 		return s;
 	}
-	
+
 	/**
 	 * 替换为手机识别的HTML，去掉样式及属性，保留回车。
 	 * @param html
@@ -120,7 +120,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		}
 		return html.replaceAll("<([a-z]+?)\\s+?.*?>", "<$1>");
 	}
-	
+
 	/**
 	 * 对txt进行HTML编码，并将\n转换为&gt;br/&lt;、\t转换为&nbsp; &nbsp;
 	 * @param txt
@@ -161,10 +161,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		}
 		return "";
 	}
-	
+
 	// 缩略字符串替换Html正则表达式预编译
 	private static Pattern p1 = Pattern.compile("<([a-zA-Z]+)[^<>]*>");
-	
+
 	/**
 	 * 缩略字符串（适应于与HTML标签的）
 	 * @param param 目标字符串
@@ -230,25 +230,25 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		}
 		return result.toString();
 	}
-	
+
 	/**
 	 * 首字母大写
 	 */
 	public static String cap(String str){
 		return capitalize(str);
 	}
-	
+
 	/**
 	 * 首字母小写
 	 */
 	public static String uncap(String str){
 		return uncapitalize(str);
 	}
-	
+
 	/**
 	 * 驼峰命名法工具
 	 * @return
-	 * 		camelCase("hello_world") == "helloWorld" 
+	 * 		camelCase("hello_world") == "helloWorld"
 	 * 		capCamelCase("hello_world") == "HelloWorld"
 	 * 		uncamelCase("helloWorld") = "hello_world"
 	 */
@@ -277,7 +277,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
 	 * 驼峰命名法工具
 	 * @return
-	 * 		camelCase("hello_world") == "helloWorld" 
+	 * 		camelCase("hello_world") == "helloWorld"
 	 * 		capCamelCase("hello_world") == "HelloWorld"
 	 * 		uncamelCase("helloWorld") = "hello_world"
 	 */
@@ -288,11 +288,11 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         s = camelCase(s);
         return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
-    
+
     /**
 	 * 驼峰命名法工具
 	 * @return
-	 * 		camelCase("hello_world") == "helloWorld" 
+	 * 		camelCase("hello_world") == "helloWorld"
 	 * 		capCamelCase("hello_world") == "HelloWorld"
 	 * 		uncamelCase("helloWorld") = "hello_world"
 	 */
@@ -320,7 +320,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return sb.toString();
     }
-    
+
     /**
      * 转换为JS获取对象值，生成三目运算返回结果
      * @param objectString 对象串
@@ -372,7 +372,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 		}
 		return s.toString();
 	}
-	
+
 	/**
 	 * 获取树节点名字
 	 * @param isShowCode 是否显示编码<br>
@@ -381,7 +381,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 	 * 		false or null：不显示编码：name
 	 * @param code 编码
 	 * @param name 名称
-	 * @return 
+	 * @return
 	 */
 	public static String getTreeNodeName(String isShowCode, String code, String name) {
 		if ("true".equals(isShowCode) || "1".equals(isShowCode)) {
@@ -392,7 +392,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 			return name/*StringUtils.replace(name, " ", "")*/;
 		}
 	}
-	
+
 //	/**
 //	 * 测试代码
 //	 * @param args
@@ -404,5 +404,5 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 //		html = html.replaceAll("__eol__", "");
 //		System.out.println(replaceMobileHtml(html));
 //	}
-	
+
 }

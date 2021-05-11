@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.entity;
 
@@ -37,7 +37,7 @@ import com.jeesite.common.utils.excel.fieldtype.OfficeType;
 				@Column(name="emp_name", 	attrName="empName", 	label="员工姓名", queryType=QueryType.LIKE),
 				@Column(name="emp_name_en", attrName="empNameEn", 	label="英文名", queryType=QueryType.LIKE),
 		}),
-		@JoinTable(type=Type.LEFT_JOIN, entity=Office.class, alias="o", 
+		@JoinTable(type=Type.LEFT_JOIN, entity=Office.class, alias="o",
 			on="o.office_code=e.office_code", attrName="employee.office",
 			columns={
 					@Column(includeEntity=DataEntity.class),
@@ -53,7 +53,7 @@ import com.jeesite.common.utils.excel.fieldtype.OfficeType;
 					@Column(name="zip_code", 	label="邮政编码"),
 					@Column(name="email", 		label="邮箱"),
 		}),
-		@JoinTable(type=Type.LEFT_JOIN, entity=Company.class, alias="c", 
+		@JoinTable(type=Type.LEFT_JOIN, entity=Company.class, alias="c",
 			on="c.company_code=e.company_code", attrName="employee.company",
 			columns={
 					@Column(includeEntity=DataEntity.class),
@@ -81,11 +81,11 @@ import com.jeesite.common.utils.excel.fieldtype.OfficeType;
 	orderBy="a.user_weight DESC, a.update_date DESC"
 )
 public class EmpUser extends User {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private String[] codes; // 查询用
-	
+
 	public EmpUser() {
 		this(null);
 	}
@@ -93,7 +93,7 @@ public class EmpUser extends User {
 	public EmpUser(String id){
 		super(id);
 	}
-	
+
 	@Valid
 	@ExcelFields({
 		@ExcelField(title="归属机构", attrName="employee.office", align=Align.CENTER, sort=10, fieldType=OfficeType.class),
@@ -118,7 +118,7 @@ public class EmpUser extends User {
 		}
 		return employee;
 	}
-	
+
 	public void setEmployee(Employee employee){
 		super.setRefObj(employee);
 	}
@@ -130,5 +130,5 @@ public class EmpUser extends User {
 	public void setCodes(String[] codes) {
 		this.codes = codes;
 	}
-	
+
 }

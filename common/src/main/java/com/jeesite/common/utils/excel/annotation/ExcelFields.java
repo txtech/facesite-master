@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.utils.excel.annotation;
 
@@ -18,5 +18,5 @@ import java.lang.annotation.Target;
 public @interface ExcelFields {
 
 	ExcelField[] value();
-	
+
 }

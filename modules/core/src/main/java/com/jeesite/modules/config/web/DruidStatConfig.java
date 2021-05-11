@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.config.web;
 
@@ -36,7 +36,7 @@ public class DruidStatConfig {
 		bean.addUrlPatterns("/*");
 		return bean;
 	}
-	
+
 	/**
 	 * 注册DruidServlet
 	 */
@@ -47,5 +47,5 @@ public class DruidStatConfig {
 		bean.addUrlMappings("/druid/*");
 		return bean;
 	}
-	
+
 }

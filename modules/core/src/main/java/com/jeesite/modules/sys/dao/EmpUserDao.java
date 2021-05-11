@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.dao;
 
@@ -21,20 +21,20 @@ public interface EmpUserDao extends CrudDao<EmpUser> {
 	 * 查询全部用户，仅返回基本信息
 	 */
 	public List<EmpUser> findUserList(EmpUser empUser);
-	
+
 	/**
 	 * 根据部门编码查询用户，仅返回基本信息
 	 */
 	public List<EmpUser> findUserListByOfficeCodes(EmpUser empUser);
-	
+
 	/**
 	 * 根据角色编码查询用户，仅返回基本信息
 	 */
 	public List<EmpUser> findUserListByRoleCodes(EmpUser empUser);
-	
+
 	/**
 	 * 根据岗位编码查询用户，仅返回基本信息
 	 */
 	public List<EmpUser> findUserListByPostCodes(EmpUser empUser);
-	
+
 }

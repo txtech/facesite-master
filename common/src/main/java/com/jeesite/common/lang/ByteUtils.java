@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.lang;
 
@@ -17,7 +17,7 @@ public class ByteUtils {
      * @return
      */
     public static String formatByteSize(long byteSize) {
-    	
+
     	if (byteSize <= -1){
     		return String.valueOf(byteSize);
     	}

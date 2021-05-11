@@ -19,8 +19,7 @@
 	<modules>
         <module>common</module>
         <module>modules/core</module>
-		<module>modules/mall</module>
-		<module>modules/game</module>
+		<module>modules/nabob</module>
         <module>web</module>
     </modules>
 
@@ -47,10 +46,10 @@
 				<version>${project.parent.version}</version>
 			</dependency>
 
-			<!--游戏模块-->
+			<!--富豪模块-->
 			<dependency>
 				<groupId>com.jeesite</groupId>
-				<artifactId>jeesite-module-game</artifactId>
+				<artifactId>jeesite-module-nabob</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 		</dependencies>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.entity;
 
@@ -19,11 +19,11 @@ import com.jeesite.common.mybatis.annotation.Table;
 	}, orderBy=""
 )
 public class CompanyOffice extends DataEntity<CompanyOffice> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String companyCode;		// 公司编码
 	private String officeCode;		// 机构编码
-	
+
 	public CompanyOffice() {
 		this(null);
 	}
@@ -31,7 +31,7 @@ public class CompanyOffice extends DataEntity<CompanyOffice> {
 	public CompanyOffice(String id){
 		super(id);
 	}
-	
+
 	public String getCompanyCode() {
 		return companyCode;
 	}
@@ -39,7 +39,7 @@ public class CompanyOffice extends DataEntity<CompanyOffice> {
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
 	}
-	
+
 	public String getOfficeCode() {
 		return officeCode;
 	}
@@ -47,5 +47,5 @@ public class CompanyOffice extends DataEntity<CompanyOffice> {
 	public void setOfficeCode(String officeCode) {
 		this.officeCode = officeCode;
 	}
-	
+
 }

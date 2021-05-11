@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.web;
 
@@ -31,11 +31,11 @@ import com.jeesite.modules.sys.utils.UserUtils;
  */
 @Controller
 public class SsoController extends BaseController{
-	
+
 	/**
 	 * 单点登录（如已经登录，则直接跳转）
 	 * @param username 	登录用户名（loginCode）
-	 * @param token 	单点登录令牌，令牌组成：sso密钥+用户名+日期，进行md5加密，举例： 
+	 * @param token 	单点登录令牌，令牌组成：sso密钥+用户名+日期，进行md5加密，举例：
 	 * 		// 注意如果 shiro.sso.encryptKey 为 true，则 secretKey 会自动加密。
 	 * 		String secretKey = Global.getConfig("shiro.sso.secretKey");
 	 * 		String token = Md5Utils.md5(secretKey + username + DateUtils.getDate("yyyyMMdd"));
@@ -75,9 +75,9 @@ public class SsoController extends BaseController{
 		}
 		return "error/403";
 	}
-	
+
 //	public static void main(String[] args) {
 //		System.out.println(UserUtils.getSsoToken("system"));
 //	}
-	
+
 }

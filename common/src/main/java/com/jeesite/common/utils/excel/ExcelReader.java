@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.utils.excel;
 
@@ -32,7 +32,7 @@ public abstract class ExcelReader extends DefaultHandler {
 
 	// 共享字符串表
 	private SharedStringsTable sst;
-	
+
 	// 上一次的内容
 	private String lastContents;
 	private boolean nextIsString;
@@ -218,13 +218,13 @@ public abstract class ExcelReader extends DefaultHandler {
 //	public static void main(String[] args) throws Exception {
 //
 //		String file = "E:/销售数据导入.xlsx";
-//		
+//
 //		ExcelReader reader = new ExcelReader() {
 //			@Override
 //			public void getRows(int sheetIndex, int curRow, List<String> rowList) {
-//				
+//
 //				System.out.println("Sheet:" + sheetIndex + ", Row:" + curRow + ", Data:" +rowList);
-//				
+//
 //			}
 //		};
 //		reader.process(file, 1);

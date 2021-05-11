@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.config.web;
 
@@ -34,14 +34,14 @@ public class SchemeHttpsConfig {
 		FilterRegistrationBean<Filter> bean = new FilterRegistrationBean<>();
 		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 		bean.setFilter(new Filter() {
-			
+
 			@Override
 			public void init(FilterConfig filterConfig) throws ServletException {}
 
 			@Override
 			public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 				chain.doFilter(new HttpServletRequestWrapper((HttpServletRequest) request) {
-					
+
 					@Override
 					public String getScheme() {
 						return "https";
@@ -56,7 +56,7 @@ public class SchemeHttpsConfig {
 							return sb;
 						}
 					}
-					
+
 				}, response);
 			}
 

@@ -18,8 +18,7 @@ public class IpUtils {
 			return "unknown";
 		}
 		String ip = null;
-		String xffName = PropertiesUtils.getInstance()
-				.getProperty("shiro.remoteAddrHeaderName");
+		String xffName = PropertiesUtils.getInstance().getProperty("shiro.remoteAddrHeaderName");
 		if (StringUtils.isNotBlank(xffName)){
 			ip = request.getHeader(xffName);
 		}
@@ -35,7 +34,7 @@ public class IpUtils {
 		}
 		return ip;
 	}
-	
+
 	/**
 	 * 是否是本地地址
 	 * @param ip
@@ -47,12 +46,12 @@ public class IpUtils {
 
 	/**
 	 * 判断IP地址为内网IP还是公网IP
-	 * 
+	 *
 	 * tcp/ip协议中，专门保留了三个IP地址区域作为私有地址，其地址范围如下：
 	 * 10.0.0.0/8：10.0.0.0～10.255.255.255
 	 * 172.16.0.0/12：172.16.0.0～172.31.255.255
 	 * 192.168.0.0/16：192.168.0.0～192.168.255.255
-	 * 
+	 *
 	 * @param ip
 	 * @return
 	 */
@@ -61,7 +60,7 @@ public class IpUtils {
 		if (isLocalAddr(ip)){
 			return true;
 		}
-		
+
 		byte[] addr = textToNumericFormatV4(ip);
 
 		final byte b0 = addr[0];

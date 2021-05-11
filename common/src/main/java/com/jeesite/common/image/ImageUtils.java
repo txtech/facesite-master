@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.image;
 
@@ -26,7 +26,7 @@ import net.coobird.thumbnailator.Thumbnails.Builder;
 public class ImageUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(ImageUtils.class);
-	
+
 	/**
 	 * 缩略图生成，处理一些较大的图片，防止占用太多的网络资源
 	 */
@@ -66,5 +66,5 @@ public class ImageUtils {
 			logger.error("图片压缩失败：" + imageFile.getAbsoluteFile(), e);
 		}
 	}
-	
+
 }

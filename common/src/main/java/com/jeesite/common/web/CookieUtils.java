@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.web;
 
@@ -26,7 +26,7 @@ public class CookieUtils {
 	public static void setCookie(HttpServletResponse response, String name, String value) {
 		setCookie(response, name, value, 60*60*24*30);
 	}
-	
+
 	/**
 	 * 设置 Cookie
 	 * @param name 名称
@@ -37,7 +37,7 @@ public class CookieUtils {
 	public static void setCookie(HttpServletResponse response, String name, String value, String path) {
 		setCookie(response, name, value, path, 60*60*24*30);
 	}
-	
+
 	/**
 	 * 设置 Cookie
 	 * @param name 名称
@@ -49,7 +49,7 @@ public class CookieUtils {
 		HttpServletRequest request = ServletUtils.getRequest();
 		setCookie(response, name, value, request != null ? request.getContextPath() : "", maxAge);
 	}
-	
+
 	/**
 	 * 设置 Cookie
 	 * @param name 名称
@@ -68,7 +68,7 @@ public class CookieUtils {
 			response.addCookie(cookie);
 		}
 	}
-	
+
 	/**
 	 * 获得指定Cookie的值
 	 * @param name 名称
@@ -77,7 +77,7 @@ public class CookieUtils {
 	public static String getCookie(HttpServletRequest request, String name) {
 		return getCookie(request, null, name, false);
 	}
-	
+
 	/**
 	 * 获得指定Cookie的值，并删除。
 	 * @param name 名称

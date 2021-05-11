@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.web;
 
@@ -71,7 +71,7 @@ public class OnlineController extends BaseController{
 	public String list(Model model) {
 		return "modules/sys/onlineList";
 	}
-	
+
 	/**
 	 * 在线用户列表数据
 	 * @param request
@@ -81,12 +81,12 @@ public class OnlineController extends BaseController{
 	@RequiresPermissions("sys:online:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
-	public List<Map<String, Object>> listData(String isAllOnline, String isVisitor, String sessionId, 
+	public List<Map<String, Object>> listData(String isAllOnline, String isVisitor, String sessionId,
 			String userCode, String userName, String userType, String orderBy) {
 		List<Map<String, Object>> list = ListUtils.newArrayList();
 		boolean excludeLeave = isAllOnline==null || !Global.YES.equals(isAllOnline);
 		boolean excludeVisitor = isVisitor==null || !Global.YES.equals(isVisitor);
- 		Collection<Session> sessions = sessionDAO.getActiveSessions(excludeLeave, 
+ 		Collection<Session> sessions = sessionDAO.getActiveSessions(excludeLeave,
 				excludeVisitor, null, sessionId, userCode);
 		long currentTime = System.currentTimeMillis();
 		for (Session session : sessions){
@@ -99,7 +99,7 @@ public class OnlineController extends BaseController{
 			Map<String, Object> map = MapUtils.newLinkedHashMap();
 			// 为了安全性，需要有权限的人才能看
 			if (UserUtils.getSubject().isPermitted("sys:online:edit")){
-				map.put("id", session.getId().toString()); 
+				map.put("id", session.getId().toString());
 			}
 			map.put("startTimestamp", DateUtils.formatDateTime(session.getStartTimestamp()));
 			map.put("lastAccessTime", DateUtils.formatDateTime(session.getLastAccessTime()));
@@ -134,7 +134,7 @@ public class OnlineController extends BaseController{
 		}
 		return list;
 	}
-	
+
 	/**
 	 * 提出在线用户
 	 * @author ThinkGem
@@ -166,5 +166,5 @@ public class OnlineController extends BaseController{
 		}
 		return renderResult(Global.FALSE, text("踢出失败，没有找到该在线用户！"));
 	}
-	
+
 }

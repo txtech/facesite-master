@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.utils.excel.fieldtype;
 
@@ -18,7 +18,7 @@ import com.jeesite.modules.sys.utils.EmpUtils;
 public class CompanyType implements FieldType {
 
 	private List<Company> list;
-	
+
 	public CompanyType() {
 		list = EmpUtils.getCompanyAllList();
 	}
@@ -44,5 +44,5 @@ public class CompanyType implements FieldType {
 		}
 		return StringUtils.EMPTY;
 	}
-	
+
 }

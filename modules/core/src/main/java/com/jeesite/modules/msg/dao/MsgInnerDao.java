@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.msg.dao;
 
@@ -14,5 +14,5 @@ import com.jeesite.modules.msg.entity.MsgInner;
  */
 @MyBatisDao
 public interface MsgInnerDao extends CrudDao<MsgInner> {
-	
+
 }

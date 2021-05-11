@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.utils.excel.fieldtype;
 
@@ -23,12 +23,12 @@ public interface FieldType {
 	default public String setValue(Object val) {
 		return null;
 	}
-	
+
 	/**
 	 * 获取对象值格式（导出）
 	 */
 	default public String getDataFormat() {
 		return null;
 	}
-	
+
 }

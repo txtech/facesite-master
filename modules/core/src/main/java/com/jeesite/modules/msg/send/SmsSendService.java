@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.msg.send;
 
@@ -44,7 +44,7 @@ public class SmsSendService extends BaseService implements MsgSendService{
 //				}
 //			}
 //			// 手机号码
-//			conn.data("mobile", msgPush.getReceiveCode());	
+//			conn.data("mobile", msgPush.getReceiveCode());
 //			// 短信内容
 //			SmsMsgContent content = msgPush.parseMsgContent(SmsMsgContent.class);
 //			conn.data("content", prefix + content.getContent() + suffix);
@@ -52,12 +52,12 @@ public class SmsSendService extends BaseService implements MsgSendService{
 //			String result = conn.execute().body();
 //			String result = "{result:0,message:\"ok\"}"; // 模拟发送结果
 //			Map<String, Object> map = JsonMapper.fromJson(result, Map.class);
-			
+
 			// 发送短信
 			SmsMsgContent content = msgPush.parseMsgContent(SmsMsgContent.class);
 			String result = SmsUtils.send(content.getContent(), msgPush.getReceiveCode());
 			Map<String, Object> map = JsonMapper.fromJson(result, Map.class);
-			
+
 			// 发送成功
 			if (ObjectUtils.toInteger(map.get("result")) == 0){
 				msgPush.setPushStatus(MsgPush.PUSH_STATUS_SUCCESS);
@@ -67,7 +67,7 @@ public class SmsSendService extends BaseService implements MsgSendService{
 			else{
 				throw new RuntimeException(result);
 			}
-			
+
 		} catch (Exception ex) {
 			logger.error("发送短信失败！ ", ex);
 			msgPush.setPushDate(new Date());

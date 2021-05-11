@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.lang;
 
@@ -93,7 +93,7 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
 		BigDecimal bg = new BigDecimal(one * 100 / total);
 		return bg.setScale(0, RoundingMode.HALF_UP).toString();
 	}
-	
+
 	/**
 	 * 格式化数值类型
 	 * @param data
@@ -118,5 +118,5 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
 		}
 		return df.format(data);
 	}
-	
+
 }

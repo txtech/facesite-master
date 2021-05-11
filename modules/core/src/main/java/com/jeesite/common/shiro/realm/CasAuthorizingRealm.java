@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.shiro.realm;
 
@@ -45,20 +45,20 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 
 	private UserService userService;
 	private EmpUserService empUserService;
-	
+
 	private CasOutHandler casOutHandler;
 	private String casServerUrl; 			// CAS 服务器地址
     private String casServerCallbackUrl; 	// CAS 服务器回调地址
     private TicketValidator ticketValidator;// CAS 令牌验证类
-	
+
 	public CasAuthorizingRealm() {
 		super();
 		this.setAuthenticationTokenClass(CasToken.class);
 	}
-	
+
 	@Override
 	protected FormToken getFormToken(AuthenticationToken authcToken) {
-		
+
 		// 单点登录登出句柄（登出时注销session）有CAS中央服务器调用
 		HttpServletRequest request = ServletUtils.getRequest();
 		if (casOutHandler.isLogoutRequest(request)) {
@@ -68,18 +68,18 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 			}
 			return null;
 		}
-		
+
 		if (authcToken == null){
 			return null;
 		}
-		
+
 		CasToken casToken = (CasToken) authcToken;
 		String ticket = (String) casToken.getCredentials();
 		if (ticketValidator == null) {
             ticketValidator = new Cas20ServiceTicketValidator(casServerUrl);
             ((Cas20ServiceTicketValidator)ticketValidator).setEncoding("UTF-8");
         }
-		
+
 		// 进行登录身份验证
 		Assertion casAssertion = null;
 		try {
@@ -90,7 +90,7 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 		}
 		AttributePrincipal casPrincipal = casAssertion.getPrincipal();
 		casToken.setUserId(casPrincipal.getName());
-		
+
 		// 生成登录信息对象
 		FormToken token = new FormToken(request);
         token.setUsername(casPrincipal.getName());
@@ -100,17 +100,17 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
         token.setParams(params);
         return token;
 	}
-	
+
 	@Override
 	protected User getUserInfo(FormToken token) {
-		
+
 		User user = super.getUserInfo(token);
 		if (user == null){
 			Map<String, Object> attrs = token.getParams();
-			
+
 			// 如果允许客户端创建账号，则创建账号
 			if (ObjectUtils.toBoolean(attrs.get("isAllowClientCreateUser"))){
-				
+
 				// 获取CAS传递过来的用户属性信息
 				user = new User(EncodeUtils.decodeUrl(ObjectUtils.toString(attrs.get("userCode"))));
 				user.setLoginCode(EncodeUtils.decodeUrl(ObjectUtils.toString(attrs.get("loginCode"))));
@@ -125,10 +125,10 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 				user.setRefName(EncodeUtils.decodeUrl(ObjectUtils.toString(attrs.get("refName"))));
 				user.setMgrType(EncodeUtils.decodeUrl(ObjectUtils.toString(attrs.get("mgrType"))));
 				user.setStatus(EncodeUtils.decodeUrl(ObjectUtils.toString(attrs.get("status"))));
-				
+
 				// 如果是员工类型，则平台自动创建
 				if (User.USER_TYPE_EMPLOYEE.equals(user.getUserType())){
-					
+
 					// 保存员工和用户
 					try{
 						EmpUser empUser = new EmpUser();
@@ -144,15 +144,15 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 					}catch(ValidationException ve){
 						throw new AuthenticationException("msg:" + ve.getMessage());
 					}
-					
+
 					// 重新获取用户登录
 					user = UserUtils.getByLoginCode(token.getUsername(), user.getCorpCode_());
 					if (user != null) {
 						return user;
 					}
-					
+
 				}
-				
+
 				// 其它类型，根据项目需要自行创建
 				else{
 					try{
@@ -171,13 +171,13 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 		}
 		return user;
 	}
-	
+
 	@Override
 	protected void assertCredentialsMatch(AuthenticationToken authcToken,
 			AuthenticationInfo info) throws AuthenticationException {
 		// CAS的Ticket已经在doGetAuthenticationInfo()认证过了，这里就不验证身份了
 	}
-	
+
 	@Override
 	public void onLoginSuccess(LoginInfo loginInfo, HttpServletRequest request) {
 		super.onLoginSuccess(loginInfo, request);
@@ -187,19 +187,19 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 		casOutHandler.recordSession(request, ticket);
 		//System.out.print("__sid: "+request.getSession().getId());
 		//System.out.println(" == "+UserUtils.getSession().getId());
-		
+
 		// 更新登录IP、时间、会话ID等
 		User user = UserUtils.get(loginInfo.getId());
 		getUserService().updateUserLoginInfo(user);
-		
+
 		// 记录用户登录日志
 		LogUtils.saveLog(user, ServletUtils.getRequest(), "系统登录", Log.TYPE_LOGIN_LOGOUT);
 	}
-	
+
 	@Override
 	public void onLogoutSuccess(LoginInfo loginInfo, HttpServletRequest request) {
 		super.onLogoutSuccess(loginInfo, request);
-		
+
 		// 记录用户退出日志
 		User user = UserUtils.get(loginInfo.getId());
 		LogUtils.saveLog(user, request, "系统退出", Log.TYPE_LOGIN_LOGOUT);
@@ -218,7 +218,7 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 		}
 		return empUserService;
 	}
-	
+
     public void setCasOutHandler(CasOutHandler casOutHandler) {
 		this.casOutHandler = casOutHandler;
 	}

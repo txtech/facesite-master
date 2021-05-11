@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.test.service;
 
@@ -21,7 +21,7 @@ import com.jeesite.modules.test.entity.TestTree;
 @Service
 @Transactional(readOnly=true)
 public class TestTreeService extends TreeService<TestTreeDao, TestTree> {
-	
+
 	/**
 	 * 获取单条数据
 	 * @param testTree
@@ -31,7 +31,7 @@ public class TestTreeService extends TreeService<TestTreeDao, TestTree> {
 	public TestTree get(TestTree testTree) {
 		return super.get(testTree);
 	}
-	
+
 	/**
 	 * 查询列表数据
 	 * @param testTree
@@ -41,7 +41,7 @@ public class TestTreeService extends TreeService<TestTreeDao, TestTree> {
 	public List<TestTree> findList(TestTree testTree) {
 		return super.findList(testTree);
 	}
-	
+
 	/**
 	 * 保存数据（插入或更新）
 	 * @param testTree
@@ -55,7 +55,7 @@ public class TestTreeService extends TreeService<TestTreeDao, TestTree> {
 		// 保存上传附件
 		FileUploadUtils.saveFileUpload(testTree.getId(), "testTree_file");
 	}
-	
+
 	/**
 	 * 更新状态
 	 * @param testTree
@@ -65,7 +65,7 @@ public class TestTreeService extends TreeService<TestTreeDao, TestTree> {
 	public void updateStatus(TestTree testTree) {
 		super.updateStatus(testTree);
 	}
-	
+
 	/**
 	 * 删除数据
 	 * @param testTree
@@ -75,5 +75,5 @@ public class TestTreeService extends TreeService<TestTreeDao, TestTree> {
 	public void delete(TestTree testTree) {
 		super.delete(testTree);
 	}
-	
+
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.shiro.filter;
 
@@ -19,10 +19,10 @@ public class RolesAuthorizationFilter extends org.apache.shiro.web.filter.authz.
 	protected void redirectToLogin(ServletRequest request, ServletResponse response) throws IOException {
 		PermissionsAuthorizationFilter.redirectToDefaultPath(request, response);
 	}
-	
+
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
 		return PermissionsAuthorizationFilter.redirectTo403Page(request, response);
     }
-	
+
 }

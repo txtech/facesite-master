@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.test.service;
 
@@ -28,10 +28,10 @@ import com.jeesite.modules.test.entity.TestDataChild;
 @Service
 @Transactional(readOnly=true)
 public class TestDataService extends CrudService<TestDataDao, TestData> {
-	
+
 	@Autowired
 	private TestDataChildDao testDataChildDao;
-	
+
 	/**
 	 * 获取单条数据
 	 * @param testData
@@ -47,7 +47,7 @@ public class TestDataService extends CrudService<TestDataDao, TestData> {
 		}
 		return entity;
 	}
-	
+
 	/**
 	 * 查询分页数据
 	 * @param page 分页对象
@@ -56,7 +56,7 @@ public class TestDataService extends CrudService<TestDataDao, TestData> {
 	 */
 	@Override
 	public Page<TestData> findPage(TestData testData) {
-		
+
 //		// 演示Map参数和返回值，支持分页
 //		Page<Map<String, Object>> pageMap = new Page<>();
 //		Map<String, Object> params = MapUtils.newHashMap();
@@ -65,10 +65,10 @@ public class TestDataService extends CrudService<TestDataDao, TestData> {
 //		pageMap.setList(dao.findListForMap(params));
 //		System.out.println(pageMap.getList());
 //		System.out.println(pageMap.getCount());
-		
+
 		return super.findPage(testData);
 	}
-	
+
 	/**
 	 * 查询子表分页数据
 	 * @param page 分页对象
@@ -78,7 +78,7 @@ public class TestDataService extends CrudService<TestDataDao, TestData> {
 	public List<TestDataChild> findSubList(TestDataChild testData) {
 		return testDataChildDao.findList(testData);
 	}
-	
+
 	/**
 	 * 保存数据（插入或更新）
 	 * @param testData
@@ -112,7 +112,7 @@ public class TestDataService extends CrudService<TestDataDao, TestData> {
 			index++;
 		}
 	}
-	
+
 	/**
 	 * 更新状态
 	 * @param testData
@@ -122,7 +122,7 @@ public class TestDataService extends CrudService<TestDataDao, TestData> {
 	public void updateStatus(TestData testData) {
 		super.updateStatus(testData);
 	}
-	
+
 	/**
 	 * 删除数据
 	 * @param testData
@@ -135,7 +135,7 @@ public class TestDataService extends CrudService<TestDataDao, TestData> {
 		testDataChild.setTestData(testData);
 		testDataChildDao.deleteByEntity(testDataChild);
 	}
-	
+
 	/**
 	 * 任务调度测试：testDataService.executeTestTask(userService, 1, 2L, 3F, 4D, 'abc')
 	 */
@@ -143,7 +143,7 @@ public class TestDataService extends CrudService<TestDataDao, TestData> {
 		System.out.println(DateUtils.getTime() + " 任务执行了~~~  bean: " + userService + ", i: " + i
 				+ ", l: " + l + ", f: " + f + ", d: " + d + ", s: " + s);
 	}
-	
+
 	/**
 	 * 事务测试，若 Child 报错，则回滚
 	 */
@@ -162,12 +162,12 @@ public class TestDataService extends CrudService<TestDataDao, TestData> {
 		testDataChild.setTestInput(sb.toString());
 		testDataChildDao.insert(testDataChild);
 	}
-	
+
 	/**
 	 * 事务验证，返回空，则事务回滚成功
 	 */
 	public boolean transValid(TestData testData) {
 		return dao.get(testData) == null;
 	}
-	
+
 }

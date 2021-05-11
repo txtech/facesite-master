@@ -9,7 +9,7 @@
 
 	<!-- Project level setting -->
 <!-- 	<logger name="your.package" level="DEBUG" /> -->
-	<logger name="com.facesite.modules.game" level="INFO" />
+	<logger name="com.nabobsite.modules.nabob" level="INFO" />
 
 	<!-- Console log output -->
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">

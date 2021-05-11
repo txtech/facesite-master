@@ -1,7 +1,7 @@
 #======================================#
 #Project settings
 # 产品或项目名称、软件开发公司名称
-productName: game
+productName: nabob
 companyName: nada
 # 产品版本、版权年份
 productVersion: V4.2
@@ -14,7 +14,7 @@ demoMode: false
 server:
   port: 9998
   servlet:
-    context-path: /game
+    context-path: /nabob
   tomcat:
     uri-encoding: UTF-8
   # 将请求协议转换为 https
@@ -26,9 +26,9 @@ server:
 jdbc:
   type: mysql
   driver: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://47.110.43.93:3337/facesite?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
-  username: testdb
-  password: testdb@mysqlApoBlkCmn
+  url: jdbc:mysql://127.0.0.1:3306/nabobsite?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=Asia/Shanghai
+  username: root
+  password: 12345678
   testSql: SELECT 1
 
 #  # 连接信息加密
@@ -494,7 +494,7 @@ shiro:
 # MyBatis 相关
 mybatis:
   # @MyBatisDao、Aliases 扫描基础包，如果多个，用“,”分隔
-  scanBasePackage: com.jeesite.modules,com.facesite.modules.mall,com.facesite.modules.game
+  scanBasePackage: com.jeesite.modules,com.nabobsite.modules.mall,com.nabobsite.modules.nabob
 
 #  # TypeHandlers 扫描基础包，如果多个，用“,”分隔
 #  scanTypeHandlersPackage: ~

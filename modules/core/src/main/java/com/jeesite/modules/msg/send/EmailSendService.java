@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.msg.send;
 
@@ -31,7 +31,7 @@ public class EmailSendService extends BaseService implements MsgSendService{
 			Integer smtpPort = Global.getPropertyToInteger("msg.email.smtpPort", "25");
 			String sslOnConnect = Global.getProperty("msg.email.sslOnConnect", "false");
 			String sslSmtpPort = Global.getProperty("msg.email.sslSmtpPort", "465");
-			
+
 			HtmlEmail htmlEmail = new HtmlEmail();
 			htmlEmail.setCharset("utf-8");
 			htmlEmail.setFrom(fromAddress);
@@ -43,12 +43,12 @@ public class EmailSendService extends BaseService implements MsgSendService{
 				htmlEmail.setSslSmtpPort(sslSmtpPort);
 			}
 			htmlEmail.addTo(msgPush.getReceiveCode(), msgPush.getReceiveUserName());
-			
+
 			// 内容
 			EmailMsgContent content = msgPush.parseMsgContent(EmailMsgContent.class);
 			htmlEmail.setSubject(content.getTitle());
 			htmlEmail.setMsg(content.getContent());
-			
+
 			// 抄送
 			if (StringUtils.isNotBlank(content.getCc())) {
 				for (String email : content.getCc().split(";")) {
@@ -61,14 +61,14 @@ public class EmailSendService extends BaseService implements MsgSendService{
 					htmlEmail.addBcc(email);
 				}
 			}
-			
+
 			// 发送邮件
 			String result = htmlEmail.send();
-			
+
 			// 发送成功
 			msgPush.setPushStatus(MsgPush.PUSH_STATUS_SUCCESS);
 			msgPush.addPushReturnContent(result);
-			
+
 		} catch (Exception ex) {
 			logger.error("发送邮件失败！ ", ex);
 			msgPush.setPushStatus(MsgPush.PUSH_STATUS_FAIL);

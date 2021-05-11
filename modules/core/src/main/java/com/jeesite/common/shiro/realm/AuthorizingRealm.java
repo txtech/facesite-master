@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.shiro.realm;
 
@@ -25,13 +25,13 @@ import com.jeesite.modules.sys.utils.UserUtils;
  * @version 2018-7-11
  */
 public class AuthorizingRealm extends BaseAuthorizingRealm  {
-	
+
 	public static final String HASH_ALGORITHM = "SHA-1";
 	public static final int HASH_INTERATIONS = 1024;
 	public static final int SALT_SIZE = 8;
-	
+
 	private UserService userService;
-	
+
 	public AuthorizingRealm() {
 		super();
 //		// 设定密码校验的Hash算法与迭代次数（V4.1.4及以上版本不需要了，统一使用validatePassword验证密码）
@@ -39,7 +39,7 @@ public class AuthorizingRealm extends BaseAuthorizingRealm  {
 //		matcher.setHashIterations(HASH_INTERATIONS);
 //		this.setCredentialsMatcher(matcher);
 	}
-	
+
 	/**
 	 * 获取登录凭证，将 authcToken 转换为 FormToken，参考 CAS 实现
 	 */
@@ -47,7 +47,7 @@ public class AuthorizingRealm extends BaseAuthorizingRealm  {
 	protected FormToken getFormToken(AuthenticationToken authcToken) {
 		return super.getFormToken(authcToken);
 	}
-	
+
 	/**
 	 * 用于用户根据登录信息获取用户信息<br>
 	 * 1、默认根据登录账号登录信息，如：UserUtils.getByLoginCode(token.getUsername(), token.getParam("corpCode"));<br>
@@ -57,7 +57,7 @@ public class AuthorizingRealm extends BaseAuthorizingRealm  {
 	protected User getUserInfo(FormToken token) {
 		return super.getUserInfo(token);
 	}
-	
+
 	/**
 	 * 校验登录凭证，如密码验证，token验证，验证失败抛出 AuthenticationException 异常
 	 */
@@ -65,7 +65,7 @@ public class AuthorizingRealm extends BaseAuthorizingRealm  {
 	protected void assertCredentialsMatch(AuthenticationToken authcToken, AuthenticationInfo authcInfo) throws AuthenticationException {
 		super.assertCredentialsMatch(authcToken, authcInfo);
 	}
-	
+
 	/**
 	 * 生成密文密码，生成随机的16位salt并经过1024次 sha-1 hash
 	 * @param plainPassword 明文密码
@@ -94,23 +94,23 @@ public class AuthorizingRealm extends BaseAuthorizingRealm  {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public void onLoginSuccess(LoginInfo loginInfo, HttpServletRequest request) {
 		super.onLoginSuccess(loginInfo, request);
-		
+
 		// 更新登录IP、时间、会话ID等
 		User user = UserUtils.get(loginInfo.getId());
 		getUserService().updateUserLoginInfo(user);
-		
+
 		// 记录用户登录日志
 		LogUtils.saveLog(user, request, "系统登录", Log.TYPE_LOGIN_LOGOUT);
 	}
-	
+
 	@Override
 	public void onLogoutSuccess(LoginInfo loginInfo, HttpServletRequest request) {
 		super.onLogoutSuccess(loginInfo, request);
-		
+
 		// 记录用户退出日志
 		User user = UserUtils.get(loginInfo.getId());
 		LogUtils.saveLog(user, request, "系统退出", Log.TYPE_LOGIN_LOGOUT);
@@ -122,5 +122,5 @@ public class AuthorizingRealm extends BaseAuthorizingRealm  {
 		}
 		return userService;
 	}
-	
+
 }

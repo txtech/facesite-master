@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.config;
 
@@ -47,7 +47,7 @@ import com.jeesite.common.shiro.web.WebSecurityManager;
 @SuppressWarnings("deprecation")
 @Configuration
 public class ShiroConfig {
-	
+
 	/**
 	 * Apache Shiro Filter
 	 */
@@ -67,7 +67,7 @@ public class ShiroConfig {
 	private InnerFilter shiroInnerFilter() {
 		return new InnerFilter();
 	}
-	
+
 	/**
 	 * CAS登录过滤器
 	 */
@@ -140,7 +140,7 @@ public class ShiroConfig {
 		bean.setFilterChainDefinitionMap(chains.getObject());
 		return bean;
 	}
-	
+
 	/**
 	 * 系统安全认证实现类
 	 */
@@ -150,7 +150,7 @@ public class ShiroConfig {
 		bean.setSessionDAO(sessionDAO);
 		return bean;
 	}
-	
+
 	/**
 	 * 单点登录信息句柄，单点退出用
 	 */
@@ -158,7 +158,7 @@ public class ShiroConfig {
 	public CasOutHandler casOutHandler() {
 		return new CasOutHandler();
 	}
-	
+
 	/**
 	 * 系统安全认证实现类
 	 */
@@ -191,7 +191,7 @@ public class ShiroConfig {
 		bean.setSubjectFactory(new CasSubjectFactory());
 		return bean;
 	}
-	
+
 	/**
 	 * Shiro 生命周期处理器，实现初始化和销毁回调
 	 */
@@ -220,7 +220,7 @@ public class ShiroConfig {
 		bean.setSecurityManager(securityManager);
 		return bean;
 	}
-	
+
 //	/**
 //	 * 在方法中 注入 securityManager 进行代理控制
 //	 */
@@ -231,5 +231,5 @@ public class ShiroConfig {
 //		bean.setArguments(new Object[] { securityManager });
 //		return bean;
 //	}
-	
+
 }

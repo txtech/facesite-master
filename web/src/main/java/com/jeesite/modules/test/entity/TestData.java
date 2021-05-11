@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.test.entity;
 
@@ -52,7 +52,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.update_date DESC"
 )
 public class TestData extends DataEntity<TestData> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String testInput;		// 单行文本
 	private String testTextarea;		// 多行文本
@@ -67,7 +67,7 @@ public class TestData extends DataEntity<TestData> {
 	private String testAreaCode;		// 区域选择
 	private String testAreaName;		// 区域名称
 	private List<TestDataChild> testDataChildList = ListUtils.newArrayList();		// 子表列表
-	
+
 	public TestData() {
 		this(null);
 	}
@@ -75,7 +75,7 @@ public class TestData extends DataEntity<TestData> {
 	public TestData(String id){
 		super(id);
 	}
-	
+
 	@Length(min=0, max=200, message="单行文本长度不能超过 200 个字符")
 	public String getTestInput() {
 		return testInput;
@@ -84,7 +84,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestInput(String testInput) {
 		this.testInput = testInput;
 	}
-	
+
 	@Length(min=0, max=200, message="多行文本长度不能超过 200 个字符")
 	public String getTestTextarea() {
 		return testTextarea;
@@ -93,7 +93,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestTextarea(String testTextarea) {
 		this.testTextarea = testTextarea;
 	}
-	
+
 	@Length(min=0, max=10, message="下拉框长度不能超过 10 个字符")
 	public String getTestSelect() {
 		return testSelect;
@@ -102,7 +102,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestSelect(String testSelect) {
 		this.testSelect = testSelect;
 	}
-	
+
 	@Length(min=0, max=200, message="下拉多选长度不能超过 200 个字符")
 	public String getTestSelectMultiple() {
 		return testSelectMultiple;
@@ -111,7 +111,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestSelectMultiple(String testSelectMultiple) {
 		this.testSelectMultiple = testSelectMultiple;
 	}
-	
+
 	@Length(min=0, max=10, message="单选框长度不能超过 10 个字符")
 	public String getTestRadio() {
 		return testRadio;
@@ -120,7 +120,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestRadio(String testRadio) {
 		this.testRadio = testRadio;
 	}
-	
+
 	@Length(min=0, max=200, message="复选框长度不能超过 200 个字符")
 	public String getTestCheckbox() {
 		return testCheckbox;
@@ -129,7 +129,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestCheckbox(String testCheckbox) {
 		this.testCheckbox = testCheckbox;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getTestDate() {
 		return testDate;
@@ -138,7 +138,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestDate(Date testDate) {
 		this.testDate = testDate;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getTestDatetime() {
 		return testDatetime;
@@ -147,7 +147,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestDatetime(Date testDatetime) {
 		this.testDatetime = testDatetime;
 	}
-	
+
 	public User getTestUser() {
 		return testUser;
 	}
@@ -155,7 +155,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestUser(User testUser) {
 		this.testUser = testUser;
 	}
-	
+
 	public Office getTestOffice() {
 		return testOffice;
 	}
@@ -163,7 +163,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestOffice(Office testOffice) {
 		this.testOffice = testOffice;
 	}
-	
+
 	@Length(min=0, max=64, message="区域选择长度不能超过 64 个字符")
 	public String getTestAreaCode() {
 		return testAreaCode;
@@ -172,7 +172,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestAreaCode(String testAreaCode) {
 		this.testAreaCode = testAreaCode;
 	}
-	
+
 	@Length(min=0, max=100, message="区域名称长度不能超过 100 个字符")
 	public String getTestAreaName() {
 		return testAreaName;
@@ -181,7 +181,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestAreaName(String testAreaName) {
 		this.testAreaName = testAreaName;
 	}
-	
+
 	public Date getTestDate_gte() {
 		return sqlMap.getWhere().getValue("test_date", QueryType.GTE);
 	}
@@ -189,7 +189,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestDate_gte(Date testDate) {
 		sqlMap.getWhere().and("test_date", QueryType.GTE, testDate);
 	}
-	
+
 	public Date getTestDate_lte() {
 		return sqlMap.getWhere().getValue("test_date", QueryType.LTE);
 	}
@@ -197,7 +197,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestDate_lte(Date testDate) {
 		sqlMap.getWhere().and("test_date", QueryType.LTE, testDate);
 	}
-	
+
 	public Date getTestDatetime_gte() {
 		return sqlMap.getWhere().getValue("test_datetime", QueryType.GTE);
 	}
@@ -205,7 +205,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestDatetime_gte(Date testDatetime) {
 		sqlMap.getWhere().and("test_datetime", QueryType.GTE, testDatetime);
 	}
-	
+
 	public Date getTestDatetime_lte() {
 		return sqlMap.getWhere().getValue("test_datetime", QueryType.LTE);
 	}
@@ -213,7 +213,7 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestDatetime_lte(Date testDatetime) {
 		sqlMap.getWhere().and("test_datetime", QueryType.LTE, testDatetime);
 	}
-	
+
 	public List<TestDataChild> getTestDataChildList() {
 		return testDataChildList;
 	}
@@ -221,5 +221,5 @@ public class TestData extends DataEntity<TestData> {
 	public void setTestDataChildList(List<TestDataChild> testDataChildList) {
 		this.testDataChildList = testDataChildList;
 	}
-	
+
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.test.db;
 
@@ -26,5 +26,5 @@ public class InitTestData extends BaseInitDataTests {
 		runCreateScript("test.sql");
 		return true;
 	}
-	
+
 }

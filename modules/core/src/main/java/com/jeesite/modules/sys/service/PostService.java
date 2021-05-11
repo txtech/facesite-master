@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.service;
 
@@ -19,7 +19,7 @@ public interface PostService extends CrudServiceApi<Post> {
 	 */
 	@Override
 	public Post get(Post post);
-	
+
 	/**
 	 * 根据名称查询岗位
 	 */

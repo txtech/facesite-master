@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.service;
 
@@ -13,16 +13,16 @@ import com.jeesite.modules.sys.entity.Log;
  * @version 2014-05-16
  */
 public interface LogService extends CrudServiceApi<Log> {
-	
+
 	/**
 	 * 查询日志记录
 	 */
 	@Override
 	public Page<Log> findPage(Log log);
-	
+
 	/**
 	 * 不使用数据库事务，执行插入日志
 	 */
 	public void insertLog(Log entity);
-	
+
 }

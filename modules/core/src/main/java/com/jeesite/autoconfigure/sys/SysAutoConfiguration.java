@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.autoconfigure.sys;
 
@@ -29,47 +29,47 @@ import com.jeesite.modules.sys.service.support.PostServiceSupport;
  */
 @Configuration
 public class SysAutoConfiguration {
-	
+
 	@Bean
 	@ConditionalOnMissingBean
 	public AreaService areaService(){
 		return new AreaServiceSupport();
 	}
-	
+
 	@Bean
 	@ConditionalOnMissingBean
 	public CompanyService companyService(){
 		return new CompanyServiceSupport();
 	}
-	
+
 	@Bean
 	@ConditionalOnMissingBean
 	public EmployeeService employeeService(){
 		return new EmployeeServiceSupport();
 	}
-	
+
 	@Bean
 	@ConditionalOnMissingBean
 	public EmpUserService empUserService(){
 		return new EmpUserServiceSupport();
 	}
-	
+
 	@Bean
 	@ConditionalOnMissingBean
 	public LogService logService(){
 		return new LogServiceSupport();
 	}
-	
+
 	@Bean
 	@ConditionalOnMissingBean
 	public OfficeService officeService(){
 		return new OfficeServiceSupport();
 	}
-	
+
 	@Bean
 	@ConditionalOnMissingBean
 	public PostService postService(){
 		return new PostServiceSupport();
 	}
-	
+
 }

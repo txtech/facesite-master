@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules;
 
@@ -13,7 +13,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @author ThinkGem
  * @version 2018-10-13
  */
-@SpringBootApplication(scanBasePackages={"com.jeesite.modules","com.facesite.modules"})
+@SpringBootApplication(scanBasePackages={"com.jeesite.modules","com.nabobsite.modules.nabob"})
 public class Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {

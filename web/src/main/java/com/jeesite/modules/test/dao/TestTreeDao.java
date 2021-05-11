@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.test.dao;
 
@@ -14,5 +14,5 @@ import com.jeesite.modules.test.entity.TestTree;
  */
 @MyBatisDao
 public interface TestTreeDao extends TreeDao<TestTree> {
-	
+
 }

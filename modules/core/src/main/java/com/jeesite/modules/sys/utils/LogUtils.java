@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.utils;
 
@@ -57,7 +57,7 @@ public class LogUtils {
 		private static LogService logService = SpringUtils.getBean(LogService.class);
 		private static MenuService menuService = SpringUtils.getBean(MenuService.class);
 	}
-	
+
 	// 参数名获取工具（尝试获取标注为@ModelAttribute注解的方法，第一个参数名一般为主键名）
 	private static ParameterNameDiscoverer pnd = new DefaultParameterNameDiscoverer();
 
@@ -67,10 +67,10 @@ public class LogUtils {
 	public static void saveLog(User user, HttpServletRequest request, String logTitle, String logType){
 		saveLog(user, request, null, null, logTitle, logType, 0);
 	}
-	
+
 	/**
 	 * 保存日志
-	 * @param executeTime 
+	 * @param executeTime
 	 */
 	public static void saveLog(User user, HttpServletRequest request, Object handler, Exception ex, String logTitle, String logType, long executeTime){
 		if (user == null || StringUtils.isBlank(user.getUserCode()) || request == null
@@ -106,7 +106,7 @@ public class LogUtils {
 		log.setExecuteTime(executeTime);
 		log.setCurrentUser(user);
         log.preInsert();
-        
+
         // 获取异常对象
         Throwable throwable = ex;
         if (throwable == null){
@@ -120,19 +120,19 @@ public class LogUtils {
 	 * 保存日志线程
 	 */
 	public static class SaveLogThread extends Thread{
-		
+
 		private Log log;
 		private Object handler;
 		private String contextPath;
 		private Throwable throwable;
-		
+
 		public SaveLogThread(Log log, Object handler, String contextPath, Throwable throwable){
 			this.log = log;
 			this.handler = handler;
 			this.contextPath = contextPath;
 			this.throwable = throwable;
 		}
-		
+
 		@Override
 		public void run() {
 			// 获取日志标题
@@ -144,7 +144,7 @@ public class LogUtils {
 					// 获取权限字符串
 					RequiresPermissions rp = m.getAnnotation(RequiresPermissions.class);
 					permission = (rp != null ? StringUtils.join(rp.value(), ",") : "");
-					
+
 					// 尝试获取BaseEntity的设置的主键值
 					for (Class<?> type : m.getParameterTypes()){
 						try {
@@ -220,7 +220,7 @@ public class LogUtils {
 			// 保存日志信息
 			log.setIsNewRecord(true);
 			Static.logService.insertLog(log);
-			
+
 		}
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.service.support;
 
@@ -27,7 +27,7 @@ public class PostServiceSupport extends CrudService<PostDao, Post>
 	public Post get(Post post) {
 		return super.get(post);
 	}
-	
+
 	/**
 	 * 根据名称查询岗位
 	 */

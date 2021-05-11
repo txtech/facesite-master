@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.msg.web;
 
@@ -36,7 +36,7 @@ public class MsgInnerController extends BaseController {
 
 	@Autowired
 	private MsgInnerService msgInnerService;
-	
+
 	/**
 	 * 获取数据
 	 */
@@ -44,7 +44,7 @@ public class MsgInnerController extends BaseController {
 	public MsgInner get(String id, boolean isNewRecord) {
 		return msgInnerService.get(id, isNewRecord);
 	}
-	
+
 	/**
 	 * 查询列表
 	 */
@@ -54,7 +54,7 @@ public class MsgInnerController extends BaseController {
 		model.addAttribute("msgInner", msgInner);
 		return "modules/msg/msgInnerList";
 	}
-	
+
 	/**
 	 * 查询列表数据
 	 */
@@ -87,7 +87,7 @@ public class MsgInnerController extends BaseController {
 		model.addAttribute("msgInner", msgInner);
 		return "modules/msg/msgInnerForm";
 	}
-	
+
 	/**
 	 * 查看编辑表单
 	 */
@@ -121,7 +121,7 @@ public class MsgInnerController extends BaseController {
 		msgInnerService.save(msgInner);
 		return renderResult(Global.TRUE, text("保存消息成功！"));
 	}
-	
+
 	/**
 	 * 删除消息
 	 */
@@ -136,5 +136,5 @@ public class MsgInnerController extends BaseController {
 		msgInnerService.delete(msgInner);
 		return renderResult(Global.TRUE, text("删除消息成功！"));
 	}
-	
+
 }

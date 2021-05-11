@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.msg.entity;
 
@@ -35,7 +35,7 @@ public class MsgInnerRecord extends DataEntity<MsgInnerRecord> {
 	// 读取状态（0未送达 1已读 2未读）
 	public static final String READ_STATUS_READ = "1";
 	public static final String READ_STATUS_UNREAD = "2";
-	
+
 	private static final long serialVersionUID = 1L;
 	private String msgInnerId;			// 所属消息
 	private String receiveUserCode;		// 接受者用户编码
@@ -43,7 +43,7 @@ public class MsgInnerRecord extends DataEntity<MsgInnerRecord> {
 	private String readStatus;			// 读取状态（0未送达 1已读 2未读）
 	private Date readDate;				// 阅读时间
 	private String isStar;				// 是否标星
-	
+
 	public MsgInnerRecord() {
 		this(null);
 	}
@@ -51,7 +51,7 @@ public class MsgInnerRecord extends DataEntity<MsgInnerRecord> {
 	public MsgInnerRecord(String id){
 		super(id);
 	}
-	
+
 	@NotBlank(message="所属消息不能为空")
 	@Length(min=0, max=64, message="所属消息长度不能超过 64 个字符")
 	public String getMsgInnerId() {
@@ -61,7 +61,7 @@ public class MsgInnerRecord extends DataEntity<MsgInnerRecord> {
 	public void setMsgInnerId(String msgInnerId) {
 		this.msgInnerId = msgInnerId;
 	}
-	
+
 	@Length(min=0, max=64, message="接受者用户编码长度不能超过 64 个字符")
 	public String getReceiveUserCode() {
 		return receiveUserCode;
@@ -70,7 +70,7 @@ public class MsgInnerRecord extends DataEntity<MsgInnerRecord> {
 	public void setReceiveUserCode(String receiveUserCode) {
 		this.receiveUserCode = receiveUserCode;
 	}
-	
+
 	@NotBlank(message="接受者用户姓名不能为空")
 	@Length(min=0, max=100, message="接受者用户姓名长度不能超过 100 个字符")
 	public String getReceiveUserName() {
@@ -80,7 +80,7 @@ public class MsgInnerRecord extends DataEntity<MsgInnerRecord> {
 	public void setReceiveUserName(String receiveUserName) {
 		this.receiveUserName = receiveUserName;
 	}
-	
+
 	@NotBlank(message="读取状态不能为空")
 	@Length(min=0, max=1, message="读取状态长度不能超过 1 个字符")
 	public String getReadStatus() {
@@ -90,7 +90,7 @@ public class MsgInnerRecord extends DataEntity<MsgInnerRecord> {
 	public void setReadStatus(String readStatus) {
 		this.readStatus = readStatus;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getReadDate() {
 		return readDate;
@@ -99,7 +99,7 @@ public class MsgInnerRecord extends DataEntity<MsgInnerRecord> {
 	public void setReadDate(Date readDate) {
 		this.readDate = readDate;
 	}
-	
+
 	@Length(min=0, max=1, message="是否标星长度不能超过 1 个字符")
 	public String getIsStar() {
 		return isStar;
@@ -108,5 +108,5 @@ public class MsgInnerRecord extends DataEntity<MsgInnerRecord> {
 	public void setIsStar(String isStar) {
 		this.isStar = isStar;
 	}
-	
+
 }

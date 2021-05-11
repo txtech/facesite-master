@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.test.web;
 
@@ -27,7 +27,7 @@ public class DemoController extends BaseController {
 
 	@Autowired
 	private TestDataService testDataService;
-	
+
 	/**
 	 * 获取数据
 	 */
@@ -35,7 +35,7 @@ public class DemoController extends BaseController {
 	public TestData get(String id, boolean isNewRecord) {
 		return testDataService.get(id, isNewRecord);
 	}
-	
+
 	/**
 	 * DataGrid
 	 */
@@ -44,7 +44,7 @@ public class DemoController extends BaseController {
 	public String dataGrid(@PathVariable String viewName, TestData testData, Model model) {
 		return "modules/demo/demoDataGrid" + StringUtils.cap(viewName);
 	}
-	
+
 	/**
 	 * Form
 	 */
@@ -53,5 +53,5 @@ public class DemoController extends BaseController {
 	public String form(@PathVariable String viewName, TestData testData, Model model) {
 		return "modules/demo/demoForm" + StringUtils.cap(viewName);
 	}
-	
+
 }

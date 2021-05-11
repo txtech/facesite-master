@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.msg.service;
 
@@ -41,12 +41,12 @@ import com.jeesite.modules.sys.service.EmpUserService;
 @Service
 @Transactional(readOnly=true)
 public class MsgInnerService extends CrudService<MsgInnerDao, MsgInner> {
-	
+
 	@Autowired
 	private EmpUserService empUserService;
 	@Autowired
 	private MsgInnerRecordDao msgInnerRecordDao;
-	
+
 	/**
 	 * 获取单条数据
 	 * @param msgInner
@@ -56,7 +56,7 @@ public class MsgInnerService extends CrudService<MsgInnerDao, MsgInner> {
 	public MsgInner get(MsgInner msgInner) {
 		return super.get(msgInner);
 	}
-	
+
 	/**
 	 * 查询分页数据
 	 * @param msgInner 查询条件
@@ -74,7 +74,7 @@ public class MsgInnerService extends CrudService<MsgInnerDao, MsgInner> {
 	public List<MsgInnerRecord> findRecordList(MsgInnerRecord msgInnerRecord){
 		return msgInnerRecordDao.findList(msgInnerRecord);
 	}
-	
+
 	/**
 	 * 保存数据（插入或更新）
 	 * @param msgInner
@@ -135,7 +135,7 @@ public class MsgInnerService extends CrudService<MsgInnerDao, MsgInner> {
 			this.saveMsgInnerRecord(msgInner, empUserList);
 		}
 	}
-	
+
 	/**
 	 * 保存消息推送记录
 	 */
@@ -159,7 +159,7 @@ public class MsgInnerService extends CrudService<MsgInnerDao, MsgInner> {
 					if (MsgPush.TYPE_PC.equals(type)){
 						msgContent = new PcMsgContent();
 						msgContent.setContent(text("你有一条内部消息，点击“详情”进行查阅。"));
-						((PcMsgContent)msgContent).addButton(new String[]{text("详情"), 
+						((PcMsgContent)msgContent).addButton(new String[]{text("详情"),
 								Global.getAdminPath()+"/msg/msgInner/view?id="+msgInner.getId()});
 					}else if (MsgPush.TYPE_APP.equals(type)){
 						msgContent = new AppMsgContent();
@@ -203,7 +203,7 @@ public class MsgInnerService extends CrudService<MsgInnerDao, MsgInner> {
 			thread.start();
 		}
 	}
-	
+
 	/**
 	 * 根据消息编号和接受者用户名读取内部消息
 	 */
@@ -219,7 +219,7 @@ public class MsgInnerService extends CrudService<MsgInnerDao, MsgInner> {
 		MsgPushUtils.readMsgByBiz(msgInner.getId(), MsgInner.class.getSimpleName(),
 				msgInnerRecord.getReceiveUserCode());
 	}
-	
+
 	/**
 	 * 更新状态
 	 * @param msgInner
@@ -229,7 +229,7 @@ public class MsgInnerService extends CrudService<MsgInnerDao, MsgInner> {
 	public void updateStatus(MsgInner msgInner) {
 		super.updateStatus(msgInner);
 	}
-	
+
 	/**
 	 * 删除数据
 	 * @param msgInner
@@ -239,5 +239,5 @@ public class MsgInnerService extends CrudService<MsgInnerDao, MsgInner> {
 	public void delete(MsgInner msgInner) {
 		super.delete(msgInner);
 	}
-	
+
 }

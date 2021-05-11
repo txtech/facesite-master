@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.idgen;
 
@@ -18,16 +18,16 @@ public class IdGen {
 
 	private static SecureRandom random = new SecureRandom();
 	private static IdWorker idWorker = new IdWorker(-1, -1);
-	
+
 	/**
 	 * 生成UUID, 中间无-分割.
 	 */
 	public static String uuid() {
 		return StringUtils.replace(UUID.randomUUID().toString(),"-", "");
 	}
-	
+
 	/**
-	 * 使用SecureRandom随机生成Long. 
+	 * 使用SecureRandom随机生成Long.
 	 */
 	public static long randomLong() {
 		return Math.abs(random.nextLong());
@@ -43,12 +43,12 @@ public class IdGen {
 	}
 
 	/**
-	 * 使用SecureRandom随机生成指定范围的Integer. 
+	 * 使用SecureRandom随机生成指定范围的Integer.
 	 */
 	public static int randomInt(int min, int max) {
 		return random.nextInt(max) % (max - min + 1) + min;
 	}
-	
+
 	/**
 	 * 获取新唯一编号（18为数值）
 	 * 来自于twitter项目snowflake的id产生方案，全局唯一，时间有序。
@@ -57,7 +57,7 @@ public class IdGen {
 	public static String nextId() {
 		return String.valueOf(idWorker.nextId());
 	}
-	
+
 	/**
 	 * 获取新代码编号
 	 */
@@ -85,7 +85,7 @@ public class IdGen {
 		}
 		return null;
 	}
-	
+
 //	public static void main(String[] args) {
 //		System.out.println(nextCode("8") + " = 9");
 //		System.out.println(nextCode("09") + " = 10");

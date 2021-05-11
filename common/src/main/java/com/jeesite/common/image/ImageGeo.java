@@ -1,5 +1,5 @@
 ///**
-// * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+// * Copyright (c) 2013-Now  All rights reserved.
 // */
 //package com.jeesite.common.image;
 //
@@ -45,7 +45,7 @@
 //			if (easting.equalsIgnoreCase("W")) {
 //				lonsign = -1.0d;
 //			}
-//			
+//
 //			lat = (Math.abs(latpart[0].doubleValue()) + latpart[1].doubleValue() / 60.0d + latpart[2].doubleValue() / 3600.0d) * latsign;
 //			lon = (Math.abs(lonpart[0].doubleValue()) + lonpart[1].doubleValue() / 60.0d + lonpart[2].doubleValue() / 3600.0d) * lonsign;
 //

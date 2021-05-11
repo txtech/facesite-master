@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.entity;
 
@@ -22,15 +22,15 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.post_sort ASC"
 )
 public class Post extends DataEntity<Post> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String postCode;		// 岗位编码
 	private String postName;		// 岗位名称
 	private String postType;		// 岗位分类（高管、中层、基层）
 	private Integer postSort;		// 岗位排序（升序）
-	
+
 	private String empCode; 		// 根据用户查询岗位
-	
+
 	public Post() {
 		this(null);
 	}
@@ -38,7 +38,7 @@ public class Post extends DataEntity<Post> {
 	public Post(String id){
 		super(id);
 	}
-	
+
 	public String getPostCode() {
 		return postCode;
 	}
@@ -46,7 +46,7 @@ public class Post extends DataEntity<Post> {
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
 	}
-	
+
 	@NotBlank(message="岗位名称不能为空")
 	@Length(min=0, max=100, message="岗位名称长度不能超过 100 个字符")
 	public String getPostName() {
@@ -56,7 +56,7 @@ public class Post extends DataEntity<Post> {
 	public void setPostName(String postName) {
 		this.postName = postName;
 	}
-	
+
 	public String getPostName_like() {
 		return getSqlMap().getWhere().getValue("post_name", QueryType.LIKE);
 	}
@@ -64,7 +64,7 @@ public class Post extends DataEntity<Post> {
 	public void setPostName_like(String roleName) {
 		getSqlMap().getWhere().and("post_name", QueryType.LIKE, roleName);
 	}
-	
+
 	@Length(min=0, max=100, message="岗位分类长度不能超过 100 个字符")
 	public String getPostType() {
 		return postType;
@@ -73,7 +73,7 @@ public class Post extends DataEntity<Post> {
 	public void setPostType(String postType) {
 		this.postType = postType;
 	}
-	
+
 	public Integer getPostSort() {
 		return postSort;
 	}
@@ -89,5 +89,5 @@ public class Post extends DataEntity<Post> {
 	public void setEmpCode(String empCode) {
 		this.empCode = empCode;
 	}
-	
+
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.io;
 
@@ -89,7 +89,7 @@ public class IOUtils extends org.apache.commons.io.IOUtils {
 	public static void closeQuietly(final InputStream input) {
         closeQuietly((Closeable) input);
     }
-	
+
 	/**
 	 * Closes a <code>Closeable</code> unconditionally.
 	 */
@@ -102,5 +102,5 @@ public class IOUtils extends org.apache.commons.io.IOUtils {
             // ignore
         }
     }
-	
+
 }

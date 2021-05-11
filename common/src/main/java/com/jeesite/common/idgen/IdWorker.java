@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.idgen;
 
@@ -12,7 +12,7 @@ import java.util.Random;
  * 		scala/com/twitter/service/snowflake/IdWorker.scala
  */
 public class IdWorker {
-	
+
 	private final static long twepoch = 1288834974657L;
 	// 机器标识位数
 	private final static long workerIdBits = 5L;
@@ -105,9 +105,9 @@ public class IdWorker {
 	private long timeGen() {
 		return System.currentTimeMillis();
 	}
-	
+
 //	////////////  test  ////////////
-//	
+//
 //	public static void main(String[] args) throws Exception {
 //		final Set<Long> set = SetUtils.newHashSet();
 //
@@ -126,7 +126,7 @@ public class IdWorker {
 //					} catch (BrokenBarrierException e) {
 //						e.printStackTrace();
 //					}
-//					
+//
 //					// id
 //					Long id = w1.nextId();
 //					if (set.contains(id)){
@@ -134,7 +134,7 @@ public class IdWorker {
 //					}
 //					set.add(id);
 //					System.out.println(id);
-//					
+//
 //					// id2
 //					Long id2 = w2.nextId();
 //					if (set.contains(id2)){
@@ -151,5 +151,5 @@ public class IdWorker {
 //			e.printStackTrace();
 //		}
 //	}
-	
+
 }

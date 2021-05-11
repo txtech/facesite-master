@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.service.support;
 
@@ -32,7 +32,7 @@ public class EmployeeServiceSupport extends CrudService<EmployeeDao, Employee>
 	private EmployeePostDao employeePostDao;
 	@Autowired
 	private EmployeeOfficeDao employeeOfficeDao;
-	
+
 	/**
 	 * 获取单条数据
 	 */
@@ -40,7 +40,7 @@ public class EmployeeServiceSupport extends CrudService<EmployeeDao, Employee>
 	public Employee get(Employee employee) {
 		return super.get(employee);
 	}
-	
+
 	/**
 	 * 根据工号获取数据
 	 */
@@ -50,7 +50,7 @@ public class EmployeeServiceSupport extends CrudService<EmployeeDao, Employee>
 		where.setEmpNo(employee.getEmpNo());
 		return dao.getByEntity(where);
 	}
-	
+
 	/**
 	 * 查询分页数据
 	 */
@@ -58,7 +58,7 @@ public class EmployeeServiceSupport extends CrudService<EmployeeDao, Employee>
 	public Page<Employee> findPage(Employee employee) {
 		return super.findPage(employee);
 	}
-	
+
 	/**
 	 * 保存数据（插入或更新）
 	 */
@@ -82,7 +82,7 @@ public class EmployeeServiceSupport extends CrudService<EmployeeDao, Employee>
 			employeePostDao.insertBatch(employee.getEmployeePostList());
 		}
 	}
-	
+
 	/**
 	 * 删除数据
 	 */
@@ -91,7 +91,7 @@ public class EmployeeServiceSupport extends CrudService<EmployeeDao, Employee>
 	public void delete(Employee employee) {
 		super.delete(employee);
 	}
-	
+
 	/**
 	 * 查询当前员工关联的岗位信息
 	 */
@@ -100,7 +100,7 @@ public class EmployeeServiceSupport extends CrudService<EmployeeDao, Employee>
 		employeePost.setEmpCode(employee.getEmpCode());
 		return employeePostDao.findList(employeePost);
 	}
-	
+
 	/**
 	 * 查询当前员工关联的附属机构信息
 	 */

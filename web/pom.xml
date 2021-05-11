@@ -9,12 +9,12 @@
 		<version>4.2.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jeesite-game</artifactId>
+	<artifactId>jeesite-nabob-web</artifactId>
 	<packaging>war</packaging>
-	<name>JeeSite game</name>
+	<name>JeeSite nabob web</name>
 
 	<properties>
-		<finalName>game</finalName>
+		<finalName>nabob</finalName>
 		<start-class>com.jeesite.modules.Application</start-class>
 		<!--<eclipse-plugin-download-sources>false</eclipse-plugin-download-sources>
 		<eclipse-plugin-download-javadocs>false</eclipse-plugin-download-javadocs>-->
@@ -29,26 +29,20 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 
-		<!--商城模块-->
+		<!--富豪模块-->
 		<dependency>
 			<groupId>com.jeesite</groupId>
-			<artifactId>jeesite-module-mall</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-
-		<!--游戏模块-->
-		<dependency>
-			<groupId>com.jeesite</groupId>
-			<artifactId>jeesite-module-game</artifactId>
+			<artifactId>jeesite-module-nabob</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 
 		<!-- 在线文档接口 -->
-		<!--<dependency>
+		<dependency>
 			<groupId>com.jeesite</groupId>
 			<artifactId>jeesite-module-swagger</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>-->
+		</dependency>
+
 		<!-- 文件管理共享（个人版）
 		<dependency>
 			<groupId>com.jeesite</groupId>

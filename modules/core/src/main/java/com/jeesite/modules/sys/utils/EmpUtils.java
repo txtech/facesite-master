@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.utils;
 
@@ -30,7 +30,7 @@ public class EmpUtils {
 	public static final String CACHE_OFFICE_ALL_LIST = "officeAllList";
 	public static final String CACHE_COMPANY_ALL_LIST = "companyAllList";
 	public static final String CACHE_COMPANY_OFFICE_LIST = "employeeOfficeList";
-	
+
 	/**
 	 * 静态内部类，延迟加载，懒汉式，线程安全的单例模式
 	 */
@@ -39,7 +39,7 @@ public class EmpUtils {
 		private static CompanyService companyService = SpringUtils.getBean(CompanyService.class);
 		private static EmployeeService employeeService = SpringUtils.getBean(EmployeeService.class);
 	}
-	
+
 	/**
 	 * 根据员工编码获取员工
 	 * @author ThinkGem
@@ -47,7 +47,7 @@ public class EmpUtils {
 	public static Employee get(String empCode){
 		return Static.employeeService.get(empCode);
 	}
-	
+
 	/**
 	 * 根据用户对象获取员工，不是员工返回null
 	 * @author ThinkGem
@@ -58,7 +58,7 @@ public class EmpUtils {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 根据用户编码获取员工，找不到或不是员工返回null
 	 * @author ThinkGem
@@ -68,7 +68,7 @@ public class EmpUtils {
 		Employee employee = get(user);
 		return employee;
 	}
-	
+
 	/**
 	 * 根据登录账号获取员工，找不到或不是员工返回null
 	 * @author ThinkGem
@@ -78,7 +78,7 @@ public class EmpUtils {
 		Employee employee = get(user);
 		return employee;
 	}
-	
+
 	/**
 	 * 获取当前登录的员工
 	 * @author ThinkGem
@@ -104,7 +104,7 @@ public class EmpUtils {
 		}
 		return list;
 	}
-	
+
 	/**
 	 * 根据机构编码获取机构对象
 	 * @param officeCode
@@ -119,7 +119,7 @@ public class EmpUtils {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 获取当前员工机构
 	 * @author ThinkGem
@@ -156,7 +156,7 @@ public class EmpUtils {
 		});
 		return list.toArray(new String[list.size()]);
 	}
-	
+
 	/**
 	 * 获取当前员工所有机构编码，包括附属机构以及子机构（数据权限用）V4.2.0
 	 * @author ThinkGem
@@ -225,7 +225,7 @@ public class EmpUtils {
 		});
 		return list.toArray(new String[list.size()]);
 	}
-	
+
 	/**
 	 * 根据机构类型，获取当前员工所有机构编码，包括附属机构（数据权限用）
 	 * @author ThinkGem
@@ -254,7 +254,7 @@ public class EmpUtils {
 		});
 		return list.toArray(new String[list.size()]);
 	}
-	
+
 	/**
 	 * 根据公司编码获取公司对象
 	 * @param companyCode
@@ -269,7 +269,7 @@ public class EmpUtils {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 获取当前员工公司对象
 	 * @author ThinkGem
@@ -293,7 +293,7 @@ public class EmpUtils {
 		}
 		return companyList;
 	}
-	
+
 	/**
 	 * 获取当前员工所有公司编码，包括子公司（数据权限用）V4.2.0
 	 * @author ThinkGem
@@ -315,7 +315,7 @@ public class EmpUtils {
 		});
 		return list.toArray(new String[list.size()]);
 	}
-	
+
 	/**
 	 * 清除指定用户缓存，不包括改用的SESSION缓存
 	 * @author ThinkGem

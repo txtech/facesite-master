@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.utils.excel.fieldtype;
 
@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
  * @example fieldType = MoneyType.class
  */
 public class MoneyType implements FieldType {
-	
+
 	private NumberFormat nf = new DecimalFormat(",##0.00");
 
 	/**
@@ -32,12 +32,12 @@ public class MoneyType implements FieldType {
 	public String setValue(Object val) {
 		return val == null ? StringUtils.EMPTY : nf.format(val);
 	}
-	
+
 	/**
 	 * 获取对象值格式（导出）
 	 */
 	public String getDataFormat() {
 		return "0.00";
 	}
-	
+
 }

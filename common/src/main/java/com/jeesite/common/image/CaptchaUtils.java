@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.image;
 
@@ -37,31 +37,31 @@ public class CaptchaUtils {
 	private static CurvesRippleFilterFactory crff; 	// 曲线波纹
 	private static DiffuseRippleFilterFactory drff; // 漫纹波
 	private static MarbleRippleFilterFactory mrff; 	// 大理石
-	
+
 	private static void initialize(){
 		if (ccs == null){
         	synchronized (CaptchaUtils.class) {
         		if (ccs == null){
         			// 配置初始化
 	            	ccs = new ConfigurableCaptchaService();
-	            	
+
 	            	// 设置图片大小
 	        		ccs.setWidth(100);
 	        		ccs.setHeight(28);
-	        		
+
 	            	// 设置文字数量
 	        		RandomWordFactory wf = new RandomWordFactory();
 	        		wf.setCharacters("ABDEFGHKMNRSWX2345689");
 	        		wf.setMinLength(4);
 	        		wf.setMaxLength(4);
 	        		ccs.setWordFactory(wf);
-	        		
+
 	        		// 设置字体大小
 	        		RandomFontFactory ff = new RandomFontFactory();
 	        		ff.setMinSize(28);
 	        		ff.setMaxSize(28);
 	        		ccs.setFontFactory(ff);
-	        		
+
 	        		// 设置文字渲染边距
 	        		BestFitTextRenderer tr = new BestFitTextRenderer();
 	        		tr.setTopMargin(3);
@@ -69,7 +69,7 @@ public class CaptchaUtils {
 	        		tr.setBottomMargin(3);
 	        		tr.setLeftMargin(3);
 					ccs.setTextRenderer(tr);
-	        		
+
 	        		// 设置字体颜色
 	        		ccs.setColorFactory(new ColorFactory() {
 	        			@Override
@@ -80,7 +80,7 @@ public class CaptchaUtils {
 	        				return new Color(r, g, b);
 	        			}
 	        		});
-	        		
+
 	        		// 设置背景
 	        		ccs.setBackgroundFactory(new BackgroundFactory() {
 						@Override
@@ -119,14 +119,14 @@ public class CaptchaUtils {
 							}
 						}
 					});
-	        		
+
 	        		// 效果初始化
 	        		wrff = new WobbleRippleFilterFactory(); 	// 摆波纹
 	        		doff = new DoubleRippleFilterFactory(); 	// 双波纹
 	        		crff = new CurvesRippleFilterFactory(ccs.getColorFactory()); // 曲线波纹
 	        		drff = new DiffuseRippleFilterFactory(); 	// 漫纹波
 	        		mrff = new MarbleRippleFilterFactory(); 	// 大理石
-	        		
+
         		}
 			}
         }
@@ -140,10 +140,10 @@ public class CaptchaUtils {
 	 * @return 验证码字符
 	 */
 	public static String generateCaptcha(OutputStream outputStream) throws IOException{
-		
+
 		// 初始化设置
 		initialize();
-		
+
         // 随机选择一个样式
         switch (random.nextInt(3)) {
 		case 0:
@@ -162,11 +162,11 @@ public class CaptchaUtils {
 			ccs.setFilterFactory(mrff); // 大理石
 			break;
 		}
-        
+
         // 生成验证码
         String s = EncoderHelper.getChallangeAndWriteImage(ccs, "png", outputStream);
 //        System.out.println(s);
-        
+
 		return s;
 	}
 

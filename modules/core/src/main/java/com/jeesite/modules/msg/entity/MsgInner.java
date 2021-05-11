@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.msg.entity;
 
@@ -46,12 +46,12 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public static final String RECEIVE_TYPE_OFFICE = "2";
 	public static final String RECEIVE_TYPE_ROLE = "3";
 	public static final String RECEIVE_TYPE_POST = "4";
-	
+
 	// 内容级别（1普通 2一般 3紧急）
 	public static final String CONTENT_LEVEL_1 = "1";
 	public static final String CONTENT_LEVEL_2 = "2";
 	public static final String CONTENT_LEVEL_3 = "3";
-	
+
 	private static final long serialVersionUID = 1L;
 	private String msgTitle;		// 消息标题
 	private String contentLevel;	// 内容等级（1普通 2一般 3紧急）
@@ -65,9 +65,9 @@ public class MsgInner extends DataEntity<MsgInner> {
 	private Date sendDate;			// 发送时间
 	private String isAttac;			// 是否有附件
 	private String notifyTypes;		// 通知类型（PC APP 短信 邮件 微信）多选
-	
+
 	private MsgInnerRecord record;	// 消息记录状态
-	
+
 	public MsgInner() {
 		this(null);
 	}
@@ -75,7 +75,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public MsgInner(String id){
 		super(id);
 	}
-	
+
 	@NotBlank(message="消息标题不能为空")
 	@Length(min=0, max=200, message="消息标题长度不能超过 200 个字符")
 	public String getMsgTitle() {
@@ -85,7 +85,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setMsgTitle(String msgTitle) {
 		this.msgTitle = msgTitle;
 	}
-	
+
 	@NotBlank(message="内容级别不能为空")
 	@Length(min=0, max=1, message="内容级别长度不能超过 1 个字符")
 	public String getContentLevel() {
@@ -95,7 +95,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setContentLevel(String contentLevel) {
 		this.contentLevel = contentLevel;
 	}
-	
+
 	@Length(min=0, max=1, message="内容类型长度不能超过 1 个字符")
 	public String getContentType() {
 		return contentType;
@@ -104,7 +104,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 	}
-	
+
 	@NotBlank(message="消息内容不能为空")
 	public String getMsgContent() {
 		return msgContent;
@@ -113,7 +113,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setMsgContent(String msgContent) {
 		this.msgContent = msgContent;
 	}
-	
+
 	@NotBlank(message="接受者类型不能为空")
 	@Length(min=0, max=1, message="接受者类型长度不能超过 1 个字符")
 	public String getReceiveType() {
@@ -123,7 +123,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setReceiveType(String receiveType) {
 		this.receiveType = receiveType;
 	}
-	
+
 	public String getReceiveCodes() {
 		return receiveCodes;
 	}
@@ -131,7 +131,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setReceiveCodes(String receiveCodes) {
 		this.receiveCodes = receiveCodes;
 	}
-	
+
 	public String getReceiveNames() {
 		return receiveNames;
 	}
@@ -139,7 +139,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setReceiveNames(String receiveNames) {
 		this.receiveNames = receiveNames;
 	}
-	
+
 	@Length(min=0, max=64, message="发送者用户编码长度不能超过 64 个字符")
 	public String getSendUserCode() {
 		return sendUserCode;
@@ -148,7 +148,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setSendUserCode(String sendUserCode) {
 		this.sendUserCode = sendUserCode;
 	}
-	
+
 	@Length(min=0, max=100, message="发送者用户姓名长度不能超过 100 个字符")
 	public String getSendUserName() {
 		return sendUserName;
@@ -157,7 +157,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setSendUserName(String sendUserName) {
 		this.sendUserName = sendUserName;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getSendDate() {
 		return sendDate;
@@ -166,7 +166,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setSendDate(Date sendDate) {
 		this.sendDate = sendDate;
 	}
-	
+
 	public Date getSendDate_gte() {
 		return sqlMap.getWhere().getValue("send_date", QueryType.GTE);
 	}
@@ -175,7 +175,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 		sendDate = DateUtils.getOfDayFirst(sendDate);
 		sqlMap.getWhere().and("send_date", QueryType.GTE, sendDate);
 	}
-	
+
 	public Date getSendDate_lte() {
 		return sqlMap.getWhere().getValue("send_date", QueryType.LTE);
 	}
@@ -184,7 +184,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 		sendDate = DateUtils.getOfDayLast(sendDate);
 		sqlMap.getWhere().and("send_date", QueryType.LTE, sendDate);
 	}
-	
+
 	@Length(min=0, max=1, message="是否有附件长度不能超过 1 个字符")
 	public String getIsAttac() {
 		return isAttac;
@@ -193,7 +193,7 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setIsAttac(String isAttac) {
 		this.isAttac = isAttac;
 	}
-	
+
 	@Length(min=0, max=100, message="通知类型长度不能超过 100 个字符")
 	public String getNotifyTypes() {
 		return notifyTypes;
@@ -210,5 +210,5 @@ public class MsgInner extends DataEntity<MsgInner> {
 	public void setRecord(MsgInnerRecord record) {
 		this.record = record;
 	}
-	
+
 }

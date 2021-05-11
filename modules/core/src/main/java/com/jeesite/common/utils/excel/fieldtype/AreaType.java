@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.utils.excel.fieldtype;
 
@@ -18,11 +18,11 @@ import com.jeesite.modules.sys.utils.AreaUtils;
 public class AreaType implements FieldType {
 
 	private List<Area> list;
-	
+
 	public AreaType() {
 		list = AreaUtils.getAreaAllList();
 	}
-	
+
 	/**
 	 * 获取对象值（导入）
 	 */
@@ -44,5 +44,5 @@ public class AreaType implements FieldType {
 		}
 		return StringUtils.EMPTY;
 	}
-	
+
 }

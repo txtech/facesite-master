@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.image;
 
@@ -32,7 +32,7 @@ public class ZxingUtils {
 
 	/**
 	 * 条形码编码
-	 * 
+	 *
 	 * @param contents
 	 * @param width
 	 * @param height
@@ -55,7 +55,7 @@ public class ZxingUtils {
 
 	/**
 	 * 条形码解码
-	 * 
+	 *
 	 * @param imgPath
 	 * @return String
 	 */
@@ -79,7 +79,7 @@ public class ZxingUtils {
 
 	/**
 	 * 二维码编码
-	 * 
+	 *
 	 * @param contents
 	 * @param width
 	 * @param height
@@ -101,7 +101,7 @@ public class ZxingUtils {
 
 	/**
 	 * 二维码解码
-	 * 
+	 *
 	 * @param imgPath
 	 * @return String
 	 */

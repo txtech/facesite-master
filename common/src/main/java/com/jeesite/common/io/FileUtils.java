@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.io;
 
@@ -45,7 +45,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(FileUtils.class);
 	private static MimetypesFileTypeMap mimetypesFileTypeMap;
-	
+
 	/**
 	 * 复制单个文件，如果目标文件存在，则不覆盖
 	 * @param srcFileName 待复制的文件名
@@ -155,7 +155,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 
 	/**
-	 * 复制整个目录的内容 
+	 * 复制整个目录的内容
 	 * @param srcDirName 源目录名
 	 * @param descDirName 目标目录名
 	 * @param coverlay 如果目标目录存在，是否覆盖
@@ -250,11 +250,11 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * 删除文件，可以删除单个文件或文件夹
-	 * 
+	 *
 	 * @param fileName 被删除的文件名
 	 * @return 如果删除成功，则返回true，否是返回false
 	 */
@@ -273,9 +273,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 
 	/**
-	 * 
+	 *
 	 * 删除单个文件
-	 * 
+	 *
 	 * @param fileName 被删除的文件名
 	 * @return 如果删除成功，则返回true，否则返回false
 	 */
@@ -296,9 +296,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 
 	/**
-	 * 
+	 *
 	 * 删除目录及目录下的文件
-	 * 
+	 *
 	 * @param dirName 被删除的目录所在的文件路径
 	 * @return 如果目录删除成功，则返回true，否则返回false
 	 */
@@ -441,7 +441,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			logger.debug("文件 " + fileName + " 写入失败! " + e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 根据图片Base64写入图片文件
 	 * @param fileName 写入的文件路径及文件名
@@ -453,7 +453,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			return;
 		}
 		byte[] data = EncodeUtils.decodeBase64(base64);
-		
+
 		File file = new File(fileName);
 		try {
 			FileUtils.writeByteArrayToFile(file, data);
@@ -461,12 +461,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			e.printStackTrace();
 		}
 	}
-	
+
 //	public static void main(String[] args) {
 //		zipFiles("target\\classes", "*", "target\\classes.zip");
 //		unZipFiles("target\\classes.zip", "target\\classes2");
 //	}
-	
+
 	/**
 	 * 压缩文件或目录
 	 * @param srcDirName 压缩的根目录
@@ -516,7 +516,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		String descFileNames = descFileName;
 		if (!descFileNames.endsWith(File.separator)) {
 			descFileNames = descFileNames + File.separator;
-		}		
+		}
         try {
 			// 根据ZIP文件创建ZipFile对象
 			ZipFile zipFile = new ZipFile(zipFileName);
@@ -659,7 +659,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 		return mimetypesFileTypeMap.getContentType(fileName);
 	}
-	
+
 	/**
 	 * 根据文件内容获取实际的内容类型
 	 * @return 返回文件类型
@@ -675,7 +675,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 		return StringUtils.EMPTY;
 	}
-	
+
 	/**
 	 * 向浏览器发送文件下载，支持断点续传
 	 * @param file 要下载的文件
@@ -686,7 +686,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	public static String downFile(File file, HttpServletRequest request, HttpServletResponse response){
 		 return downFile(file, request, response, null);
 	}
-	
+
 	/**
 	 * 向浏览器发送文件下载，支持断点续传
 	 * @param file 要下载的文件
@@ -790,7 +790,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 		return p;
 	}
-	
+
 	/**
 	 * 获目录下的文件列表
 	 * @param dir 搜索目录
@@ -834,13 +834,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return 例如：test.jpg  返回：  jpg
 	 */
 	public static String getFileExtension(String fileName) {
-		if ((fileName == null) || (fileName.lastIndexOf(".") == -1) 
+		if ((fileName == null) || (fileName.lastIndexOf(".") == -1)
 				|| (fileName.lastIndexOf(".") == fileName.length() - 1)) {
 			return null;
 		}
 		return StringUtils.lowerCase(fileName.substring(fileName.lastIndexOf(".") + 1));
 	}
-	
+
 	/**
 	 * 根据图片Base64获取文件扩展名
 	 * @param imageBase64
@@ -859,7 +859,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 		return extension;
 	}
-	
+
     /**
      * 获取工程源文件所在路径
      * @return
@@ -898,7 +898,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 		return projectPath;
     }
-    
+
     /**
      * 获取工程源文件所在路径
      * @return
@@ -937,5 +937,5 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 		return webappPath;
     }
-    
+
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.common.msg;
 
@@ -13,7 +13,7 @@ import com.jeesite.common.io.PropertiesUtils;
  * 发送电子邮件
  */
 public class EmailUtils {
-	
+
 	private final static Logger logger = LoggerFactory.getLogger(EmailUtils.class);
 
 	/**
@@ -32,7 +32,7 @@ public class EmailUtils {
 		String sslSmtpPort = props.getProperty("msg.email.sslSmtpPort");
 		return send(fromAddress, fromPassword, fromHostName, sslOnConnect, sslSmtpPort, toAddress, subject, content);
 	}
-	
+
 	/**
 	 * 发送邮件
 	 * @param toAddress 接收地址
@@ -67,7 +67,7 @@ public class EmailUtils {
 
 			// 其他信息
 			htmlEmail.setCharset("utf-8");
-			
+
 			// 发送
 			htmlEmail.send();
 			return true;
@@ -76,10 +76,10 @@ public class EmailUtils {
 		}
 		return false;
 	}
-	
+
 //	public static void main(String[] args) {
-//		EmailUtils.send("jeesite_demo@163.com", "jeesitedemo1234", "smtp.163.com", 
+//		EmailUtils.send("jeesite_demo@163.com", "jeesitedemo1234", "smtp.163.com",
 //				"false", "465", "jeesite_demo@163.com", "测试邮件", "测试<b>邮件</b>的内容");
 //	}
-	
+
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.entity;
 
@@ -50,7 +50,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, extWhereKeys="dsf", orderBy="a.tree_sorts, a.company_code"
 )
 public class Company extends TreeEntity<Company> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String companyCode;		// 公司编码
 	private String viewCode;		// 公司代码
@@ -60,7 +60,7 @@ public class Company extends TreeEntity<Company> {
 	private Extend extend;			// 扩展字段
 
 	private List<CompanyOffice> companyOfficeList = ListUtils.newArrayList();	// 公司所包含的部门信息
-	
+
 	public Company() {
 		this(null);
 	}
@@ -68,7 +68,7 @@ public class Company extends TreeEntity<Company> {
 	public Company(String id){
 		super(id);
 	}
-	
+
 	@Override
 	public Company getParent() {
 		return parent;
@@ -78,7 +78,7 @@ public class Company extends TreeEntity<Company> {
 	public void setParent(Company parent) {
 		this.parent = parent;
 	}
-	
+
 	public String getCompanyCode() {
 		return companyCode;
 	}
@@ -86,7 +86,7 @@ public class Company extends TreeEntity<Company> {
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
 	}
-	
+
 	@NotBlank(message="公司代码不能为空")
 	@Pattern(regexp="[a-zA-Z0-9_]{0,30}", message="代码长度不能大于 30 个字符，并且只能包含字母、数字、下划线")
 	public String getViewCode() {
@@ -96,7 +96,7 @@ public class Company extends TreeEntity<Company> {
 	public void setViewCode(String viewCode) {
 		this.viewCode = viewCode;
 	}
-	
+
 	@NotBlank(message="公司名称不能为空")
 	@Length(min=0, max=200, message="公司名称长度不能超过 200 个字符")
 	public String getCompanyName() {
@@ -106,7 +106,7 @@ public class Company extends TreeEntity<Company> {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-	
+
 	@NotBlank(message="公司全称不能为空")
 	@Length(min=0, max=200, message="公司全称长度不能超过 200 个字符")
 	public String getFullName() {
@@ -116,7 +116,7 @@ public class Company extends TreeEntity<Company> {
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-	
+
 	public Area getArea() {
 		return area;
 	}
@@ -124,7 +124,7 @@ public class Company extends TreeEntity<Company> {
 	public void setArea(Area area) {
 		this.area = area;
 	}
-	
+
 	public Extend getExtend() {
 		return extend;
 	}
@@ -136,7 +136,7 @@ public class Company extends TreeEntity<Company> {
 	public List<CompanyOffice> getCompanyOfficeList() {
 		return companyOfficeList;
 	}
-	
+
 	public void setCompanyOfficeListJson(String jsonString) {
 		List<String> list = JsonMapper.fromJson(jsonString, List.class);
 		if (list != null){
@@ -151,5 +151,5 @@ public class Company extends TreeEntity<Company> {
 			}
 		}
 	}
-	
+
 }

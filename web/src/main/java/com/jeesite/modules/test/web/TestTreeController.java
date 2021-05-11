@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.test.web;
 
@@ -37,7 +37,7 @@ public class TestTreeController extends BaseController {
 
 	@Autowired
 	private TestTreeService testTreeService;
-	
+
 	/**
 	 * 获取数据
 	 */
@@ -45,7 +45,7 @@ public class TestTreeController extends BaseController {
 	public TestTree get(String treeCode, boolean isNewRecord) {
 		return testTreeService.get(treeCode, isNewRecord);
 	}
-	
+
 	/**
 	 * 查询列表
 	 */
@@ -55,7 +55,7 @@ public class TestTreeController extends BaseController {
 		model.addAttribute("testTree", testTree);
 		return "modules/test/testTreeList";
 	}
-	
+
 	/**
 	 * 查询列表数据
 	 */
@@ -87,7 +87,7 @@ public class TestTreeController extends BaseController {
 		model.addAttribute("testTree", testTree);
 		return "modules/test/testTreeForm";
 	}
-	
+
 	/**
 	 * 创建并初始化下一个节点信息，如：排序号、默认值
 	 */
@@ -127,7 +127,7 @@ public class TestTreeController extends BaseController {
 		testTreeService.save(testTree);
 		return renderResult(Global.TRUE, text("保存数据成功！"));
 	}
-	
+
 	/**
 	 * 停用数据
 	 */
@@ -146,7 +146,7 @@ public class TestTreeController extends BaseController {
 		testTreeService.updateStatus(testTree);
 		return renderResult(Global.TRUE, text("停用数据成功"));
 	}
-	
+
 	/**
 	 * 启用数据
 	 */
@@ -158,7 +158,7 @@ public class TestTreeController extends BaseController {
 		testTreeService.updateStatus(testTree);
 		return renderResult(Global.TRUE, text("启用数据成功"));
 	}
-	
+
 	/**
 	 * 删除数据
 	 */
@@ -169,7 +169,7 @@ public class TestTreeController extends BaseController {
 		testTreeService.delete(testTree);
 		return renderResult(Global.TRUE, text("删除数据成功！"));
 	}
-	
+
 	/**
 	 * 获取树结构数据
 	 * @param excludeCode 排除的Code
@@ -219,5 +219,5 @@ public class TestTreeController extends BaseController {
 		testTreeService.fixTreeData();
 		return renderResult(Global.TRUE, "数据修复成功");
 	}
-	
+
 }

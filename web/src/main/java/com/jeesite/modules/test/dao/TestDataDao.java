@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.test.dao;
 
@@ -17,10 +17,10 @@ import com.jeesite.modules.test.entity.TestData;
  */
 @MyBatisDao
 public interface TestDataDao extends CrudDao<TestData> {
-	
+
 	/**
 	 * 演示Map参数和返回值，支持分页
 	 */
 	public List<Map<String, Object>> findListForMap(Map<String, Object> params);
-	
+
 }

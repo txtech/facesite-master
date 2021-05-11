@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.entity;
 
@@ -36,10 +36,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="company_code", attrName="company.companyCode", label="公司编码", isQuery=false),
 		@Column(name="company_name", attrName="company.companyName", label="公司名称", isQuery=false),
 	}, joinTable={
-		@JoinTable(type=Type.LEFT_JOIN, entity=Office.class, alias="o", 
+		@JoinTable(type=Type.LEFT_JOIN, entity=Office.class, alias="o",
 			on="o.office_code = a.office_code",
 			columns={@Column(includeEntity=Office.class)}),
-		@JoinTable(type=Type.LEFT_JOIN, entity=Company.class, alias="c", 
+		@JoinTable(type=Type.LEFT_JOIN, entity=Company.class, alias="c",
 			on="c.company_code = a.company_code",
 			columns={@Column(includeEntity=Company.class)}),
 		@JoinTable(type=Type.LEFT_JOIN, entity=Area.class, alias="ar",
@@ -48,7 +48,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.update_date DESC"
 )
 public class Employee extends DataEntity<Employee> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String empCode;		// 员工编码
 	private String empNo;		// 员工工号
@@ -56,12 +56,12 @@ public class Employee extends DataEntity<Employee> {
 	private String empNameEn;	// 员工英文名
 	private Office office;		// 机构编码
 	private Company company;	// 公司编码
-	
+
 	private String postCode;	// 根据职位查询
 
 	private List<EmployeePost> employeePostList = ListUtils.newArrayList(); // 关联岗位信息
 	private List<EmployeeOffice> employeeOfficeList = ListUtils.newArrayList(); // 关联附属机构信息
-	
+
 	public Employee() {
 		this(null);
 	}
@@ -69,7 +69,7 @@ public class Employee extends DataEntity<Employee> {
 	public Employee(String id){
 		super(id);
 	}
-	
+
 	public String getEmpCode() {
 		return empCode;
 	}
@@ -95,7 +95,7 @@ public class Employee extends DataEntity<Employee> {
 	public void setEmpName(String empName) {
 		this.empName = empName;
 	}
-	
+
 	@Length(min=0, max=100, message="英文名长度不能超过 100 个字符")
 	public String getEmpNameEn() {
 		return empNameEn;
@@ -140,7 +140,7 @@ public class Employee extends DataEntity<Employee> {
 	public List<EmployeePost> getEmployeePostList() {
 		return employeePostList;
 	}
-	
+
 	public void setEmployeePostList(List<EmployeePost> employeePostList) {
 		this.employeePostList = employeePostList;
 	}
@@ -167,5 +167,5 @@ public class Employee extends DataEntity<Employee> {
 	public void setEmployeeOfficeList(List<EmployeeOffice> employeeOfficeList) {
 		this.employeeOfficeList = employeeOfficeList;
 	}
-	
+
 }

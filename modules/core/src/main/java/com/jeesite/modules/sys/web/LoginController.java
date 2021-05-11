@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.jeesite.modules.sys.web;
 
@@ -41,7 +41,7 @@ import com.jeesite.modules.sys.utils.UserUtils;
 @Controller
 @RequestMapping(value = "${adminPath}")
 public class LoginController extends BaseController{
-	
+
 	/**
 	 * 登录页面
 	 */
@@ -56,7 +56,7 @@ public class LoginController extends BaseController{
 		}
 
 		LoginInfo loginInfo = UserUtils.getLoginInfo();
-		
+
 		// 如果已经登录，则跳转到管理首页
 		if(loginInfo != null){
 			String queryString = request.getQueryString();
@@ -64,7 +64,7 @@ public class LoginController extends BaseController{
 			ServletUtils.redirectUrl(request, response, adminPath + "/index" + queryString);
 			return null;
 		}
-		
+
 		// 如果是登录操作，跳转到此，则认为是登录失败（支持GET登录时传递__login=true参数）
 		if (WebUtils.isTrue(request, "__login")){
 			return loginFailure(request, response, model);
@@ -72,13 +72,13 @@ public class LoginController extends BaseController{
 
 		// 获取登录数据
 		model.addAllAttributes(FormAuthenticationFilter.getLoginData(request, response));
-		
+
 		// 如果是Ajax请求，返回Json字符串。
 		if (ServletUtils.isAjaxRequest((HttpServletRequest)request)){
 			model.addAttribute("message", text("sys.login.notLongIn"));
 			return ServletUtils.renderObject(response, model);
 		}
-		
+
 		// 返回指定用户类型的登录页视图
 		String userType = (String)model.asMap().get(ServletUtils.EXT_PARAMS_PREFIX + "userType");
 		if (StringUtils.isBlank(userType)){
@@ -88,7 +88,7 @@ public class LoginController extends BaseController{
 		if(StringUtils.isNotBlank(view)){
 			return view;
 		}
-		
+
 		return "modules/sys/sysLogin";
 	}
 
@@ -98,7 +98,7 @@ public class LoginController extends BaseController{
 	@RequestMapping(value = "loginFailure")
 	public String loginFailure(HttpServletRequest request, HttpServletResponse response, Model model) {
 		LoginInfo loginInfo = UserUtils.getLoginInfo();
-		
+
 		// 如果已经登录，则跳转到管理首页
 		if(loginInfo != null){
 			String queryString = request.getQueryString();
@@ -106,15 +106,15 @@ public class LoginController extends BaseController{
 			ServletUtils.redirectUrl(request, response, adminPath + "/index" + queryString);
 			return null;
 		}
-		
+
 		// 获取登录失败数据
 		model.addAllAttributes(FormAuthenticationFilter.getLoginFailureData(request, response));
-		
+
 		// 如果是Ajax请求，返回Json字符串。
 		if (ServletUtils.isAjaxRequest(request)){
 			return ServletUtils.renderObject(response, model);
 		}
-		
+
 		// 返回指定用户类型的登录页视图
 		String userType = (String)model.asMap().get(ServletUtils.EXT_PARAMS_PREFIX + "userType");
 		if (StringUtils.isBlank(userType)){
@@ -124,7 +124,7 @@ public class LoginController extends BaseController{
 		if(StringUtils.isNotBlank(view)){
 			return view;
 		}
-		
+
 		return "modules/sys/sysLogin";
 	}
 
@@ -155,7 +155,7 @@ public class LoginController extends BaseController{
 
 		//获取登录用户信息
 		LoginInfo loginInfo = UserUtils.getLoginInfo();
-		
+
 		// 未加载shiro模块时会为空，直接访问则提示操作权限不足。
 		if(loginInfo == null){
 			if (subject != null){
@@ -166,7 +166,7 @@ public class LoginController extends BaseController{
 			ServletUtils.redirectUrl(request, response, adminPath + "/login" + queryString);
 			return null;
 		}
-		
+
 		// 当前用户对象信息
 		User user = UserUtils.get(loginInfo.getId());
 		if (user == null){
@@ -180,7 +180,7 @@ public class LoginController extends BaseController{
 
 		//获取当前会话对象
 		Session session = UserUtils.getSession();
-		
+
 		// 是否是登录操作
 		boolean isLogin = "true".equals(session.getAttribute("__login"));
 		if (isLogin){
@@ -205,7 +205,7 @@ public class LoginController extends BaseController{
 		if (StringUtils.isBlank(successUrl)){
 			successUrl = Global.getProperty("shiro.successUrl");
 		}
-		
+
 		// 登录操作如果是Ajax操作，直接返回登录信息字符串。
 		if (ServletUtils.isAjaxRequest(request)){
 			model.addAttribute("result", Global.TRUE);
@@ -226,7 +226,7 @@ public class LoginController extends BaseController{
 		else if (isLogin){
 			return REDIRECT + successUrl;
 		}
-		
+
 		// 是否允许刷新主页，如果已登录，再次访问主页，则退出原账号。
 		if (!Global.getConfigToBoolean("shiro.isAllowRefreshIndex", "true")){
 			String logined = CookieUtils.getCookie(request, "LOGINED");
@@ -240,7 +240,7 @@ public class LoginController extends BaseController{
 				return REDIRECT + adminPath + "/login" + queryString;
 			}
 		}
-		
+
 		// 初始密码策略和密码修改策略验证（0：关闭；1：提醒用户；2：强制修改初始或旧密码）
 		String passwordModifyUrl = PwdUtils.passwordModifyValid(user, model);
 		if (passwordModifyUrl != null){
@@ -251,28 +251,28 @@ public class LoginController extends BaseController{
 			}
 			return null;
 		}
-		
+
 		// 非无类型用户，自动根据用户类型设置默认菜单的归属系统（个性化示例）
 		//if (!User.USER_TYPE_NONE.equals(user.getUserType())){
 		//	session.setAttribute("sysCode", user.getUserType());
 		//	UserUtils.removeCache(UserUtils.CACHE_AUTH_INFO+"_"+session.getId());
 		//}
-		
+
 		// 登录切换角色身份（个性化示例）
 		//String roleCode = "dept";
 		//session.setAttribute("roleCode", roleCode);
 		//UserUtils.removeCache(UserUtils.CACHE_AUTH_INFO+"_"+session.getId());
-		
+
 		// 返回指定用户类型的首页视图
 		String view = UserUtils.getUserTypeValue(user.getUserType(), "indexView");
 		if(StringUtils.isNotBlank(view)){
 			return view;
 		}
-		
+
 		// 返回主页面视图
 		return "modules/sys/sysIndex";
 	}
-	
+
 	/**
 	 * 侧边栏菜单数据
 	 */
@@ -281,7 +281,7 @@ public class LoginController extends BaseController{
 	public String indexMenuTree(String parentCode) {
 		return "modules/sys/menuTree";
 	}
-	
+
 	/**
 	 * 当前用户权限字符串数据（移动端用）
 	 */
@@ -334,7 +334,7 @@ public class LoginController extends BaseController{
 		UserUtils.removeCache(UserUtils.CACHE_AUTH_INFO+"_"+session.getId());
 		return REDIRECT + adminPath + "/index";
 	}
-	
+
 	/**
 	 * 切换主题风格
 	 */
@@ -348,7 +348,7 @@ public class LoginController extends BaseController{
 		}
 		return "modules/sys/switchSkin";
 	}
-	
+
 	/**
 	 * 个人桌面页面
 	 */
@@ -357,5 +357,5 @@ public class LoginController extends BaseController{
 	public String desktop(HttpServletRequest request, HttpServletResponse response, Model model) {
 		return "modules/sys/sysDesktop";
 	}
-	
+
 }
