@@ -24,5 +24,4 @@ public class UserFilter extends org.apache.shiro.web.filter.authc.UserFilter {
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
         return PermissionsAuthorizationFilter.redirectTo403Page(request, response);
     }
-
 }

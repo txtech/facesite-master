@@ -27,11 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 @Api(tags = "产品接口：无人机产品列表、云仓库产品列表")
 public class ProductApiController extends BaseController {
 
-	/**
-	 * @desc 无人机产品列表
-	 * @author nada
-	 * @create 2021/5/10 9:34 下午
-	 */
 	@PostMapping(value = {"getProductBotList"})
 	@ApiOperation(value = "无人机产品列表")
 	public JSONObject getProductBotList(@RequestBody ProductBot productBot, HttpServletRequest request, HttpServletResponse response) {
@@ -39,11 +34,6 @@ public class ProductApiController extends BaseController {
 		return null;
 	}
 
-	/**
-	 * @desc 云仓库产品列表
-	 * @author nada
-	 * @create 2021/5/10 9:34 下午
-	 */
 	@PostMapping(value = {"getProductWarehouseList"})
 	@ApiOperation(value = "云仓库产品列表")
 	public JSONObject getProductWarehouseList(@RequestBody ProductWarehouse productWarehouse, HttpServletRequest request, HttpServletResponse response) {

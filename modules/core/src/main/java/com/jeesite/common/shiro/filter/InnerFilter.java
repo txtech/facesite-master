@@ -24,8 +24,7 @@ public class InnerFilter extends AccessControlFilter {
 		boolean result = false;
 		String[] prefixes = (String[])mappedValue;
 		if (prefixes == null){
-			prefixes = StringUtils.split(Global.getProperty(
-					"shiro.innerFilterAllowRemoteAddrs", "127.0.0.1"), ",");
+			prefixes = StringUtils.split(Global.getProperty("shiro.innerFilterAllowRemoteAddrs", "127.0.0.1"), ",");
 		}
 		if (prefixes != null && request instanceof HttpServletRequest){
 			String ip = ((HttpServletRequest)request).getRemoteAddr();
@@ -43,5 +42,5 @@ public class InnerFilter extends AccessControlFilter {
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 		return PermissionsAuthorizationFilter.redirectTo403Page(request, response);
 	}
-	
+
 }

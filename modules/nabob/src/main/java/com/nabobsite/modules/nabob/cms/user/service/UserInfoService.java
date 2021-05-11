@@ -1,7 +1,9 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.user.service;
+
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +16,12 @@ import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 /**
  * 会员用户Service
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-11
  */
 @Service
 @Transactional(readOnly=true)
 public class UserInfoService extends CrudService<UserInfoDao, UserInfo> {
-
+	
 	/**
 	 * 获取单条数据
 	 * @param userInfo
@@ -29,7 +31,7 @@ public class UserInfoService extends CrudService<UserInfoDao, UserInfo> {
 	public UserInfo get(UserInfo userInfo) {
 		return super.get(userInfo);
 	}
-
+	
 	/**
 	 * 查询分页数据
 	 * @param userInfo 查询条件
@@ -40,7 +42,7 @@ public class UserInfoService extends CrudService<UserInfoDao, UserInfo> {
 	public Page<UserInfo> findPage(UserInfo userInfo) {
 		return super.findPage(userInfo);
 	}
-
+	
 	/**
 	 * 保存数据（插入或更新）
 	 * @param userInfo
@@ -50,7 +52,7 @@ public class UserInfoService extends CrudService<UserInfoDao, UserInfo> {
 	public void save(UserInfo userInfo) {
 		super.save(userInfo);
 	}
-
+	
 	/**
 	 * 更新状态
 	 * @param userInfo
@@ -60,7 +62,7 @@ public class UserInfoService extends CrudService<UserInfoDao, UserInfo> {
 	public void updateStatus(UserInfo userInfo) {
 		super.updateStatus(userInfo);
 	}
-
+	
 	/**
 	 * 删除数据
 	 * @param userInfo
@@ -70,5 +72,5 @@ public class UserInfoService extends CrudService<UserInfoDao, UserInfo> {
 	public void delete(UserInfo userInfo) {
 		super.delete(userInfo);
 	}
-
+	
 }

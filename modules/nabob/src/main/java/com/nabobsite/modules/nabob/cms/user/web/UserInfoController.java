@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.user.web;
 
@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.user.service.UserInfoService;
 /**
  * 会员用户Controller
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-11
  */
 @Controller
 @RequestMapping(value = "${adminPath}/user/userInfo")
@@ -33,7 +33,7 @@ public class UserInfoController extends BaseController {
 
 	@Autowired
 	private UserInfoService userInfoService;
-
+	
 	/**
 	 * 获取数据
 	 */
@@ -41,7 +41,7 @@ public class UserInfoController extends BaseController {
 	public UserInfo get(String id, boolean isNewRecord) {
 		return userInfoService.get(id, isNewRecord);
 	}
-
+	
 	/**
 	 * 查询列表
 	 */
@@ -51,7 +51,7 @@ public class UserInfoController extends BaseController {
 		model.addAttribute("userInfo", userInfo);
 		return "cms/user/userInfoList";
 	}
-
+	
 	/**
 	 * 查询列表数据
 	 */
@@ -84,7 +84,7 @@ public class UserInfoController extends BaseController {
 		userInfoService.save(userInfo);
 		return renderResult(Global.TRUE, text("保存会员用户成功！"));
 	}
-
+	
 	/**
 	 * 删除数据
 	 */
@@ -95,5 +95,5 @@ public class UserInfoController extends BaseController {
 		userInfoService.delete(userInfo);
 		return renderResult(Global.TRUE, text("删除会员用户成功！"));
 	}
-
+	
 }

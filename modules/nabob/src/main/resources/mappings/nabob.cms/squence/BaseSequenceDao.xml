@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nabobsite.modules.nabob.cms.base.dao.SequenceDao">
+
+	<insert id="addSequence">
+     insert into t1_user_sequence ( name ) values (  0 )
+    </insert>
+
+	<select id="getNextSequence" resultType="java.lang.Long">
+		select IFNULL(max(id),0) from t1_user_sequence
+	</select>
+</mapper>

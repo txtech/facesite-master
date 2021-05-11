@@ -24,5 +24,4 @@ public class RolesAuthorizationFilter extends org.apache.shiro.web.filter.authz.
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
 		return PermissionsAuthorizationFilter.redirectTo403Page(request, response);
     }
-
 }

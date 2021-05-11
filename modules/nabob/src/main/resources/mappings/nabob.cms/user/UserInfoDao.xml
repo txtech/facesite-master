@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao">
+
+	<!-- 查询数据
+	<select id="findList" resultType="UserInfo">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+
+	<insert id="registerUser" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
+		<selectKey keyProperty="id" keyColumn="id" order="AFTER" resultType="java.lang.String">
+			select LAST_INSERT_ID()
+		</selectKey>
+		insert into t1_user_info (
+		`id`,
+		`parent_user_id`,
+		`parent_sys_id`,
+		`name`,
+		`account_no`,
+		`password`,
+		`user_status`,
+		`phone_number`,
+		`invite_code`,
+		`favorite`,
+		`ipaddress`,
+		`level`,
+		`team_num`,
+		`team_num_1`,
+		`team_num_2`,
+		`team_num_3`,
+		`task_end_time`,
+		`REMARKS`,
+		`created`,
+		`updated`,
+		`DEL_FLAG`
+		)
+		values (
+		#{id},
+		#{parentUserId},
+		#{parentSysId},
+		#{name},
+		#{accountNo},
+		#{password},
+		#{userStatus},
+		#{phoneNumber},
+		#{inviteCode},
+		#{favorite},
+		#{ipaddress},
+		#{level},
+		#{teamNum},
+		#{teamNum1},
+		#{teamNum2},
+		#{teamNum3},
+		#{taskEndTime},
+		#{remarks},
+		sysdate(),
+		sysdate(),
+		0
+		)
+	</insert>
+</mapper>

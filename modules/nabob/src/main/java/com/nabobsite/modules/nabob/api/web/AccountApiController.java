@@ -24,11 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 @Api(tags = "账户接口：获取账户详情")
 public class AccountApiController extends BaseController {
 
-	/**
-	 * @desc 获取账户详情
-	 * @author nada
-	 * @create 2021/5/10 9:41 下午
-	*/
 	@PostMapping(value = {"getUserAccountInfo"})
 	@ApiOperation(value = "获取账户详情")
 	public JSONObject getUserInfo(@RequestBody UserAccount userAccount, HttpServletRequest request, HttpServletResponse response) {

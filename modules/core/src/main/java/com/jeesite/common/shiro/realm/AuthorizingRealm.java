@@ -98,11 +98,9 @@ public class AuthorizingRealm extends BaseAuthorizingRealm  {
 	@Override
 	public void onLoginSuccess(LoginInfo loginInfo, HttpServletRequest request) {
 		super.onLoginSuccess(loginInfo, request);
-
 		// 更新登录IP、时间、会话ID等
 		User user = UserUtils.get(loginInfo.getId());
 		getUserService().updateUserLoginInfo(user);
-
 		// 记录用户登录日志
 		LogUtils.saveLog(user, request, "系统登录", Log.TYPE_LOGIN_LOGOUT);
 	}
@@ -110,7 +108,6 @@ public class AuthorizingRealm extends BaseAuthorizingRealm  {
 	@Override
 	public void onLogoutSuccess(LoginInfo loginInfo, HttpServletRequest request) {
 		super.onLogoutSuccess(loginInfo, request);
-
 		// 记录用户退出日志
 		User user = UserUtils.get(loginInfo.getId());
 		LogUtils.saveLog(user, request, "系统退出", Log.TYPE_LOGIN_LOGOUT);
@@ -122,5 +119,4 @@ public class AuthorizingRealm extends BaseAuthorizingRealm  {
 		}
 		return userService;
 	}
-
 }

@@ -58,7 +58,6 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 
 	@Override
 	protected FormToken getFormToken(AuthenticationToken authcToken) {
-
 		// 单点登录登出句柄（登出时注销session）有CAS中央服务器调用
 		HttpServletRequest request = ServletUtils.getRequest();
 		if (casOutHandler.isLogoutRequest(request)) {
@@ -136,33 +135,26 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 						empUser.setMobile(user.getMobile());
 						empUser.setEmail(user.getEmail());
 						empUser.setPhone(user.getPhone());
-						empUser.getEmployee().getCompany().setCompanyCode(EncodeUtils
-								.decodeUrl(ObjectUtils.toString(attrs.get("companyCode"))));
-						empUser.getEmployee().getOffice().setOfficeCode(EncodeUtils
-								.decodeUrl(ObjectUtils.toString(attrs.get("officeCode"))));
+						empUser.getEmployee().getCompany().setCompanyCode(EncodeUtils.decodeUrl(ObjectUtils.toString(attrs.get("companyCode"))));
+						empUser.getEmployee().getOffice().setOfficeCode(EncodeUtils.decodeUrl(ObjectUtils.toString(attrs.get("officeCode"))));
 						getEmpUserService().save(empUser);
 					}catch(ValidationException ve){
 						throw new AuthenticationException("msg:" + ve.getMessage());
 					}
-
 					// 重新获取用户登录
 					user = UserUtils.getByLoginCode(token.getUsername(), user.getCorpCode_());
 					if (user != null) {
 						return user;
 					}
-
-				}
-
-				// 其它类型，根据项目需要自行创建
-				else{
+				}else{
 					try{
+						// 其它类型，根据项目需要自行创建
 						CasCreateUser casCreateUser = SpringUtils.getBean(CasCreateUser.class);
 						if(casCreateUser != null){
 							casCreateUser.createUser(user, attrs);
 						}
 					}catch(NoSuchBeanDefinitionException e){
-						throw new AuthenticationException("msg:用户 “" + token.getUsername()
-								+ "”, 类型 “" + user.getUserType() + "” 在本系统中不存在, 请联系管理员.");
+						throw new AuthenticationException("msg:用户 “" + token.getUsername() + "”, 类型 “" + user.getUserType() + "” 在本系统中不存在, 请联系管理员.");
 					}
 				}
 			}else{
@@ -181,7 +173,6 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 	@Override
 	public void onLoginSuccess(LoginInfo loginInfo, HttpServletRequest request) {
 		super.onLoginSuccess(loginInfo, request);
-
 		// 单点登录登出句柄（登录时注入session），在这之前必须获取下授权信息
 		String ticket = loginInfo.getParam("ticket");
 		casOutHandler.recordSession(request, ticket);
@@ -191,7 +182,6 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 		// 更新登录IP、时间、会话ID等
 		User user = UserUtils.get(loginInfo.getId());
 		getUserService().updateUserLoginInfo(user);
-
 		// 记录用户登录日志
 		LogUtils.saveLog(user, ServletUtils.getRequest(), "系统登录", Log.TYPE_LOGIN_LOGOUT);
 	}
@@ -199,8 +189,6 @@ public class CasAuthorizingRealm extends BaseAuthorizingRealm  {
 	@Override
 	public void onLogoutSuccess(LoginInfo loginInfo, HttpServletRequest request) {
 		super.onLogoutSuccess(loginInfo, request);
-
-		// 记录用户退出日志
 		User user = UserUtils.get(loginInfo.getId());
 		LogUtils.saveLog(user, request, "系统退出", Log.TYPE_LOGIN_LOGOUT);
 	}
