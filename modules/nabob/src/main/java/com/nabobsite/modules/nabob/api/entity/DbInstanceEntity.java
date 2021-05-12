@@ -31,4 +31,12 @@ public class DbInstanceEntity {
         }
         return userInfo;
     }
+
+    public static Boolean dbResult(long dbResult){
+        if(dbResult > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

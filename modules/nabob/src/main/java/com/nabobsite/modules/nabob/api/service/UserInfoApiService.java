@@ -46,7 +46,6 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
 	private SequenceService sequenceService;
 
-
 	/**
 	 * @desc 用户修改密码
 	 * @author nada
@@ -54,32 +53,43 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> updatePwd(String accountNo, String oldPassword,String newPassword,String token) {
-		if(StringUtils.isEmpty(token)){
-			return ResultUtil.failed("修改失败,获取令牌为空");
+		try {
+			if(StringUtils.isEmpty(token)){
+				return ResultUtil.failed("修改失败,获取令牌为空");
+			}
+			if(StringUtils.isAnyEmpty(accountNo,oldPassword,newPassword)){
+				return ResultUtil.failed("修改失败,修改信息为空");
+			}
+			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			UserInfo oldUserInfo = this.getUserInfoByUserId(userId);
+			if(oldUserInfo == null){
+				return ResultUtil.failed("修改失败,获取帐号信息为空");
+			}
+			if (oldPassword.equalsIgnoreCase(newPassword)) {
+				return ResultUtil.failed("修改失败,新旧密码不能一样");
+			}
+			String oldDbPwd = oldUserInfo.getPassword();
+			String md5OldPwd = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
+			if (!oldDbPwd.equalsIgnoreCase(md5OldPwd)) {
+				return ResultUtil.failed("修改失败,旧密码输入错误");
+			}
+			if(!accountNo.equalsIgnoreCase(oldUserInfo.getAccountNo())){
+				return ResultUtil.failed("修改失败,账户输入错误");
+			}
+			String md5NewPwd = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+			UserInfo updateUserInfo = new UserInfo();
+			updateUserInfo.setId(oldUserInfo.getId());
+			updateUserInfo.setPassword(md5NewPwd);
+			long dbResult = userInfoDao.update(updateUserInfo);
+			if(DbInstanceEntity.dbResult(dbResult)){
+				this.logout(token);
+				return ResultUtil.success(true);
+			}
+			return ResultUtil.failed("Failed to update password!");
+		} catch (Exception e) {
+			logger.error("Failed to update password!",e);
+			return ResultUtil.failed("Failed to update password!");
 		}
-		if(StringUtils.isAnyEmpty(accountNo,oldPassword,newPassword)){
-			return ResultUtil.failed("修改失败,修改信息为空");
-		}
-		String userId = (String) redisOpsUtil.get(RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+token);
-		UserInfo oldUserInfo = this.getUserInfoByUserId(userId);
-		if(oldUserInfo == null){
-			return ResultUtil.failed("修改失败,获取帐号信息为空");
-		}
-		if (oldPassword.equalsIgnoreCase(newPassword)) {
-			return ResultUtil.failed("修改失败,新旧密码不能一样");
-		}
-		String oldDbPwd = oldUserInfo.getPassword();
-		String md5OldPwd = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
-		if (!oldDbPwd.equalsIgnoreCase(md5OldPwd)) {
-			return ResultUtil.failed("旧密码输入错误");
-		}
-
-		String md5NewPwd = DigestUtils.md5DigestAsHex(newPassword.getBytes());
-		UserInfo updateUserInfo = new UserInfo();
-		updateUserInfo.setId(oldUserInfo.getId());
-		updateUserInfo.setPassword(md5NewPwd);
-		userInfoDao.update(updateUserInfo);
-		return ResultUtil.success(true);
 	}
 
 	/**
@@ -89,8 +99,13 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> logout(String token) {
-		redisOpsUtil.remove(RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+token);
-		return ResultUtil.success(Boolean.TRUE);
+		try {
+			redisOpsUtil.remove(RedisPrefixContant.getTokenUserKey(token));
+			return ResultUtil.success(Boolean.TRUE);
+		} catch (Exception e) {
+			logger.error("Failed to logout user!",e);
+			return ResultUtil.failed("Failed to logout user!");
+		}
 	}
 
 	/**
@@ -100,16 +115,21 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<String> shareFriends(String token) {
-		if(StringUtils.isEmpty(token)){
-			return ResultUtil.failed("获取失败,获取令牌为空");
+		try {
+			if(StringUtils.isEmpty(token)){
+				return ResultUtil.failed("获取失败,获取令牌为空");
+			}
+			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			UserInfo userInfo = this.getUserInfoByUserId(userId);
+			if(userInfo == null){
+				return ResultUtil.failed("获取失败,获取帐号信息为空");
+			}
+			String registerUrl = "http://c-mart.phlife.phshare?pid="+ HiDesUtils.desEnCode(userId);
+			return ResultUtil.success(registerUrl);
+		} catch (Exception e) {
+			logger.error("Failed to get share friends url!",e);
+			return ResultUtil.failed("Failed to get share friends url!");
 		}
-		String userId = (String) redisOpsUtil.get(RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+token);
-		UserInfo userInfo = this.getUserInfoByUserId(userId);
-		if(userInfo == null){
-			return ResultUtil.failed("获取失败,获取帐号信息为空");
-		}
-		String registerUrl = "http://c-mart.phlife.phshare?pid="+ HiDesUtils.desEnCode(userId);
-		return ResultUtil.success(registerUrl);
 	}
 
 	/**
@@ -119,15 +139,20 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<UserInfo> getUserInfo(String token) {
-		if(StringUtils.isEmpty(token)){
-			return ResultUtil.failed("获取失败,获取令牌为空");
+		try {
+			if(StringUtils.isEmpty(token)){
+				return ResultUtil.failed("获取失败,获取令牌为空");
+			}
+			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			UserInfo userInfo = this.getUserInfoByUserId(userId);
+			if(userInfo == null){
+				return ResultUtil.failed("获取失败,获取帐号信息为空");
+			}
+			return ResultUtil.success(userInfo);
+		} catch (Exception e) {
+			logger.error("Failed to get userinfo!",e);
+			return ResultUtil.failed("Failed to get userinfo!");
 		}
-		String userId = (String) redisOpsUtil.get(RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+token);
-		UserInfo userInfo = this.getUserInfoByUserId(userId);
-		if(userInfo == null){
-			return ResultUtil.failed("获取失败,获取帐号信息为空");
-		}
-		return ResultUtil.success(userInfo);
 	}
 
 	/**
@@ -137,7 +162,6 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<UserInfo> login(UserInfo userInfo,String param_lang) {
-		UserInfo loginUserInfo = null;
 		try {
 			if(userInfo == null){
 				return ResultUtil.failed("登陆失败,登陆用户信息为空");
@@ -147,7 +171,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			if(StringUtils.isAnyBlank(accountNo,password)){
 				return ResultUtil.failed("登陆失败,账号或密码不能为空");
 			}
-			loginUserInfo = this.getUserInfoByAccountNo(accountNo);
+			UserInfo loginUserInfo = this.getUserInfoByAccountNo(accountNo);
 			if(loginUserInfo == null){
 				return ResultUtil.failed("登陆失败,获取帐号信息为空");
 			}
@@ -155,15 +179,24 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				return ResultUtil.failed("登陆失败,帐号密码错误");
 			}
 			String userId = loginUserInfo.getId();
-			String token = UUID.randomUUID().toString();
-			loginUserInfo.setPassword("");
-			loginUserInfo.setToken(token);
-			String tokenKey = RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+token;
-			redisOpsUtil.set(tokenKey,userId,RedisPrefixContant.CACHE_HALF_HOUR);
-			if(redisOpsUtil.get(tokenKey)!=null){
+			String newToken = UUID.randomUUID().toString().replaceAll("-","");
+			String newTokenKey = RedisPrefixContant.getTokenUserKey(newToken);
+			String userTokenKey = RedisPrefixContant.getUserTokenKey(userId);
+
+			//移除老得token
+			String oldToken = (String) redisOpsUtil.get(userTokenKey);
+			if(StringUtils.isNotEmpty(oldToken)){
+				redisOpsUtil.remove(RedisPrefixContant.getTokenUserKey(oldToken));
+			}
+			//设置新的token
+			redisOpsUtil.set(newTokenKey,userId,RedisPrefixContant.CACHE_HALF_HOUR);
+			redisOpsUtil.set(userTokenKey,newToken,RedisPrefixContant.CACHE_HALF_HOUR);
+			if(redisOpsUtil.get(newTokenKey)!=null){
+				loginUserInfo.setPassword("");
+				loginUserInfo.setToken(newToken);
 				return ResultUtil.success(loginUserInfo);
 			}
-			return ResultUtil.success(loginUserInfo);
+			return ResultUtil.failed("Failed to login!");
 		} catch (Exception e) {
 			logger.error("Failed to login!",e);
 			return ResultUtil.failed("Failed to login!");
@@ -243,10 +276,10 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				Long seqId = sequenceService.getSequence();
 				userInfo.setInviteCode(String.valueOf(seqId));
 				long userId = userInfoDao.insert(DbInstanceEntity.initUserInfo(userInfo));
-				if(userId < 0){
-					return ResultUtil.failed("注册账号失败");
+				if(DbInstanceEntity.dbResult(userId)){
+					return ResultUtil.success(Boolean.TRUE);
 				}
-				return ResultUtil.success(Boolean.TRUE);
+				return ResultUtil.failed("注册账号失败");
 			}
 		} catch (Exception e) {
 			logger.error("Failed to register user!",e);
@@ -260,9 +293,17 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 * @create 2021/5/11 2:55 下午
 	*/
 	public UserInfo getUserInfoByAccountNo(String accountNo) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setAccountNo(accountNo);
-		return userInfoDao.getByEntity(userInfo);
+		try {
+			if(StringUtils.isEmpty(accountNo)){
+				return null;
+			}
+			UserInfo userInfo = new UserInfo();
+			userInfo.setAccountNo(accountNo);
+			return userInfoDao.getByEntity(userInfo);
+		} catch (Exception e) {
+			logger.error("根据账号获取用户信息异常",e);
+			return null;
+		}
 	}
 
 	/**
@@ -271,9 +312,17 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 * @create 2021/5/11 2:55 下午
 	 */
 	public UserInfo getUserInfoByInviteCode(String inviteCode) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setInviteCode(inviteCode);
-		return userInfoDao.getByEntity(userInfo);
+		try {
+			if(StringUtils.isEmpty(inviteCode)){
+				return null;
+			}
+			UserInfo userInfo = new UserInfo();
+			userInfo.setInviteCode(inviteCode);
+			return userInfoDao.getByEntity(userInfo);
+		} catch (Exception e) {
+			logger.error("根据邀请码获取用户信息异常",e);
+			return null;
+		}
 	}
 
 	/**
@@ -282,9 +331,17 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 * @create 2021/5/11 2:55 下午
 	 */
 	public UserInfo getUserInfoByUserId(String userId) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setId(userId);
-		return userInfoDao.getByEntity(userInfo);
+		try {
+			if(StringUtils.isEmpty(userId)){
+				return null;
+			}
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(userId);
+			return userInfoDao.getByEntity(userInfo);
+		} catch (Exception e) {
+			logger.error("根据账号ID获取用户信息异常",e);
+			return null;
+		}
 	}
 
 	/**

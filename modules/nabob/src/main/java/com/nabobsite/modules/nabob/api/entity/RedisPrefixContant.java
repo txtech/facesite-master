@@ -81,4 +81,11 @@ public class RedisPrefixContant {
      */
     public final static String CMS_MEMBER_INFO_CACHE = "cms:member:info:id:";
 
+
+    public static String getTokenUserKey(String token){
+        return RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+token;
+    }
+    public static String getUserTokenKey(String userId){
+        return RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+userId;
+    }
 }
