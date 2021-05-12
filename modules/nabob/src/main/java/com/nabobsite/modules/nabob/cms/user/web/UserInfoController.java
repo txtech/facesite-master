@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.user.service.UserInfoService;
 /**
  * 会员用户Controller
  * @author face
- * @version 2021-05-11
+ * @version 2021-05-12
  */
 @Controller
 @RequestMapping(value = "${adminPath}/user/userInfo")

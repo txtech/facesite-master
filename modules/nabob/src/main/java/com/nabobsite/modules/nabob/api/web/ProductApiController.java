@@ -40,7 +40,7 @@ public class ProductApiController extends BaseController {
 	@ApiOperation(value = "无人机产品列表")
 	public String getProductBotList(HttpServletRequest request, HttpServletResponse response) {
 		String ip = HttpBrowserTools.getIpAddr(request);
-		CommonResult<List<ProductBot>> result = productApiService.getProductBotList(null);
+		CommonResult<List<ProductBot>> result = productApiService.getProductBotList(new ProductBot());
 		return renderResult(Global.TRUE,text("getProductBotList"), result);
 	}
 
@@ -48,7 +48,7 @@ public class ProductApiController extends BaseController {
 	@ApiOperation(value = "云仓库产品列表")
 	public String getProductWarehouseList(HttpServletRequest request, HttpServletResponse response) {
 		String ip = HttpBrowserTools.getIpAddr(request);
-		CommonResult<List<ProductWarehouse>> result = productApiService.getProductWarehouseList(null);
+		CommonResult<List<ProductWarehouse>> result = productApiService.getProductWarehouseList(new ProductWarehouse());
 		return renderResult(Global.TRUE,text("getProductWarehouseList"), result);
 	}
 }

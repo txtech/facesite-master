@@ -140,6 +140,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('登陆IP')}：</label>
+					<div class="control-inline">
+						<#form:input path="loginIp" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -177,6 +183,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
+		{header:'${text("登陆IP")}', name:'loginIp', index:'a.login_ip', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:userInfo:edit')){ %>

@@ -39,8 +39,13 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<ProductBot>> getProductBotList(ProductBot productBot) {
-		List<ProductBot> list = productBotDao.findList(productBot);
-		return ResultUtil.success(list);
+		try {
+			List<ProductBot> list = productBotDao.findList(productBot);
+			return ResultUtil.success(list);
+		} catch (Exception e) {
+			logger.error("Failed to get product bot list!",e);
+			return ResultUtil.failed("Failed to get product bot list!");
+		}
 	}
 
 	/**
@@ -50,8 +55,13 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<ProductWarehouse>> getProductWarehouseList(ProductWarehouse productWarehouse) {
-		List<ProductWarehouse> list = productWarehouseDao.findList(productWarehouse);
-		return ResultUtil.success(list);
+		try {
+			List<ProductWarehouse> list = productWarehouseDao.findList(productWarehouse);
+			return ResultUtil.success(list);
+		} catch (Exception e) {
+			logger.error("Failed to get product warehouse list!",e);
+			return ResultUtil.failed("Failed to get product warehouse list!");
+		}
 	}
 
 	/**

@@ -19,20 +19,20 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 会员用户Entity
  * @author face
- * @version 2021-05-11
+ * @version 2021-05-12
  */
 @Table(name="t1_user_info", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
-		@Column(name="parent_user_id", attrName="parentUserId", label="上级ID", queryType=QueryType.EQ),
-		@Column(name="parent_sys_id", attrName="parentSysId", label="操作员上级", queryType=QueryType.EQ),
-		@Column(name="user_status", attrName="userStatus", label="状态 1", comment="状态 1:正常 2:禁用", queryType=QueryType.EQ),
-		@Column(name="level", attrName="level", label="级别", queryType=QueryType.EQ),
+		@Column(name="parent_user_id", attrName="parentUserId", label="上级ID"),
+		@Column(name="parent_sys_id", attrName="parentSysId", label="操作员上级"),
+		@Column(name="user_status", attrName="userStatus", label="状态 1", comment="状态 1:正常 2:禁用"),
+		@Column(name="level", attrName="level", label="级别"),
 		@Column(name="name", attrName="name", label="名称", queryType=QueryType.LIKE),
-		@Column(name="account_no", attrName="accountNo", label="账号", queryType=QueryType.EQ),
-		@Column(name="password", attrName="password", label="密码", queryType=QueryType.EQ),
+		@Column(name="account_no", attrName="accountNo", label="账号"),
+		@Column(name="password", attrName="password", label="密码"),
 		@Column(name="phone_number", attrName="phoneNumber", label="电话号码"),
-		@Column(name="invite_code", attrName="inviteCode", label="邀请码", queryType=QueryType.EQ),
-		@Column(name="favorite", attrName="favorite", label="最喜欢的人", queryType=QueryType.EQ),
+		@Column(name="invite_code", attrName="inviteCode", label="邀请码"),
+		@Column(name="favorite", attrName="favorite", label="最喜欢的人"),
 		@Column(name="ipaddress", attrName="ipaddress", label="注册IP"),
 		@Column(name="team_num", attrName="teamNum", label="团队总人数"),
 		@Column(name="team_num_1", attrName="teamNum1", label="一级团队人数"),
@@ -40,11 +40,12 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="team_num_3", attrName="teamNum3", label="三级团队人数"),
 		@Column(name="task_end_time", attrName="taskEndTime", label="任务结束时间"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
-		@Column(name="created", attrName="created", label="创建时间",isUpdate=false),
-		@Column(name="updated", attrName="updated", label="更新时间", isQuery=false),
-		@Column(name="create_by", attrName="createBy", label="创建人",isUpdate=false),
+		@Column(name="created", attrName="created", label="创建时间"),
+		@Column(name="updated", attrName="updated", label="更新时间"),
+		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
-		@Column(name="del_flag", attrName="delFlag", label="删除标志", isQuery=false),
+		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="login_ip", attrName="loginIp", label="登陆IP"),
 	}, orderBy="a.id DESC"
 )
 public class UserInfo extends DataEntity<UserInfo> {
@@ -69,8 +70,8 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private String loginIp;		// 登陆IP
 	private String token;
-	private String loginIp;
 
 	public UserInfo() {
 		this(null);
@@ -258,20 +259,20 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.delFlag = delFlag;
 	}
 
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-
+	@Length(min=0, max=50, message="登陆IP长度不能超过 50 个字符")
 	public String getLoginIp() {
 		return loginIp;
 	}
 
 	public void setLoginIp(String loginIp) {
 		this.loginIp = loginIp;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 }

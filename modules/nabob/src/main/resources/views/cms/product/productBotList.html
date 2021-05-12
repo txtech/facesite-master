@@ -17,6 +17,12 @@
 			<#form:form id="searchForm" model="${productBot}" action="${ctx}/product/productBot/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
+					<label class="control-label">${text('排序')}：</label>
+					<div class="control-inline">
+						<#form:input path="seq" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('产品名称')}：</label>
 					<div class="control-inline">
 						<#form:input path="name" maxlength="520" class="form-control width-120"/>
@@ -26,6 +32,12 @@
 					<label class="control-label">${text('限制等级')}：</label>
 					<div class="control-inline">
 						<#form:input path="level" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('价格')}：</label>
+					<div class="control-inline">
+						<#form:input path="price" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -94,10 +106,12 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("产品名称")}', name:'name', index:'a.name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+		{header:'${text("排序")}', name:'seq', index:'a.seq', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/product/productBot/form?id='+row.id+'" class="btnList" data-title="${text("编辑产品机器人")}">'+(val||row.id)+'</a>';
 		}},
+		{header:'${text("产品名称")}', name:'name', index:'a.name', width:150, align:"left"},
 		{header:'${text("限制等级")}', name:'level', index:'a.level', width:150, align:"center"},
+		{header:'${text("价格")}', name:'price', index:'a.price', width:150, align:"left"},
 		{header:'${text("佣金比例")}', name:'commissionRate', index:'a.commission_rate', width:150, align:"left"},
 		{header:'${text("额外佣金比例")}', name:'commissionRateOther', index:'a.commission_rate_other', width:150, align:"left"},
 		{header:'${text("产品图片")}', name:'productUrl', index:'a.product_url', width:150, align:"left"},
