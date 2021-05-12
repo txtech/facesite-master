@@ -124,7 +124,10 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			if(userInfo == null){
 				return ResultUtil.failed("获取失败,获取帐号信息为空");
 			}
-			String registerUrl = "http://c-mart.phlife.phshare?pid="+ HiDesUtils.desEnCode(userId);
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("pid",userInfo.getId());
+			jsonObject.put("sid",userInfo.getParentSysId());
+			String registerUrl = "http://localhost?param_parent="+ HiDesUtils.desEnCode(jsonObject.toString());
 			return ResultUtil.success(registerUrl);
 		} catch (Exception e) {
 			logger.error("Failed to get share friends url!",e);
