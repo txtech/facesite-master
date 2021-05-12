@@ -22,14 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "${frontPath}/api/payCallBack")
 @ConditionalOnProperty(name="web.swagger.pay.enabled", havingValue="true", matchIfMissing=true)
-@Api(tags = "自定义支付回调接口")
+@Api(tags = "模拟支付回调接口")
 public class SimulationPayCallback extends BaseController {
 
     @Autowired
     private CommonCallbackService commonCallbackService;
 
     @PostMapping(value = {"SimulationPayCallback"})
-    @ApiOperation(value = "模拟回调通道")
+    @ApiOperation(value = "模拟支付回调")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orderNo", value = "支付订单", required = true, paramType="query", type="String"),
             @ApiImplicitParam(name = "pOrderNo",value = "上游订单号"),
