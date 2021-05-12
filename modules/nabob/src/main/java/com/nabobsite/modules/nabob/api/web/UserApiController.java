@@ -61,16 +61,16 @@ public class UserApiController extends BaseController {
 			@ApiImplicitParam(name = "accountNo", value = "登陆账号", required = true, paramType="query", type="String"),
 			@ApiImplicitParam(name = "password",  value = "登陆密码", required = true),
 			@ApiImplicitParam(name = "param_lang",  value = "语言默认：zh_CN", required = false),
-			@ApiImplicitParam(name = "param_deviceType",  value = "设备类型:mobileApp:1、H5:2", required = false),
 	})
-	public String login(String accountNo, String password,String param_lang,String param_deviceType,HttpServletRequest request) {
+	public String login(String accountNo, String password,String param_lang,HttpServletRequest request) {
 		String loginIp = HttpBrowserTools.getIpAddr(request);
 		String ip = HttpBrowserTools.getIpAddr(request);
 		UserInfo userInfo = new UserInfo();
 		userInfo.setIpaddress(ip);
 		userInfo.setAccountNo(accountNo);
 		userInfo.setPassword(password);
-		CommonResult<UserInfo> result = userInfoApiService.login(userInfo,param_lang,param_deviceType,loginIp);
+		userInfo.setLoginIp(loginIp);
+		CommonResult<UserInfo> result = userInfoApiService.login(userInfo,param_lang);
 		return renderResult(Global.TRUE,text("login"), result);
 	}
 

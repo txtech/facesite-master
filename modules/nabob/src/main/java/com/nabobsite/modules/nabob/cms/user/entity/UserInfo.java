@@ -70,6 +70,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	private String token;
+	private String loginIp;
 
 	public UserInfo() {
 		this(null);
@@ -263,5 +264,14 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+
+	public String getLoginIp() {
+		return loginIp;
+	}
+
+	public void setLoginIp(String loginIp) {
+		this.loginIp = loginIp;
 	}
 }

@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+import springfox.documentation.service.ApiListing;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -135,43 +136,41 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 * @create 2021/5/11 10:13 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<UserInfo> login(UserInfo userInfo,String param_lang,String param_deviceType,String loginIp) {
-		if(userInfo == null){
-			return ResultUtil.failed("登陆失败,登陆用户信息为空");
-		}
-		//解密账户密码
-		String secretKey = Global.getConfig("shiro.loginSubmit.secretKey");
-		String accountNo = null;
-		String password = null;
+	public CommonResult<UserInfo> login(UserInfo userInfo,String param_lang) {
+		UserInfo loginUserInfo = null;
 		try {
-			String accountNoEntry = userInfo.getAccountNo();
-			String passwordEntry = userInfo.getPassword();
-			if(StringUtils.isAnyBlank(accountNoEntry,passwordEntry)){
+			if(userInfo == null){
+				return ResultUtil.failed("登陆失败,登陆用户信息为空");
+			}
+			String accountNo = userInfo.getAccountNo();
+			String password = userInfo.getPassword();
+			if(StringUtils.isAnyBlank(accountNo,password)){
 				return ResultUtil.failed("登陆失败,账号或密码不能为空");
 			}
-			accountNo = DesUtils.decode(accountNoEntry, secretKey);
-			password = DesUtils.decode(passwordEntry, secretKey);
-			String md5Pass = DigestUtils.md5DigestAsHex(password.getBytes());
-			userInfo.setAccountNo(accountNo);
-			userInfo.setPassword(md5Pass);
+			loginUserInfo = this.getUserInfoByAccountNo(accountNo);
+			if(loginUserInfo == null){
+				return ResultUtil.failed("登陆失败,获取帐号信息为空");
+			}
+			if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(loginUserInfo.getPassword())) {
+				return ResultUtil.failed("登陆失败,帐号密码错误");
+			}
+			String userId = loginUserInfo.getId();
+			String token = UUID.randomUUID().toString();
+			loginUserInfo.setPassword("");
+			loginUserInfo.setToken(token);
+			String tokenKey = RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+token;
+			redisOpsUtil.set(tokenKey,userId,RedisPrefixContant.CACHE_HALF_HOUR);
+			if(redisOpsUtil.get(tokenKey)!=null){
+				return ResultUtil.success(loginUserInfo);
+			}
+			return ResultUtil.success(loginUserInfo);
 		} catch (Exception e) {
-			logger.error("Failed to decrypt accountNo or password!",e);
+			logger.error("Failed to login!",e);
+			return ResultUtil.failed("Failed to login!");
 		}
-
-		UserInfo loginUserInfo = this.getUserInfoByAccountNo(accountNo);
-		if(loginUserInfo == null){
-			return ResultUtil.failed("登陆失败,获取帐号信息为空");
-		}
-		if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(loginUserInfo.getPassword())) {
-			return ResultUtil.failed("登陆失败,帐号密码错误");
-		}
-		String userId = loginUserInfo.getId();
-		String token = UUID.randomUUID().toString();
-		loginUserInfo.setPassword("");
-		loginUserInfo.setToken(token);
-		redisOpsUtil.set(RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+token,userId,RedisPrefixContant.CACHE_HALF_HOUR);
-		return ResultUtil.success(loginUserInfo);
 	}
+
+
 
 	/**
 	 * @desc 用户注册
@@ -185,30 +184,17 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				return ResultUtil.failed("注册失败,注册信息为空");
 			}
 
-			//解密账户密码
-			String secretKey = Global.getConfig("shiro.loginSubmit.secretKey");
-			String accountNo = null;
-			String password = null;
-			try {
-				String accountNoEntry = userInfo.getAccountNo();
-				String passwordEntry = userInfo.getPassword();
-				if(StringUtils.isAnyBlank(accountNoEntry,passwordEntry)){
-					return ResultUtil.failed("注册失败,账号或密码不能为空");
-				}
-				accountNo = DesUtils.decode(accountNoEntry, secretKey);
-				password = DesUtils.decode(passwordEntry, secretKey);
-				String md5Pass = DigestUtils.md5DigestAsHex(password.getBytes());
-				userInfo.setAccountNo(accountNo);
-				userInfo.setPassword(md5Pass);
-			} catch (Exception e) {
-				logger.error("Failed to decrypt accountNo or password!",e);
-			}
-			if(StringUtils.isEmpty(accountNo) || StringUtils.isEmpty(password)){
-				return ResultUtil.failed("注册失败,账号或密码解析失败");
+			String accountNo = userInfo.getAccountNo();
+			String password = userInfo.getPassword();
+			if(StringUtils.isAnyBlank(accountNo,password)){
+				return ResultUtil.failed("注册失败,账号或密码不能为空");
 			}
 			if(accountNo.length() < 10 || password.length()<6 || accountNo.length() > 15 || password.length() > 20){
 				return ResultUtil.failed("注册失败,账号或密码不符合要求");
 			}
+			String md5Pass = DigestUtils.md5DigestAsHex(password.getBytes());
+			userInfo.setAccountNo(accountNo);
+			userInfo.setPassword(md5Pass);
 
 			//注册账户
 			synchronized (accountNo){
@@ -299,5 +285,21 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setId(userId);
 		return userInfoDao.getByEntity(userInfo);
+	}
+
+	/**
+	 * @desc 加密铭感信息
+	 * @author nada
+	 * @create 2021/5/12 11:07 上午
+	*/
+	public String decodeAccountAndPwd(String accountNoEntry, String passwordEntry) {
+		if(StringUtils.isAnyBlank(accountNoEntry,passwordEntry)){
+			return "账号或密码不能为空";
+		}
+		String secretKey = Global.getConfig("shiro.loginSubmit.secretKey");
+		String accountNo = DesUtils.decode(accountNoEntry, secretKey);
+		String password = DesUtils.decode(passwordEntry, secretKey);
+		String md5Pass = DigestUtils.md5DigestAsHex(password.getBytes());
+		return md5Pass;
 	}
 }
