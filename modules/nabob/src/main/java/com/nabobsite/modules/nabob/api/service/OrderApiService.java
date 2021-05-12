@@ -74,7 +74,7 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 			order.setUserId(userId);
 			Long orderNo = SnowFlakeIDGenerator.generateSnowFlakeId();
 			synchronized (orderNo) {
-				long dbResult = orderDao.insert(DbInstanceEntity.initOrderInfo(order,orderNo));
+				long dbResult = orderDao.insert(DbInstanceEntity.initOrderInfo(order,String.valueOf(orderNo)));
 				if(CommonStaticContact.dbResult(dbResult)){
 					triggerApiService.payOrderTrigger(userId,orderNo);
 					return ResultUtil.success(order);

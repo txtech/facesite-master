@@ -78,7 +78,7 @@ public class OrderApiController extends BaseController {
 	})
 	public String getOrderInfo(String param_token,String orderNo) {
 		Order order = new Order();
-		order.setOrderNo(Long.valueOf(orderNo));
+		order.setOrderNo(orderNo);
 		CommonResult<Order> result = orderApiService.getOrderInfo(order,param_token);
 		return renderResult(Global.TRUE,text("getOrderInfo"), result);
 	}

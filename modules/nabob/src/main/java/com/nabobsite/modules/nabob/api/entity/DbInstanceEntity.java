@@ -45,7 +45,7 @@ public class DbInstanceEntity {
      * @author nada
      * @create 2021/5/12 2:59 下午
     */
-    public static Order initOrderInfo(Order params,Long orderNo){
+    public static Order initOrderInfo(Order params,String orderNo){
         Order order = (Order)params.clone();
         order.setIsNewRecord(true);
         order.setOrderNo(orderNo);

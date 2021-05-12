@@ -57,8 +57,7 @@ public class SnowFlakeIDGenerator {
     }
     /**
      * 雪花算法ID生成，全局唯一
-     * @return
-     *      long id
+     * @return  long id
      */
     public final static long generateSnowFlakeId(){
         return snowFlake.nextId();

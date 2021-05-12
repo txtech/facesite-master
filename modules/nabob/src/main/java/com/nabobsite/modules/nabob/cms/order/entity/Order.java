@@ -28,6 +28,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="type", attrName="type", label="订单类型"),
 		@Column(name="order_status", attrName="orderStatus", label="1", comment="1: 待支付 2:支付中 3:支付失败 4:支付成功 9:退款"),
 		@Column(name="order_no", attrName="orderNo", label="订单号"),
+		@Column(name="p_order_no", attrName="porderNo", label="上游订单号"),
 		@Column(name="pay_money", attrName="payMoney", label="支付金额"),
 		@Column(name="actual_money", attrName="actualMoney", label="真实到账金额"),
 		@Column(name="name", attrName="name", label="名称", queryType=QueryType.LIKE),
@@ -48,7 +49,8 @@ public class Order extends DataEntity<Order> {
 	private String userId;		// 用户ID
 	private Integer type;		// 订单类型
 	private Integer orderStatus;		// 1: 待支付 2:支付中 3:支付失败 4:支付成功 9:退款
-	private Long orderNo;		// 订单号
+	private String orderNo;		// 订单号
+	private String porderNo;		// 上游订单号
 	private BigDecimal payMoney;		// 支付金额
 	private BigDecimal actualMoney;		// 真实到账金额
 	private String name;		// 名称
@@ -95,13 +97,23 @@ public class Order extends DataEntity<Order> {
 		this.orderStatus = orderStatus;
 	}
 	
-	@NotNull(message="订单号不能为空")
-	public Long getOrderNo() {
+	@NotBlank(message="订单号不能为空")
+	@Length(min=0, max=50, message="订单号长度不能超过 50 个字符")
+	public String getOrderNo() {
 		return orderNo;
 	}
 
-	public void setOrderNo(Long orderNo) {
+	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
+	}
+	
+	@Length(min=0, max=50, message="上游订单号长度不能超过 50 个字符")
+	public String getPorderNo() {
+		return porderNo;
+	}
+
+	public void setPorderNo(String porderNo) {
+		this.porderNo = porderNo;
 	}
 	
 	@NotNull(message="支付金额不能为空")
@@ -153,6 +165,7 @@ public class Order extends DataEntity<Order> {
 	}
 	
 	@NotBlank(message="电话号码不能为空")
+	@Length(min=0, max=255, message="电话号码长度不能超过 255 个字符")
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
