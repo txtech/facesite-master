@@ -9,7 +9,10 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,9 +23,9 @@ import javax.servlet.http.HttpServletResponse;
  * @version 2021-01-11
  */
 @RestController
-@RequestMapping(value = "${frontPath}/api/account")
-@Api(tags = "账户接口")
-public class AccountApiController extends BaseController {
+@RequestMapping(value = "${frontPath}/api/order")
+@Api(tags = "订单接口")
+public class OrderApiController extends BaseController {
 
 	@PostMapping(value = {"getUserAccountInfo"})
 	@ApiOperation(value = "获取账户详情")

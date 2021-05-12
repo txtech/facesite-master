@@ -22,7 +22,7 @@ public class DbInstanceEntity {
         userInfo.setTeamNum1(0);
         userInfo.setTeamNum2(0);
         userInfo.setTeamNum3(0);
-        userInfo.setUserStatus(DbStaticContact.USER_STATUS_OK);
+        userInfo.setUserStatus(UserStaticContact.USER_STATUS_OK);
         if(StringUtils.isEmpty(params.getParentUserId())){
             userInfo.setParentUserId("0");
         }

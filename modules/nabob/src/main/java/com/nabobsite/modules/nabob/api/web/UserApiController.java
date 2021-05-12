@@ -2,13 +2,11 @@
  * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.nabobsite.modules.nabob.api.web;
-import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.config.Global;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.CommonResult;
-import com.nabobsite.modules.nabob.utils.HiDesUtils;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.utils.ResultUtil;
@@ -16,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,9 +26,9 @@ import javax.servlet.http.HttpServletRequest;
  * @version 2021-01-11
  */
 @RestController
-@RequestMapping(value = "${frontPath}/user/api")
+@RequestMapping(value = "${frontPath}/api/user")
 @ConditionalOnProperty(name="web.swagger.nabob.enabled", havingValue="true", matchIfMissing=true)
-@Api(tags = "用户接口：账号注册、账号登录、找回密码、获取用户详情")
+@Api(tags = "用户接口")
 public class UserApiController extends BaseController {
 
 	@Autowired
@@ -64,29 +61,37 @@ public class UserApiController extends BaseController {
 			@ApiImplicitParam(name = "accountNo", value = "登陆账号", required = true, paramType="query", type="String"),
 			@ApiImplicitParam(name = "password",  value = "登陆密码", required = true),
 			@ApiImplicitParam(name = "param_lang",  value = "语言默认：zh_CN", required = false),
-			@ApiImplicitParam(name = "param_deviceType",  value = "设备类型:mobileApp、H5", required = false),
+			@ApiImplicitParam(name = "param_deviceType",  value = "设备类型:mobileApp:1、H5:2", required = false),
 	})
-	public JSONObject login(String accountNo, String password,String param_lang,String param_deviceType,HttpServletRequest request) {
+	public String login(String accountNo, String password,String param_lang,String param_deviceType,HttpServletRequest request) {
+		String loginIp = HttpBrowserTools.getIpAddr(request);
 		String ip = HttpBrowserTools.getIpAddr(request);
-		return null;
+		UserInfo userInfo = new UserInfo();
+		userInfo.setIpaddress(ip);
+		userInfo.setAccountNo(accountNo);
+		userInfo.setPassword(password);
+		CommonResult<UserInfo> result = userInfoApiService.login(userInfo,param_lang,param_deviceType,loginIp);
+		return renderResult(Global.TRUE,text("login"), result);
 	}
 
 	@PostMapping(value = {"logout"})
 	@ApiOperation(value = "用户退出")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话token", required = true, paramType="query", type="String"),})
-	public JSONObject logout(String userId,String param_token,HttpServletRequest request) {
+	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
+	public String logout(String param_token,HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
-		return null;
+		CommonResult<Boolean> result = userInfoApiService.logout(param_token);
+		return renderResult(Global.TRUE,text("logout"), result);
 	}
 
 	@ApiOperation(value = "用户获取详情")
 	@PostMapping(value = {"getUserInfo"})
-	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话token", required = true, paramType="query", type="String"),})
-	public String getUserInfo(String userId,String param_token,HttpServletRequest request) {
+	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
+	public String getUserInfo(String param_token,HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
-		UserInfo result = userInfoApiService.get(userId);
+		CommonResult<UserInfo> result = userInfoApiService.getUserInfo(param_token);
 		return renderResult(Global.TRUE,text("getUserInfo"), result);
 	}
+
 
 	@PostMapping(value = {"updatePwd"})
 	@ApiOperation(value = "用户修改密码")
@@ -96,21 +101,20 @@ public class UserApiController extends BaseController {
 			@ApiImplicitParam(name = "newPassword",  value = "新密码", required = true),
 			@ApiImplicitParam(name = "param_token",  value = "会话token", required = true),
 	})
-	public JSONObject updatePwd(String accountNo, String password,String param_token,String param_lang,String param_deviceType,HttpServletRequest request) {
+	public String updatePwd(String accountNo, String oldPassword,String newPassword,String param_token,HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
-		return null;
+		CommonResult<Boolean> result = userInfoApiService.updatePwd(accountNo,oldPassword,newPassword,param_token);
+		return renderResult(Global.TRUE,text("updatePwd"),result);
 	}
 
-	@ApiOperation(value = "用户邀请好友注册")
+	@ApiOperation(value = "获取邀请好友链接")
 	@PostMapping(value = {"shareFriends"})
-	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话token", required = true, paramType="query", type="String"),})
-	public String shareFriends(String userId){
-		if(StringUtils.isEmpty(userId)){
-			userId = "0";
-		}
-		String registerUrl = "http://c-mart.phlife.phshare?pid="+ HiDesUtils.desEnCode(userId);
-		return renderResult(Global.TRUE, text("shareFriends"),ResultUtil.success(registerUrl));
+	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
+	public String shareFriends(String param_token){
+		CommonResult<String> result = userInfoApiService.shareFriends(param_token);
+		return renderResult(Global.TRUE,text("shareFriends"),result);
 	}
+
 
 	@ApiOperation(value = "用户切换语言")
 	@RequestMapping(value = "switchLang/{Lang}")

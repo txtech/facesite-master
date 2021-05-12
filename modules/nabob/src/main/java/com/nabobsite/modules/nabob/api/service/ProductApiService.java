@@ -5,9 +5,16 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductBotDao;
+import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
+import com.nabobsite.modules.nabob.utils.CommonResult;
+import com.nabobsite.modules.nabob.utils.ResultUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 产品机器人Service
@@ -17,6 +24,35 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly=true)
 public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
+
+
+	@Autowired
+	private ProductBotDao productBotDao;
+	@Autowired
+	private ProductWarehouseDao productWarehouseDao;
+
+
+	/**
+	 * @desc 获取无人机产品列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<List<ProductBot>> getProductBotList(ProductBot productBot) {
+		List<ProductBot> list = productBotDao.findList(productBot);
+		return ResultUtil.success(list);
+	}
+
+	/**
+	 * @desc 获取云仓库产品列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<List<ProductWarehouse>> getProductWarehouseList(ProductWarehouse productWarehouse) {
+		List<ProductWarehouse> list = productWarehouseDao.findList(productWarehouse);
+		return ResultUtil.success(list);
+	}
 
 	/**
 	 * 获取单条数据

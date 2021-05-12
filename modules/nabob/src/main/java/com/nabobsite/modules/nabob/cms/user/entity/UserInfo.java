@@ -69,6 +69,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private String token;
 
 	public UserInfo() {
 		this(null);
@@ -256,4 +257,11 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.delFlag = delFlag;
 	}
 
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 }
