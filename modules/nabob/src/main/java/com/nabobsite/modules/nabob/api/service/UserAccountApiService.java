@@ -49,6 +49,10 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public boolean addAccount(String userId, BigDecimal actualMoney) {
 		try {
+			if(StringUtils.isEmpty(userId)){
+				logger.error("增加账户失败,userId信息为空:{}",userId);
+				return false;
+			}
 			synchronized (userId){
 				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
 				if(oldUserAccount == null){
