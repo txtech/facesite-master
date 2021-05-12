@@ -40,10 +40,10 @@ public class Application extends SpringBootServletInitializer  implements Comman
 
 	@Override
 	public void run(String... args){
-		String[] beans = appContext.getBeanDefinitionNames();
+		/*String[] beans = appContext.getBeanDefinitionNames();
 		Arrays.sort(beans);
 		for (String bean : beans) {
 			System.out.println(bean + " of Type :: " + appContext.getBean(bean).getClass());
-		}
+		}*/
 	}
 }
