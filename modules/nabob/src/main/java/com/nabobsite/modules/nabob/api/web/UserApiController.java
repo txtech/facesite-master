@@ -77,8 +77,7 @@ public class UserApiController extends BaseController {
 	@PostMapping(value = {"logout"})
 	@ApiOperation(value = "用户退出")
 	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
-	public String logout(String param_token,HttpServletRequest request) {
-		String ip = HttpBrowserTools.getIpAddr(request);
+	public String logout(String param_token) {
 		CommonResult<Boolean> result = userInfoApiService.logout(param_token);
 		return renderResult(Global.TRUE,text("logout"), result);
 	}
@@ -86,8 +85,7 @@ public class UserApiController extends BaseController {
 	@ApiOperation(value = "用户获取详情")
 	@PostMapping(value = {"getUserInfo"})
 	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
-	public String getUserInfo(String param_token,HttpServletRequest request) {
-		String ip = HttpBrowserTools.getIpAddr(request);
+	public String getUserInfo(String param_token) {
 		CommonResult<UserInfo> result = userInfoApiService.getUserInfo(param_token);
 		return renderResult(Global.TRUE,text("getUserInfo"), result);
 	}

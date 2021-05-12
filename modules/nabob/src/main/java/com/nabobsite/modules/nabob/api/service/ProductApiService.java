@@ -65,6 +65,39 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 	}
 
 	/**
+	 * @desc 获取无人机产品详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<ProductBot> getProductBotInfo(ProductBot productBot) {
+		try {
+			ProductBot productBotInfo = productBotDao.getByEntity(productBot);
+			return ResultUtil.success(productBotInfo);
+		} catch (Exception e) {
+			logger.error("Failed to get product bot info!",e);
+			return ResultUtil.failed("Failed to get product bot info!");
+		}
+	}
+
+	/**
+	 * @desc 获取云仓库产品详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<ProductWarehouse> getProductWarehouseInfo(ProductWarehouse productWarehouse) {
+		try {
+			ProductWarehouse productWarehouseInfo = productWarehouseDao.getByEntity(productWarehouse);
+			return ResultUtil.success(productWarehouseInfo);
+		} catch (Exception e) {
+			logger.error("Failed to get product warehouse info!",e);
+			return ResultUtil.failed("Failed to get product warehouse info!");
+		}
+	}
+
+
+	/**
 	 * 获取单条数据
 	 * @param productBot
 	 * @return

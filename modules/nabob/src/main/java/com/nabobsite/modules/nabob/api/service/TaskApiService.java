@@ -5,10 +5,17 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
+import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
+import com.nabobsite.modules.nabob.utils.CommonResult;
+import com.nabobsite.modules.nabob.utils.ResultUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 任务列表Service
@@ -18,6 +25,43 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly=true)
 public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
+
+	@Autowired
+	private TaskInfoDao taskInfoDao;
+
+
+	/**
+	 * @desc 获取任务列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<List<TaskInfo>> getTaskList(TaskInfo taskInfo) {
+		try {
+			List<TaskInfo> list = taskInfoDao.findList(taskInfo);
+			return ResultUtil.success(list);
+		} catch (Exception e) {
+			logger.error("Failed to get task list!",e);
+			return ResultUtil.failed("Failed to get task list!");
+		}
+	}
+
+
+	/**
+	 * @desc 获取任务详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<TaskInfo> getTaskInfo(TaskInfo taskInfo) {
+		try {
+			TaskInfo taskInfo1 = taskInfoDao.getByEntity(taskInfo);
+			return ResultUtil.success(taskInfo1);
+		} catch (Exception e) {
+			logger.error("Failed to get task list!",e);
+			return ResultUtil.failed("Failed to get task info!");
+		}
+	}
 
 	/**
 	 * 获取单条数据

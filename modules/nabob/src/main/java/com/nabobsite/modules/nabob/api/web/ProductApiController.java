@@ -12,6 +12,8 @@ import com.nabobsite.modules.nabob.utils.CommonResult;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import com.jeesite.common.web.BaseController;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -38,17 +40,36 @@ public class ProductApiController extends BaseController {
 
 	@PostMapping(value = {"getProductBotList"})
 	@ApiOperation(value = "无人机产品列表")
-	public String getProductBotList(HttpServletRequest request, HttpServletResponse response) {
-		String ip = HttpBrowserTools.getIpAddr(request);
+	public String getProductBotList() {
 		CommonResult<List<ProductBot>> result = productApiService.getProductBotList(new ProductBot());
 		return renderResult(Global.TRUE,text("getProductBotList"), result);
 	}
 
 	@PostMapping(value = {"getProductWarehouseList"})
 	@ApiOperation(value = "云仓库产品列表")
-	public String getProductWarehouseList(HttpServletRequest request, HttpServletResponse response) {
-		String ip = HttpBrowserTools.getIpAddr(request);
+	public String getProductWarehouseList() {
 		CommonResult<List<ProductWarehouse>> result = productApiService.getProductWarehouseList(new ProductWarehouse());
 		return renderResult(Global.TRUE,text("getProductWarehouseList"), result);
+	}
+
+
+	@PostMapping(value = {"getProductBotInfo"})
+	@ApiOperation(value = "无人机产品详情")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType="query", type="String"),})
+	public String getProductBotInfo(String id) {
+		ProductBot productBot = new ProductBot();
+		productBot.setId(id);
+		CommonResult<ProductBot> result = productApiService.getProductBotInfo(productBot);
+		return renderResult(Global.TRUE,text("getProductBotInfo"), result);
+	}
+
+	@PostMapping(value = {"getProductWarehouseInfo"})
+	@ApiOperation(value = "云仓库产品详情")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType="query", type="String"),})
+	public String getProductWarehouseInfo(String id) {
+		ProductWarehouse productWarehouse = new ProductWarehouse();
+		productWarehouse.setId(id);
+		CommonResult<ProductWarehouse> result = productApiService.getProductWarehouseInfo(productWarehouse);
+		return renderResult(Global.TRUE,text("getProductWarehouseInfo"), result);
 	}
 }
