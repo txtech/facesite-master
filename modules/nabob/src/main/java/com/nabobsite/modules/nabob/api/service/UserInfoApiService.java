@@ -65,6 +65,9 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				return ResultUtil.failed("修改失败,修改信息为空");
 			}
 			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return ResultUtil.failed("获取失败,登陆令牌失效");
+			}
 			UserInfo oldUserInfo = this.getUserInfoByUserId(userId);
 			if(oldUserInfo == null){
 				return ResultUtil.failed("修改失败,获取帐号信息为空");
@@ -124,6 +127,9 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				return ResultUtil.failed("获取失败,获取令牌为空");
 			}
 			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return ResultUtil.failed("获取失败,登陆令牌失效");
+			}
 			UserInfo userInfo = this.getUserInfoByUserId(userId);
 			if(userInfo == null){
 				return ResultUtil.failed("获取失败,获取帐号信息为空");
@@ -151,6 +157,9 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				return ResultUtil.failed("获取失败,获取令牌为空");
 			}
 			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return ResultUtil.failed("获取失败,登陆令牌失效");
+			}
 			UserInfo userInfo = this.getUserInfoByUserId(userId);
 			if(userInfo == null){
 				return ResultUtil.failed("获取失败,获取帐号信息为空");

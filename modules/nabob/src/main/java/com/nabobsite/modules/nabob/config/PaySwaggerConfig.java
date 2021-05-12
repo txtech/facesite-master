@@ -15,14 +15,14 @@ import springfox.documentation.spring.web.plugins.Docket;
  */
 @Configuration
 @ConditionalOnProperty(name="web.swagger.enabled", havingValue="true", matchIfMissing=false)
-public class CustomApiConfig {
+public class PaySwaggerConfig {
 
     @Bean
-    @ConditionalOnProperty(name="web.swagger.nabob.enabled", havingValue="true", matchIfMissing=true)
-    public Docket customApi() {
-        String moduleCode = "nabob";
-        String moduleName = "富豪模块";
-        String basePackage = "com.nabobsite.modules.nabob.api.web";
+    @ConditionalOnProperty(name="web.swagger.pay.enabled", havingValue="true", matchIfMissing=true)
+    public Docket customPayApi() {
+        String moduleCode = "nabobpay";
+        String moduleName = "富豪支付模块";
+        String basePackage = "com.nabobsite.modules.nabob.pay.web";
         return SwaggerConfig.docket(moduleCode, moduleName, basePackage)
                 .select()
                 .apis(
@@ -33,5 +33,4 @@ public class CustomApiConfig {
                         RequestHandlerSelectors.basePackage(basePackage)
                 ).build();
     }
-
 }

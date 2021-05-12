@@ -6,27 +6,15 @@ package com.nabobsite.modules.nabob.pay.service;
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
-import com.nabobsite.modules.nabob.api.entity.DbInstanceEntity;
-import com.nabobsite.modules.nabob.api.entity.NabobLogicContact;
-import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.api.service.OrderApiService;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
-import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.config.RedisOpsUtil;
-import com.nabobsite.modules.nabob.utils.CommonResult;
-import com.nabobsite.modules.nabob.utils.ResultUtil;
-import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 订单Service
@@ -49,6 +37,7 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 	 * @author nada
 	 * @create 2021/5/12 1:10 下午
 	*/
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public boolean callBack(String orderNo,String pOrderNo,int backStatus,String message) {
 		try {
 			synchronized (orderNo) {

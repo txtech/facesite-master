@@ -13,7 +13,7 @@
 	</select> -->
 
 	<!--增加-->
-	<update id="addAccount" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccount">
+	<update id="updateAccountTotalMoney" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccount">
 		update
 		    t1_user_account
 		<set>

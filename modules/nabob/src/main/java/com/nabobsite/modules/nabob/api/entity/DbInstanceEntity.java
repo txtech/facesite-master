@@ -70,11 +70,12 @@ public class DbInstanceEntity {
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
-    public static UserAccountRecord initUserAccountRecord(String userId,String accountId,BigDecimal payMoney,BigDecimal totalMoney){
+    public static UserAccountRecord initUserAccountRecord(String userId,String accountId,BigDecimal payMoney,BigDecimal totalMoney,String remark){
         synchronized (userId) {
             UserAccountRecord userAccountRecord = new UserAccountRecord();
             userAccountRecord.setIsNewRecord(true);
             userAccountRecord.setType(1);
+            userAccountRecord.setRemark(remark);
             userAccountRecord.setUserId(userId);
             userAccountRecord.setAccountId(accountId);
             userAccountRecord.setTotalMoney(CommonStaticContact.add(totalMoney,payMoney));

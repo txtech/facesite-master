@@ -61,7 +61,8 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 				}
 				String accountId = oldUserAccount.getId();
 				BigDecimal totalMoney = oldUserAccount.getTotalMoney();
-				UserAccountRecord userAccountRecord = DbInstanceEntity.initUserAccountRecord(userId,accountId,actualMoney,totalMoney);
+				String remark = "充值:"+actualMoney;
+				UserAccountRecord userAccountRecord = DbInstanceEntity.initUserAccountRecord(userId,accountId,actualMoney,totalMoney,remark);
 				long dbResult = userAccountRecordDao.insert(userAccountRecord);
 				if(!CommonStaticContact.dbResult(dbResult)){
 					logger.error("增加账户失败,记录明细失败:{},{}",userId,accountId);
@@ -71,7 +72,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 				userAccount.setId(accountId);
 				userAccount.setUserId(userId);
 				userAccount.setTotalMoney(actualMoney);
-				dbResult = userAccountDao.addAccount(userAccount);
+				dbResult = userAccountDao.updateAccountTotalMoney(userAccount);
 				if(CommonStaticContact.dbResult(dbResult)){
 					logger.info("增加账户成功,记录明细成功:{},{}",userId,accountId);
 					return true;
@@ -103,7 +104,8 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 				}
 				String accountId = oldUserAccount.getId();
 				BigDecimal totalMoney = oldUserAccount.getTotalMoney();
-				UserAccountRecord userAccountRecord = DbInstanceEntity.initUserAccountRecord(userId,accountId,actualMoney,totalMoney);
+				String remark = "减少:"+actualMoney;
+				UserAccountRecord userAccountRecord = DbInstanceEntity.initUserAccountRecord(userId,accountId,actualMoney,totalMoney,remark);
 				long dbResult = userAccountRecordDao.insert(userAccountRecord);
 				if(!CommonStaticContact.dbResult(dbResult)){
 					logger.error("减去账户失败,记录明细失败:{},{}",userId,accountId);
@@ -113,7 +115,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 				userAccount.setId(accountId);
 				userAccount.setUserId(userId);
 				userAccount.setTotalMoney(actualMoney);
-				dbResult = userAccountDao.addAccount(userAccount);
+				dbResult = userAccountDao.updateAccountTotalMoney(userAccount);
 				if(CommonStaticContact.dbResult(dbResult)){
 					logger.info("减去账户成功,记录明细成功:{},{}",userId,accountId);
 					return true;
@@ -139,7 +141,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 				return null;
 			}
 			UserAccount userAccount = new UserAccount();
-			userAccount.setId(userId);
+			userAccount.setUserId(userId);
 			return userAccountDao.getByEntity(userAccount);
 		} catch (Exception e) {
 			logger.error("根据账号ID获取账户信息异常",e);

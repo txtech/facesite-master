@@ -66,6 +66,9 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 				return ResultUtil.failed("充值失败,充值金额小于0");
 			}
 			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return ResultUtil.failed("获取失败,登陆令牌失效");
+			}
 			UserInfo oldUserInfo = userInfoApiService.getUserInfoByUserId(userId);
 			if(oldUserInfo == null){
 				return ResultUtil.failed("充值失败,获取帐号信息为空");
@@ -97,6 +100,9 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 				return ResultUtil.failed("充值失败,获取令牌为空");
 			}
 			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return ResultUtil.failed("获取失败,登陆令牌失效");
+			}
 			order.setUserId(userId);
 			List<Order> result = orderDao.findList(order);
 			return ResultUtil.success(result);
@@ -121,6 +127,9 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 				return ResultUtil.failed("获取订单详情,获取订单号为空");
 			}
 			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return ResultUtil.failed("获取失败,登陆令牌失效");
+			}
 			order.setUserId(userId);
 			Order result = orderDao.getByEntity(order);
 			return ResultUtil.success(result);
@@ -154,6 +163,7 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean updateOrderById(String id,Order order) {
 		try {
 			if(StringUtils.isEmpty(id)){
