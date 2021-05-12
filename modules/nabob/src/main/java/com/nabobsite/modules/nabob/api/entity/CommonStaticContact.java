@@ -1,5 +1,7 @@
 package com.nabobsite.modules.nabob.api.entity;
 
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
+
 import java.math.BigDecimal;
 
 /**
@@ -12,6 +14,10 @@ public class CommonStaticContact {
     //用户状态
     public final static int USER_STATUS_OK = 1;//正常
     public final static int USER_STATUS_ENABLE = 3;//禁用
+
+    //用户账户状态
+    public final static int USER_ACCOUNT_STATUS_OK = 1;//正常
+    public final static int USER_ACCOUNT_STATUS_ENABLE = 2;//冻结
 
     //订单类型
     public final static int ORDER_TYPE_RECHANGE = 1;//充值

@@ -1,8 +1,12 @@
 package com.nabobsite.modules.nabob.api.entity;
 
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.apache.commons.lang3.StringUtils;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @ClassName nada
@@ -37,6 +41,26 @@ public class DbInstanceEntity {
                 userInfo.setParentUserId("0");
             }
             return userInfo;
+        }
+    }
+
+    /**
+     * @desc 初始化用户账户信息
+     * @author nada
+     * @create 2021/5/12 2:58 下午
+     */
+    public static UserAccount initUserAccount(String userId){
+        synchronized (userId) {
+            UserAccount userAccount = new UserAccount();
+            userAccount.setIsNewRecord(true);
+            userAccount.setUserId(userId);
+            userAccount.setTotalMoney(new BigDecimal("0"));
+            userAccount.setAvailableMoney(new BigDecimal("0"));
+            userAccount.setWarehouseMoney(new BigDecimal("0"));
+            userAccount.setAiAssetsMoney(new BigDecimal("0"));
+            userAccount.setIncomeMoney(new BigDecimal("0"));
+            userAccount.setAccountStatus(CommonStaticContact.USER_ACCOUNT_STATUS_OK);
+            return userAccount;
         }
     }
 

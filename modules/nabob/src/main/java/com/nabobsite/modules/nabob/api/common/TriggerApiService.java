@@ -5,6 +5,7 @@ import com.nabobsite.modules.nabob.api.common.task.UserRegisterTrigger;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerPoolManagerImpl;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerQueueManagerImpl;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerThread;
+import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,8 @@ public class TriggerApiService {
 
     @Autowired
     private TriggerPoolManagerImpl timeOutManager;
+    @Autowired
+    private UserAccountApiService userAccountApiService;
 
     /**
      * @desc 注册成功触发器
@@ -27,8 +30,8 @@ public class TriggerApiService {
      * @create 2021/5/11 10:33 下午
      */
     @Transactional (readOnly = false, rollbackFor = Exception.class)
-    public void registerTrigger(String userId) {
-        TriggerThread callback = new UserRegisterTrigger(userId);
+    public void registerTrigger(String userId){
+        TriggerThread callback = new UserRegisterTrigger(userId,userAccountApiService);
         timeOutManager.submit(callback);
     }
 

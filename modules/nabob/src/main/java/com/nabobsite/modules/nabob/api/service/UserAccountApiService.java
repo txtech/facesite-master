@@ -68,5 +68,4 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 	public void delete(UserAccount userAccount) {
 		super.delete(userAccount);
 	}
-
 }

@@ -282,9 +282,10 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				//生产唯一邀请码
 				Long seqId = sequenceService.getSequence();
 				userInfo.setInviteCode(String.valueOf(seqId));
-				long userId = userInfoDao.insert(DbInstanceEntity.initUserInfo(userInfo));
-				if(CommonStaticContact.dbResult(userId)){
-					triggerApiService.registerTrigger(String.valueOf(userId));
+				UserInfo initUser = DbInstanceEntity.initUserInfo(userInfo);
+				long dbResult = userInfoDao.insert(initUser);
+				if(CommonStaticContact.dbResult(dbResult)){
+					triggerApiService.registerTrigger(initUser.getId());
 					return ResultUtil.success(Boolean.TRUE);
 				}
 				return ResultUtil.failed("注册账号失败");
