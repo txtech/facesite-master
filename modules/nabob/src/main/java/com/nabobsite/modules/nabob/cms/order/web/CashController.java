@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.order.web;
 
@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.order.service.CashService;
 /**
  * 出款Controller
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-12
  */
 @Controller
 @RequestMapping(value = "${adminPath}/order/cash")
@@ -33,7 +33,7 @@ public class CashController extends BaseController {
 
 	@Autowired
 	private CashService cashService;
-
+	
 	/**
 	 * 获取数据
 	 */
@@ -41,7 +41,7 @@ public class CashController extends BaseController {
 	public Cash get(String id, boolean isNewRecord) {
 		return cashService.get(id, isNewRecord);
 	}
-
+	
 	/**
 	 * 查询列表
 	 */
@@ -51,7 +51,7 @@ public class CashController extends BaseController {
 		model.addAttribute("cash", cash);
 		return "cms/order/cashList";
 	}
-
+	
 	/**
 	 * 查询列表数据
 	 */
@@ -84,7 +84,7 @@ public class CashController extends BaseController {
 		cashService.save(cash);
 		return renderResult(Global.TRUE, text("保存出款成功！"));
 	}
-
+	
 	/**
 	 * 删除数据
 	 */
@@ -95,5 +95,5 @@ public class CashController extends BaseController {
 		cashService.delete(cash);
 		return renderResult(Global.TRUE, text("删除出款成功！"));
 	}
-
+	
 }

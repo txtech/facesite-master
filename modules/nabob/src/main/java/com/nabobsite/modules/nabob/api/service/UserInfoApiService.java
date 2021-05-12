@@ -9,6 +9,8 @@ import com.jeesite.common.config.Global;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
+import com.nabobsite.modules.nabob.api.common.TriggerApiService;
+import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
 import com.nabobsite.modules.nabob.api.entity.DbInstanceEntity;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
@@ -45,6 +47,8 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	private UserInfoDao userInfoDao;
 	@Autowired
 	private SequenceService sequenceService;
+	@Autowired
+	private TriggerApiService triggerApiService;
 
 	/**
 	 * @desc 用户修改密码
@@ -81,7 +85,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			updateUserInfo.setId(oldUserInfo.getId());
 			updateUserInfo.setPassword(md5NewPwd);
 			long dbResult = userInfoDao.update(updateUserInfo);
-			if(DbInstanceEntity.dbResult(dbResult)){
+			if(CommonStaticContact.dbResult(dbResult)){
 				this.logout(token);
 				return ResultUtil.success(true);
 			}
@@ -279,7 +283,8 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				Long seqId = sequenceService.getSequence();
 				userInfo.setInviteCode(String.valueOf(seqId));
 				long userId = userInfoDao.insert(DbInstanceEntity.initUserInfo(userInfo));
-				if(DbInstanceEntity.dbResult(userId)){
+				if(CommonStaticContact.dbResult(userId)){
+					triggerApiService.registerTrigger(String.valueOf(userId));
 					return ResultUtil.success(Boolean.TRUE);
 				}
 				return ResultUtil.failed("注册账号失败");
@@ -362,4 +367,6 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 		String md5Pass = DigestUtils.md5DigestAsHex(password.getBytes());
 		return md5Pass;
 	}
+
+
 }

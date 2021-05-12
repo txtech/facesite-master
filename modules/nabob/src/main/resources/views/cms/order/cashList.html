@@ -17,21 +17,21 @@
 			<#form:form id="searchForm" model="${cash}" action="${ctx}/order/cash/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('类型')}：</label>
+					<label class="control-label">${text('用户ID')}：</label>
+					<div class="control-inline">
+						<#form:input path="userId" maxlength="30" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('类型 1')}：</label>
 					<div class="control-inline">
 						<#form:input path="type" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('状态 1')}：</label>
-					<div class="control-inline width-120">
-						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control isQuick"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('用户ID')}：</label>
 					<div class="control-inline">
-						<#form:input path="userId" class="form-control width-120"/>
+						<#form:input path="cashStatus" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -109,12 +109,6 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('状态 1')}：</label>
-					<div class="control-inline">
-						<#form:input path="cashStatus" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -130,13 +124,11 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("类型")}', name:'type', index:'a.type', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/order/cash/form?id='+row.id+'" class="btnList" data-title="${text("编辑出款")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("状态 1")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
-			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
-		}},
-		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"center"},
+		{header:'${text("类型 1")}', name:'type', index:'a.type', width:150, align:"center"},
+		{header:'${text("状态 1")}', name:'cashStatus', index:'a.cash_status', width:150, align:"center"},
 		{header:'${text("提现金额")}', name:'cashMoney', index:'a.cash_money', width:150, align:"left"},
 		{header:'${text("提现手续费")}', name:'serviceCharge', index:'a.service_charge', width:150, align:"left"},
 		{header:'${text("提现地址")}', name:'ipaddress', index:'a.ipaddress', width:150, align:"left"},
@@ -149,7 +141,6 @@ $('#dataGrid').dataGrid({
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
-		{header:'${text("状态 1")}', name:'cashStatus', index:'a.cash_status', width:150, align:"center"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('order:cash:edit')){ %>

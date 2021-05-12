@@ -17,6 +17,15 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('用户ID')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="userId" maxlength="30" class="form-control required"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> ${text('订单类型')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="type" class="form-control required digits"/>
@@ -26,16 +35,16 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('用户ID')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('1')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="userId" class="form-control required digits"/>
+								<#form:input path="orderStatus" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('order_no')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('订单号')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="orderNo" class="form-control required digits"/>
 							</div>
@@ -134,15 +143,6 @@
 								<span class="required hide">*</span> ${text('删除标志')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="delFlag" maxlength="1" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('1')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="orderStatus" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>

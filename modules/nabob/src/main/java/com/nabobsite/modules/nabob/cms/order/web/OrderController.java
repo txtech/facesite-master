@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.order.web;
 
@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.order.service.OrderService;
 /**
  * 订单Controller
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-12
  */
 @Controller
 @RequestMapping(value = "${adminPath}/order/order")
@@ -33,7 +33,7 @@ public class OrderController extends BaseController {
 
 	@Autowired
 	private OrderService orderService;
-
+	
 	/**
 	 * 获取数据
 	 */
@@ -41,7 +41,7 @@ public class OrderController extends BaseController {
 	public Order get(String id, boolean isNewRecord) {
 		return orderService.get(id, isNewRecord);
 	}
-
+	
 	/**
 	 * 查询列表
 	 */
@@ -51,7 +51,7 @@ public class OrderController extends BaseController {
 		model.addAttribute("order", order);
 		return "cms/order/orderList";
 	}
-
+	
 	/**
 	 * 查询列表数据
 	 */
@@ -84,7 +84,7 @@ public class OrderController extends BaseController {
 		orderService.save(order);
 		return renderResult(Global.TRUE, text("保存订单成功！"));
 	}
-
+	
 	/**
 	 * 删除数据
 	 */
@@ -95,5 +95,5 @@ public class OrderController extends BaseController {
 		orderService.delete(order);
 		return renderResult(Global.TRUE, text("删除订单成功！"));
 	}
-
+	
 }

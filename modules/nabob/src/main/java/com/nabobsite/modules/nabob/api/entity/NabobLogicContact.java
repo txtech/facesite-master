@@ -1,5 +1,7 @@
 package com.nabobsite.modules.nabob.api.entity;
 
+import java.math.BigDecimal;
+
 /**
  * @ClassName nada
  * @Author lihai
@@ -7,4 +9,6 @@ package com.nabobsite.modules.nabob.api.entity;
  * @Version 1.0
  */
 public class NabobLogicContact {
+    public final static BigDecimal ZERO = new BigDecimal("0");
+
 }

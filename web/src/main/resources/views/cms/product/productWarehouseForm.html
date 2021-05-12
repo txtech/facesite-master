@@ -1,15 +1,15 @@
-<% layout('/layouts/default.html', {title: '出款管理', libs: ['validate']}){ %>
+<% layout('/layouts/default.html', {title: '产品仓库管理', libs: ['validate']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header with-border">
 			<div class="box-title">
-				<i class="fa icon-note"></i> ${text(cash.isNewRecord ? '新增出款' : '编辑出款')}
+				<i class="fa icon-note"></i> ${text(productWarehouse.isNewRecord ? '新增产品仓库' : '编辑产品仓库')}
 			</div>
 			<div class="box-tools pull-right">
 				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 			</div>
 		</div>
-		<#form:form id="inputForm" model="${cash}" action="${ctx}/order/cash/save" method="post" class="form-horizontal">
+		<#form:form id="inputForm" model="${productWarehouse}" action="${ctx}/product/productWarehouse/save" method="post" class="form-horizontal">
 			<div class="box-body">
 				<div class="form-unit">${text('基本信息')}</div>
 				<#form:hidden path="id"/>
@@ -17,99 +17,54 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('用户ID')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('排序')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="userId" maxlength="30" class="form-control required"/>
+								<#form:input path="seq" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('类型 1')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('名称')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="type" class="form-control required digits"/>
+								<#form:input path="name" maxlength="1024" class="form-control required"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('状态 1')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('日收益比例')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="cashStatus" class="form-control required digits"/>
+								<#form:input path="dailyInterestRate" class="form-control required number"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('提现金额')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('限制日')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="cashMoney" class="form-control required number"/>
+								<#form:input path="days" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('提现手续费')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('图片地址')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="serviceCharge" class="form-control required number"/>
+								<#form:input path="productUrl" maxlength="1024" class="form-control required"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('提现地址')}：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> ${text('描述')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="ipaddress" maxlength="255" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('名称')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="name" maxlength="255" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('邮箱')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="email" maxlength="255" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('手机号码')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="phoneNumber" maxlength="20" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('提款账户')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="accountNo" maxlength="30" class="form-control"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('提款豹纹')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="cashMessage" maxlength="3200" class="form-control"/>
+								<#form:input path="desc" maxlength="2048" class="form-control"/>
 							</div>
 						</div>
 					</div>
@@ -160,7 +115,7 @@
 			<div class="box-footer">
 				<div class="row">
 					<div class="col-sm-offset-2 col-sm-10">
-						<% if (hasPermi('order:cash:edit')){ %>
+						<% if (hasPermi('product:productWarehouse:edit')){ %>
 							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
 						<% } %>
 						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>

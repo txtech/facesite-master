@@ -3,10 +3,19 @@
  */
 package com.jeesite.modules;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationContext;
 
 /**
  * Application
@@ -14,7 +23,10 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @version 2018-10-13
  */
 @SpringBootApplication(scanBasePackages={"com.jeesite.modules","com.nabobsite.modules.nabob"})
-public class Application extends SpringBootServletInitializer {
+public class Application extends SpringBootServletInitializer  implements CommandLineRunner {
+
+	@Autowired
+	private ApplicationContext appContext;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -26,4 +38,12 @@ public class Application extends SpringBootServletInitializer {
 		return builder.sources(Application.class);
 	}
 
+	@Override
+	public void run(String... args){
+		String[] beans = appContext.getBeanDefinitionNames();
+		Arrays.sort(beans);
+		for (String bean : beans) {
+			System.out.println(bean + " of Type :: " + appContext.getBean(bean).getClass());
+		}
+	}
 }

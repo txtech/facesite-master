@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.nabobsite.modules.game.cms.product.entity;
+package com.nabobsite.modules.nabob.cms.product.entity;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.NotBlank;
@@ -18,20 +18,18 @@ import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 
 /**
- * 产品机器人Entity
+ * 产品仓库Entity
  * @author face
  * @version 2021-05-12
  */
-@Table(name="t1_product_bot", alias="a", columns={
+@Table(name="t1_product_warehouse", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="seq", attrName="seq", label="排序"),
-		@Column(name="name", attrName="name", label="产品名称", queryType=QueryType.LIKE),
-		@Column(name="level", attrName="level", label="限制等级"),
-		@Column(name="price", attrName="price", label="价格"),
-		@Column(name="commission_rate", attrName="commissionRate", label="佣金比例"),
-		@Column(name="commission_rate_other", attrName="commissionRateOther", label="额外佣金比例"),
-		@Column(name="product_url", attrName="productUrl", label="产品图片"),
-		@Column(name="desc", attrName="desc", label="产品描述"),
+		@Column(name="name", attrName="name", label="名称", queryType=QueryType.LIKE),
+		@Column(name="daily_interest_rate", attrName="dailyInterestRate", label="日收益比例"),
+		@Column(name="days", attrName="days", label="限制日"),
+		@Column(name="product_url", attrName="productUrl", label="图片地址"),
+		@Column(name="desc", attrName="desc", label="描述"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
@@ -40,26 +38,24 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
 	}, orderBy="a.id DESC"
 )
-public class ProductBot extends DataEntity<ProductBot> {
+public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	
 	private static final long serialVersionUID = 1L;
 	private Integer seq;		// 排序
-	private String name;		// 产品名称
-	private Integer level;		// 限制等级
-	private BigDecimal price;		// 价格
-	private BigDecimal commissionRate;		// 佣金比例
-	private BigDecimal commissionRateOther;		// 额外佣金比例
-	private String productUrl;		// 产品图片
-	private String desc;		// 产品描述
+	private String name;		// 名称
+	private BigDecimal dailyInterestRate;		// 日收益比例
+	private Integer days;		// 限制日
+	private String productUrl;		// 图片地址
+	private String desc;		// 描述
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	
-	public ProductBot() {
+	public ProductWarehouse() {
 		this(null);
 	}
 
-	public ProductBot(String id){
+	public ProductWarehouse(String id){
 		super(id);
 	}
 	
@@ -72,8 +68,8 @@ public class ProductBot extends DataEntity<ProductBot> {
 		this.seq = seq;
 	}
 	
-	@NotBlank(message="产品名称不能为空")
-	@Length(min=0, max=520, message="产品名称长度不能超过 520 个字符")
+	@NotBlank(message="名称不能为空")
+	@Length(min=0, max=1024, message="名称长度不能超过 1024 个字符")
 	public String getName() {
 		return name;
 	}
@@ -82,43 +78,26 @@ public class ProductBot extends DataEntity<ProductBot> {
 		this.name = name;
 	}
 	
-	@NotNull(message="限制等级不能为空")
-	public Integer getLevel() {
-		return level;
+	@NotNull(message="日收益比例不能为空")
+	public BigDecimal getDailyInterestRate() {
+		return dailyInterestRate;
 	}
 
-	public void setLevel(Integer level) {
-		this.level = level;
+	public void setDailyInterestRate(BigDecimal dailyInterestRate) {
+		this.dailyInterestRate = dailyInterestRate;
 	}
 	
-	public BigDecimal getPrice() {
-		return price;
+	@NotNull(message="限制日不能为空")
+	public Integer getDays() {
+		return days;
 	}
 
-	public void setPrice(BigDecimal price) {
-		this.price = price;
+	public void setDays(Integer days) {
+		this.days = days;
 	}
 	
-	@NotNull(message="佣金比例不能为空")
-	public BigDecimal getCommissionRate() {
-		return commissionRate;
-	}
-
-	public void setCommissionRate(BigDecimal commissionRate) {
-		this.commissionRate = commissionRate;
-	}
-	
-	@NotNull(message="额外佣金比例不能为空")
-	public BigDecimal getCommissionRateOther() {
-		return commissionRateOther;
-	}
-
-	public void setCommissionRateOther(BigDecimal commissionRateOther) {
-		this.commissionRateOther = commissionRateOther;
-	}
-	
-	@NotBlank(message="产品图片不能为空")
-	@Length(min=0, max=1024, message="产品图片长度不能超过 1024 个字符")
+	@NotBlank(message="图片地址不能为空")
+	@Length(min=0, max=1024, message="图片地址长度不能超过 1024 个字符")
 	public String getProductUrl() {
 		return productUrl;
 	}
@@ -127,7 +106,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 		this.productUrl = productUrl;
 	}
 	
-	@Length(min=0, max=2024, message="产品描述长度不能超过 2024 个字符")
+	@Length(min=0, max=2048, message="描述长度不能超过 2048 个字符")
 	public String getDesc() {
 		return desc;
 	}

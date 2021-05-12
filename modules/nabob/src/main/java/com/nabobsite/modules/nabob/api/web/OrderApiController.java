@@ -25,6 +25,7 @@ import springfox.documentation.service.ApiListing;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -42,25 +43,43 @@ public class OrderApiController extends BaseController {
 
 	@PostMapping(value = {"rechargeOrder"})
 	@ApiOperation(value = "充值订单")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
-	public String rechargeOrder(String param_token,HttpServletRequest request) {
-		CommonResult<Order> result = orderApiService.rechargeOrder(new Order());
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),
+			@ApiImplicitParam(name = "payMoney", value = "充值金额", required = true),
+			@ApiImplicitParam(name = "name",  value = "名称", required = true),
+			@ApiImplicitParam(name = "email",value = "邮箱", required = true),
+			@ApiImplicitParam(name = "phoneNumber",value = "电话号码", required = true),
+	})
+	public String rechargeOrder(String param_token,String payMoney,String name,String email,String phoneNumber,HttpServletRequest request) {
+		String ip = HttpBrowserTools.getIpAddr(request);
+		Order order = new Order();
+		order.setName(name);
+		order.setEmail(email);
+		order.setIpaddress(ip);
+		order.setPhoneNumber(phoneNumber);
+		order.setPayMoney(new BigDecimal(payMoney));
+		CommonResult<Order> result = orderApiService.rechargeOrder(order,param_token);
 		return renderResult(Global.TRUE,text("rechargeOrder"), result);
 	}
 
 	@PostMapping(value = {"getOrderList"})
 	@ApiOperation(value = "获取订单列表")
 	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
-	public String getOrderList(String param_token,HttpServletRequest request) {
-		CommonResult<List<Order>> result = orderApiService.getOrderList(new Order());
+	public String getOrderList(String param_token) {
+		CommonResult<List<Order>> result = orderApiService.getOrderList(new Order(),param_token);
 		return renderResult(Global.TRUE,text("getOrderList"), result);
 	}
 
 	@PostMapping(value = {"getOrderInfo"})
 	@ApiOperation(value = "获取订单详情")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
-	public String getOrderInfo(String param_token,HttpServletRequest request) {
-		CommonResult<Order> result = orderApiService.getOrderInfo(new Order());
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),
+			@ApiImplicitParam(name = "orderNo", value = "订单号"),
+	})
+	public String getOrderInfo(String param_token,String orderNo) {
+		Order order = new Order();
+		order.setOrderNo(Long.valueOf(orderNo));
+		CommonResult<Order> result = orderApiService.getOrderInfo(order,param_token);
 		return renderResult(Global.TRUE,text("getOrderInfo"), result);
 	}
 }

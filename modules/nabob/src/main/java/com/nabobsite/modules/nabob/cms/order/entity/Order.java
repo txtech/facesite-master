@@ -1,13 +1,15 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.order.entity;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import com.jeesite.common.mybatis.annotation.JoinTable;
+import com.jeesite.common.mybatis.annotation.JoinTable.Type;
 import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.jeesite.common.entity.DataEntity;
@@ -18,14 +20,14 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 订单Entity
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-12
  */
 @Table(name="t1_order", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
-		@Column(name="type", attrName="type", label="订单类型"),
-		@Column(name="status", attrName="status", label="1", comment="1: 待支付 2:支付中 3:支付失败 4:支付成功 9:退款", isUpdate=false),
 		@Column(name="user_id", attrName="userId", label="用户ID"),
-		@Column(name="order_no", attrName="orderNo", label="order_no"),
+		@Column(name="type", attrName="type", label="订单类型"),
+		@Column(name="order_status", attrName="orderStatus", label="1", comment="1: 待支付 2:支付中 3:支付失败 4:支付成功 9:退款"),
+		@Column(name="order_no", attrName="orderNo", label="订单号"),
 		@Column(name="pay_money", attrName="payMoney", label="支付金额"),
 		@Column(name="actual_money", attrName="actualMoney", label="真实到账金额"),
 		@Column(name="name", attrName="name", label="名称", queryType=QueryType.LIKE),
@@ -41,13 +43,14 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class Order extends DataEntity<Order> {
-
+	
 	private static final long serialVersionUID = 1L;
-	private Long type;		// 订单类型
-	private Long userId;		// 用户ID
-	private Long orderNo;		// order_no
-	private Double payMoney;		// 支付金额
-	private Double actualMoney;		// 真实到账金额
+	private String userId;		// 用户ID
+	private Integer type;		// 订单类型
+	private Integer orderStatus;		// 1: 待支付 2:支付中 3:支付失败 4:支付成功 9:退款
+	private Long orderNo;		// 订单号
+	private BigDecimal payMoney;		// 支付金额
+	private BigDecimal actualMoney;		// 真实到账金额
 	private String name;		// 名称
 	private String email;		// 邮箱
 	private String ipaddress;		// 订单IP
@@ -55,7 +58,7 @@ public class Order extends DataEntity<Order> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-
+	
 	public Order() {
 		this(null);
 	}
@@ -63,26 +66,36 @@ public class Order extends DataEntity<Order> {
 	public Order(String id){
 		super(id);
 	}
-
-	@NotNull(message="订单类型不能为空")
-	public Long getType() {
-		return type;
-	}
-
-	public void setType(Long type) {
-		this.type = type;
-	}
-
-	@NotNull(message="用户ID不能为空")
-	public Long getUserId() {
+	
+	@NotBlank(message="用户ID不能为空")
+	@Length(min=0, max=30, message="用户ID长度不能超过 30 个字符")
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+	
+	@NotNull(message="订单类型不能为空")
+	public Integer getType() {
+		return type;
+	}
 
-	@NotNull(message="order_no不能为空")
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	
+	@NotNull(message="1不能为空")
+	public Integer getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(Integer orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+	
+	@NotNull(message="订单号不能为空")
 	public Long getOrderNo() {
 		return orderNo;
 	}
@@ -90,25 +103,25 @@ public class Order extends DataEntity<Order> {
 	public void setOrderNo(Long orderNo) {
 		this.orderNo = orderNo;
 	}
-
+	
 	@NotNull(message="支付金额不能为空")
-	public Double getPayMoney() {
+	public BigDecimal getPayMoney() {
 		return payMoney;
 	}
 
-	public void setPayMoney(Double payMoney) {
+	public void setPayMoney(BigDecimal payMoney) {
 		this.payMoney = payMoney;
 	}
-
+	
 	@NotNull(message="真实到账金额不能为空")
-	public Double getActualMoney() {
+	public BigDecimal getActualMoney() {
 		return actualMoney;
 	}
 
-	public void setActualMoney(Double actualMoney) {
+	public void setActualMoney(BigDecimal actualMoney) {
 		this.actualMoney = actualMoney;
 	}
-
+	
 	@NotBlank(message="名称不能为空")
 	@Length(min=0, max=255, message="名称长度不能超过 255 个字符")
 	public String getName() {
@@ -118,7 +131,7 @@ public class Order extends DataEntity<Order> {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
 	@NotBlank(message="邮箱不能为空")
 	@Length(min=0, max=255, message="邮箱长度不能超过 255 个字符")
 	public String getEmail() {
@@ -128,7 +141,7 @@ public class Order extends DataEntity<Order> {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	
 	@NotBlank(message="订单IP不能为空")
 	@Length(min=0, max=255, message="订单IP长度不能超过 255 个字符")
 	public String getIpaddress() {
@@ -138,7 +151,7 @@ public class Order extends DataEntity<Order> {
 	public void setIpaddress(String ipaddress) {
 		this.ipaddress = ipaddress;
 	}
-
+	
 	@NotBlank(message="电话号码不能为空")
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -147,7 +160,7 @@ public class Order extends DataEntity<Order> {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -156,7 +169,7 @@ public class Order extends DataEntity<Order> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -165,7 +178,7 @@ public class Order extends DataEntity<Order> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-
+	
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -174,5 +187,5 @@ public class Order extends DataEntity<Order> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-
+	
 }
