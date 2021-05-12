@@ -41,7 +41,7 @@ public class TriggerApiService {
      * @create 2021/5/11 10:33 下午
      */
     @Transactional (readOnly = false, rollbackFor = Exception.class)
-    public void payOrderTrigger(String userId,Long orderNo) {
+    public void payOrderTrigger(String userId,String orderNo) {
         TriggerThread callback = new UserOrderTrigger(userId,orderNo);
         timeOutManager.submit(callback);
     }

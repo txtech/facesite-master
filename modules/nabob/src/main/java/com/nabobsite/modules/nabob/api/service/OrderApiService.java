@@ -14,6 +14,7 @@ import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.CommonResult;
@@ -45,8 +46,6 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 	private OrderDao orderDao;
 	@Autowired
 	private UserInfoApiService userInfoApiService;
-	@Autowired
-	private TriggerApiService triggerApiService;
 
 	/**
 	 * @desc 充值订单
@@ -76,7 +75,6 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 			synchronized (orderNo) {
 				long dbResult = orderDao.insert(DbInstanceEntity.initOrderInfo(order,String.valueOf(orderNo)));
 				if(CommonStaticContact.dbResult(dbResult)){
-					triggerApiService.payOrderTrigger(userId,orderNo);
 					return ResultUtil.success(order);
 				}
 			}
@@ -133,43 +131,40 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 	}
 
 	/**
-	 * 获取单条数据
-	 * @param order
-	 * @return
+	 * @desc 根据订单号获取
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
 	 */
-	@Override
-	public Order get(Order order) {
-		return super.get(order);
+	public Order getOrderByOrderNo(String orderNo) {
+		try {
+			if(StringUtils.isEmpty(orderNo)){
+				return null;
+			}
+			Order order = new Order();
+			order.setOrderNo(orderNo);
+			return orderDao.getByEntity(order);
+		} catch (Exception e) {
+			logger.error("根据订单号获取异常",e);
+			return null;
+		}
 	}
 
 	/**
-	 * 保存数据（插入或更新）
-	 * @param order
+	 * @desc 根据ID修改
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
 	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void save(Order order) {
-		super.save(order);
+	public Boolean updateOrderById(String id,Order order) {
+		try {
+			if(StringUtils.isEmpty(id)){
+				return null;
+			}
+			order.setId(id);
+			long dbResult = orderDao.update(order);
+			return CommonStaticContact.dbResult(dbResult);
+		} catch (Exception e) {
+			logger.error("根据ID修改异常",e);
+			return null;
+		}
 	}
-
-	/**
-	 * 更新状态
-	 * @param order
-	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void updateStatus(Order order) {
-		super.updateStatus(order);
-	}
-
-	/**
-	 * 删除数据
-	 * @param order
-	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void delete(Order order) {
-		super.delete(order);
-	}
-
 }

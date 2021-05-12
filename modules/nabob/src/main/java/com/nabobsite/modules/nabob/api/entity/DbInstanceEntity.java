@@ -2,6 +2,7 @@ package com.nabobsite.modules.nabob.api.entity;
 
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountRecord;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.apache.commons.lang3.StringUtils;
 
@@ -61,6 +62,24 @@ public class DbInstanceEntity {
             userAccount.setIncomeMoney(new BigDecimal("0"));
             userAccount.setAccountStatus(CommonStaticContact.USER_ACCOUNT_STATUS_OK);
             return userAccount;
+        }
+    }
+
+    /**
+     * @desc 初始化用户账户记录信息
+     * @author nada
+     * @create 2021/5/12 2:58 下午
+     */
+    public static UserAccountRecord initUserAccountRecord(String userId,String accountId,BigDecimal payMoney,BigDecimal totalMoney){
+        synchronized (userId) {
+            UserAccountRecord userAccountRecord = new UserAccountRecord();
+            userAccountRecord.setIsNewRecord(true);
+            userAccountRecord.setType(1);
+            userAccountRecord.setUserId(userId);
+            userAccountRecord.setAccountId(accountId);
+            userAccountRecord.setTotalMoney(CommonStaticContact.add(totalMoney,payMoney));
+            userAccountRecord.setChangeMoney(payMoney);
+            return userAccountRecord;
         }
     }
 

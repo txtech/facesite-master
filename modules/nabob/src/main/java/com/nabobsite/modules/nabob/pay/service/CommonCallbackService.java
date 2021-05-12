@@ -9,9 +9,12 @@ import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
 import com.nabobsite.modules.nabob.api.entity.DbInstanceEntity;
 import com.nabobsite.modules.nabob.api.entity.NabobLogicContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
+import com.nabobsite.modules.nabob.api.service.OrderApiService;
+import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.CommonResult;
@@ -35,13 +38,11 @@ import java.util.List;
 public class CommonCallbackService extends CrudService<OrderDao, Order> {
 
 	@Autowired
-	private RedisOpsUtil redisOpsUtil;
-	@Autowired
-	private OrderDao orderDao;
-	@Autowired
-	private UserInfoApiService userInfoApiService;
-	@Autowired
 	private TriggerApiService triggerApiService;
+	@Autowired
+	private OrderApiService orderApiService;
+	@Autowired
+	private UserAccountApiService userAccountApiService;
 
 	/**
 	 * @desc 充值订单回调
@@ -51,9 +52,7 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 	public boolean callBack(String orderNo,String pOrderNo,int backStatus,String message) {
 		try {
 			synchronized (orderNo) {
-				Order order = new Order();
-				order.setOrderNo(orderNo);
-				Order oldOrder = orderDao.getByEntity(order);
+				Order oldOrder = orderApiService.getOrderByOrderNo(orderNo);
 				if(oldOrder == null){
 					logger.error("充值订单回调失败,订单不存在:{},{}",orderNo,pOrderNo);
 					return false;
@@ -90,12 +89,15 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 	 * @create 2021/5/12 7:03 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean doExecute(Order order,String pOrderNo,int backStatus,String message) {
+	public boolean doExecute(Order oldOrder,String pOrderNo,int backStatus,String message) {
 		try {
-			String userId = order.getUserId();
-			String orderNo = order.getOrderNo();
+			String id = oldOrder.getId();
+			int type = oldOrder.getType();
+			String userId = oldOrder.getUserId();
+			String orderNo = oldOrder.getOrderNo();
+			BigDecimal actualMoney = oldOrder.getActualMoney();
 			Order newOrder = new Order();
-			newOrder.setId(order.getId());
+			newOrder.setId(id);
 			newOrder.setPorderNo(pOrderNo);
 			newOrder.setRemarks(message);
 			if(backStatus == CommonStaticContact.ORDER_STATUS_3){
@@ -103,10 +105,26 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 			}else if(backStatus == CommonStaticContact.ORDER_STATUS_4){
 				newOrder.setOrderStatus(CommonStaticContact.ORDER_STATUS_4);
 			}
-			long dbResult = orderDao.update(newOrder);
-			if(!CommonStaticContact.dbResult(dbResult)){
+			Boolean isOk = orderApiService.updateOrderById(id,newOrder);
+			if(!isOk){
 				logger.error("充值订单回调失败,更新订单失败:{},{}",orderNo,pOrderNo);
 				return false;
+			}
+			if(backStatus == CommonStaticContact.ORDER_STATUS_3){
+				logger.error("充值订单回调失败,更新订单成功:{},{}",orderNo,pOrderNo);
+				return true;
+			}
+			if(backStatus != CommonStaticContact.ORDER_STATUS_4){
+				logger.error("充值订单回调失败,更新订单失败:{},{}",orderNo,pOrderNo);
+				return false;
+			}
+			isOk = userAccountApiService.addAccount(userId,actualMoney);
+			if(!isOk){
+				logger.error("充值订单回调失败,更新账户失败:{},{}",orderNo,pOrderNo);
+				return false;
+			}
+			if(type == CommonStaticContact.ORDER_TYPE_RECHANGE){
+				triggerApiService.payOrderTrigger(userId,orderNo);
 			}
 			return true;
 		} catch (Exception e) {

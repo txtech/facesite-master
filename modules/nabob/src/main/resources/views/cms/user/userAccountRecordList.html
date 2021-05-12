@@ -17,15 +17,21 @@
 			<#form:form id="searchForm" model="${userAccountRecord}" action="${ctx}/user/userAccountRecord/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('类型')}：</label>
+					<label class="control-label">${text('用户ID')}：</label>
 					<div class="control-inline">
-						<#form:input path="type" class="form-control width-120"/>
+						<#form:input path="userId" maxlength="30" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('账户ID')}：</label>
 					<div class="control-inline">
-						<#form:input path="accountId" class="form-control width-120"/>
+						<#form:input path="accountId" maxlength="30" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="type" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -88,10 +94,11 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("类型")}', name:'type', index:'a.type', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/user/userAccountRecord/form?id='+row.id+'" class="btnList" data-title="${text("编辑账户账务明显")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("账户ID")}', name:'accountId', index:'a.account_id', width:150, align:"center"},
+		{header:'${text("账户ID")}', name:'accountId', index:'a.account_id', width:150, align:"left"},
+		{header:'${text("类型")}', name:'type', index:'a.type', width:150, align:"center"},
 		{header:'${text("总金额")}', name:'totalMoney', index:'a.total_money', width:150, align:"left"},
 		{header:'${text("变化金额")}', name:'changeMoney', index:'a.change_money', width:150, align:"left"},
 		{header:'${text("备注")}', name:'remark', index:'a.remark', width:150, align:"left"},

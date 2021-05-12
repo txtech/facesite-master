@@ -14,5 +14,8 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
  */
 @MyBatisDao
 public interface UserAccountDao extends CrudDao<UserAccount> {
-	
+
+    public Long addAccount(UserAccount userAccount);
+
+    public Long subtractAccount(UserAccount userAccount);
 }

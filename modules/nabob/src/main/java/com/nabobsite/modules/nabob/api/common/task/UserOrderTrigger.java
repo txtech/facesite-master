@@ -10,9 +10,9 @@ import com.nabobsite.modules.nabob.api.common.trigger.TriggerOperation;
 public class UserOrderTrigger extends TriggerOperation {
 
 	private String userId;
-	private Long orderNo;
+	private String orderNo;
 
-	public UserOrderTrigger(String userId, Long orderNo) {
+	public UserOrderTrigger(String userId, String orderNo) {
 		super(userId);
 		this.orderNo = orderNo;
 	}
@@ -22,11 +22,11 @@ public class UserOrderTrigger extends TriggerOperation {
 		LOG.info("用户支付触发，userId:{},orderNo:{}",userId,orderNo);
 	}
 
-	public Long getOrderNo() {
+	public String getOrderNo() {
 		return orderNo;
 	}
 
-	public void setOrderNo(Long orderNo) {
+	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
 	}
 }

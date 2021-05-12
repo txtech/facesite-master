@@ -1,13 +1,15 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.user.entity;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import com.jeesite.common.mybatis.annotation.JoinTable;
+import com.jeesite.common.mybatis.annotation.JoinTable.Type;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.jeesite.common.entity.DataEntity;
@@ -18,12 +20,13 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 账户账务明显Entity
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-12
  */
 @Table(name="t1_user_account_record", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
-		@Column(name="type", attrName="type", label="类型"),
+		@Column(name="user_id", attrName="userId", label="用户ID"),
 		@Column(name="account_id", attrName="accountId", label="账户ID"),
+		@Column(name="type", attrName="type", label="类型"),
 		@Column(name="total_money", attrName="totalMoney", label="总金额"),
 		@Column(name="change_money", attrName="changeMoney", label="变化金额"),
 		@Column(name="remark", attrName="remark", label="备注"),
@@ -36,17 +39,18 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class UserAccountRecord extends DataEntity<UserAccountRecord> {
-
+	
 	private static final long serialVersionUID = 1L;
-	private Long type;		// 类型
-	private Long accountId;		// 账户ID
-	private Double totalMoney;		// 总金额
-	private Double changeMoney;		// 变化金额
+	private String userId;		// 用户ID
+	private String accountId;		// 账户ID
+	private Integer type;		// 类型
+	private BigDecimal totalMoney;		// 总金额
+	private BigDecimal changeMoney;		// 变化金额
 	private String remark;		// 备注
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-
+	
 	public UserAccountRecord() {
 		this(null);
 	}
@@ -54,43 +58,52 @@ public class UserAccountRecord extends DataEntity<UserAccountRecord> {
 	public UserAccountRecord(String id){
 		super(id);
 	}
-
-	@NotNull(message="类型不能为空")
-	public Long getType() {
-		return type;
+	
+	@Length(min=0, max=30, message="用户ID长度不能超过 30 个字符")
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setType(Long type) {
-		this.type = type;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-
-	@NotNull(message="账户ID不能为空")
-	public Long getAccountId() {
+	
+	@Length(min=0, max=30, message="账户ID长度不能超过 30 个字符")
+	public String getAccountId() {
 		return accountId;
 	}
 
-	public void setAccountId(Long accountId) {
+	public void setAccountId(String accountId) {
 		this.accountId = accountId;
 	}
+	
+	@NotNull(message="类型不能为空")
+	public Integer getType() {
+		return type;
+	}
 
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	
 	@NotNull(message="总金额不能为空")
-	public Double getTotalMoney() {
+	public BigDecimal getTotalMoney() {
 		return totalMoney;
 	}
 
-	public void setTotalMoney(Double totalMoney) {
+	public void setTotalMoney(BigDecimal totalMoney) {
 		this.totalMoney = totalMoney;
 	}
-
+	
 	@NotNull(message="变化金额不能为空")
-	public Double getChangeMoney() {
+	public BigDecimal getChangeMoney() {
 		return changeMoney;
 	}
 
-	public void setChangeMoney(Double changeMoney) {
+	public void setChangeMoney(BigDecimal changeMoney) {
 		this.changeMoney = changeMoney;
 	}
-
+	
 	@NotBlank(message="备注不能为空")
 	@Length(min=0, max=520, message="备注长度不能超过 520 个字符")
 	public String getRemark() {
@@ -100,7 +113,7 @@ public class UserAccountRecord extends DataEntity<UserAccountRecord> {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -109,7 +122,7 @@ public class UserAccountRecord extends DataEntity<UserAccountRecord> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -118,7 +131,7 @@ public class UserAccountRecord extends DataEntity<UserAccountRecord> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-
+	
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -127,5 +140,5 @@ public class UserAccountRecord extends DataEntity<UserAccountRecord> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-
+	
 }
