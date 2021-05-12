@@ -87,49 +87,6 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 	}
 
 	/**
-	 * @desc 根据ID减去账户并记录日志
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean subtractAccount(String userId, BigDecimal actualMoney) {
-		try {
-			//金额转为负数
-			actualMoney = actualMoney.negate();
-			synchronized (userId){
-				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
-				if(oldUserAccount == null){
-					logger.error("减去账户失败,账户信息为空:{}",userId);
-					return false;
-				}
-				String accountId = oldUserAccount.getId();
-				BigDecimal totalMoney = oldUserAccount.getTotalMoney();
-				String remark = "减少:"+actualMoney;
-				UserAccountRecord userAccountRecord = DbInstanceEntity.initUserAccountRecord(userId,accountId,actualMoney,totalMoney,remark);
-				long dbResult = userAccountRecordDao.insert(userAccountRecord);
-				if(!CommonStaticContact.dbResult(dbResult)){
-					logger.error("减去账户失败,记录明细失败:{},{}",userId,accountId);
-					return false;
-				}
-				UserAccount userAccount = new UserAccount();
-				userAccount.setId(accountId);
-				userAccount.setUserId(userId);
-				userAccount.setTotalMoney(actualMoney);
-				dbResult = userAccountDao.updateAccountTotalMoney(userAccount);
-				if(CommonStaticContact.dbResult(dbResult)){
-					logger.info("减去账户成功,记录明细成功:{},{}",userId,accountId);
-					return true;
-				}
-				logger.info("减去账户失败,减去账户失败:{},{}",userId,accountId);
-				return false;
-			}
-		} catch (Exception e) {
-			logger.error("根据ID减去账户异常",e);
-			return false;
-		}
-	}
-
-	/**
 	 * @desc 根据账号ID获取账户信息
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
