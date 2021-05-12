@@ -6,9 +6,16 @@ package com.nabobsite.modules.nabob.api.service;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.cms.order.dao.CashDao;
+import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Cash;
+import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.utils.CommonResult;
+import com.nabobsite.modules.nabob.utils.ResultUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 出款Service
@@ -18,6 +25,57 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly=true)
 public class CashApiService extends CrudService<CashDao, Cash> {
+
+	@Autowired
+	private CashDao cashDao;
+
+	/**
+	 * @desc 提款订单
+	 * @author nada
+	 * @create 2021/5/12 1:10 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Cash> cashOrder(Cash cash) {
+		try {
+			long dbResult = cashDao.insert(cash);
+			return ResultUtil.success(cash);
+		} catch (Exception e) {
+			logger.error("Failed to recharge order!",e);
+			return ResultUtil.failed("Failed to recharge order!");
+		}
+	}
+
+	/**
+	 * @desc 获取提款订单列表
+	 * @author nada
+	 * @create 2021/5/12 1:10 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<List<Cash>> getCashOrderList(Cash cash) {
+		try {
+			List<Cash> result = cashDao.findList(cash);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("Failed to get Cash order list!",e);
+			return ResultUtil.failed("Failed to get Cash order list!");
+		}
+	}
+
+	/**
+	 * @desc 获取提款订单详情
+	 * @author nada
+	 * @create 2021/5/12 1:10 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Cash> getCashOrderInfo(Cash cash) {
+		try {
+			Cash result = cashDao.getByEntity(cash);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("Failed to get Cash order info!",e);
+			return ResultUtil.failed("Failed to get Cash order info!");
+		}
+	}
 
 	/**
 	 * 获取单条数据

@@ -38,8 +38,8 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<TaskInfo>> getTaskList(TaskInfo taskInfo) {
 		try {
-			List<TaskInfo> list = taskInfoDao.findList(taskInfo);
-			return ResultUtil.success(list);
+			List<TaskInfo> result = taskInfoDao.findList(taskInfo);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("Failed to get task list!",e);
 			return ResultUtil.failed("Failed to get task list!");
@@ -55,8 +55,8 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<TaskInfo> getTaskInfo(TaskInfo taskInfo) {
 		try {
-			TaskInfo taskInfo1 = taskInfoDao.getByEntity(taskInfo);
-			return ResultUtil.success(taskInfo1);
+			TaskInfo result = taskInfoDao.getByEntity(taskInfo);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("Failed to get task list!",e);
 			return ResultUtil.failed("Failed to get task info!");
