@@ -77,6 +77,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('解锁状态：1')}：</label>
+					<div class="control-inline">
+						<#form:input path="lock" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('注册IP')}：</label>
 					<div class="control-inline">
 						<#form:input path="ipaddress" maxlength="520" class="form-control width-120"/>
@@ -86,6 +92,12 @@
 					<label class="control-label">${text('团队总人数')}：</label>
 					<div class="control-inline">
 						<#form:input path="teamNum" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('登陆IP')}：</label>
+					<div class="control-inline">
+						<#form:input path="loginIp" maxlength="50" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -140,12 +152,6 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('登陆IP')}：</label>
-					<div class="control-inline">
-						<#form:input path="loginIp" maxlength="50" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -173,8 +179,10 @@ $('#dataGrid').dataGrid({
 		{header:'${text("电话号码")}', name:'phoneNumber', index:'a.phone_number', width:150, align:"left"},
 		{header:'${text("邀请码")}', name:'inviteCode', index:'a.invite_code', width:150, align:"left"},
 		{header:'${text("最喜欢的人")}', name:'favorite', index:'a.favorite', width:150, align:"left"},
+		{header:'${text("解锁状态：1")}', name:'lock', index:'a.lock', width:150, align:"center"},
 		{header:'${text("注册IP")}', name:'ipaddress', index:'a.ipaddress', width:150, align:"left"},
 		{header:'${text("团队总人数")}', name:'teamNum', index:'a.team_num', width:150, align:"center"},
+		{header:'${text("登陆IP")}', name:'loginIp', index:'a.login_ip', width:150, align:"left"},
 		{header:'${text("一级团队人数")}', name:'teamNum1', index:'a.team_num_1', width:150, align:"center"},
 		{header:'${text("二级团队人数")}', name:'teamNum2', index:'a.team_num_2', width:150, align:"center"},
 		{header:'${text("三级团队人数")}', name:'teamNum3', index:'a.team_num_3', width:150, align:"center"},
@@ -183,7 +191,6 @@ $('#dataGrid').dataGrid({
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
-		{header:'${text("登陆IP")}', name:'loginIp', index:'a.login_ip', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:userInfo:edit')){ %>

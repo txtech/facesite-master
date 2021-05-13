@@ -16,7 +16,7 @@ import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 /**
  * 会员用户Service
  * @author face
- * @version 2021-05-12
+ * @version 2021-05-13
  */
 @Service
 @Transactional(readOnly=true)

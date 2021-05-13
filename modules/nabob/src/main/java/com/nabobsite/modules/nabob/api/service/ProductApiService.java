@@ -25,12 +25,10 @@ import java.util.List;
 @Transactional(readOnly=true)
 public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 
-
 	@Autowired
 	private ProductBotDao productBotDao;
 	@Autowired
 	private ProductWarehouseDao productWarehouseDao;
-
 
 	/**
 	 * @desc 获取无人机产品列表

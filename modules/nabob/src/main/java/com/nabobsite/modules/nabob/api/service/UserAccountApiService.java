@@ -37,6 +37,8 @@ import java.util.List;
 public class UserAccountApiService extends CrudService<UserAccountDao, UserAccount> {
 
 	@Autowired
+	private UserInfoDao userInfoDao;
+	@Autowired
 	private UserAccountDao userAccountDao;
 	@Autowired
 	private UserAccountRecordDao userAccountRecordDao;

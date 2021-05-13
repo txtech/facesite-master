@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 /**
  * 会员用户DAO接口
  * @author face
- * @version 2021-05-12
+ * @version 2021-05-13
  */
 @MyBatisDao
 public interface UserInfoDao extends CrudDao<UserInfo> {

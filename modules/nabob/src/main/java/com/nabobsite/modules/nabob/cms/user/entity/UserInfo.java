@@ -19,7 +19,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 会员用户Entity
  * @author face
- * @version 2021-05-12
+ * @version 2021-05-13
  */
 @Table(name="t1_user_info", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -33,8 +33,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="phone_number", attrName="phoneNumber", label="电话号码"),
 		@Column(name="invite_code", attrName="inviteCode", label="邀请码"),
 		@Column(name="favorite", attrName="favorite", label="最喜欢的人"),
+		@Column(name="lock", attrName="lock", label="解锁状态：1", comment="解锁状态：1:解锁 2:锁定"),
 		@Column(name="ipaddress", attrName="ipaddress", label="注册IP"),
 		@Column(name="team_num", attrName="teamNum", label="团队总人数"),
+		@Column(name="login_ip", attrName="loginIp", label="登陆IP"),
 		@Column(name="team_num_1", attrName="teamNum1", label="一级团队人数"),
 		@Column(name="team_num_2", attrName="teamNum2", label="二级团队人数"),
 		@Column(name="team_num_3", attrName="teamNum3", label="三级团队人数"),
@@ -45,7 +47,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
-		@Column(name="login_ip", attrName="loginIp", label="登陆IP"),
 	}, orderBy="a.id DESC"
 )
 public class UserInfo extends DataEntity<UserInfo> {
@@ -61,8 +62,10 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private String phoneNumber;		// 电话号码
 	private String inviteCode;		// 邀请码
 	private String favorite;		// 最喜欢的人
+	private Integer lock;		// 解锁状态：1:解锁 2:锁定
 	private String ipaddress;		// 注册IP
 	private Integer teamNum;		// 团队总人数
+	private String loginIp;		// 登陆IP
 	private Integer teamNum1;		// 一级团队人数
 	private Integer teamNum2;		// 二级团队人数
 	private Integer teamNum3;		// 三级团队人数
@@ -70,8 +73,8 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	private String loginIp;		// 登陆IP
 	private String token;
+
 
 	public UserInfo() {
 		this(null);
@@ -178,6 +181,14 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.favorite = favorite;
 	}
 
+	public Integer getLock() {
+		return lock;
+	}
+
+	public void setLock(Integer lock) {
+		this.lock = lock;
+	}
+
 	@Length(min=0, max=520, message="注册IP长度不能超过 520 个字符")
 	public String getIpaddress() {
 		return ipaddress;
@@ -194,6 +205,15 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setTeamNum(Integer teamNum) {
 		this.teamNum = teamNum;
+	}
+
+	@Length(min=0, max=50, message="登陆IP长度不能超过 50 个字符")
+	public String getLoginIp() {
+		return loginIp;
+	}
+
+	public void setLoginIp(String loginIp) {
+		this.loginIp = loginIp;
 	}
 
 	@NotNull(message="一级团队人数不能为空")
@@ -257,15 +277,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
-	}
-
-	@Length(min=0, max=50, message="登陆IP长度不能超过 50 个字符")
-	public String getLoginIp() {
-		return loginIp;
-	}
-
-	public void setLoginIp(String loginIp) {
-		this.loginIp = loginIp;
 	}
 
 	public String getToken() {

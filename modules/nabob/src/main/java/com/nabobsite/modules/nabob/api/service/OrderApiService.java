@@ -3,32 +3,23 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.jeesite.common.config.Global;
-import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
-import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
 import com.nabobsite.modules.nabob.api.entity.DbInstanceEntity;
 import com.nabobsite.modules.nabob.api.entity.NabobLogicContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.CommonResult;
 import com.nabobsite.modules.nabob.utils.ResultUtil;
 import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**

@@ -16,7 +16,6 @@ import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.cms.user.service.UserInfoService;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.CommonResult;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
@@ -26,10 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
-import springfox.documentation.service.ApiListing;
-
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -47,6 +42,8 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	private UserInfoDao userInfoDao;
 	@Autowired
 	private SequenceService sequenceService;
+	@Autowired
+	private UserAccountApiService userAccountApiService;
 	@Autowired
 	private TriggerApiService triggerApiService;
 
@@ -294,7 +291,9 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				UserInfo initUser = DbInstanceEntity.initUserInfo(userInfo);
 				long dbResult = userInfoDao.insert(initUser);
 				if(CommonStaticContact.dbResult(dbResult)){
-					triggerApiService.registerTrigger(initUser.getId());
+					String userId = initUser.getId();
+					userAccountApiService.save(DbInstanceEntity.initUserAccount(userId));
+					triggerApiService.registerTrigger(userId);
 					return ResultUtil.success(Boolean.TRUE);
 				}
 				return ResultUtil.failed("注册账号失败");
@@ -377,6 +376,4 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 		String md5Pass = DigestUtils.md5DigestAsHex(password.getBytes());
 		return md5Pass;
 	}
-
-
 }

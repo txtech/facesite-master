@@ -12,6 +12,17 @@ import java.util.Map;
  */
 public class TaskLogicStaticContact {
 
+    //用户等级
+    public final static int USER_LEVEL_0 = 0;
+    public final static int USER_LEVEL_1 = 1;
+    public final static int USER_LEVEL_2 = 2;
+    public final static int USER_LEVEL_3 = 3;
+    public final static int USER_LEVEL_4 = 4;
+    public final static int USER_LEVEL_5 = 5;
+    public final static int USER_LEVEL_6 = 6;
+    public final static int USER_LEVEL_7 = 7;
+    public final static int USER_LEVEL_8 = 8;
+
     //会员等级--余额账户-佣金比例
     public static volatile Map<Integer, BigDecimal> LEVEL_BALANCE_COMMISSION_RATE = new HashMap();
     //会员等级--余额账户-10次任务收益
@@ -92,5 +103,22 @@ public class TaskLogicStaticContact {
         LEVEL_BALANCE_TASK_INCOME.put(5,new BigDecimal("9000"));
         LEVEL_BALANCE_TASK_INCOME.put(6,new BigDecimal("28500"));
         LEVEL_BALANCE_TASK_INCOME.put(7,new BigDecimal("50000"));
+    }
+
+    /**
+     * @desc 根据余额获取最高等级
+     * @author nada
+     * @create 2021/5/12 10:54 下午
+    */
+    public static int getMaxUserLevelByTotalBalance(BigDecimal money){
+        int tempMaxLevel = 0;
+        for(Map.Entry<Integer, BigDecimal> entry : LEVEL_BALANCE_MIN_BALANCE.entrySet()){
+            int key = entry.getKey();
+            BigDecimal value = entry.getValue();
+            if(CommonStaticContact.isBigger(money,value) && tempMaxLevel < key){
+                tempMaxLevel = key;
+            }
+        }
+        return tempMaxLevel;
     }
 }

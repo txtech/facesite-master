@@ -3,9 +3,10 @@ package com.nabobsite.modules.nabob.api.common;
 import com.nabobsite.modules.nabob.api.common.task.UserOrderTrigger;
 import com.nabobsite.modules.nabob.api.common.task.UserRegisterTrigger;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerPoolManagerImpl;
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerQueueManagerImpl;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerThread;
-import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
+import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
+import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
+import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
  * @Version 1.0
  */
 @Service
-@Transactional(readOnly=true)
 public class TriggerApiService {
-
     @Autowired
-    private TriggerPoolManagerImpl timeOutManager;
+    private OrderDao orderDao;
     @Autowired
-    private UserAccountApiService userAccountApiService;
+    private UserInfoDao userInfoDao;
+    @Autowired
+    private UserAccountDao userAccountDao;
+    @Autowired
+    private TriggerPoolManagerImpl triggerPoolManager;
 
     /**
      * @desc 注册成功触发器
@@ -31,8 +34,8 @@ public class TriggerApiService {
      */
     @Transactional (readOnly = false, rollbackFor = Exception.class)
     public void registerTrigger(String userId){
-        TriggerThread callback = new UserRegisterTrigger(userId,userAccountApiService);
-        timeOutManager.submit(callback);
+        TriggerThread callback = new UserRegisterTrigger(userId);
+        triggerPoolManager.submit(callback);
     }
 
     /**
@@ -42,7 +45,7 @@ public class TriggerApiService {
      */
     @Transactional (readOnly = false, rollbackFor = Exception.class)
     public void payOrderTrigger(String userId,String orderNo) {
-        TriggerThread callback = new UserOrderTrigger(userId,orderNo);
-        timeOutManager.submit(callback);
+        TriggerThread callback = new UserOrderTrigger(userId,orderNo,orderDao,userInfoDao,userAccountDao);
+        triggerPoolManager.submit(callback);
     }
 }
