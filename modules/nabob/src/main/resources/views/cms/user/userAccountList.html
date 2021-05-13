@@ -66,10 +66,22 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('增值账户')}：</label>
+					<div class="control-inline">
+						<#form:input path="incrementMoney" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('更新时间')}：</label>
 					<div class="control-inline">
 						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('可提取账户')}：</label>
+					<div class="control-inline">
+						<#form:input path="claimableMoney" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -85,15 +97,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('增值账户')}：</label>
+					<label class="control-label">${text('任务账户')}：</label>
 					<div class="control-inline">
-						<#form:input path="incrementMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('可提取账户')}：</label>
-					<div class="control-inline">
-						<#form:input path="claimableMoney" class="form-control width-120"/>
+						<#form:input path="taskMoney" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -122,11 +128,12 @@ $('#dataGrid').dataGrid({
 		{header:'${text("收入资金")}', name:'incomeMoney', index:'a.income_money', width:150, align:"left"},
 		{header:'${text("ai资产")}', name:'aiAssetsMoney', index:'a.ai_assets_money', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("增值账户")}', name:'incrementMoney', index:'a.increment_money', width:150, align:"left"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
+		{header:'${text("可提取账户")}', name:'claimableMoney', index:'a.claimable_money', width:150, align:"left"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
-		{header:'${text("增值账户")}', name:'incrementMoney', index:'a.increment_money', width:150, align:"left"},
-		{header:'${text("可提取账户")}', name:'claimableMoney', index:'a.claimable_money', width:150, align:"left"},
+		{header:'${text("任务账户")}', name:'taskMoney', index:'a.task_money', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:userAccount:edit')){ %>

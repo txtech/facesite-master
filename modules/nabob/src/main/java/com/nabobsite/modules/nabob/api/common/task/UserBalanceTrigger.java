@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 
 /**
- * @desc 用户支付触发
+ * @desc 用户余额触发
  * @author nada
  * @create 2021/5/12 5:41 下午
 */
@@ -32,15 +32,15 @@ public class UserBalanceTrigger extends TriggerOperation {
 
 	@Override
 	public void execute() {
-		LOG.info("用户支付触发，userId:{},money:{}",userId,payMoney);
+		LOG.info("用户余额触发，userId:{},money:{}",userId,payMoney);
 		UserInfo userInfo = this.getUserInfoByUserId(userId);
 		if(userInfo == null){
-			LOG.error("用户支付触发,用户为空:{}",userId);
+			LOG.error("用户余额触发,用户为空:{}",userId);
 			return;
 		}
 		UserAccount userAccount = userAccountApiService.getUserAccountByUserId(userId);
 		if(userInfo == null){
-			LOG.error("用户支付触发,用户账户为空:{}",userId);
+			LOG.error("用户余额触发,用户账户为空:{}",userId);
 			return;
 		}
 		int oldLock = userInfo.getLock();
@@ -53,15 +53,15 @@ public class UserBalanceTrigger extends TriggerOperation {
 			int userLock = this.getUserLock(userId,currentLevel,payMoney);
 			Boolean isUpLevelOk = this.updateUpLevel(userId,maxLevel,userLock);
 			if(isUpLevelOk){
-				LOG.info("用户支付触发,用户升级且解锁:{},{}",userId,isUpLevelOk);
+				LOG.info("用户余额触发,用户升级且解锁:{},{}",userId,isUpLevelOk);
 				isUpLevelOk = this.updateParentUpLock(parent1Id);
-				LOG.info("用户支付触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
+				LOG.info("用户余额触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
 			}
 		}else{
 			int userLock = this.getUserLock(userId,currentLevel,payMoney);
 			if(oldLock != CommonStaticContact.USER_LOCK_1 && userLock == CommonStaticContact.USER_LOCK_1){
 				Boolean isUpLevelOk = this.updateLock(userId,userLock);
-				LOG.info("用户支付触发,用户不升级只解锁:{},{}",userId,isUpLevelOk);
+				LOG.info("用户余额触发,用户不升级只解锁:{},{}",userId,isUpLevelOk);
 			}
 		}
 	}
@@ -80,7 +80,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			int teamNum = this.getLevelUpTeamNum(parent1Id);
 			if(teamNum >= LogicStaticContact.USER_LEVEL_UP_TEAM_NUM){
 				Boolean isUpLevelOk = this.updateLock(parent1Id,CommonStaticContact.USER_LOCK_1);
-				LOG.info("用户支付触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
+				LOG.info("用户余额触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
 			}
 			return true;
 		} catch (Exception e) {
@@ -89,7 +89,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 		}
 	}
 	/**
-	 * @desc 根据账号ID升级
+	 * @desc 账号等级升级
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
@@ -111,7 +111,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 		}
 	}
 	/**
-	 * @desc 根据账号ID解锁
+	 * @desc 当前用户解锁
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */

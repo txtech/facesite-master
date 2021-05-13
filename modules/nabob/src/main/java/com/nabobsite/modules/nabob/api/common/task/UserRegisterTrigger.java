@@ -9,7 +9,6 @@ import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -41,18 +40,16 @@ public class UserRegisterTrigger extends TriggerOperation {
 			LOG.error("用户注册触发器,用户为空:{}",userId);
 			return;
 		}
-		//注册送100卢比
+
 		BigDecimal rewardMoney = LogicStaticContact.USER_REGISTER_REWARD;
 		String title = "注册奖励:"+rewardMoney;
-		boolean isOkReward = userAccountApiService.addRewardRecord(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_1,rewardMoney,title,title);
-		if(isOkReward){
-			Boolean isOk = userAccountApiService.addAccount(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_2,rewardMoney,title,"");
-			if(isOk){
-				TriggerThread callback = new UserBalanceTrigger(userId,rewardMoney,userInfoDao,userAccountApiService);
-				triggerPoolManager.submit(callback);
-				LOG.info("用户注册触发器,注册奖励:{},{}",userId,title);
-			}
+		boolean isOk = this.sendReward(rewardMoney,title);
+		if(isOk){
+			TriggerThread callback = new UserBalanceTrigger(userId,rewardMoney,userInfoDao,userAccountApiService);
+			triggerPoolManager.submit(callback);
+			LOG.info("用户注册触发器,注册奖励:{},{}",userId,title);
 		}
+
 		//修改团队人数
 		String parent1UserId = curUserInfo.getParentUserId();
 		String parent2UserId = curUserInfo.getParent2UserId();
@@ -61,6 +58,25 @@ public class UserRegisterTrigger extends TriggerOperation {
 		if(isok){
 			LOG.error("用户注册触发器,修改团队人数失败:{}",userId);
 			return;
+		}
+	}
+
+	/**
+	 * @desc 注册送奖励，注册送100卢比
+	 * @author nada
+	 * @create 2021/5/13 8:16 下午
+	*/
+	@Transactional(readOnly = false, rollbackFor = Exception.class)
+	public Boolean sendReward(BigDecimal rewardMoney,String title) {
+		try {
+			boolean isOkReward = userAccountApiService.addRewardRecord(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_1,rewardMoney,title,title);
+			if(!isOkReward){
+				return false;
+			}
+			return userAccountApiService.addAccountBalance(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_2,rewardMoney,title,title);
+		} catch (Exception e) {
+			LOG.error("注册送奖励异常",e);
+			return false;
 		}
 	}
 
@@ -102,7 +118,7 @@ public class UserRegisterTrigger extends TriggerOperation {
 			return true;
 		} catch (Exception e) {
 			LOG.error("修改团队人数异常",e);
-			return null;
+			return false;
 		}
 	}
 

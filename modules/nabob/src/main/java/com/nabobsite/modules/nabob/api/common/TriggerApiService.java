@@ -45,7 +45,7 @@ public class TriggerApiService {
      * @create 2021/5/11 10:33 下午
      */
     @Transactional (readOnly = false, rollbackFor = Exception.class)
-    public void payOrderTrigger(String userId,BigDecimal payMoney) {
+    public void balanceTrigger(String userId,BigDecimal payMoney) {
         TriggerThread callback = new UserBalanceTrigger(userId,payMoney,userInfoDao,userAccountApiService);
         triggerPoolManager.submit(callback);
     }

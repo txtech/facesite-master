@@ -1,43 +1,49 @@
-<% layout('/layouts/default.html', {title: '用户任务管理', libs: ['dataGrid']}){ %>
+<% layout('/layouts/default.html', {title: '任务列表管理', libs: ['dataGrid']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header">
 			<div class="box-title">
-				<i class="fa icon-notebook"></i> ${text('用户任务管理')}
+				<i class="fa icon-notebook"></i> ${text('任务列表管理')}
 			</div>
 			<div class="box-tools pull-right">
 				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
-				<% if(hasPermi('task:userTask:edit')){ %>
-					<a href="${ctx}/task/userTask/form" class="btn btn-default btnTool" title="${text('新增用户任务')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% if(hasPermi('task:taskInfo:edit')){ %>
+					<a href="${ctx}/task/taskInfo/form" class="btn btn-default btnTool" title="${text('新增任务列表')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
 				<% } %>
 				<a href="#" class="btn btn-default" id="btnSetting" title="${text('设置')}"><i class="fa fa-navicon"></i></a>
 			</div>
 		</div>
 		<div class="box-body">
-			<#form:form id="searchForm" model="${userTask}" action="${ctx}/task/userTask/listData" method="post" class="form-inline hide"
+			<#form:form id="searchForm" model="${taskInfo}" action="${ctx}/task/taskInfo/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('用户ID')}：</label>
+					<label class="control-label">${text('任务名称')}：</label>
 					<div class="control-inline">
-						<#form:input path="userId" maxlength="30" class="form-control width-120"/>
+						<#form:input path="name" maxlength="255" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('任务ID')}：</label>
+					<label class="control-label">${text('任务类型 1')}：</label>
 					<div class="control-inline">
-						<#form:input path="taskId" maxlength="30" class="form-control width-120"/>
+						<#form:input path="type" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('任务状态 1')}：</label>
+					<label class="control-label">${text('总任务个数')}：</label>
 					<div class="control-inline">
-						<#form:input path="taskStatus" class="form-control width-120"/>
+						<#form:input path="taskNumber" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('完成个数')}：</label>
+					<label class="control-label">${text('奖励金额')}：</label>
 					<div class="control-inline">
-						<#form:input path="finishNumber" class="form-control width-120"/>
+						<#form:input path="rewardMoney" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('图标地址')}：</label>
+					<div class="control-inline">
+						<#form:input path="iconUrl" maxlength="1024" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -82,21 +88,22 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/task/userTask/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户任务")}">'+(val||row.id)+'</a>';
+		{header:'${text("任务名称")}', name:'name', index:'a.name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/task/taskInfo/form?id='+row.id+'" class="btnList" data-title="${text("编辑任务列表")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("任务ID")}', name:'taskId', index:'a.task_id', width:150, align:"left"},
-		{header:'${text("任务状态 1")}', name:'taskStatus', index:'a.task_status', width:150, align:"center"},
-		{header:'${text("完成个数")}', name:'finishNumber', index:'a.finish_number', width:150, align:"center"},
+		{header:'${text("任务类型 1")}', name:'type', index:'a.type', width:150, align:"center"},
+		{header:'${text("总任务个数")}', name:'taskNumber', index:'a.task_number', width:150, align:"center"},
+		{header:'${text("奖励金额")}', name:'rewardMoney', index:'a.reward_money', width:150, align:"left"},
+		{header:'${text("图标地址")}', name:'iconUrl', index:'a.icon_url', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
-			<% if(hasPermi('task:userTask:edit')){ %>
-				actions.push('<a href="${ctx}/task/userTask/form?id='+row.id+'" class="btnList" title="${text("编辑用户任务")}"><i class="fa fa-pencil"></i></a>&nbsp;');
-				actions.push('<a href="${ctx}/task/userTask/delete?id='+row.id+'" class="btnList" title="${text("删除用户任务")}" data-confirm="${text("确认要删除该用户任务吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% if(hasPermi('task:taskInfo:edit')){ %>
+				actions.push('<a href="${ctx}/task/taskInfo/form?id='+row.id+'" class="btnList" title="${text("编辑任务列表")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/task/taskInfo/delete?id='+row.id+'" class="btnList" title="${text("删除任务列表")}" data-confirm="${text("确认要删除该任务列表吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
 			<% } %>
 			return actions.join('');
 		}}

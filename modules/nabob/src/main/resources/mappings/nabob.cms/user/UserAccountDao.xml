@@ -30,13 +30,13 @@
 		</where>
 	</update>
 
-	<!--减少-->
-	<update id="subtractAccount" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccount">
+	<!--增加-->
+	<update id="updateAccountTaskMoney" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccount">
 		update
-		t1_user_account
+			t1_user_account
 		<set>
-			<if test="totalMoney != null ">
-				total_money = total_money - #{totalMoney},
+			<if test="taskMoney != null ">
+				task_money = task_money + #{taskMoney},
 			</if>
 			<if test="remarks != null and remarks !='' ">
 				remarks = #{remarks},
@@ -44,7 +44,7 @@
 			updated = sysdate()
 		</set>
 		<where>
-			id = #{id} and  (total_money - #{totalMoney}) >= 0
+			id = #{id} and  (task_money - #{taskMoney}) >= 0
 		</where>
 	</update>
 

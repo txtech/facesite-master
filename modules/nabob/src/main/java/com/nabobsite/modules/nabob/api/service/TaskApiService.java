@@ -3,18 +3,29 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import cn.hutool.db.Db;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
+import com.nabobsite.modules.nabob.api.common.TriggerApiService;
+import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
+import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
+import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
+import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.CommonResult;
 import com.nabobsite.modules.nabob.utils.ResultUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,8 +38,132 @@ import java.util.List;
 public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 
 	@Autowired
+	private RedisOpsUtil redisOpsUtil;
+	@Autowired
 	private TaskInfoDao taskInfoDao;
+	@Autowired
+	private UserTaskDao userTaskDao;
+	@Autowired
+	private UserAccountApiService userAccountApiService;
 
+	/**
+	 * @desc 新用户做任务
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> doUserTask(String taskId,String token) {
+		try {
+			if(StringUtils.isEmpty(token)){
+				return ResultUtil.failed("获取失败,获取令牌为空");
+			}
+			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return ResultUtil.failed("获取失败,登陆令牌失效");
+			}
+			TaskInfo taskInfo = this.getTaskInfoById(taskId);
+			if(taskInfo == null){
+				return ResultUtil.failed("获取失败,任务不存在");
+			}
+			synchronized (userId) {
+				BigDecimal rewardMoney = taskInfo.getRewardMoney();
+				String title = "完成任务:"+rewardMoney;
+				Boolean isOK = this.sendReward(userId,rewardMoney,title);
+				if(!isOK){
+					logger.error("新用户第一次做记录日志失败:{},{}",userId,taskId);
+					return ResultUtil.failed("Failed to do the task!");
+				}
+				UserTask userTask = this.getUserTaskByUserIdAndTaskId(userId,taskId);
+				if(userTask == null){
+					UserTask initUserTask = DbInstanceContact.initUserTask(userId,taskId,1);
+					long dbResult = userTaskDao.insert(initUserTask);
+					if(CommonStaticContact.dbResult(dbResult)){
+						logger.info("新用户第一次做任务成功:{},{}",userId,taskId);
+						return ResultUtil.success(true);
+					}
+					logger.error("新用户第一次做任务失败:{},{}",userId,taskId);
+					return ResultUtil.failed("Failed to do the task!");
+				}
+
+				int taskStatus = userTask.getTaskStatus();
+				int taskFinishNumber = userTask.getFinishNumber();
+				if(taskStatus == CommonStaticContact.USER_TASK_STATUS_3){
+					logger.error("新用户任务已经完毕:{},{}",userId,taskId);
+					return ResultUtil.failed("Failed to do the task!");
+				}
+				int taskNum = taskInfo.getTaskNumber();
+				if(taskFinishNumber >= taskNum){
+					logger.error("新用户任务已经完毕:{},{}",userId,taskId);
+					return ResultUtil.failed("Failed to do the task!");
+				}
+				Boolean isOk = this.updateTaskFinishNumber(userTask.getId(),taskFinishNumber+1);
+				if(isOk){
+					logger.info("新用户做任务成功:{},{}",userId,taskId);
+					return ResultUtil.success(true);
+				}
+				logger.error("新用户做任务失败:{},{}",userId,taskId);
+				return ResultUtil.failed("Failed to do the task!");
+			}
+		} catch (Exception e) {
+			logger.error("Failed to do the task!",e);
+			return ResultUtil.failed("Failed to do the task!");
+		}
+	}
+
+	/**
+	 * @desc 完成任务送奖励
+	 * @author nada
+	 * @create 2021/5/13 8:16 下午
+	 */
+	@Transactional(readOnly = false, rollbackFor = Exception.class)
+	public Boolean sendReward(String userId,BigDecimal rewardMoney, String title) {
+		try {
+			boolean isOkReward = userAccountApiService.addRewardRecord(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_2,rewardMoney,title,title);
+			if(!isOkReward){
+				return false;
+			}
+			return userAccountApiService.addAccountTaskBalance(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_3,rewardMoney,title,title);
+		} catch (Exception e) {
+			logger.error("完成任务送奖励异常",e);
+			return false;
+		}
+	}
+
+	/**
+	 * @desc 修改任务完成数量
+	 * @author nada
+	 * @create 2021/5/13 8:03 下午
+	*/
+	public Boolean updateTaskFinishNumber(String id,int finishNumber){
+		try {
+			UserTask userTaskPrams = new UserTask();
+			userTaskPrams.setId(id);
+			userTaskPrams.setFinishNumber(finishNumber);
+			long dbResult = userTaskDao.update(userTaskPrams);
+			return CommonStaticContact.dbResult(dbResult);
+		} catch (Exception e) {
+			logger.error("修改任务完成数量异常",e);
+			return false;
+		}
+	}
+
+	/**
+	 * @desc 获取用户任务
+	 * @author nada
+	 * @create 2021/5/13 7:32 下午
+	*/
+	public UserTask getUserTaskByUserIdAndTaskId(String userId,String taskId){
+		try {
+			UserTask userTaskPrams = new UserTask();
+			userTaskPrams.setTaskId(taskId);
+			userTaskPrams.setUserId(userId);
+			UserTask userTask = userTaskDao.getByEntity(userTaskPrams);
+			return userTask;
+		} catch (Exception e) {
+			logger.error("获取用户任务异常",e);
+			return null;
+		}
+	}
 
 	/**
 	 * @desc 获取任务列表
@@ -63,44 +198,21 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 		}
 	}
 
-	/**
-	 * 获取单条数据
-	 * @param taskInfo
-	 * @return
-	 */
-	@Override
-	public TaskInfo get(TaskInfo taskInfo) {
-		return super.get(taskInfo);
-	}
 
 	/**
-	 * 保存数据（插入或更新）
-	 * @param taskInfo
+	 * @desc 获取任务详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
 	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void save(TaskInfo taskInfo) {
-		super.save(taskInfo);
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public TaskInfo getTaskInfoById(String id) {
+		try {
+			TaskInfo taskInfo = new TaskInfo();
+			taskInfo.setId(id);
+			return taskInfoDao.getByEntity(taskInfo);
+		} catch (Exception e) {
+			logger.error("Failed to get task list!",e);
+			return null;
+		}
 	}
-
-	/**
-	 * 更新状态
-	 * @param taskInfo
-	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void updateStatus(TaskInfo taskInfo) {
-		super.updateStatus(taskInfo);
-	}
-
-	/**
-	 * 删除数据
-	 * @param taskInfo
-	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void delete(TaskInfo taskInfo) {
-		super.delete(taskInfo);
-	}
-
 }

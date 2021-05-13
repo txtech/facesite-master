@@ -1,6 +1,8 @@
 package com.nabobsite.modules.nabob.api.entity;
 
+import com.jeesite.common.shiro.realms.Da;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountRecord;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -34,6 +36,7 @@ public class DbInstanceContact {
             userInfo.setTeamNum1(0);
             userInfo.setTeamNum2(0);
             userInfo.setTeamNum3(0);
+            userInfo.setTaskEndTime(CommonStaticContact.addDateHour(48));
             userInfo.setLock(CommonStaticContact.USER_LOCK_1);
             userInfo.setUserStatus(CommonStaticContact.USER_STATUS_1);
             if(StringUtils.isEmpty(params.getParentSysId())){
@@ -67,6 +70,7 @@ public class DbInstanceContact {
             userAccount.setWarehouseMoney(new BigDecimal("0"));
             userAccount.setAiAssetsMoney(new BigDecimal("0"));
             userAccount.setIncomeMoney(new BigDecimal("0"));
+            userAccount.setTaskMoney(LogicStaticContact.USER_TACK_BASE_MONEY);
             userAccount.setAccountStatus(CommonStaticContact.USER_ACCOUNT_STATUS_OK);
             return userAccount;
         }
@@ -125,4 +129,20 @@ public class DbInstanceContact {
         order.setOrderStatus(CommonStaticContact.ORDER_STATUS_1);
         return order;
     }
+
+    /**
+     * @desc 初始化用户任务信息
+     * @author nada
+     * @create 2021/5/12 2:59 下午
+     */
+    public static UserTask initUserTask(String userId,String taskId,int finishNumber){
+        UserTask userTask = new UserTask();
+        userTask.setIsNewRecord(true);
+        userTask.setUserId(userId);
+        userTask.setTaskId(taskId);
+        userTask.setFinishNumber(finishNumber);
+        userTask.setTaskStatus(CommonStaticContact.USER_TASK_STATUS_2);
+        return userTask;
+    }
+
 }

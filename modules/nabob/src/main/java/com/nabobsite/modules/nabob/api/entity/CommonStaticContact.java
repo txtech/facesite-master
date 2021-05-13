@@ -1,6 +1,12 @@
 package com.nabobsite.modules.nabob.api.entity;
 
+import com.jeesite.common.shiro.realms.Da;
+
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @ClassName nada
@@ -22,11 +28,12 @@ public class CommonStaticContact {
 
     //账户明细记录类型
     public final static int USER_ACCOUNT_RECORD_TYPE_1 = 1;//充值
-    public final static int USER_ACCOUNT_RECORD_TYPE_2 = 2;//奖励
+    public final static int USER_ACCOUNT_RECORD_TYPE_2 = 2;//注册奖励
+    public final static int USER_ACCOUNT_RECORD_TYPE_3 = 3;//用户任务奖励
 
     //账户奖励记录类型
     public final static int USER_ACCOUNT_REWARD_TYPE_1 = 1;//注册奖励
-    public final static int USER_ACCOUNT_REWARD_TYPE_2 = 2;//邀请好友奖励
+    public final static int USER_ACCOUNT_REWARD_TYPE_2 = 2;//用户完成任务奖励： 分享好友奖励,观看视频奖励,邀请好友奖励,定期投资奖励
 
     //用户账户状态
     public final static int USER_ACCOUNT_STATUS_OK = 1;//正常
@@ -42,6 +49,11 @@ public class CommonStaticContact {
     public final static int ORDER_STATUS_3 = 3;
     public final static int ORDER_STATUS_4 = 4;
     public final static int ORDER_STATUS_9 = 9;
+
+    //用户任务 1:未开始 2:进行中 3:完成
+    public final static int USER_TASK_STATUS_1 = 1;
+    public final static int USER_TASK_STATUS_2 = 2;
+    public final static int USER_TASK_STATUS_3 = 3;
 
     /**
      * @desc 解析数据库返回接口
@@ -121,5 +133,26 @@ public class CommonStaticContact {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 给时间加上几个小时
+     * @return
+     */
+    public static Date addDateHour(int hour){
+        try {
+            Date date = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.HOUR,hour);
+            date = cal.getTime();
+            return date;
+            //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            //System.out.println("after:" + format.format(date));
+            //return format.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

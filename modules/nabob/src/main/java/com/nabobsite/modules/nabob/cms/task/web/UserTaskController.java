@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.task.web;
 
@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.task.service.UserTaskService;
 /**
  * 用户任务Controller
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-13
  */
 @Controller
 @RequestMapping(value = "${adminPath}/task/userTask")
@@ -33,7 +33,7 @@ public class UserTaskController extends BaseController {
 
 	@Autowired
 	private UserTaskService userTaskService;
-
+	
 	/**
 	 * 获取数据
 	 */
@@ -41,7 +41,7 @@ public class UserTaskController extends BaseController {
 	public UserTask get(String id, boolean isNewRecord) {
 		return userTaskService.get(id, isNewRecord);
 	}
-
+	
 	/**
 	 * 查询列表
 	 */
@@ -51,7 +51,7 @@ public class UserTaskController extends BaseController {
 		model.addAttribute("userTask", userTask);
 		return "cms/task/userTaskList";
 	}
-
+	
 	/**
 	 * 查询列表数据
 	 */
@@ -84,7 +84,7 @@ public class UserTaskController extends BaseController {
 		userTaskService.save(userTask);
 		return renderResult(Global.TRUE, text("保存用户任务成功！"));
 	}
-
+	
 	/**
 	 * 删除数据
 	 */
@@ -95,5 +95,5 @@ public class UserTaskController extends BaseController {
 		userTaskService.delete(userTask);
 		return renderResult(Global.TRUE, text("删除用户任务成功！"));
 	}
-
+	
 }

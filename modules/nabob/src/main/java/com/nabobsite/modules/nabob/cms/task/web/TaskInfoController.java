@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.task.web;
 
@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.task.service.TaskInfoService;
 /**
  * 任务列表Controller
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-13
  */
 @Controller
 @RequestMapping(value = "${adminPath}/task/taskInfo")
@@ -33,7 +33,7 @@ public class TaskInfoController extends BaseController {
 
 	@Autowired
 	private TaskInfoService taskInfoService;
-
+	
 	/**
 	 * 获取数据
 	 */
@@ -41,7 +41,7 @@ public class TaskInfoController extends BaseController {
 	public TaskInfo get(String id, boolean isNewRecord) {
 		return taskInfoService.get(id, isNewRecord);
 	}
-
+	
 	/**
 	 * 查询列表
 	 */
@@ -51,7 +51,7 @@ public class TaskInfoController extends BaseController {
 		model.addAttribute("taskInfo", taskInfo);
 		return "cms/task/taskInfoList";
 	}
-
+	
 	/**
 	 * 查询列表数据
 	 */
@@ -84,7 +84,7 @@ public class TaskInfoController extends BaseController {
 		taskInfoService.save(taskInfo);
 		return renderResult(Global.TRUE, text("保存任务列表成功！"));
 	}
-
+	
 	/**
 	 * 删除数据
 	 */
@@ -95,5 +95,5 @@ public class TaskInfoController extends BaseController {
 		taskInfoService.delete(taskInfo);
 		return renderResult(Global.TRUE, text("删除任务列表成功！"));
 	}
-
+	
 }

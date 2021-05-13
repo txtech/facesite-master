@@ -55,23 +55,66 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 			return false;
 		}
 	}
-
 	/**
-	 * @desc 根据ID增加账户并记录日志
+	 * @desc 增加任务账户余额
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean addAccount(String userId,int type,BigDecimal actualMoney,String title,String remarks) {
+	public boolean addAccountTaskBalance(String userId,int type,BigDecimal actualMoney,String title,String remarks) {
 		try {
 			if(StringUtils.isEmpty(userId)){
-				logger.error("增加账户失败,userId信息为空:{}",userId);
+				logger.error("增加任务账户余额失败,userId信息为空:{}",userId);
 				return false;
 			}
 			synchronized (userId){
 				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
 				if(oldUserAccount == null){
-					logger.error("增加账户失败,账户信息为空:{}",userId);
+					logger.error("增加任务账户余额失败,账户信息为空:{}",userId);
+					return false;
+				}
+				String accountId = oldUserAccount.getId();
+				BigDecimal totalTaskMoney = oldUserAccount.getTaskMoney();
+				UserAccountRecord userAccountRecord = DbInstanceContact.initUserAccountRecord(userId,accountId,type,actualMoney,totalTaskMoney,title,remarks);
+				long dbResult = userAccountRecordDao.insert(userAccountRecord);
+				if(!CommonStaticContact.dbResult(dbResult)){
+					logger.error("增加任务账户余额失败,记录明细失败:{},{}",userId,accountId);
+					return false;
+				}
+				UserAccount userAccount = new UserAccount();
+				userAccount.setId(accountId);
+				userAccount.setUserId(userId);
+				userAccount.setTaskMoney(actualMoney);
+				dbResult = userAccountDao.updateAccountTaskMoney(userAccount);
+				if(CommonStaticContact.dbResult(dbResult)){
+					logger.info("增加任务账户余额成功:{},{}",userId,accountId);
+					return true;
+				}
+				logger.info("增加任务账户余额失败,修改账户失败:{},{}",userId,accountId);
+				return false;
+			}
+		} catch (Exception e) {
+			logger.error("增加任务账户余额异常",e);
+			return false;
+		}
+	}
+
+	/**
+	 * @desc 增加账户总余额
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public boolean addAccountBalance(String userId,int type,BigDecimal actualMoney,String title,String remarks) {
+		try {
+			if(StringUtils.isEmpty(userId)){
+				logger.error("增加账户总余额失败,userId信息为空:{}",userId);
+				return false;
+			}
+			synchronized (userId){
+				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
+				if(oldUserAccount == null){
+					logger.error("增加账户总余额失败,账户信息为空:{}",userId);
 					return false;
 				}
 				String accountId = oldUserAccount.getId();
@@ -88,20 +131,20 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 				userAccount.setTotalMoney(actualMoney);
 				dbResult = userAccountDao.updateAccountTotalMoney(userAccount);
 				if(CommonStaticContact.dbResult(dbResult)){
-					logger.info("增加账户成功:{},{}",userId,accountId);
+					logger.info("增加账户总余额成功:{},{}",userId,accountId);
 					return true;
 				}
-				logger.info("增加账户失败,修改账户失败:{},{}",userId,accountId);
+				logger.info("增加账户总余额失败,修改账户失败:{},{}",userId,accountId);
 				return false;
 			}
 		} catch (Exception e) {
-			logger.error("根据ID增加账户异常",e);
+			logger.error("增加账户总余额异常",e);
 			return false;
 		}
 	}
 
 	/**
-	 * @desc 根据账号ID获取账户信息
+	 * @desc 获取账户信息
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */

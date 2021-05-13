@@ -52,23 +52,22 @@ public class ProductApiController extends BaseController {
 		return renderResult(Global.TRUE,text("getProductWarehouseList"), result);
 	}
 
-
 	@PostMapping(value = {"getProductBotInfo"})
 	@ApiOperation(value = "无人机产品详情")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType="query", type="String"),})
-	public String getProductBotInfo(String id) {
+	@ApiImplicitParams({ @ApiImplicitParam(name = "botId", value = "无人机产品ID", required = true, paramType="query", type="String"),})
+	public String getProductBotInfo(String botId) {
 		ProductBot productBot = new ProductBot();
-		productBot.setId(id);
+		productBot.setId(botId);
 		CommonResult<ProductBot> result = productApiService.getProductBotInfo(productBot);
 		return renderResult(Global.TRUE,text("getProductBotInfo"), result);
 	}
 
 	@PostMapping(value = {"getProductWarehouseInfo"})
 	@ApiOperation(value = "云仓库产品详情")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "id", value = "产品ID", required = true, paramType="query", type="String"),})
-	public String getProductWarehouseInfo(String id) {
+	@ApiImplicitParams({ @ApiImplicitParam(name = "warehouseId", value = "云仓库产品ID", required = true, paramType="query", type="String"),})
+	public String getProductWarehouseInfo(String warehouseId) {
 		ProductWarehouse productWarehouse = new ProductWarehouse();
-		productWarehouse.setId(id);
+		productWarehouse.setId(warehouseId);
 		CommonResult<ProductWarehouse> result = productApiService.getProductWarehouseInfo(productWarehouse);
 		return renderResult(Global.TRUE,text("getProductWarehouseInfo"), result);
 	}
