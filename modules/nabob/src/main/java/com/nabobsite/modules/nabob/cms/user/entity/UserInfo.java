@@ -23,20 +23,22 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  */
 @Table(name="t1_user_info", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
-		@Column(name="parent_user_id", attrName="parentUserId", label="上级ID"),
 		@Column(name="parent_sys_id", attrName="parentSysId", label="操作员上级"),
+		@Column(name="parent_user_id", attrName="parentUserId", label="一级ID"),
+		@Column(name="parent2_user_id", attrName="parent2UserId", label="二级ID"),
+		@Column(name="parent3_user_id", attrName="parent3UserId", label="三级ID"),
 		@Column(name="user_status", attrName="userStatus", label="状态 1", comment="状态 1:正常 2:禁用"),
 		@Column(name="level", attrName="level", label="级别"),
 		@Column(name="name", attrName="name", label="名称", queryType=QueryType.LIKE),
+		@Column(name="lock", attrName="lock", label="解锁状态：1", comment="解锁状态：1:解锁 2:锁定"),
 		@Column(name="account_no", attrName="accountNo", label="账号"),
 		@Column(name="password", attrName="password", label="密码"),
 		@Column(name="phone_number", attrName="phoneNumber", label="电话号码"),
 		@Column(name="invite_code", attrName="inviteCode", label="邀请码"),
 		@Column(name="favorite", attrName="favorite", label="最喜欢的人"),
-		@Column(name="lock", attrName="lock", label="解锁状态：1", comment="解锁状态：1:解锁 2:锁定"),
 		@Column(name="ipaddress", attrName="ipaddress", label="注册IP"),
-		@Column(name="team_num", attrName="teamNum", label="团队总人数"),
 		@Column(name="login_ip", attrName="loginIp", label="登陆IP"),
+		@Column(name="team_num", attrName="teamNum", label="团队总人数"),
 		@Column(name="team_num_1", attrName="teamNum1", label="一级团队人数"),
 		@Column(name="team_num_2", attrName="teamNum2", label="二级团队人数"),
 		@Column(name="team_num_3", attrName="teamNum3", label="三级团队人数"),
@@ -52,20 +54,22 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 public class UserInfo extends DataEntity<UserInfo> {
 
 	private static final long serialVersionUID = 1L;
-	private String parentUserId;		// 上级ID
 	private String parentSysId;		// 操作员上级
+	private String parentUserId;		// 一级ID
+	private String parent2UserId;		// 二级ID
+	private String parent3UserId;		// 三级ID
 	private Integer userStatus;		// 状态 1:正常 2:禁用
 	private Integer level;		// 级别
 	private String name;		// 名称
+	private Integer lock;		// 解锁状态：1:解锁 2:锁定
 	private String accountNo;		// 账号
 	private String password;		// 密码
 	private String phoneNumber;		// 电话号码
 	private String inviteCode;		// 邀请码
 	private String favorite;		// 最喜欢的人
-	private Integer lock;		// 解锁状态：1:解锁 2:锁定
 	private String ipaddress;		// 注册IP
-	private Integer teamNum;		// 团队总人数
 	private String loginIp;		// 登陆IP
+	private Integer teamNum;		// 团队总人数
 	private Integer teamNum1;		// 一级团队人数
 	private Integer teamNum2;		// 二级团队人数
 	private Integer teamNum3;		// 三级团队人数
@@ -75,23 +79,12 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private String delFlag;		// 删除标志
 	private String token;
 
-
 	public UserInfo() {
 		this(null);
 	}
 
 	public UserInfo(String id){
 		super(id);
-	}
-
-	@NotBlank(message="上级ID不能为空")
-	@Length(min=0, max=30, message="上级ID长度不能超过 30 个字符")
-	public String getParentUserId() {
-		return parentUserId;
-	}
-
-	public void setParentUserId(String parentUserId) {
-		this.parentUserId = parentUserId;
 	}
 
 	@NotBlank(message="操作员上级不能为空")
@@ -102,6 +95,34 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setParentSysId(String parentSysId) {
 		this.parentSysId = parentSysId;
+	}
+
+	@NotBlank(message="一级ID不能为空")
+	@Length(min=0, max=30, message="一级ID长度不能超过 30 个字符")
+	public String getParentUserId() {
+		return parentUserId;
+	}
+
+	public void setParentUserId(String parentUserId) {
+		this.parentUserId = parentUserId;
+	}
+
+	@Length(min=0, max=50, message="二级ID长度不能超过 50 个字符")
+	public String getParent2UserId() {
+		return parent2UserId;
+	}
+
+	public void setParent2UserId(String parent2UserId) {
+		this.parent2UserId = parent2UserId;
+	}
+
+	@Length(min=0, max=50, message="三级ID长度不能超过 50 个字符")
+	public String getParent3UserId() {
+		return parent3UserId;
+	}
+
+	public void setParent3UserId(String parent3UserId) {
+		this.parent3UserId = parent3UserId;
 	}
 
 	@NotNull(message="状态 1不能为空")
@@ -130,6 +151,14 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Integer getLock() {
+		return lock;
+	}
+
+	public void setLock(Integer lock) {
+		this.lock = lock;
 	}
 
 	@NotBlank(message="账号不能为空")
@@ -181,14 +210,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.favorite = favorite;
 	}
 
-	public Integer getLock() {
-		return lock;
-	}
-
-	public void setLock(Integer lock) {
-		this.lock = lock;
-	}
-
 	@Length(min=0, max=520, message="注册IP长度不能超过 520 个字符")
 	public String getIpaddress() {
 		return ipaddress;
@@ -198,15 +219,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.ipaddress = ipaddress;
 	}
 
-	@NotNull(message="团队总人数不能为空")
-	public Integer getTeamNum() {
-		return teamNum;
-	}
-
-	public void setTeamNum(Integer teamNum) {
-		this.teamNum = teamNum;
-	}
-
 	@Length(min=0, max=50, message="登陆IP长度不能超过 50 个字符")
 	public String getLoginIp() {
 		return loginIp;
@@ -214,6 +226,15 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setLoginIp(String loginIp) {
 		this.loginIp = loginIp;
+	}
+
+	@NotNull(message="团队总人数不能为空")
+	public Integer getTeamNum() {
+		return teamNum;
+	}
+
+	public void setTeamNum(Integer teamNum) {
+		this.teamNum = teamNum;
 	}
 
 	@NotNull(message="一级团队人数不能为空")

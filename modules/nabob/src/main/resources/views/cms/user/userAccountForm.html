@@ -119,6 +119,24 @@
 							</div>
 						</div>
 					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('增值账户')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="incrementMoney" class="form-control number"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('可提取账户')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="claimableMoney" class="form-control number"/>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="box-footer">

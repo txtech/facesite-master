@@ -12,55 +12,61 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 
-	<insert id="registerUser" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
-		<selectKey keyProperty="id" keyColumn="id" order="AFTER" resultType="java.lang.String">
-			select LAST_INSERT_ID()
-		</selectKey>
-		insert into t1_user_info (
-		`id`,
-		`parent_user_id`,
-		`parent_sys_id`,
-		`name`,
-		`account_no`,
-		`password`,
-		`user_status`,
-		`phone_number`,
-		`invite_code`,
-		`favorite`,
-		`ipaddress`,
-		`level`,
-		`team_num`,
-		`team_num_1`,
-		`team_num_2`,
-		`team_num_3`,
-		`task_end_time`,
-		`REMARKS`,
-		`created`,
-		`updated`,
-		`DEL_FLAG`
-		)
-		values (
-		#{id},
-		#{parentUserId},
-		#{parentSysId},
-		#{name},
-		#{accountNo},
-		#{password},
-		#{userStatus},
-		#{phoneNumber},
-		#{inviteCode},
-		#{favorite},
-		#{ipaddress},
-		#{level},
-		#{teamNum},
-		#{teamNum1},
-		#{teamNum2},
-		#{teamNum3},
-		#{taskEndTime},
-		#{remarks},
-		sysdate(),
-		sysdate(),
-		0
-		)
-	</insert>
+	<!--获取达到等级的直推团队人数-->
+	<update id="getOkLevelTeamNum1" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
+		SELECT
+		    IFNULL(count(id),0)
+		FROM
+			t1_user_info
+		where
+			parent_user_id = #{id} and  level &lt;= (select IFNULL(level-1,0) from t1_user_info where id = #{id} and lock =2 and level>1)
+	</update>
+
+	<!--增加一级团队-->
+	<update id="updateTeam1" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
+		update
+			t1_user_info
+		<set>
+			<if test="teamNum != null ">
+				team_num = team_num + #{teamNum},
+				team_num_1 = team_num_1 + #{teamNum},
+			</if>
+			updated = sysdate()
+		</set>
+		<where>
+			id = #{id} and  (team_num + #{teamNum}) >= 0 and  (team_num_1 + #{teamNum}) >= 0
+		</where>
+	</update>
+
+	<!--增加二级团队-->
+	<update id="updateTeam2" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
+		update
+		t1_user_info
+		<set>
+			<if test="teamNum != null ">
+				team_num = team_num + #{teamNum},
+				team_num_2 = team_num_2 + #{teamNum},
+			</if>
+			updated = sysdate()
+		</set>
+		<where>
+			id = #{id} and  (team_num + #{teamNum}) >= 0 and  (team_num_2 + #{teamNum}) >= 0
+		</where>
+	</update>
+
+	<!--增加三级团队-->
+	<update id="updateTeam3" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
+		update
+		t1_user_info
+		<set>
+			<if test="teamNum != null ">
+				team_num = team_num + #{teamNum},
+				team_num_3 = team_num_3 + #{teamNum},
+			</if>
+			updated = sysdate()
+		</set>
+		<where>
+			id = #{id} and  (team_num + #{teamNum}) >= 0 and  (team_num_3 + #{teamNum}) >= 0
+		</where>
+	</update>
 </mapper>

@@ -1,7 +1,5 @@
 package com.nabobsite.modules.nabob.api.entity;
 
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
-
 import java.math.BigDecimal;
 
 /**
@@ -11,6 +9,9 @@ import java.math.BigDecimal;
  * @Version 1.0
  */
 public class CommonStaticContact {
+
+    public final static BigDecimal ZERO = new BigDecimal("0");
+
     //用户状态
     public final static int USER_STATUS_1 = 1;//正常
     public final static int USER_STATUS_3 = 3;//禁用
@@ -18,6 +19,14 @@ public class CommonStaticContact {
     //用户解锁状态
     public final static int USER_LOCK_1 = 1;//正常
     public final static int USER_LOCK_2 = 2;//锁定
+
+    //账户明细记录类型
+    public final static int USER_ACCOUNT_RECORD_TYPE_1 = 1;//充值
+    public final static int USER_ACCOUNT_RECORD_TYPE_2 = 2;//奖励
+
+    //账户奖励记录类型
+    public final static int USER_ACCOUNT_REWARD_TYPE_1 = 1;//注册奖励
+    public final static int USER_ACCOUNT_REWARD_TYPE_2 = 2;//邀请好友奖励
 
     //用户账户状态
     public final static int USER_ACCOUNT_STATUS_OK = 1;//正常

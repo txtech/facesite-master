@@ -10,10 +10,9 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 /**
  * 用户账户DAO接口
  * @author face
- * @version 2021-05-12
+ * @version 2021-05-13
  */
 @MyBatisDao
 public interface UserAccountDao extends CrudDao<UserAccount> {
-
-    long updateAccountTotalMoney(UserAccount userAccount);
+	
 }

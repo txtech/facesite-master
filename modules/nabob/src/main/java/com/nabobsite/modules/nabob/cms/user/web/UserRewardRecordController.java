@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.user.web;
 
@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.user.service.UserRewardRecordService;
 /**
  * 用户收益明细Controller
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-13
  */
 @Controller
 @RequestMapping(value = "${adminPath}/user/userRewardRecord")
@@ -33,7 +33,7 @@ public class UserRewardRecordController extends BaseController {
 
 	@Autowired
 	private UserRewardRecordService userRewardRecordService;
-
+	
 	/**
 	 * 获取数据
 	 */
@@ -41,7 +41,7 @@ public class UserRewardRecordController extends BaseController {
 	public UserRewardRecord get(String id, boolean isNewRecord) {
 		return userRewardRecordService.get(id, isNewRecord);
 	}
-
+	
 	/**
 	 * 查询列表
 	 */
@@ -51,7 +51,7 @@ public class UserRewardRecordController extends BaseController {
 		model.addAttribute("userRewardRecord", userRewardRecord);
 		return "cms/user/userRewardRecordList";
 	}
-
+	
 	/**
 	 * 查询列表数据
 	 */
@@ -84,7 +84,7 @@ public class UserRewardRecordController extends BaseController {
 		userRewardRecordService.save(userRewardRecord);
 		return renderResult(Global.TRUE, text("保存用户收益明细成功！"));
 	}
-
+	
 	/**
 	 * 删除数据
 	 */
@@ -95,5 +95,5 @@ public class UserRewardRecordController extends BaseController {
 		userRewardRecordService.delete(userRewardRecord);
 		return renderResult(Global.TRUE, text("删除用户收益明细成功！"));
 	}
-
+	
 }

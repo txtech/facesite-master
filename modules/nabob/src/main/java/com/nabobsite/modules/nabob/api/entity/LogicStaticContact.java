@@ -10,7 +10,12 @@ import java.util.Map;
  * @Date 2021/5/11 11:16 下午
  * @Version 1.0
  */
-public class TaskLogicStaticContact {
+public class LogicStaticContact {
+
+    //用户升级人数
+    public final static int USER_LEVEL_UP_TEAM_NUM = 5;
+    //用户注册奖励
+    public final static BigDecimal USER_REGISTER_REWARD = new BigDecimal("100");
 
     //用户等级
     public final static int USER_LEVEL_0 = 0;
@@ -39,7 +44,7 @@ public class TaskLogicStaticContact {
     public static volatile Map<Integer, BigDecimal> LEVEL_CASH_MAX_LIMIT = new HashMap();
 
     public static void main(String[] args) {
-        System.out.println(TaskLogicStaticContact.LEVEL_BALANCE_COMMISSION_RATE.get(0));
+        System.out.println(LogicStaticContact.LEVEL_BALANCE_COMMISSION_RATE.get(0));
     }
 
     static {

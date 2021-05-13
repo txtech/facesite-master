@@ -1,7 +1,9 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.user.service;
+
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +16,12 @@ import com.nabobsite.modules.nabob.cms.user.dao.UserRewardRecordDao;
 /**
  * 用户收益明细Service
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-13
  */
 @Service
 @Transactional(readOnly=true)
 public class UserRewardRecordService extends CrudService<UserRewardRecordDao, UserRewardRecord> {
-
+	
 	/**
 	 * 获取单条数据
 	 * @param userRewardRecord
@@ -29,7 +31,7 @@ public class UserRewardRecordService extends CrudService<UserRewardRecordDao, Us
 	public UserRewardRecord get(UserRewardRecord userRewardRecord) {
 		return super.get(userRewardRecord);
 	}
-
+	
 	/**
 	 * 查询分页数据
 	 * @param userRewardRecord 查询条件
@@ -40,7 +42,7 @@ public class UserRewardRecordService extends CrudService<UserRewardRecordDao, Us
 	public Page<UserRewardRecord> findPage(UserRewardRecord userRewardRecord) {
 		return super.findPage(userRewardRecord);
 	}
-
+	
 	/**
 	 * 保存数据（插入或更新）
 	 * @param userRewardRecord
@@ -50,7 +52,7 @@ public class UserRewardRecordService extends CrudService<UserRewardRecordDao, Us
 	public void save(UserRewardRecord userRewardRecord) {
 		super.save(userRewardRecord);
 	}
-
+	
 	/**
 	 * 更新状态
 	 * @param userRewardRecord
@@ -60,7 +62,7 @@ public class UserRewardRecordService extends CrudService<UserRewardRecordDao, Us
 	public void updateStatus(UserRewardRecord userRewardRecord) {
 		super.updateStatus(userRewardRecord);
 	}
-
+	
 	/**
 	 * 删除数据
 	 * @param userRewardRecord
@@ -70,5 +72,5 @@ public class UserRewardRecordService extends CrudService<UserRewardRecordDao, Us
 	public void delete(UserRewardRecord userRewardRecord) {
 		super.delete(userRewardRecord);
 	}
-
+	
 }

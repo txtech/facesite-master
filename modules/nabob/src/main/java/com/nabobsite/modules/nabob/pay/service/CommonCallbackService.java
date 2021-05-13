@@ -84,6 +84,7 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 			int type = oldOrder.getType();
 			String userId = oldOrder.getUserId();
 			String orderNo = oldOrder.getOrderNo();
+			BigDecimal payMoney = oldOrder.getPayMoney();
 			BigDecimal actualMoney = oldOrder.getActualMoney();
 			Order newOrder = new Order();
 			newOrder.setId(id);
@@ -107,13 +108,14 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 				logger.error("充值订单回调失败,更新订单失败:{},{}",orderNo,pOrderNo);
 				return false;
 			}
-			isOk = userAccountApiService.addAccount(userId,actualMoney);
+			String title = "充值成功:"+actualMoney;
+			isOk = userAccountApiService.addAccount(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_1,actualMoney,title,orderNo);
 			if(!isOk){
 				logger.error("充值订单回调失败,更新账户失败:{},{}",orderNo,pOrderNo);
 				return false;
 			}
 			if(type == CommonStaticContact.ORDER_TYPE_RECHANGE){
-				triggerApiService.payOrderTrigger(userId,orderNo);
+				triggerApiService.payOrderTrigger(userId,payMoney);
 			}
 			return true;
 		} catch (Exception e) {

@@ -4,6 +4,7 @@ import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountRecord;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.cms.user.entity.UserRewardRecord;
 import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,7 +15,7 @@ import java.util.Date;
  * @Date 2021/5/11 11:23 上午
  * @Version 1.0
  */
-public class DbInstanceEntity {
+public class DbInstanceContact {
 
     /**
      * @desc 初始化用户信息
@@ -33,13 +34,19 @@ public class DbInstanceEntity {
             userInfo.setTeamNum1(0);
             userInfo.setTeamNum2(0);
             userInfo.setTeamNum3(0);
-            userInfo.setLock(CommonStaticContact.USER_LOCK_2);
+            userInfo.setLock(CommonStaticContact.USER_LOCK_1);
             userInfo.setUserStatus(CommonStaticContact.USER_STATUS_1);
-            if(StringUtils.isEmpty(params.getParentUserId())){
-                userInfo.setParentUserId("0");
+            if(StringUtils.isEmpty(params.getParentSysId())){
+                userInfo.setParentSysId("0");
             }
             if(StringUtils.isEmpty(params.getParentUserId())){
                 userInfo.setParentUserId("0");
+            }
+            if(StringUtils.isEmpty(params.getParent2UserId())){
+                userInfo.setParent2UserId("0");
+            }
+            if(StringUtils.isEmpty(params.getParent3UserId())){
+                userInfo.setParent3UserId("0");
             }
             return userInfo;
         }
@@ -70,17 +77,37 @@ public class DbInstanceEntity {
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
-    public static UserAccountRecord initUserAccountRecord(String userId,String accountId,BigDecimal payMoney,BigDecimal totalMoney,String remark){
+    public static UserAccountRecord initUserAccountRecord(String userId,String accountId,int type,BigDecimal payMoney,BigDecimal totalMoney,String title,String remarks){
         synchronized (userId) {
             UserAccountRecord userAccountRecord = new UserAccountRecord();
             userAccountRecord.setIsNewRecord(true);
-            userAccountRecord.setType(1);
-            userAccountRecord.setRemark(remark);
+            userAccountRecord.setType(type);
             userAccountRecord.setUserId(userId);
+            userAccountRecord.setRemark(title);
+            userAccountRecord.setRemarks(remarks);
             userAccountRecord.setAccountId(accountId);
-            userAccountRecord.setTotalMoney(CommonStaticContact.add(totalMoney,payMoney));
             userAccountRecord.setChangeMoney(payMoney);
+            userAccountRecord.setTotalMoney(CommonStaticContact.add(totalMoney,payMoney));
             return userAccountRecord;
+        }
+    }
+
+    /**
+     * @desc 初始化用户账户记录信息
+     * @author nada
+     * @create 2021/5/12 2:58 下午
+     */
+    public static UserRewardRecord initUserRewardRecord(String userId, int type, BigDecimal rewardMoney, BigDecimal totalMoney, String title, String remarks){
+        synchronized (userId) {
+            UserRewardRecord userRewardRecord = new UserRewardRecord();
+            userRewardRecord.setIsNewRecord(true);
+            userRewardRecord.setType(type);
+            userRewardRecord.setUserId(userId);
+            userRewardRecord.setTitle(title);
+            userRewardRecord.setRemarks(remarks);
+            userRewardRecord.setMoney(rewardMoney);
+            userRewardRecord.setTotalMoney(rewardMoney);
+            return userRewardRecord;
         }
     }
 

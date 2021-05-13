@@ -5,8 +5,7 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
-import com.nabobsite.modules.nabob.api.entity.DbInstanceEntity;
-import com.nabobsite.modules.nabob.api.entity.NabobLogicContact;
+import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
@@ -53,7 +52,7 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 			if(StringUtils.isAnyEmpty(token,name,email,phoneNumber)){
 				return ResultUtil.failed("充值失败,获取充值参数为空");
 			}
-			if(CommonStaticContact.isLesserOrEqual(payMoney, NabobLogicContact.ZERO)){
+			if(CommonStaticContact.isLesserOrEqual(payMoney, CommonStaticContact.ZERO)){
 				return ResultUtil.failed("充值失败,充值金额小于0");
 			}
 			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
@@ -67,7 +66,7 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 			order.setUserId(userId);
 			Long orderNo = SnowFlakeIDGenerator.generateSnowFlakeId();
 			synchronized (orderNo) {
-				long dbResult = orderDao.insert(DbInstanceEntity.initOrderInfo(order,String.valueOf(orderNo)));
+				long dbResult = orderDao.insert(DbInstanceContact.initOrderInfo(order,String.valueOf(orderNo)));
 				if(CommonStaticContact.dbResult(dbResult)){
 					return ResultUtil.success(order);
 				}

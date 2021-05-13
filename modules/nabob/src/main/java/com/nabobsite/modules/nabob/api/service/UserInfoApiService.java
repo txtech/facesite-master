@@ -11,9 +11,10 @@ import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
-import com.nabobsite.modules.nabob.api.entity.DbInstanceEntity;
+import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
+import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
@@ -41,9 +42,9 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
 	private UserInfoDao userInfoDao;
 	@Autowired
-	private SequenceService sequenceService;
+	private UserAccountDao userAccountDao;
 	@Autowired
-	private UserAccountApiService userAccountApiService;
+	private SequenceService sequenceService;
 	@Autowired
 	private TriggerApiService triggerApiService;
 
@@ -161,6 +162,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			if(userInfo == null){
 				return ResultUtil.failed("获取失败,获取帐号信息为空");
 			}
+			userInfo.setPassword("");
 			return ResultUtil.success(userInfo);
 		} catch (Exception e) {
 			logger.error("Failed to get userinfo!",e);
@@ -285,15 +287,28 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 						userInfo.setParentSysId(user.getId());
 					}
 				}
+				//根据父一级ID，写入父二级ID，父三级ID
+				String parent1UserId = userInfo.getParentUserId();
+				if(StringUtils.isNotEmpty(parent1UserId) && !"0".equalsIgnoreCase(parent1UserId)){
+					UserInfo parent2UserInfo = this.getUserInfoByUserId(parent1UserId);
+					if(parent2UserInfo !=null && StringUtils.isNotEmpty(parent2UserInfo.getId())){
+						String parent2UserId = parent2UserInfo.getId();
+						userInfo.setParent2UserId(parent2UserId);
+						UserInfo parent3UserInfo = this.getUserInfoByUserId(parent2UserId);
+						if(parent3UserInfo !=null && StringUtils.isNotEmpty(parent3UserInfo.getId())){
+							userInfo.setParent2UserId(parent3UserInfo.getId());
+						}
+					}
+				}
 
 				//生产唯一邀请码
 				Long seqId = sequenceService.getSequence();
 				userInfo.setInviteCode(String.valueOf(seqId));
-				UserInfo initUser = DbInstanceEntity.initUserInfo(userInfo);
+				UserInfo initUser = DbInstanceContact.initUserInfo(userInfo);
 				long dbResult = userInfoDao.insert(initUser);
 				if(CommonStaticContact.dbResult(dbResult)){
 					String userId = initUser.getId();
-					userAccountApiService.save(DbInstanceEntity.initUserAccount(userId));
+					userAccountDao.insert(DbInstanceContact.initUserAccount(userId));
 					triggerApiService.registerTrigger(userId);
 					return ResultUtil.success(Boolean.TRUE);
 				}
@@ -312,7 +327,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	public boolean updateLoginIp(String userId,String ip) {
 		try {
-			if(StringUtils.isEmpty(userId)){
+			if(StringUtils.isEmpty(userId) || "0".equalsIgnoreCase(userId)){
 				return false;
 			}
 			UserInfo userInfo = new UserInfo();
@@ -371,7 +386,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	public UserInfo getUserInfoByUserId(String userId) {
 		try {
-			if(StringUtils.isEmpty(userId)){
+			if(StringUtils.isEmpty(userId) || "0".equalsIgnoreCase(userId)){
 				return null;
 			}
 			UserInfo userInfo = new UserInfo();

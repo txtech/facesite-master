@@ -19,14 +19,14 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> ${text('用户id')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="userId" class="form-control required digits"/>
+								<#form:input path="userId" maxlength="30" class="form-control required"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('类型')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('类型 1')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="type" class="form-control required digits"/>
 							</div>
@@ -44,7 +44,16 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('金额')}：<i class="fa icon-question hide"></i></label>
+								<span class="required hide">*</span> ${text('总金额')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="totalMoney" class="form-control number"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('奖励金额')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="money" class="form-control required number"/>
 							</div>
