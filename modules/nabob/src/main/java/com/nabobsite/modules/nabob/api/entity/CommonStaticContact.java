@@ -12,8 +12,12 @@ import java.math.BigDecimal;
  */
 public class CommonStaticContact {
     //用户状态
-    public final static int USER_STATUS_OK = 1;//正常
-    public final static int USER_STATUS_ENABLE = 3;//禁用
+    public final static int USER_STATUS_1 = 1;//正常
+    public final static int USER_STATUS_3 = 3;//禁用
+
+    //用户解锁状态
+    public final static int USER_LOCK_1 = 1;//正常
+    public final static int USER_LOCK_2 = 2;//锁定
 
     //用户账户状态
     public final static int USER_ACCOUNT_STATUS_OK = 1;//正常

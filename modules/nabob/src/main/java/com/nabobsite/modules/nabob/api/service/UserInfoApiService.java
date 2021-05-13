@@ -209,6 +209,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				loginUserInfo.setToken(newToken);
 				return ResultUtil.success(loginUserInfo);
 			}
+			this.updateLoginIp(userId,userInfo.getLoginIp());
 			return ResultUtil.failed("Failed to login!");
 		} catch (Exception e) {
 			logger.error("Failed to login!",e);
@@ -301,6 +302,27 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 		} catch (Exception e) {
 			logger.error("Failed to register user!",e);
 			return ResultUtil.failed("Failed to register user!");
+		}
+	}
+
+	/**
+	 * @desc 根据ID修改登陆IP
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public boolean updateLoginIp(String userId,String ip) {
+		try {
+			if(StringUtils.isEmpty(userId)){
+				return false;
+			}
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(userId);
+			userInfo.setLoginIp(ip);
+			long dbResult = userInfoDao.update(userInfo);
+			return CommonStaticContact.dbResult(dbResult);
+		} catch (Exception e) {
+			logger.error("根据ID修改登陆IP异常",e);
+			return true;
 		}
 	}
 

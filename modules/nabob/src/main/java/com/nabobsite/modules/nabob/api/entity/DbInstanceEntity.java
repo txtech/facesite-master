@@ -5,7 +5,6 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountRecord;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.apache.commons.lang3.StringUtils;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -34,7 +33,8 @@ public class DbInstanceEntity {
             userInfo.setTeamNum1(0);
             userInfo.setTeamNum2(0);
             userInfo.setTeamNum3(0);
-            userInfo.setUserStatus(CommonStaticContact.USER_STATUS_OK);
+            userInfo.setLock(CommonStaticContact.USER_LOCK_2);
+            userInfo.setUserStatus(CommonStaticContact.USER_STATUS_1);
             if(StringUtils.isEmpty(params.getParentUserId())){
                 userInfo.setParentUserId("0");
             }

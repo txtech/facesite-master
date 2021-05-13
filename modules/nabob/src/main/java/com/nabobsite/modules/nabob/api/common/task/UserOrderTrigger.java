@@ -54,6 +54,7 @@ public class UserOrderTrigger extends TriggerOperation {
 			LOG.error("用户支付触发,订单为空:{}",orderNo);
 			return;
 		}
+		int oldLock = userInfo.getLock();
 		int currentLevel = userInfo.getLevel();
 		BigDecimal payMoney = order.getPayMoney();
 		BigDecimal currentTotalMoney = userAccount.getTotalMoney();
@@ -62,9 +63,13 @@ public class UserOrderTrigger extends TriggerOperation {
 			currentLevel = maxLevel;
 			int userLock = this.getUserLock(currentLevel,payMoney);
 			Boolean isUpLevelOk = this.updateUpLevel(userId,maxLevel,userLock);
-			LOG.error("用户支付触发,用户升级:{},{}",userId,isUpLevelOk);
+			LOG.info("用户支付触发,用户升级且解锁:{},{}",userId,isUpLevelOk);
 		}else{
-
+			int userLock = this.getUserLock(currentLevel,payMoney);
+			if(oldLock != CommonStaticContact.USER_LOCK_1 && userLock == CommonStaticContact.USER_LOCK_1){
+				Boolean isUpLevelOk = this.updateLock(userId,userLock);
+				LOG.info("用户支付触发,用户不升级只解锁:{},{}",userId,isUpLevelOk);
+			}
 		}
 	}
 
@@ -74,6 +79,9 @@ public class UserOrderTrigger extends TriggerOperation {
 	 * @create 2021/5/12 11:22 下午
 	*/
 	public int getUserLock(int currentLevel,BigDecimal payMoney){
+		if(currentLevel == TaskLogicStaticContact.USER_LEVEL_0 || currentLevel == TaskLogicStaticContact.USER_LEVEL_1){
+			return 1;
+		}
 		BigDecimal mustBalance = TaskLogicStaticContact.LEVEL_BALANCE_MIN_BALANCE.get(currentLevel);
 		if(CommonStaticContact.isBiggerOrEqual(payMoney,mustBalance)){
 			return 1;
@@ -95,6 +103,26 @@ public class UserOrderTrigger extends TriggerOperation {
 			userInfo.setId(userId);
 			userInfo.setLock(userLock);
 			userInfo.setLevel(upLevel);
+			long dbResult = userInfoDao.update(userInfo);
+			return CommonStaticContact.dbResult(dbResult);
+		} catch (Exception e) {
+			LOG.error("根据账号ID升级异常",e);
+			return null;
+		}
+	}
+	/**
+	 * @desc 根据账号ID解锁
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public Boolean updateLock(String userId,int userLock) {
+		try {
+			if(StringUtils.isEmpty(userId)){
+				return null;
+			}
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(userId);
+			userInfo.setLock(userLock);
 			long dbResult = userInfoDao.update(userInfo);
 			return CommonStaticContact.dbResult(dbResult);
 		} catch (Exception e) {
