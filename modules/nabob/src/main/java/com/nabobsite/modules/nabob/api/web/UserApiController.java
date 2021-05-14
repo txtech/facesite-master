@@ -2,6 +2,7 @@
  * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.nabobsite.modules.nabob.api.web;
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.config.Global;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
@@ -46,7 +47,7 @@ public class UserApiController extends BaseController {
 	public String register(String accountNo, String password, String inviteCode,String param_parent,String favorite,HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		UserInfo userInfo = new UserInfo();
-		userInfo.setIpaddress(ip);
+		userInfo.setRegistIp(ip);
 		userInfo.setAccountNo(accountNo);
 		userInfo.setPassword(password);
 		userInfo.setFavorite(favorite);
@@ -66,7 +67,6 @@ public class UserApiController extends BaseController {
 		String loginIp = HttpBrowserTools.getIpAddr(request);
 		String ip = HttpBrowserTools.getIpAddr(request);
 		UserInfo userInfo = new UserInfo();
-		userInfo.setIpaddress(ip);
 		userInfo.setAccountNo(accountNo);
 		userInfo.setPassword(password);
 		userInfo.setLoginIp(loginIp);
@@ -90,7 +90,6 @@ public class UserApiController extends BaseController {
 		return renderResult(Global.TRUE,text("getUserInfo"), result);
 	}
 
-
 	@PostMapping(value = {"updatePwd"})
 	@ApiOperation(value = "用户修改密码")
 	@ApiImplicitParams({
@@ -113,6 +112,13 @@ public class UserApiController extends BaseController {
 		return renderResult(Global.TRUE,text("shareFriends"),result);
 	}
 
+	@ApiOperation(value = "获取系统配置")
+	@PostMapping(value = {"getSysConfig"})
+	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
+	public String getSysConfig(String param_token){
+		CommonResult<JSONObject> result = userInfoApiService.getSysConfig(param_token);
+		return renderResult(Global.TRUE,text("getCountdown"),result);
+	}
 
 	@ApiOperation(value = "用户切换语言")
 	@RequestMapping(value = "switchLang/{Lang}")

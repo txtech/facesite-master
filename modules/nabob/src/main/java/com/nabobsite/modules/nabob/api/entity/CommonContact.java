@@ -18,6 +18,8 @@ public class CommonContact {
 
     public final static BigDecimal ZERO = new BigDecimal("0");
 
+    public final static String SYS_KEY_COUNTDOWN_TIME  = "sys.key.countdown.time";
+
     //用户状态
     public final static int USER_STATUS_1 = 1;//正常
     public final static int USER_STATUS_3 = 3;//禁用

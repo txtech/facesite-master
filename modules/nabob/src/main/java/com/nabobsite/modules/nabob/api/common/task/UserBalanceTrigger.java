@@ -1,6 +1,7 @@
 package com.nabobsite.modules.nabob.api.common.task;
 
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerOperation;
+import com.nabobsite.modules.nabob.api.dao.CustomUserInfoDao;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
@@ -45,7 +46,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 		}
 		int oldLock = userInfo.getLock();
 		int currentLevel = userInfo.getLevel();
-		String parent1Id = userInfo.getParentUserId();
+		String parent1Id = userInfo.getParent1UserId();
 		BigDecimal currentTotalMoney = userAccount.getTotalMoney();
 		int maxLevel = LogicStaticContact.getMaxUserLevelByTotalBalance(currentTotalMoney);
 		if(currentLevel < maxLevel){
@@ -184,7 +185,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			}
 			UserInfo userInfo = new UserInfo();
 			userInfo.setId(userId);
-			return userInfoDao.getOkLevelTeamNum1(userInfo);
+			return userInfoDao.getOkLevelTeam1Num(userInfo);
 		} catch (Exception e) {
 			LOG.error("根据账号ID和等级获取用户团队个数异常",e);
 			return 0;

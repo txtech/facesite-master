@@ -13,7 +13,7 @@
 	</select> -->
 
 	<!--获取达到等级的直推团队人数-->
-	<update id="getOkLevelTeamNum1" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
+	<update id="getOkLevelTeam1Num" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
 		SELECT
 		    IFNULL(count(id),0)
 		FROM
@@ -22,51 +22,27 @@
 			parent_user_id = #{id} and  level &lt;= (select IFNULL(level-1,0) from t1_user_info where id = #{id} and lock =2 and level>1)
 	</update>
 
-	<!--增加一级团队-->
-	<update id="updateTeam1" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
+	<!--增加团队-->
+	<update id="updateTeamNum" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
 		update
 			t1_user_info
 		<set>
-			<if test="teamNum != null ">
-				team_num = team_num + #{teamNum},
-				team_num_1 = team_num_1 + #{teamNum},
+			<if test="team1Num != null and team1Num >0">
+				team_num = team_num + #{team1Num},
+				team1_num = team1_num + #{team1Num},
+			</if>
+			<if test="team2Num != null and team2Num >0">
+				team_num = team_num + #{team2Num},
+				team2_num = team2_num + #{team2Num},
+			</if>
+			<if test="team3Num != null and team3Num >0">
+				team_num = team_num + #{team3Num},
+				team3_num = team3_num + #{team3Num},
 			</if>
 			updated = sysdate()
 		</set>
 		<where>
-			id = #{id} and  (team_num + #{teamNum}) >= 0 and  (team_num_1 + #{teamNum}) >= 0
-		</where>
-	</update>
-
-	<!--增加二级团队-->
-	<update id="updateTeam2" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
-		update
-		t1_user_info
-		<set>
-			<if test="teamNum != null ">
-				team_num = team_num + #{teamNum},
-				team_num_2 = team_num_2 + #{teamNum},
-			</if>
-			updated = sysdate()
-		</set>
-		<where>
-			id = #{id} and  (team_num + #{teamNum}) >= 0 and  (team_num_2 + #{teamNum}) >= 0
-		</where>
-	</update>
-
-	<!--增加三级团队-->
-	<update id="updateTeam3" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
-		update
-		t1_user_info
-		<set>
-			<if test="teamNum != null ">
-				team_num = team_num + #{teamNum},
-				team_num_3 = team_num_3 + #{teamNum},
-			</if>
-			updated = sysdate()
-		</set>
-		<where>
-			id = #{id} and  (team_num + #{teamNum}) >= 0 and  (team_num_3 + #{teamNum}) >= 0
+			id = #{id}
 		</where>
 	</update>
 </mapper>

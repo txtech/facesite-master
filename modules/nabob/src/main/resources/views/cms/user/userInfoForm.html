@@ -28,7 +28,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> ${text('一级ID')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="parentUserId" maxlength="30" class="form-control required"/>
+								<#form:input path="parent1UserId" maxlength="30" class="form-control required"/>
 							</div>
 						</div>
 					</div>
@@ -125,6 +125,15 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('会话令牌')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="token" maxlength="520" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> ${text('最喜欢的人')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="favorite" maxlength="520" class="form-control"/>
@@ -136,7 +145,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> ${text('注册IP')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="ipaddress" maxlength="520" class="form-control"/>
+								<#form:input path="registIp" maxlength="520" class="form-control"/>
 							</div>
 						</div>
 					</div>
@@ -163,7 +172,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> ${text('一级团队人数')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="teamNum1" class="form-control required digits"/>
+								<#form:input path="team1Num" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>
@@ -172,7 +181,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> ${text('二级团队人数')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="teamNum2" class="form-control required digits"/>
+								<#form:input path="team2Num" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>
@@ -181,44 +190,7 @@
 							<label class="control-label col-sm-4" title="">
 								<span class="required ">*</span> ${text('三级团队人数')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="teamNum3" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('一级解锁人数')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="teamUnlockNum1" class="form-control digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('二级解锁人数')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="teamUnlockNum2" class="form-control digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('三级解锁人数')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="teamUnlockNum3" class="form-control digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('任务结束时间')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="taskEndTime" readonly="true" maxlength="20" class="form-control laydate"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+								<#form:input path="team3Num" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>
@@ -261,6 +233,15 @@
 								<span class="required hide">*</span> ${text('删除标志')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="delFlag" maxlength="1" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('邀请秘文')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="inviteSecret" maxlength="250" class="form-control required"/>
 							</div>
 						</div>
 					</div>

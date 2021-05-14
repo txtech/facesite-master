@@ -1,18 +1,18 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.nabobsite.modules.nabob.cms.order.dao;
+package com.nabobsite.modules.nabob.cms.sys.dao;
 
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
-import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 
 /**
- * 订单DAO接口
+ * 用户任务DAO接口
  * @author face
  * @version 2021-05-14
  */
 @MyBatisDao
-public interface OrderDao extends CrudDao<Order> {
+public interface SysConfigDao extends CrudDao<SysConfig> {
 	
 }

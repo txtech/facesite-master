@@ -4,6 +4,7 @@ import com.nabobsite.modules.nabob.api.common.task.UserBalanceTrigger;
 import com.nabobsite.modules.nabob.api.common.task.UserRegisterTrigger;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerPoolManagerImpl;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerThread;
+import com.nabobsite.modules.nabob.api.dao.CustomUserInfoDao;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;

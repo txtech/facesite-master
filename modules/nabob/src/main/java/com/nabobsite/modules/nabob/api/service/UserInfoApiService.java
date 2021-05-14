@@ -14,6 +14,8 @@ import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
+import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
+import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -41,6 +43,8 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	private RedisOpsUtil redisOpsUtil;
 	@Autowired
 	private UserInfoDao userInfoDao;
+	@Autowired
+	private SysConfigDao sysConfigDao;
 	@Autowired
 	private UserAccountDao userAccountDao;
 	@Autowired
@@ -208,7 +212,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			redisOpsUtil.set(userTokenKey,newToken,RedisPrefixContant.CACHE_HALF_HOUR);
 			if(redisOpsUtil.get(newTokenKey)!=null){
 				loginUserInfo.setPassword("");
-				loginUserInfo.setToken(newToken);
+				//loginUserInfo.setToken(newToken);
 				return ResultUtil.success(loginUserInfo);
 			}
 			this.updateLoginIp(userId,userInfo.getLoginIp());
@@ -262,11 +266,11 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 					String parentSysId = userInfo.getParentSysId();
 					if(StringUtils.isNotEmpty(parentUserId) && StringUtils.isNotEmpty(parentSysId)){
 						userInfo.setParentSysId(parentSysId);
-						userInfo.setParentUserId(parentUserId);
+						userInfo.setParent1UserId(parentUserId);
 					}
 				}
 				//邀请码链接信息
-				if(StringUtils.isNotEmpty(param_parent) && StringUtils.isEmpty(userInfo.getParentUserId())){
+				if(StringUtils.isNotEmpty(param_parent) && StringUtils.isEmpty(userInfo.getParent1UserId())){
 					try {
 						String pidAndSid = HiDesUtils.desDeCode(param_parent);
 						if(StringUtils.isNotEmpty(pidAndSid)){
@@ -274,7 +278,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 							String parentUserId = pidAndSidJson.getString("pid");
 							String parentSysId = pidAndSidJson.getString("sid");
 							userInfo.setParentSysId(parentSysId);
-							userInfo.setParentUserId(parentUserId);
+							userInfo.setParent1UserId(parentUserId);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -288,7 +292,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 					}
 				}
 				//根据父一级ID，写入父二级ID，父三级ID
-				String parent1UserId = userInfo.getParentUserId();
+				String parent1UserId = userInfo.getParent1UserId();
 				if(StringUtils.isNotEmpty(parent1UserId) && !"0".equalsIgnoreCase(parent1UserId)){
 					UserInfo parent2UserInfo = this.getUserInfoByUserId(parent1UserId);
 					if(parent2UserInfo !=null && StringUtils.isNotEmpty(parent2UserInfo.getId())){
@@ -309,6 +313,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				if(CommonContact.dbResult(dbResult)){
 					String userId = initUser.getId();
 					userAccountDao.insert(DbInstanceContact.initUserAccount(userId));
+					this.updateUserSecret(userId,parent1UserId);
 					triggerApiService.registerTrigger(userId);
 					return ResultUtil.success(Boolean.TRUE);
 				}
@@ -321,7 +326,63 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	}
 
 	/**
-	 * @desc 根据ID修改登陆IP
+	 * @desc 获取倒计时时间
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONObject> getSysConfig(String token) {
+		try {
+			if(StringUtils.isEmpty(token)){
+				return ResultUtil.failed("获取失败,获取令牌为空");
+			}
+			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return ResultUtil.failed("获取失败,登陆令牌失效");
+			}
+			UserInfo userInfo = this.getUserInfoByUserId(userId);
+			if(userInfo == null){
+				return ResultUtil.failed("获取失败,获取帐号信息为空");
+			}
+			SysConfig sysConfig = this.getSysConfigByKey(CommonContact.SYS_KEY_COUNTDOWN_TIME);
+			if(sysConfig == null){
+				return ResultUtil.failed("获取失败,获取配置为空");
+			}
+			JSONObject configJson = new JSONObject();
+			configJson.put("countDown",sysConfig.getValue());
+			return ResultUtil.success(configJson);
+		} catch (Exception e) {
+			logger.error("Failed to get count down time!",e);
+			return ResultUtil.failed("Failed to get count down time!");
+		}
+	}
+
+	/**
+	 * @desc 修改唯一邀请秘文
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public boolean updateUserSecret(String userId,String parentSysId) {
+		try {
+			if(StringUtils.isEmpty(userId) || "0".equalsIgnoreCase(userId)){
+				return false;
+			}
+			UserInfo userInfo = new UserInfo();
+			JSONObject secretJson = new JSONObject();
+			secretJson.put("pid",userId);
+			secretJson.put("sid",parentSysId);
+			userInfo.setId(userId);
+			userInfo.setInviteSecret( HiDesUtils.desEnCode(secretJson.toString()));
+			long dbResult = userInfoDao.update(userInfo);
+			return CommonContact.dbResult(dbResult);
+		} catch (Exception e) {
+			logger.error("修改登陆IP异常",e);
+			return true;
+		}
+	}
+
+	/**
+	 * @desc 修改登陆IP
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
@@ -336,13 +397,13 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			long dbResult = userInfoDao.update(userInfo);
 			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
-			logger.error("根据ID修改登陆IP异常",e);
+			logger.error("修改登陆IP异常",e);
 			return true;
 		}
 	}
 
 	/**
-	 * @desc 根据账号获取用户信息
+	 * @desc 获取用户信息
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	*/
@@ -355,13 +416,13 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			userInfo.setAccountNo(accountNo);
 			return userInfoDao.getByEntity(userInfo);
 		} catch (Exception e) {
-			logger.error("根据账号获取用户信息异常",e);
+			logger.error("获取用户信息异常",e);
 			return null;
 		}
 	}
 
 	/**
-	 * @desc 根据邀请码获取用户信息
+	 * @desc 获取用户信息
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
@@ -374,13 +435,13 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			userInfo.setInviteCode(inviteCode);
 			return userInfoDao.getByEntity(userInfo);
 		} catch (Exception e) {
-			logger.error("根据邀请码获取用户信息异常",e);
+			logger.error("获取用户信息异常",e);
 			return null;
 		}
 	}
 
 	/**
-	 * @desc 根据账号ID获取用户信息
+	 * @desc 获取用户信息
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
@@ -393,7 +454,26 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			userInfo.setId(userId);
 			return userInfoDao.getByEntity(userInfo);
 		} catch (Exception e) {
-			logger.error("根据账号ID获取用户信息异常",e);
+			logger.error("获取用户信息异常",e);
+			return null;
+		}
+	}
+
+	/**
+	 * @desc 获取配置
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public SysConfig getSysConfigByKey(String key) {
+		try {
+			if(StringUtils.isEmpty(key)){
+				return null;
+			}
+			SysConfig sysConfig = new SysConfig();
+			sysConfig.setKey(key);
+			return sysConfigDao.getByEntity(sysConfig);
+		} catch (Exception e) {
+			logger.error("获取配置异常",e);
 			return null;
 		}
 	}

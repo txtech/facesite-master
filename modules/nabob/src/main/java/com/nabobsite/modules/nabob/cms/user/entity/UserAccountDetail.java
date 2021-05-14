@@ -25,7 +25,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 @Table(name="t1_user_account_detail", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="user_id", attrName="userId", label="用户id"),
-		@Column(name="account_id", attrName="accountId", label="账户ID"),
 		@Column(name="title", attrName="title", label="标题", queryType=QueryType.LIKE),
 		@Column(name="type", attrName="type", label="类型 1", comment="类型 1:总资金 20:佣金账户 30:仓库资金 40:奖励账户"),
 		@Column(name="unique", attrName="unique", label="唯一标识"),
@@ -47,10 +46,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class UserAccountDetail extends DataEntity<UserAccountDetail> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户id
-	private String accountId;		// 账户ID
 	private String title;		// 标题
 	private Integer type;		// 类型 1:总资金 20:佣金账户 30:仓库资金 40:奖励账户
 	private String unique;		// 唯一标识
@@ -66,7 +64,8 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+	private String accountId;
+
 	public UserAccountDetail() {
 		this(null);
 	}
@@ -74,7 +73,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public UserAccountDetail(String id){
 		super(id);
 	}
-	
+
 	@NotBlank(message="用户id不能为空")
 	@Length(min=0, max=30, message="用户id长度不能超过 30 个字符")
 	public String getUserId() {
@@ -84,17 +83,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
-	@NotBlank(message="账户ID不能为空")
-	@Length(min=0, max=30, message="账户ID长度不能超过 30 个字符")
-	public String getAccountId() {
-		return accountId;
-	}
 
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
-	}
-	
 	@NotBlank(message="标题不能为空")
 	@Length(min=0, max=520, message="标题长度不能超过 520 个字符")
 	public String getTitle() {
@@ -104,7 +93,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	@NotNull(message="类型 1不能为空")
 	public Integer getType() {
 		return type;
@@ -113,7 +102,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setType(Integer type) {
 		this.type = type;
 	}
-	
+
 	@NotBlank(message="唯一标识不能为空")
 	@Length(min=0, max=128, message="唯一标识长度不能超过 128 个字符")
 	public String getUnique() {
@@ -123,7 +112,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setUnique(String unique) {
 		this.unique = unique;
 	}
-	
+
 	@NotNull(message="总资金不能为空")
 	public BigDecimal getTotalMoney() {
 		return totalMoney;
@@ -132,7 +121,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setTotalMoney(BigDecimal totalMoney) {
 		this.totalMoney = totalMoney;
 	}
-	
+
 	@NotNull(message="可用资金不能为空")
 	public BigDecimal getAvailableMoney() {
 		return availableMoney;
@@ -141,7 +130,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setAvailableMoney(BigDecimal availableMoney) {
 		this.availableMoney = availableMoney;
 	}
-	
+
 	@NotNull(message="仓库资金不能为空")
 	public BigDecimal getWarehouseMoney() {
 		return warehouseMoney;
@@ -150,7 +139,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setWarehouseMoney(BigDecimal warehouseMoney) {
 		this.warehouseMoney = warehouseMoney;
 	}
-	
+
 	@NotNull(message="收入资金不能为空")
 	public BigDecimal getIncomeMoney() {
 		return incomeMoney;
@@ -159,7 +148,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setIncomeMoney(BigDecimal incomeMoney) {
 		this.incomeMoney = incomeMoney;
 	}
-	
+
 	@NotNull(message="云资产不能为空")
 	public BigDecimal getAiAssetsMoney() {
 		return aiAssetsMoney;
@@ -168,7 +157,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setAiAssetsMoney(BigDecimal aiAssetsMoney) {
 		this.aiAssetsMoney = aiAssetsMoney;
 	}
-	
+
 	@NotNull(message="佣金账户不能为空")
 	public BigDecimal getCommissionMoney() {
 		return commissionMoney;
@@ -177,7 +166,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setCommissionMoney(BigDecimal commissionMoney) {
 		this.commissionMoney = commissionMoney;
 	}
-	
+
 	@NotNull(message="增值账户不能为空")
 	public BigDecimal getIncrementMoney() {
 		return incrementMoney;
@@ -186,7 +175,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setIncrementMoney(BigDecimal incrementMoney) {
 		this.incrementMoney = incrementMoney;
 	}
-	
+
 	@NotNull(message="可提取账户不能为空")
 	public BigDecimal getClaimableMoney() {
 		return claimableMoney;
@@ -195,7 +184,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setClaimableMoney(BigDecimal claimableMoney) {
 		this.claimableMoney = claimableMoney;
 	}
-	
+
 	@NotNull(message="奖励账户不能为空")
 	public BigDecimal getRewardMoney() {
 		return rewardMoney;
@@ -204,7 +193,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setRewardMoney(BigDecimal rewardMoney) {
 		this.rewardMoney = rewardMoney;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -213,7 +202,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -222,7 +211,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -231,5 +220,12 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
 }

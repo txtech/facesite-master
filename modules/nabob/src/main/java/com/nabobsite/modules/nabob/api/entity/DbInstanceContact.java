@@ -28,17 +28,16 @@ public class DbInstanceContact {
             userInfo.setPhoneNumber(accountNo);
             userInfo.setLevel(0);
             userInfo.setTeamNum(0);
-            userInfo.setTeamNum1(0);
-            userInfo.setTeamNum2(0);
-            userInfo.setTeamNum3(0);
-            userInfo.setTaskEndTime(CommonContact.addDateHour(48));
+            userInfo.setTeam1Num(0);
+            userInfo.setTeam2Num(0);
+            userInfo.setTeam3Num(0);
             userInfo.setLock(CommonContact.USER_LOCK_1);
             userInfo.setUserStatus(CommonContact.USER_STATUS_1);
             if(StringUtils.isEmpty(params.getParentSysId())){
                 userInfo.setParentSysId("0");
             }
-            if(StringUtils.isEmpty(params.getParentUserId())){
-                userInfo.setParentUserId("0");
+            if(StringUtils.isEmpty(params.getParent1UserId())){
+                userInfo.setParent1UserId("0");
             }
             if(StringUtils.isEmpty(params.getParent2UserId())){
                 userInfo.setParent2UserId("0");

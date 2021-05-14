@@ -25,7 +25,7 @@
 				<div class="form-group">
 					<label class="control-label">${text('一级ID')}：</label>
 					<div class="control-inline">
-						<#form:input path="parentUserId" maxlength="30" class="form-control width-120"/>
+						<#form:input path="parent1UserId" maxlength="30" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -89,6 +89,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('会话令牌')}：</label>
+					<div class="control-inline">
+						<#form:input path="token" maxlength="520" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('最喜欢的人')}：</label>
 					<div class="control-inline">
 						<#form:input path="favorite" maxlength="520" class="form-control width-120"/>
@@ -97,7 +103,7 @@
 				<div class="form-group">
 					<label class="control-label">${text('注册IP')}：</label>
 					<div class="control-inline">
-						<#form:input path="ipaddress" maxlength="520" class="form-control width-120"/>
+						<#form:input path="registIp" maxlength="520" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -115,44 +121,19 @@
 				<div class="form-group">
 					<label class="control-label">${text('一级团队人数')}：</label>
 					<div class="control-inline">
-						<#form:input path="teamNum1" class="form-control width-120"/>
+						<#form:input path="team1Num" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('二级团队人数')}：</label>
 					<div class="control-inline">
-						<#form:input path="teamNum2" class="form-control width-120"/>
+						<#form:input path="team2Num" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('三级团队人数')}：</label>
 					<div class="control-inline">
-						<#form:input path="teamNum3" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('一级解锁人数')}：</label>
-					<div class="control-inline">
-						<#form:input path="teamUnlockNum1" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('二级解锁人数')}：</label>
-					<div class="control-inline">
-						<#form:input path="teamUnlockNum2" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('三级解锁人数')}：</label>
-					<div class="control-inline">
-						<#form:input path="teamUnlockNum3" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('任务结束时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="taskEndTime" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+						<#form:input path="team3Num" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -182,6 +163,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('邀请秘文')}：</label>
+					<div class="control-inline">
+						<#form:input path="inviteSecret" maxlength="250" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -200,7 +187,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text("操作员上级")}', name:'parentSysId', index:'a.parent_sys_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/user/userInfo/form?id='+row.id+'" class="btnList" data-title="${text("编辑会员用户")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("一级ID")}', name:'parentUserId', index:'a.parent_user_id', width:150, align:"left"},
+		{header:'${text("一级ID")}', name:'parent1UserId', index:'a.parent1_user_id', width:150, align:"left"},
 		{header:'${text("二级ID")}', name:'parent2UserId', index:'a.parent2_user_id', width:150, align:"left"},
 		{header:'${text("三级ID")}', name:'parent3UserId', index:'a.parent3_user_id', width:150, align:"left"},
 		{header:'${text("状态 1")}', name:'userStatus', index:'a.user_status', width:150, align:"center"},
@@ -211,21 +198,19 @@ $('#dataGrid').dataGrid({
 		{header:'${text("密码")}', name:'password', index:'a.password', width:150, align:"left"},
 		{header:'${text("电话号码")}', name:'phoneNumber', index:'a.phone_number', width:150, align:"left"},
 		{header:'${text("邀请码")}', name:'inviteCode', index:'a.invite_code', width:150, align:"left"},
+		{header:'${text("会话令牌")}', name:'token', index:'a.token', width:150, align:"left"},
 		{header:'${text("最喜欢的人")}', name:'favorite', index:'a.favorite', width:150, align:"left"},
-		{header:'${text("注册IP")}', name:'ipaddress', index:'a.ipaddress', width:150, align:"left"},
+		{header:'${text("注册IP")}', name:'registIp', index:'a.regist_ip', width:150, align:"left"},
 		{header:'${text("登陆IP")}', name:'loginIp', index:'a.login_ip', width:150, align:"left"},
 		{header:'${text("团队总人数")}', name:'teamNum', index:'a.team_num', width:150, align:"center"},
-		{header:'${text("一级团队人数")}', name:'teamNum1', index:'a.team_num_1', width:150, align:"center"},
-		{header:'${text("二级团队人数")}', name:'teamNum2', index:'a.team_num_2', width:150, align:"center"},
-		{header:'${text("三级团队人数")}', name:'teamNum3', index:'a.team_num_3', width:150, align:"center"},
-		{header:'${text("一级解锁人数")}', name:'teamUnlockNum1', index:'a.team_unlock_num_1', width:150, align:"center"},
-		{header:'${text("二级解锁人数")}', name:'teamUnlockNum2', index:'a.team_unlock_num_2', width:150, align:"center"},
-		{header:'${text("三级解锁人数")}', name:'teamUnlockNum3', index:'a.team_unlock_num_3', width:150, align:"center"},
-		{header:'${text("任务结束时间")}', name:'taskEndTime', index:'a.task_end_time', width:150, align:"center"},
+		{header:'${text("一级团队人数")}', name:'team1Num', index:'a.team1_num', width:150, align:"center"},
+		{header:'${text("二级团队人数")}', name:'team2Num', index:'a.team2_num', width:150, align:"center"},
+		{header:'${text("三级团队人数")}', name:'team3Num', index:'a.team3_num', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
+		{header:'${text("邀请秘文")}', name:'inviteSecret', index:'a.invite_secret', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:userInfo:edit')){ %>
