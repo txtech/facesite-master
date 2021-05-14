@@ -43,7 +43,7 @@ public class UserApiController extends BaseController {
 			@ApiImplicitParam(name = "param_parent",value = "邀请上级", required = false),
 			@ApiImplicitParam(name = "inviteCode",value = "邀请码", required = false),
 			@ApiImplicitParam(name = "favorite",  value = "最喜欢的人", required = false),
-			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en,in,zh", required = false),
+			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en_US,en_IN,zh_CN", required = false),
 	})
 	public String register(String accountNo, String password, String inviteCode,String param_parent,String favorite,String param_lang,HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
@@ -63,7 +63,7 @@ public class UserApiController extends BaseController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "accountNo", value = "登陆账号", required = true, paramType="query", type="String"),
 			@ApiImplicitParam(name = "password",  value = "登陆密码", required = true),
-			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en,in,zh", required = false),
+			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en_US,en_IN,zh_CN", required = false),
 	})
 	public String login(String accountNo, String password,String param_lang,HttpServletRequest request) {
 		String loginIp = HttpBrowserTools.getIpAddr(request);
@@ -126,7 +126,7 @@ public class UserApiController extends BaseController {
 	@RequestMapping(value = "switchLang")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "param_token",  value = "会话token", required = true),
-			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en,in,zh", required = false),
+			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en_US,en_IN,zh_CN", required = false),
 	})
 	public String switchLang(String param_token,String param_lang) {
 		CommonResult<Boolean> result = userInfoApiService.switchLang(param_token,param_lang);

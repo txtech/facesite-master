@@ -49,6 +49,11 @@
 			<version>${jedis.version}</version>
 		</dependency>
 		<!-- Redis客户端 -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>30.1-jre</version>
+		</dependency>
 	</dependencies>
 
 	<build>

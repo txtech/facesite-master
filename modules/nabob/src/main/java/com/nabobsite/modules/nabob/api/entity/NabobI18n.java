@@ -1,5 +1,7 @@
 package com.nabobsite.modules.nabob.api.entity;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.jeesite.common.config.Global;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
@@ -10,10 +12,9 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName nada
@@ -22,26 +23,34 @@ import java.util.Set;
  * @Version 1.0
  */
 public class NabobI18n {
+    //英语(美国)
+    public static final String LANG_EN = "en_US";
+    //英语(印度)
+    public static final String LANG_IN = "en_IN";
+    //简体中文(中国)
+    public static final String LANG_ZH = "zh_CN";
 
-    //英文
-    public static final String LANG_EN = "en";
-    //中文
-    public static final String LANG_ZH = "zh";
-    //印度
-    public static final String LANG_IN = "in";
+    public static final Map<String, Map<String, String>> LOCAL_CACHE = new ConcurrentHashMap<>(256);
 
-    /**
-     * @desc 获取信息
-     * @author nada
-     * @create 2021/5/14 7:37 下午
-    */
-    public static String getText(String key,String defaultVale){
-        Global.getLang();
-        return i18nMap.get(key);
-    }
+    private static Cache<String, List> cache = CacheBuilder.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).build();
 
-    public static volatile Map<String,Map<String,String>>  langMap = new HashMap<String,Map<String,String>>();
-    public static volatile Map<String,String>  i18nMap = new HashMap<>();
-
-    public static volatile Map<String,String>  userLang = new HashMap<>();
+//    public Map<String, Map<Integer, CardInfoDO>> getAllCardInfo() {
+//        List<Map<String, Map<Integer, CardInfoDO>>> allCardList = null;
+//        try {
+//            allCardList = cache.get(CARD_INFO,new Callable<List<Map<String, Map<Integer, CardInfoDO>>>>() {
+//                                @Override
+//                                public List<Map<String, Map<Integer, CardInfoDO>>> call()
+//                                        throws Exception {
+//                                    return buildCardInfo();
+//                                }
+//                            });
+//        } catch (ExecutionException e) {
+//            LOG.error("get card info exception ", e);
+//            return null;
+//        }
+//        if (CollectionUtils.isEmpty(allCardList)) {
+//            return null;
+//        }
+//        return allCardList.get(0);
+//    }
 }
