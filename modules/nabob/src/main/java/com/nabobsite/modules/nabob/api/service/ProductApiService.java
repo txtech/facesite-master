@@ -73,7 +73,12 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 				if(userLevel < mustLevel){
 					return ResultUtil.failed("任务失败,当前等级不符合要求");
 				}
-				Boolean isOk =  this.updateAppreciationRate(userId,botId,mustLevel,productBotPrice);
+				String title = CommonContact.USER_ACCOUNT_DETAIL_TITLE_4;
+				BigDecimal commissionOtherRate = LogicStaticContact.PRODUCT_COMMISSION_OTHER_RATE;//增值比例
+				BigDecimal commissionRate = LogicStaticContact.LEVEL_BALANCE_COMMISSION_RATE.get(mustLevel);//产品佣金比例
+				BigDecimal commissionMoney = CommonContact.multiply(productBotPrice,commissionRate);//佣金
+				BigDecimal incrementMoney = CommonContact.multiply(commissionMoney,commissionOtherRate);//增值佣金
+				Boolean isOk = userAccountApiService.updateAccountCommissionMoney(userId,commissionMoney,incrementMoney,botId,title);
 				if(isOk){
 					return ResultUtil.success(true);
 				}
@@ -82,30 +87,6 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 		} catch (Exception e) {
 			logger.error("Failed to do the task!",e);
 			return ResultUtil.failed("Failed to do the task!");
-		}
-	}
-
-	/**
-	 * @desc 佣金和增值升值率账户
-	 * @author nada
-	 * @create 2021/5/13 10:14 下午
-	*/
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean updateAppreciationRate(String userId,String botId,int level,BigDecimal money) {
-		try {
-			String title = "刷单任务";
-			BigDecimal commissionOtherRate = LogicStaticContact.PRODUCT_COMMISSION_OTHER_RATE;//增值比例
-			BigDecimal commissionRate = LogicStaticContact.LEVEL_BALANCE_COMMISSION_RATE.get(level);//产品佣金比例
-			BigDecimal commissionMoney = CommonContact.multiply(money,commissionRate);//佣金
-			BigDecimal incrementMoney = CommonContact.multiply(commissionMoney,commissionOtherRate);//增值佣金
-			Boolean isOk = userAccountApiService.updateAccountCommissionMoney(userId,commissionMoney,incrementMoney,botId,title);
-			if(isOk){
-				return true;
-			}
-			return false;
-		} catch (Exception e) {
-			logger.error("佣金和增值失败",e);
-			return false;
 		}
 	}
 
