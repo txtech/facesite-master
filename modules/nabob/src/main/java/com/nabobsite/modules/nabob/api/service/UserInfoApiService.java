@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+
 import java.util.UUID;
 
 /**
@@ -354,6 +355,40 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 		} catch (Exception e) {
 			logger.error("Failed to get count down time!",e);
 			return ResultUtil.failed("Failed to get count down time!");
+		}
+	}
+
+	/**
+	 * @desc 用户设置语言
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> switchLang(String token, String lang) {
+		try {
+			if(StringUtils.isEmpty(token)){
+				return ResultUtil.failed("修改失败,获取令牌为空");
+			}
+			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return ResultUtil.failed("获取失败,登陆令牌失效");
+			}
+			UserInfo oldUserInfo = this.getUserInfoByUserId(userId);
+			if(oldUserInfo == null){
+				return ResultUtil.failed("修改失败,获取帐号信息为空");
+			}
+			UserInfo updateUserInfo = new UserInfo();
+			updateUserInfo.setId(oldUserInfo.getId());
+			updateUserInfo.setLang(token);
+			long dbResult = userInfoDao.update(updateUserInfo);
+			if(CommonContact.dbResult(dbResult)){
+				this.logout(token);
+				return ResultUtil.success(true);
+			}
+			return ResultUtil.failed("Failed to set lang!");
+		} catch (Exception e) {
+			logger.error("Failed to set lang!",e);
+			return ResultUtil.failed("Failed to set lang!");
 		}
 	}
 

@@ -42,9 +42,10 @@ public class UserApiController extends BaseController {
 			@ApiImplicitParam(name = "password",  value = "登陆密码", required = true),
 			@ApiImplicitParam(name = "param_parent",value = "邀请上级", required = false),
 			@ApiImplicitParam(name = "inviteCode",value = "邀请码", required = false),
-			@ApiImplicitParam(name = "favorite",  value = "最喜欢的人", required = false)
+			@ApiImplicitParam(name = "favorite",  value = "最喜欢的人", required = false),
+			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en,in,zh", required = false),
 	})
-	public String register(String accountNo, String password, String inviteCode,String param_parent,String favorite,HttpServletRequest request) {
+	public String register(String accountNo, String password, String inviteCode,String param_parent,String favorite,String param_lang,HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		UserInfo userInfo = new UserInfo();
 		userInfo.setRegistIp(ip);
@@ -52,6 +53,7 @@ public class UserApiController extends BaseController {
 		userInfo.setPassword(password);
 		userInfo.setFavorite(favorite);
 		userInfo.setInviteCode(inviteCode);
+		userInfo.setLang(param_lang);
 		CommonResult<Boolean> result = userInfoApiService.register(userInfo,param_parent);
 		return renderResult(Global.TRUE,text("register"), result);
 	}
@@ -61,7 +63,7 @@ public class UserApiController extends BaseController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "accountNo", value = "登陆账号", required = true, paramType="query", type="String"),
 			@ApiImplicitParam(name = "password",  value = "登陆密码", required = true),
-			@ApiImplicitParam(name = "param_lang",  value = "语言默认：zh_CN", required = false),
+			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en,in,zh", required = false),
 	})
 	public String login(String accountNo, String password,String param_lang,HttpServletRequest request) {
 		String loginIp = HttpBrowserTools.getIpAddr(request);
@@ -104,7 +106,7 @@ public class UserApiController extends BaseController {
 		return renderResult(Global.TRUE,text("updatePwd"),result);
 	}
 
-	@ApiOperation(value = "获取邀请好友链接")
+	@ApiOperation(value = "用户获取邀请好友链接")
 	@PostMapping(value = {"shareFriends"})
 	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
 	public String shareFriends(String param_token){
@@ -112,7 +114,7 @@ public class UserApiController extends BaseController {
 		return renderResult(Global.TRUE,text("shareFriends"),result);
 	}
 
-	@ApiOperation(value = "获取系统配置")
+	@ApiOperation(value = "用户获取系统配置")
 	@PostMapping(value = {"getSysConfig"})
 	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
 	public String getSysConfig(String param_token){
@@ -121,12 +123,13 @@ public class UserApiController extends BaseController {
 	}
 
 	@ApiOperation(value = "用户切换语言")
-	@RequestMapping(value = "switchLang/{Lang}")
-	public String switchLang(@PathVariable String lang) {
-		Session session = UserUtils.getSession();
-		if (com.jeesite.common.lang.StringUtils.isNotBlank(lang)){
-			session.setAttribute("__appLang", lang);
-		}
-		return renderResult(Global.TRUE, text("switchLang"),ResultUtil.success(true));
+	@RequestMapping(value = "switchLang")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "param_token",  value = "会话token", required = true),
+			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en,in,zh", required = false),
+	})
+	public String switchLang(String param_token,String param_lang) {
+		CommonResult<Boolean> result = userInfoApiService.switchLang(param_token,param_lang);
+		return renderResult(Global.TRUE, text("switchLang"),ResultUtil.success(result));
 	}
 }

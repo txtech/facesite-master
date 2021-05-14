@@ -95,6 +95,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('邀请秘文')}：</label>
+					<div class="control-inline">
+						<#form:input path="inviteSecret" maxlength="250" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('最喜欢的人')}：</label>
 					<div class="control-inline">
 						<#form:input path="favorite" maxlength="520" class="form-control width-120"/>
@@ -163,9 +169,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('邀请秘文')}：</label>
+					<label class="control-label">${text('语言')}：</label>
 					<div class="control-inline">
-						<#form:input path="inviteSecret" maxlength="250" class="form-control width-120"/>
+						<#form:input path="lang" maxlength="10" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -199,6 +205,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text("电话号码")}', name:'phoneNumber', index:'a.phone_number', width:150, align:"left"},
 		{header:'${text("邀请码")}', name:'inviteCode', index:'a.invite_code', width:150, align:"left"},
 		{header:'${text("会话令牌")}', name:'token', index:'a.token', width:150, align:"left"},
+		{header:'${text("邀请秘文")}', name:'inviteSecret', index:'a.invite_secret', width:150, align:"left"},
 		{header:'${text("最喜欢的人")}', name:'favorite', index:'a.favorite', width:150, align:"left"},
 		{header:'${text("注册IP")}', name:'registIp', index:'a.regist_ip', width:150, align:"left"},
 		{header:'${text("登陆IP")}', name:'loginIp', index:'a.login_ip', width:150, align:"left"},
@@ -210,7 +217,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
-		{header:'${text("邀请秘文")}', name:'inviteSecret', index:'a.invite_secret', width:150, align:"left"},
+		{header:'${text("语言")}', name:'lang', index:'a.lang', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:userInfo:edit')){ %>

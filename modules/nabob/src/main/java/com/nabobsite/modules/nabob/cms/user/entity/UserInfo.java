@@ -36,6 +36,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="phone_number", attrName="phoneNumber", label="电话号码"),
 		@Column(name="invite_code", attrName="inviteCode", label="邀请码"),
 		@Column(name="token", attrName="token", label="会话令牌"),
+		@Column(name="invite_secret", attrName="inviteSecret", label="邀请秘文"),
 		@Column(name="favorite", attrName="favorite", label="最喜欢的人"),
 		@Column(name="regist_ip", attrName="registIp", label="注册IP"),
 		@Column(name="login_ip", attrName="loginIp", label="登陆IP"),
@@ -49,7 +50,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
-		@Column(name="invite_secret", attrName="inviteSecret", label="邀请秘文"),
+		@Column(name="lang", attrName="lang", label="语言"),
 	}, orderBy="a.id DESC"
 )
 public class UserInfo extends DataEntity<UserInfo> {
@@ -68,6 +69,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private String phoneNumber;		// 电话号码
 	private String inviteCode;		// 邀请码
 	private String token;		// 会话令牌
+	private String inviteSecret;		// 邀请秘文
 	private String favorite;		// 最喜欢的人
 	private String registIp;		// 注册IP
 	private String loginIp;		// 登陆IP
@@ -78,7 +80,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	private String inviteSecret;		// 邀请秘文
+	private String lang;		// 语言
 	
 	public UserInfo() {
 		this(null);
@@ -211,6 +213,16 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.token = token;
 	}
 	
+	@NotBlank(message="邀请秘文不能为空")
+	@Length(min=0, max=250, message="邀请秘文长度不能超过 250 个字符")
+	public String getInviteSecret() {
+		return inviteSecret;
+	}
+
+	public void setInviteSecret(String inviteSecret) {
+		this.inviteSecret = inviteSecret;
+	}
+	
 	@Length(min=0, max=520, message="最喜欢的人长度不能超过 520 个字符")
 	public String getFavorite() {
 		return favorite;
@@ -301,14 +313,14 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.delFlag = delFlag;
 	}
 	
-	@NotBlank(message="邀请秘文不能为空")
-	@Length(min=0, max=250, message="邀请秘文长度不能超过 250 个字符")
-	public String getInviteSecret() {
-		return inviteSecret;
+	@NotBlank(message="语言不能为空")
+	@Length(min=0, max=10, message="语言长度不能超过 10 个字符")
+	public String getLang() {
+		return lang;
 	}
 
-	public void setInviteSecret(String inviteSecret) {
-		this.inviteSecret = inviteSecret;
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 	
 }
