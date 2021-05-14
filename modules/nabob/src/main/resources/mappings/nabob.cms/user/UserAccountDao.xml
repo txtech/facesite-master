@@ -13,51 +13,36 @@
 	</select> -->
 
 	<!--增加-->
-	<update id="updateAccountTotalMoney" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccount">
+	<update id="updateAccountMoney" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccount">
 		update
 		    t1_user_account
 		<set>
-			<if test="totalMoney != null ">
+			<if test="totalMoney != null and totalMoney !=0">
 				total_money = total_money + #{totalMoney},
 			</if>
-			<if test="remarks != null and remarks !='' ">
-				remarks = #{remarks},
+			<if test="availableMoney != null and availableMoney !=0">
+				available_money = available_money + #{availableMoney},
 			</if>
-			updated = sysdate()
-		</set>
-		<where>
-			id = #{id} and  (total_money + #{totalMoney}) >= 0
-		</where>
-	</update>
-
-	<!--增加-->
-	<update id="updateAccountTaskMoney" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccount">
-		update
-			t1_user_account
-		<set>
-			<if test="taskMoney != null ">
-				task_money = task_money + #{taskMoney},
+			<if test="warehouseMoney != null and warehouseMoney !=0">
+				warehouse_money = warehouse_money + #{warehouseMoney},
 			</if>
-			<if test="remarks != null and remarks !='' ">
-				remarks = #{remarks},
+			<if test="incomeMoney != null and incomeMoney !=0">
+				income_money = income_money + #{incomeMoney},
 			</if>
-			updated = sysdate()
-		</set>
-		<where>
-			id = #{id} and  (task_money + #{taskMoney}) >= 0
-		</where>
-	</update>
-
-	<!--增加-->
-	<update id="updateCommissionMoney" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccount">
-		update
-		t1_user_account
-		<set>
-			<if test="commissionMoney != null ">
+			<if test="aiAssetsMoney != null and aiAssetsMoney!=0">
+				ai_assets_money = ai_assets_money + #{aiAssetsMoney},
+			</if>
+			<if test="commissionMoney != null and commissionMoney !=0">
 				commission_money = commission_money + #{commissionMoney},
 			</if>
-			<if test="incrementMoney != null ">
+			<if test="incrementMoney != null and incrementMoney !=0">
 				increment_money = increment_money + #{incrementMoney},
+			</if>
+			<if test="claimableMoney != null and claimableMoney !=0">
+				claimable_money = claimable_money + #{claimableMoney},
+			</if>
+			<if test="rewardMoney != null and rewardMoney !=0 ">
+				reward_money = reward_money + #{rewardMoney},
 			</if>
 			<if test="remarks != null and remarks !='' ">
 				remarks = #{remarks},
@@ -65,8 +50,34 @@
 			updated = sysdate()
 		</set>
 		<where>
-			id = #{id} and  (commission_money + #{commissionMoney}) >= 0
+			<if test="totalMoney != null and totalMoney !=0">
+				(total_money + #{totalMoney}) >= 0 and
+			</if>
+			<if test="availableMoney != null and availableMoney !=0">
+				(available_money + #{availableMoney}) >= 0 and
+			</if>
+			<if test="warehouseMoney != null and warehouseMoney !=0">
+				(warehouse_money + #{warehouseMoney}) >= 0 and
+			</if>
+			<if test="incomeMoney != null and incomeMoney !=0">
+				(income_money + #{incomeMoney}) >= 0 and
+			</if>
+			<if test="aiAssetsMoney != null and aiAssetsMoney!=0">
+				(ai_assets_money + #{aiAssetsMoney}) >= 0 and
+			</if>
+			<if test="commissionMoney != null and commissionMoney !=0">
+				(commission_money + #{commissionMoney}) >= 0 and
+			</if>
+			<if test="incrementMoney != null and incrementMoney !=0">
+				(increment_money + #{incrementMoney}) >= 0 and
+			</if>
+			<if test="claimableMoney != null and claimableMoney !=0">
+				(claimable_money + #{claimableMoney}) >= 0 and
+			</if>
+			<if test="rewardMoney != null and rewardMoney !=0 ">
+				(reward_money + #{rewardMoney}) >= 0 and
+			</if>
+			user_id = #{userId}
 		</where>
 	</update>
-
 </mapper>

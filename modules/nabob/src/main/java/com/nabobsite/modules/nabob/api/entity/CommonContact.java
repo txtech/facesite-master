@@ -14,7 +14,7 @@ import java.util.Date;
  * @Date 2021/5/11 11:25 上午
  * @Version 1.0
  */
-public class CommonStaticContact {
+public class CommonContact {
 
     public final static BigDecimal ZERO = new BigDecimal("0");
 
@@ -26,15 +26,21 @@ public class CommonStaticContact {
     public final static int USER_LOCK_1 = 1;//正常
     public final static int USER_LOCK_2 = 2;//锁定
 
-    //账户明细记录类型
-    public final static int USER_ACCOUNT_RECORD_TYPE_1 = 1;//充值
-    public final static int USER_ACCOUNT_RECORD_TYPE_2 = 2;//注册奖励
-    public final static int USER_ACCOUNT_RECORD_TYPE_3 = 3;//用户任务奖励
+    //账户明细类型
+    public final static int USER_ACCOUNT_DETAIL_TYPE_1 = 1;//余额账户
+    public final static int USER_ACCOUNT_DETAIL_TYPE_2 = 20;//佣金账户
+    public final static int USER_ACCOUNT_DETAIL_TYPE_3 = 30;//仓库资金
+    public final static int USER_ACCOUNT_DETAIL_TYPE_4 = 40;//奖励账户
 
-    //账户奖励记录类型
+    //账户明细标题
+    public final static String USER_ACCOUNT_DETAIL_TITLE_1 = "订单充值";
+    public final static String USER_ACCOUNT_DETAIL_TITLE_2 = "注册奖励";
+    public final static String USER_ACCOUNT_DETAIL_TITLE_3 = "任务奖励";
+    public final static String USER_ACCOUNT_DETAIL_TITLE_4 = "刷单佣金";
+
+    //奖励明细类型
     public final static int USER_ACCOUNT_REWARD_TYPE_1 = 1;//注册奖励
-    public final static int USER_ACCOUNT_REWARD_TYPE_2 = 2;//用户完成任务奖励： 分享好友奖励,观看视频奖励,邀请好友奖励,定期投资奖励
-    public final static int USER_ACCOUNT_REWARD_TYPE_3 = 3;//无人机产品任务
+    public final static int USER_ACCOUNT_REWARD_TYPE_2 = 2;//新手任务奖励： 分享好友奖励,观看视频奖励,邀请好友奖励,定期投资奖励
 
     //用户账户状态
     public final static int USER_ACCOUNT_STATUS_OK = 1;//正常
@@ -134,6 +140,12 @@ public class CommonStaticContact {
             return true;
         }
         return false;
+    }
+    public static Boolean isEqualZero(BigDecimal num1){
+        if(num1 == null){
+            return false;
+        }
+        return isEqual(num1,ZERO);
     }
 
     /**

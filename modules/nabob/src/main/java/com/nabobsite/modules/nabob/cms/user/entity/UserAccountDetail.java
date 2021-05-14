@@ -22,10 +22,13 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  * @author face
  * @version 2021-05-14
  */
-@Table(name="t1_user_account", alias="a", columns={
+@Table(name="t1_user_account_detail", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="user_id", attrName="userId", label="用户id"),
-		@Column(name="account_status", attrName="accountStatus", label="账户状态 1", comment="账户状态 1:可用 2:冻结"),
+		@Column(name="account_id", attrName="accountId", label="账户ID"),
+		@Column(name="title", attrName="title", label="标题", queryType=QueryType.LIKE),
+		@Column(name="type", attrName="type", label="类型 1", comment="类型 1:总资金 20:佣金账户 30:仓库资金 40:奖励账户"),
+		@Column(name="unique", attrName="unique", label="唯一标识"),
 		@Column(name="total_money", attrName="totalMoney", label="总资金"),
 		@Column(name="available_money", attrName="availableMoney", label="可用资金"),
 		@Column(name="warehouse_money", attrName="warehouseMoney", label="仓库资金"),
@@ -43,11 +46,14 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
 	}, orderBy="a.id DESC"
 )
-public class UserAccount extends DataEntity<UserAccount> {
+public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户id
-	private Integer accountStatus;		// 账户状态 1:可用 2:冻结
+	private String accountId;		// 账户ID
+	private String title;		// 标题
+	private Integer type;		// 类型 1:总资金 20:佣金账户 30:仓库资金 40:奖励账户
+	private String unique;		// 唯一标识
 	private BigDecimal totalMoney;		// 总资金
 	private BigDecimal availableMoney;		// 可用资金
 	private BigDecimal warehouseMoney;		// 仓库资金
@@ -61,11 +67,11 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	
-	public UserAccount() {
+	public UserAccountDetail() {
 		this(null);
 	}
 
-	public UserAccount(String id){
+	public UserAccountDetail(String id){
 		super(id);
 	}
 	
@@ -79,13 +85,43 @@ public class UserAccount extends DataEntity<UserAccount> {
 		this.userId = userId;
 	}
 	
-	@NotNull(message="账户状态 1不能为空")
-	public Integer getAccountStatus() {
-		return accountStatus;
+	@NotBlank(message="账户ID不能为空")
+	@Length(min=0, max=30, message="账户ID长度不能超过 30 个字符")
+	public String getAccountId() {
+		return accountId;
 	}
 
-	public void setAccountStatus(Integer accountStatus) {
-		this.accountStatus = accountStatus;
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+	
+	@NotBlank(message="标题不能为空")
+	@Length(min=0, max=520, message="标题长度不能超过 520 个字符")
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	@NotNull(message="类型 1不能为空")
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	
+	@NotBlank(message="唯一标识不能为空")
+	@Length(min=0, max=128, message="唯一标识长度不能超过 128 个字符")
+	public String getUnique() {
+		return unique;
+	}
+
+	public void setUnique(String unique) {
+		this.unique = unique;
 	}
 	
 	@NotNull(message="总资金不能为空")

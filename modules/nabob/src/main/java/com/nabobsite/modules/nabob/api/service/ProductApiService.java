@@ -4,20 +4,14 @@
 package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.service.CrudService;
-import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
-import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
+import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductBotDao;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
-import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
-import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
-import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
-import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.cms.user.service.UserInfoService;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.CommonResult;
 import com.nabobsite.modules.nabob.utils.ResultUtil;
@@ -92,20 +86,20 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 	}
 
 	/**
-	 * @desc 佣金和增值 升值率
+	 * @desc 佣金和增值升值率账户
 	 * @author nada
 	 * @create 2021/5/13 10:14 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean updateAppreciationRate(String userId,String botId,int level,BigDecimal money) {
 		try {
-			String title = "完成任务";
+			String title = "刷单任务";
 			BigDecimal commissionOtherRate = LogicStaticContact.PRODUCT_COMMISSION_OTHER_RATE;//增值比例
 			BigDecimal commissionRate = LogicStaticContact.LEVEL_BALANCE_COMMISSION_RATE.get(level);//产品佣金比例
-			BigDecimal commissionMoney = CommonStaticContact.multiply(money,commissionRate);//佣金
-			BigDecimal incrementMoney = CommonStaticContact.multiply(commissionMoney,commissionOtherRate);//增值佣金
-			Boolean isOk = userAccountApiService.addAccountCommissionBalance(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_3,commissionMoney,incrementMoney,botId,title,title);
-			if (isOk){
+			BigDecimal commissionMoney = CommonContact.multiply(money,commissionRate);//佣金
+			BigDecimal incrementMoney = CommonContact.multiply(commissionMoney,commissionOtherRate);//增值佣金
+			Boolean isOk = userAccountApiService.updateAccountCommissionMoney(userId,commissionMoney,incrementMoney,botId,title);
+			if(isOk){
 				return true;
 			}
 			return false;

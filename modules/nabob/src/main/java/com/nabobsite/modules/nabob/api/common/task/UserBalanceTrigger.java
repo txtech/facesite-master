@@ -1,7 +1,7 @@
 package com.nabobsite.modules.nabob.api.common.task;
 
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerOperation;
-import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
+import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
@@ -59,7 +59,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			}
 		}else{
 			int userLock = this.getUserLock(userId,currentLevel,payMoney);
-			if(oldLock != CommonStaticContact.USER_LOCK_1 && userLock == CommonStaticContact.USER_LOCK_1){
+			if(oldLock != CommonContact.USER_LOCK_1 && userLock == CommonContact.USER_LOCK_1){
 				Boolean isUpLevelOk = this.updateLock(userId,userLock);
 				LOG.info("用户余额触发,用户不升级只解锁:{},{}",userId,isUpLevelOk);
 			}
@@ -79,7 +79,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			}
 			int teamNum = this.getLevelUpTeamNum(parent1Id);
 			if(teamNum >= LogicStaticContact.USER_LEVEL_UP_TEAM_NUM){
-				Boolean isUpLevelOk = this.updateLock(parent1Id,CommonStaticContact.USER_LOCK_1);
+				Boolean isUpLevelOk = this.updateLock(parent1Id, CommonContact.USER_LOCK_1);
 				LOG.info("用户余额触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
 			}
 			return true;
@@ -104,7 +104,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			userInfo.setLock(userLock);
 			userInfo.setLevel(upLevel);
 			long dbResult = userInfoDao.update(userInfo);
-			return CommonStaticContact.dbResult(dbResult);
+			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
 			LOG.error("根据账号ID升级异常",e);
 			return null;
@@ -125,7 +125,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			userInfo.setId(userId);
 			userInfo.setLock(userLock);
 			long dbResult = userInfoDao.update(userInfo);
-			return CommonStaticContact.dbResult(dbResult);
+			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
 			LOG.error("根据账号ID升级异常",e);
 			return null;
@@ -143,7 +143,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			return 1;
 		}
 		BigDecimal mustBalance = LogicStaticContact.LEVEL_BALANCE_MIN_BALANCE.get(currentLevel);
-		if(CommonStaticContact.isBiggerOrEqual(payMoney,mustBalance)){
+		if(CommonContact.isBiggerOrEqual(payMoney,mustBalance)){
 			return 1;
 		}else{
 			int teamNum = this.getLevelUpTeamNum(userId);

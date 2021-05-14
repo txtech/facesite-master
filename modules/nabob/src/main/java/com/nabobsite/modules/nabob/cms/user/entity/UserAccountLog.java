@@ -22,9 +22,11 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  * @author face
  * @version 2021-05-14
  */
-@Table(name="t1_user_account", alias="a", columns={
+@Table(name="t1_user_account_log", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
+		@Column(name="detail_id", attrName="detailId", label="上级ID"),
 		@Column(name="user_id", attrName="userId", label="用户id"),
+		@Column(name="title", attrName="title", label="日志标题", queryType=QueryType.LIKE),
 		@Column(name="account_status", attrName="accountStatus", label="账户状态 1", comment="账户状态 1:可用 2:冻结"),
 		@Column(name="total_money", attrName="totalMoney", label="总资金"),
 		@Column(name="available_money", attrName="availableMoney", label="可用资金"),
@@ -43,10 +45,12 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
 	}, orderBy="a.id DESC"
 )
-public class UserAccount extends DataEntity<UserAccount> {
+public class UserAccountLog extends DataEntity<UserAccountLog> {
 	
 	private static final long serialVersionUID = 1L;
+	private String detailId;		// 上级ID
 	private String userId;		// 用户id
+	private String title;		// 日志标题
 	private Integer accountStatus;		// 账户状态 1:可用 2:冻结
 	private BigDecimal totalMoney;		// 总资金
 	private BigDecimal availableMoney;		// 可用资金
@@ -61,12 +65,22 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	
-	public UserAccount() {
+	public UserAccountLog() {
 		this(null);
 	}
 
-	public UserAccount(String id){
+	public UserAccountLog(String id){
 		super(id);
+	}
+	
+	@NotBlank(message="上级ID不能为空")
+	@Length(min=0, max=30, message="上级ID长度不能超过 30 个字符")
+	public String getDetailId() {
+		return detailId;
+	}
+
+	public void setDetailId(String detailId) {
+		this.detailId = detailId;
 	}
 	
 	@NotBlank(message="用户id不能为空")
@@ -77,6 +91,16 @@ public class UserAccount extends DataEntity<UserAccount> {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	
+	@NotBlank(message="日志标题不能为空")
+	@Length(min=0, max=520, message="日志标题长度不能超过 520 个字符")
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	@NotNull(message="账户状态 1不能为空")

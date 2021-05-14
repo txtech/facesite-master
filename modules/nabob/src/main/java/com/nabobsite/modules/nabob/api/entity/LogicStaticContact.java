@@ -125,7 +125,7 @@ public class LogicStaticContact {
         for(Map.Entry<Integer, BigDecimal> entry : LEVEL_BALANCE_MIN_BALANCE.entrySet()){
             int key = entry.getKey();
             BigDecimal value = entry.getValue();
-            if(CommonStaticContact.isBigger(money,value) && tempMaxLevel < key){
+            if(CommonContact.isBigger(money,value) && tempMaxLevel < key){
                 tempMaxLevel = key;
             }
         }

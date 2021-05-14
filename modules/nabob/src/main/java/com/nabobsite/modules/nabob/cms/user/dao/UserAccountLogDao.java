@@ -5,14 +5,14 @@ package com.nabobsite.modules.nabob.cms.user.dao;
 
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
-import com.nabobsite.modules.nabob.cms.user.entity.UserRewardRecord;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountLog;
 
 /**
- * 用户收益明细DAO接口
+ * 用户账户DAO接口
  * @author face
- * @version 2021-05-13
+ * @version 2021-05-14
  */
 @MyBatisDao
-public interface UserRewardRecordDao extends CrudDao<UserRewardRecord> {
+public interface UserAccountLogDao extends CrudDao<UserAccountLog> {
 	
 }

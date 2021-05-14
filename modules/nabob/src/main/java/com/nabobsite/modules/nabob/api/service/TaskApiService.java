@@ -3,20 +3,14 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import cn.hutool.db.Db;
-import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
-import com.nabobsite.modules.nabob.api.common.TriggerApiService;
-import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
+import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
-import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.CommonResult;
 import com.nabobsite.modules.nabob.utils.ResultUtil;
@@ -67,17 +61,11 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 			}
 			synchronized (userId) {
 				BigDecimal rewardMoney = taskInfo.getRewardMoney();
-				String title = "完成任务:"+rewardMoney;
-				Boolean isOK = this.sendReward(userId,rewardMoney,taskId,title);
-				if(!isOK){
-					logger.error("新用户第一次做记录日志失败:{},{}",userId,taskId);
-					return ResultUtil.failed("Failed to do the task!");
-				}
 				UserTask userTask = this.getUserTaskByUserIdAndTaskId(userId,taskId);
 				if(userTask == null){
 					UserTask initUserTask = DbInstanceContact.initUserTask(userId,taskId,1);
 					long dbResult = userTaskDao.insert(initUserTask);
-					if(CommonStaticContact.dbResult(dbResult)){
+					if(CommonContact.dbResult(dbResult)){
 						logger.info("新用户第一次做任务成功:{},{}",userId,taskId);
 						return ResultUtil.success(true);
 					}
@@ -87,8 +75,9 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 
 				int taskStatus = userTask.getTaskStatus();
 				int taskFinishNumber = userTask.getFinishNumber();
-				if(taskStatus == CommonStaticContact.USER_TASK_STATUS_3){
+				if(taskStatus == CommonContact.USER_TASK_STATUS_3){
 					logger.error("新用户任务已经完毕:{},{}",userId,taskId);
+					this.sendReward(userId,rewardMoney,taskId);
 					return ResultUtil.failed("Failed to do the task!");
 				}
 				int taskNum = taskInfo.getTaskNumber();
@@ -99,6 +88,7 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 				Boolean isOk = this.updateTaskFinishNumber(userTask.getId(),taskFinishNumber+1);
 				if(isOk){
 					logger.info("新用户做任务成功:{},{}",userId,taskId);
+					this.sendReward(userId,rewardMoney,taskId);
 					return ResultUtil.success(true);
 				}
 				logger.error("新用户做任务失败:{},{}",userId,taskId);
@@ -116,13 +106,10 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 	 * @create 2021/5/13 8:16 下午
 	 */
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	public Boolean sendReward(String userId,BigDecimal rewardMoney,String taskId,String title) {
+	public Boolean sendReward(String userId,BigDecimal rewardMoney,String taskId) {
 		try {
-			String rewardId= userAccountApiService.addRewardRecord(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_2,rewardMoney,title,title);
-			if(StringUtils.isEmpty(rewardId)){
-				return false;
-			}
-			return userAccountApiService.addAccountTaskBalance(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_3,rewardMoney,taskId,title,title);
+			String title = CommonContact.USER_ACCOUNT_DETAIL_TITLE_3;
+			return userAccountApiService.updateAccountRewardMoney(userId,rewardMoney,taskId,title);
 		} catch (Exception e) {
 			logger.error("完成任务送奖励异常",e);
 			return false;
@@ -140,7 +127,7 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 			userTaskPrams.setId(id);
 			userTaskPrams.setFinishNumber(finishNumber);
 			long dbResult = userTaskDao.update(userTaskPrams);
-			return CommonStaticContact.dbResult(dbResult);
+			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("修改任务完成数量异常",e);
 			return false;

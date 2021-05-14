@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
-import com.nabobsite.modules.nabob.cms.user.service.UserAccountService;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountLog;
+import com.nabobsite.modules.nabob.cms.user.service.UserAccountLogService;
 
 /**
  * 用户账户Controller
@@ -28,71 +28,71 @@ import com.nabobsite.modules.nabob.cms.user.service.UserAccountService;
  * @version 2021-05-14
  */
 @Controller
-@RequestMapping(value = "${adminPath}/user/userAccount")
-public class UserAccountController extends BaseController {
+@RequestMapping(value = "${adminPath}/user/userAccountLog")
+public class UserAccountLogController extends BaseController {
 
 	@Autowired
-	private UserAccountService userAccountService;
+	private UserAccountLogService userAccountLogService;
 	
 	/**
 	 * 获取数据
 	 */
 	@ModelAttribute
-	public UserAccount get(String id, boolean isNewRecord) {
-		return userAccountService.get(id, isNewRecord);
+	public UserAccountLog get(String id, boolean isNewRecord) {
+		return userAccountLogService.get(id, isNewRecord);
 	}
 	
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("user:userAccount:view")
+	@RequiresPermissions("user:userAccountLog:view")
 	@RequestMapping(value = {"list", ""})
-	public String list(UserAccount userAccount, Model model) {
-		model.addAttribute("userAccount", userAccount);
-		return "cms/user/userAccountList";
+	public String list(UserAccountLog userAccountLog, Model model) {
+		model.addAttribute("userAccountLog", userAccountLog);
+		return "cms/user/userAccountLogList";
 	}
 	
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("user:userAccount:view")
+	@RequiresPermissions("user:userAccountLog:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
-	public Page<UserAccount> listData(UserAccount userAccount, HttpServletRequest request, HttpServletResponse response) {
-		userAccount.setPage(new Page<>(request, response));
-		Page<UserAccount> page = userAccountService.findPage(userAccount);
+	public Page<UserAccountLog> listData(UserAccountLog userAccountLog, HttpServletRequest request, HttpServletResponse response) {
+		userAccountLog.setPage(new Page<>(request, response));
+		Page<UserAccountLog> page = userAccountLogService.findPage(userAccountLog);
 		return page;
 	}
 
 	/**
 	 * 查看编辑表单
 	 */
-	@RequiresPermissions("user:userAccount:view")
+	@RequiresPermissions("user:userAccountLog:view")
 	@RequestMapping(value = "form")
-	public String form(UserAccount userAccount, Model model) {
-		model.addAttribute("userAccount", userAccount);
-		return "cms/user/userAccountForm";
+	public String form(UserAccountLog userAccountLog, Model model) {
+		model.addAttribute("userAccountLog", userAccountLog);
+		return "cms/user/userAccountLogForm";
 	}
 
 	/**
 	 * 保存数据
 	 */
-	@RequiresPermissions("user:userAccount:edit")
+	@RequiresPermissions("user:userAccountLog:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
-	public String save(@Validated UserAccount userAccount) {
-		userAccountService.save(userAccount);
+	public String save(@Validated UserAccountLog userAccountLog) {
+		userAccountLogService.save(userAccountLog);
 		return renderResult(Global.TRUE, text("保存用户账户成功！"));
 	}
 	
 	/**
 	 * 删除数据
 	 */
-	@RequiresPermissions("user:userAccount:edit")
+	@RequiresPermissions("user:userAccountLog:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
-	public String delete(UserAccount userAccount) {
-		userAccountService.delete(userAccount);
+	public String delete(UserAccountLog userAccountLog) {
+		userAccountLogService.delete(userAccountLog);
 		return renderResult(Global.TRUE, text("删除用户账户成功！"));
 	}
 	

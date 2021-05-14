@@ -10,7 +10,7 @@ import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.nabobsite.modules.nabob.api.common.TriggerApiService;
-import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
+import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
@@ -86,7 +86,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			updateUserInfo.setId(oldUserInfo.getId());
 			updateUserInfo.setPassword(md5NewPwd);
 			long dbResult = userInfoDao.update(updateUserInfo);
-			if(CommonStaticContact.dbResult(dbResult)){
+			if(CommonContact.dbResult(dbResult)){
 				this.logout(token);
 				return ResultUtil.success(true);
 			}
@@ -135,7 +135,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("pid",userInfo.getId());
 			jsonObject.put("sid",userInfo.getParentSysId());
-			String registerUrl = "http://localhost?param_parent="+ HiDesUtils.desEnCode(jsonObject.toString());
+			String registerUrl = "param_parent="+ HiDesUtils.desEnCode(jsonObject.toString());
 			return ResultUtil.success(registerUrl);
 		} catch (Exception e) {
 			logger.error("Failed to get share friends url!",e);
@@ -306,7 +306,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				userInfo.setInviteCode(String.valueOf(seqId));
 				UserInfo initUser = DbInstanceContact.initUserInfo(userInfo);
 				long dbResult = userInfoDao.insert(initUser);
-				if(CommonStaticContact.dbResult(dbResult)){
+				if(CommonContact.dbResult(dbResult)){
 					String userId = initUser.getId();
 					userAccountDao.insert(DbInstanceContact.initUserAccount(userId));
 					triggerApiService.registerTrigger(userId);
@@ -334,7 +334,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			userInfo.setId(userId);
 			userInfo.setLoginIp(ip);
 			long dbResult = userInfoDao.update(userInfo);
-			return CommonStaticContact.dbResult(dbResult);
+			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("根据ID修改登陆IP异常",e);
 			return true;

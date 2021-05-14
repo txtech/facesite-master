@@ -39,15 +39,15 @@ public class ProductApiController extends BaseController {
 	private ProductApiService productApiService;
 
 	@PostMapping(value = {"doBotTask"})
-	@ApiOperation(value = "无人机任务")
+	@ApiOperation(value = "无人机产品刷单任务")
 	@ApiImplicitParams({
-			@ApiImplicitParam(name = "botId", value = "任务ID", required = true, paramType="query", type="String"),
+			@ApiImplicitParam(name = "botId", value = "产品ID", required = true, paramType="query", type="String"),
 			@ApiImplicitParam(name = "orderNo", value = "订单号", required = true, paramType="query", type="String"),
 			@ApiImplicitParam(name = "param_token",  value = "会话token", required = true),
 	})
 	public String doBotTask(String botId,String param_token,String orderNo) {
 		CommonResult<Boolean> result = productApiService.doBotTask(botId,param_token,orderNo);
-		return renderResult(Global.TRUE,text("getProductBotList"), result);
+		return renderResult(Global.TRUE,text("doBotTask"), result);
 	}
 
 	@PostMapping(value = {"getProductBotList"})

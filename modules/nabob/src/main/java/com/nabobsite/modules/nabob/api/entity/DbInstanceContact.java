@@ -1,15 +1,10 @@
 package com.nabobsite.modules.nabob.api.entity;
 
-import com.jeesite.common.shiro.realms.Da;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccountRecord;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.cms.user.entity.UserRewardRecord;
+import com.nabobsite.modules.nabob.cms.user.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @ClassName nada
@@ -36,9 +31,9 @@ public class DbInstanceContact {
             userInfo.setTeamNum1(0);
             userInfo.setTeamNum2(0);
             userInfo.setTeamNum3(0);
-            userInfo.setTaskEndTime(CommonStaticContact.addDateHour(48));
-            userInfo.setLock(CommonStaticContact.USER_LOCK_1);
-            userInfo.setUserStatus(CommonStaticContact.USER_STATUS_1);
+            userInfo.setTaskEndTime(CommonContact.addDateHour(48));
+            userInfo.setLock(CommonContact.USER_LOCK_1);
+            userInfo.setUserStatus(CommonContact.USER_STATUS_1);
             if(StringUtils.isEmpty(params.getParentSysId())){
                 userInfo.setParentSysId("0");
             }
@@ -70,8 +65,8 @@ public class DbInstanceContact {
             userAccount.setWarehouseMoney(new BigDecimal("0"));
             userAccount.setAiAssetsMoney(new BigDecimal("0"));
             userAccount.setIncomeMoney(new BigDecimal("0"));
-            userAccount.setTaskMoney(LogicStaticContact.USER_TACK_BASE_MONEY);
-            userAccount.setAccountStatus(CommonStaticContact.USER_ACCOUNT_STATUS_OK);
+            userAccount.setRewardMoney(LogicStaticContact.USER_TACK_BASE_MONEY);
+            userAccount.setAccountStatus(CommonContact.USER_ACCOUNT_STATUS_OK);
             return userAccount;
         }
     }
@@ -81,39 +76,29 @@ public class DbInstanceContact {
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
-    public static UserAccountRecord initUserAccountRecord(String userId,String accountId,int type,BigDecimal payMoney,BigDecimal totalMoney,String uniqueId,String title,String remarks){
+    public static UserAccountDetail initUserAccountDetail(String userId,int type,String uniqueId,String title){
         synchronized (userId) {
-            UserAccountRecord userAccountRecord = new UserAccountRecord();
-            userAccountRecord.setIsNewRecord(true);
-            userAccountRecord.setType(type);
-            userAccountRecord.setUserId(userId);
-            userAccountRecord.setRemark(title);
-            userAccountRecord.setRemarks(remarks);
-            userAccountRecord.setAccountId(accountId);
-            userAccountRecord.setChangeMoney(payMoney);
-            userAccountRecord.setUnique(uniqueId);
-            userAccountRecord.setTotalMoney(CommonStaticContact.add(totalMoney,payMoney));
-            return userAccountRecord;
+            UserAccountDetail userAccountDetail = new UserAccountDetail();
+            userAccountDetail.setIsNewRecord(true);
+            userAccountDetail.setUserId(userId);
+            userAccountDetail.setTitle(title);
+            userAccountDetail.setType(type);
+            userAccountDetail.setUnique(uniqueId);
+            return userAccountDetail;
         }
     }
 
     /**
-     * @desc 初始化用户账户记录信息
+     * @desc 初始化用户账户日志
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
-    public static UserRewardRecord initUserRewardRecord(String userId, int type, BigDecimal rewardMoney, BigDecimal totalMoney, String title, String remarks){
-        synchronized (userId) {
-            UserRewardRecord userRewardRecord = new UserRewardRecord();
-            userRewardRecord.setIsNewRecord(true);
-            userRewardRecord.setType(type);
-            userRewardRecord.setUserId(userId);
-            userRewardRecord.setTitle(title);
-            userRewardRecord.setRemarks(remarks);
-            userRewardRecord.setMoney(rewardMoney);
-            userRewardRecord.setTotalMoney(rewardMoney);
-            return userRewardRecord;
-        }
+    public static UserAccountLog initUserAccountLog(String detailId,String title,UserAccount olduUerAccount){
+        UserAccountLog userAccountLog = (UserAccountLog)olduUerAccount.clone();
+        userAccountLog.setIsNewRecord(true);
+        userAccountLog.setTitle(title);
+        userAccountLog.setDetailId(detailId);
+        return userAccountLog;
     }
 
     /**
@@ -126,8 +111,8 @@ public class DbInstanceContact {
         order.setIsNewRecord(true);
         order.setOrderNo(orderNo);
         order.setActualMoney(params.getPayMoney());
-        order.setType(CommonStaticContact.ORDER_TYPE_RECHANGE);
-        order.setOrderStatus(CommonStaticContact.ORDER_STATUS_1);
+        order.setType(CommonContact.ORDER_TYPE_RECHANGE);
+        order.setOrderStatus(CommonContact.ORDER_STATUS_1);
         return order;
     }
 
@@ -142,7 +127,7 @@ public class DbInstanceContact {
         userTask.setUserId(userId);
         userTask.setTaskId(taskId);
         userTask.setFinishNumber(finishNumber);
-        userTask.setTaskStatus(CommonStaticContact.USER_TASK_STATUS_2);
+        userTask.setTaskStatus(CommonContact.USER_TASK_STATUS_2);
         return userTask;
     }
 

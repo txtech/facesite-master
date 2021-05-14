@@ -41,6 +41,17 @@ public class TaskApiController extends BaseController {
 	@Autowired
 	private TaskApiService taskApiService;
 
+	@ApiOperation(value = "新用户做任务")
+	@RequestMapping(value = "doUserTask")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "taskId", value = "任务ID", required = true, paramType="query", type="String"),
+			@ApiImplicitParam(name = "param_token",  value = "会话token", required = true),
+	})
+	public String doUserTask(String taskId,String param_token) {
+		CommonResult<Boolean> result = taskApiService.doUserTask(taskId,param_token);
+		return renderResult(Global.TRUE, text("userTask"),result);
+	}
+
 	@PostMapping(value = {"getTaskList"})
 	@ApiOperation(value = "获取任务列表")
 	public String getTaskList() {
@@ -56,16 +67,5 @@ public class TaskApiController extends BaseController {
 		taskInfo.setId(taskId);
 		CommonResult<TaskInfo> result = taskApiService.getTaskInfo(taskInfo);
 		return renderResult(Global.TRUE,text("getTaskInfo"), result);
-	}
-
-	@ApiOperation(value = "新用户做任务")
-	@RequestMapping(value = "doUserTask")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "taskId", value = "任务ID", required = true, paramType="query", type="String"),
-			@ApiImplicitParam(name = "param_token",  value = "会话token", required = true),
-	})
-	public String doUserTask(String taskId,String param_token) {
-		CommonResult<Boolean> result = taskApiService.doUserTask(taskId,param_token);
-		return renderResult(Global.TRUE, text("userTask"),result);
 	}
 }

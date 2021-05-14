@@ -3,7 +3,7 @@ package com.nabobsite.modules.nabob.api.common.task;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerOperation;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerPoolManagerImpl;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerThread;
-import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
+import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
@@ -42,12 +42,11 @@ public class UserRegisterTrigger extends TriggerOperation {
 		}
 
 		BigDecimal rewardMoney = LogicStaticContact.USER_REGISTER_REWARD;
-		String title = "注册奖励:"+rewardMoney;
-		boolean isOk = this.sendReward(rewardMoney,title);
+		boolean isOk = userAccountApiService.updateAccountBalance(userId,rewardMoney,userId,CommonContact.USER_ACCOUNT_DETAIL_TITLE_2);
 		if(isOk){
 			TriggerThread callback = new UserBalanceTrigger(userId,rewardMoney,userInfoDao,userAccountApiService);
 			triggerPoolManager.submit(callback);
-			LOG.info("用户注册触发器,注册奖励:{},{}",userId,title);
+			LOG.info("用户注册触发器,注册奖励:{},{}",userId,rewardMoney);
 		}
 
 		//修改团队人数
@@ -58,25 +57,6 @@ public class UserRegisterTrigger extends TriggerOperation {
 		if(isok){
 			LOG.error("用户注册触发器,修改团队人数失败:{}",userId);
 			return;
-		}
-	}
-
-	/**
-	 * @desc 注册送奖励，注册送100卢比
-	 * @author nada
-	 * @create 2021/5/13 8:16 下午
-	*/
-	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	public Boolean sendReward(BigDecimal rewardMoney,String title) {
-		try {
-			String rewardId = userAccountApiService.addRewardRecord(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_1,rewardMoney,title,title);
-			if(StringUtils.isEmpty(rewardId)){
-				return false;
-			}
-			return userAccountApiService.addAccountBalance(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_2,rewardMoney,rewardId,title,title);
-		} catch (Exception e) {
-			LOG.error("注册送奖励异常",e);
-			return false;
 		}
 	}
 
@@ -93,7 +73,7 @@ public class UserRegisterTrigger extends TriggerOperation {
 				userInfo.setId(parent1UserId);
 				userInfo.setTeamNum(num);
 				long dbResult = userInfoDao.updateTeam1(userInfo);
-				if(CommonStaticContact.dbResult(dbResult)){
+				if(CommonContact.dbResult(dbResult)){
 					LOG.info("修改1级团队人数:{}",parent1UserId);
 				}
 			}
@@ -102,7 +82,7 @@ public class UserRegisterTrigger extends TriggerOperation {
 				userInfo.setId(parent2UserId);
 				userInfo.setTeamNum(num);
 				long dbResult = userInfoDao.updateTeam2(userInfo);
-				if(CommonStaticContact.dbResult(dbResult)){
+				if(CommonContact.dbResult(dbResult)){
 					LOG.info("修改2级团队人数:{}",parent2UserId);
 				}
 			}
@@ -111,7 +91,7 @@ public class UserRegisterTrigger extends TriggerOperation {
 				userInfo.setId(parent3UserId);
 				userInfo.setTeamNum(num);
 				long dbResult = userInfoDao.updateTeam3(userInfo);
-				if(CommonStaticContact.dbResult(dbResult)){
+				if(CommonContact.dbResult(dbResult)){
 					LOG.info("修改3级团队人数:{}",parent3UserId);
 				}
 			}
