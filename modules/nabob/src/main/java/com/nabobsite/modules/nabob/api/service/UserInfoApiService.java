@@ -212,7 +212,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			redisOpsUtil.set(userTokenKey,newToken,RedisPrefixContant.CACHE_HALF_HOUR);
 			if(redisOpsUtil.get(newTokenKey)!=null){
 				loginUserInfo.setPassword("");
-				//loginUserInfo.setToken(newToken);
+				loginUserInfo.setToken(newToken);
 				return ResultUtil.success(loginUserInfo);
 			}
 			this.updateLoginIp(userId,userInfo.getLoginIp());
