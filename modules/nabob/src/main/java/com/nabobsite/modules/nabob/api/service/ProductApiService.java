@@ -74,10 +74,14 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 					return ResultUtil.failed("任务失败,当前等级不符合要求");
 				}
 				String title = CommonContact.USER_ACCOUNT_DETAIL_TITLE_4;
-				BigDecimal commissionOtherRate = LogicStaticContact.PRODUCT_COMMISSION_OTHER_RATE;//增值比例
-				BigDecimal commissionRate = LogicStaticContact.LEVEL_BALANCE_COMMISSION_RATE.get(mustLevel);//产品佣金比例
-				BigDecimal commissionMoney = CommonContact.multiply(productBotPrice,commissionRate);//佣金
-				BigDecimal incrementMoney = CommonContact.multiply(commissionMoney,commissionOtherRate);//增值佣金
+				//增值比例
+				BigDecimal commissionOtherRate = LogicStaticContact.PRODUCT_COMMISSION_OTHER_RATE;
+				//产品佣金比例
+				BigDecimal commissionRate = LogicStaticContact.LEVEL_BALANCE_COMMISSION_RATE.get(mustLevel);
+				//佣金
+				BigDecimal commissionMoney = CommonContact.multiply(productBotPrice,commissionRate);
+				//增值佣金
+				BigDecimal incrementMoney = CommonContact.multiply(commissionMoney,commissionOtherRate);
 				Boolean isOk = userAccountApiService.updateAccountCommissionMoney(userId,commissionMoney,incrementMoney,botId,title);
 				if(isOk){
 					return ResultUtil.success(true);
