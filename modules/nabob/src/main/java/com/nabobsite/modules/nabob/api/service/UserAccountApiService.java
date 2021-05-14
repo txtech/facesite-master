@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springfox.documentation.service.ApiListing;
 
 import java.math.BigDecimal;
 
@@ -36,32 +37,86 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 	private UserAccountRecordDao userAccountRecordDao;
 
 	/**
+	 * @desc 增加佣金账户余额
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public boolean addAccountCommissionBalance(String userId,int type,BigDecimal commissionMoney,BigDecimal incrementMoney,String uniqueId, String title,String remarks) {
+		try {
+			if(StringUtils.isEmpty(userId)){
+				logger.error("增加佣金账户余额失败,userId信息为空:{}",userId);
+				return false;
+			}
+			synchronized (userId){
+				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
+				if(oldUserAccount == null){
+					logger.error("增加佣金账户余额失败,账户信息为空:{}",userId);
+					return false;
+				}
+				String accountId = oldUserAccount.getId();
+				BigDecimal oldCommissionMoney = oldUserAccount.getCommissionMoney();
+				UserAccountRecord userAccountRecord1 = DbInstanceContact.initUserAccountRecord(userId,accountId,type,commissionMoney,oldCommissionMoney,uniqueId,title,remarks);
+				long dbResult = userAccountRecordDao.insert(userAccountRecord1);
+				if(!CommonStaticContact.dbResult(dbResult)){
+					logger.error("增加佣金账户余额失败,记录明细失败:{},{}",userId,accountId);
+					return false;
+				}
+
+				BigDecimal oldIncrementMoney = oldUserAccount.getIncrementMoney();
+				UserAccountRecord userAccountRecord2 = DbInstanceContact.initUserAccountRecord(userId,accountId,type,incrementMoney,oldIncrementMoney,uniqueId,title,remarks);
+				dbResult = userAccountRecordDao.insert(userAccountRecord2);
+				if(!CommonStaticContact.dbResult(dbResult)){
+					logger.error("增加佣金账户余额失败,记录明细失败:{},{}",userId,accountId);
+					return false;
+				}
+				UserAccount userAccount = new UserAccount();
+				userAccount.setId(accountId);
+				userAccount.setUserId(userId);
+				userAccount.setIncrementMoney(incrementMoney);
+				userAccount.setCommissionMoney(commissionMoney);
+				dbResult = userAccountDao.updateCommissionMoney(userAccount);
+				if(CommonStaticContact.dbResult(dbResult)){
+					logger.info("增加佣金账户余额成功:{},{}",userId,accountId);
+					return true;
+				}
+				logger.info("增加佣金账户余额失败,修改账户失败:{},{}",userId,accountId);
+				return false;
+			}
+		} catch (Exception e) {
+			logger.error("增加佣金账户余额异常",e);
+			return false;
+		}
+	}
+
+	/**
 	 * @desc 记录奖励明细
 	 * @author nada
 	 * @create 2021/5/13 3:09 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean addRewardRecord(String userId,int type,BigDecimal rewardMoney,String title,String remarks) {
+	public String addRewardRecord(String userId, int type, BigDecimal rewardMoney, String title, String remarks) {
 		try {
 			UserRewardRecord userRewardRecord = DbInstanceContact.initUserRewardRecord(userId,type,rewardMoney,rewardMoney,title,remarks);
 			long dbResult = userRewardRecordDao.insert(userRewardRecord);
 			if(!CommonStaticContact.dbResult(dbResult)){
 				logger.error("记录奖励明细失败,记录奖励明细失败:{},{}",userId,rewardMoney);
-				return false;
+				return "";
 			}
-			return true;
+			return userRewardRecord.getId();
 		} catch (Exception e) {
 			logger.error("记录奖励明细异常",e);
-			return false;
+			return "";
 		}
 	}
+
 	/**
 	 * @desc 增加任务账户余额
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean addAccountTaskBalance(String userId,int type,BigDecimal actualMoney,String title,String remarks) {
+	public boolean addAccountTaskBalance(String userId,int type,BigDecimal actualMoney,String uniqueId, String title,String remarks) {
 		try {
 			if(StringUtils.isEmpty(userId)){
 				logger.error("增加任务账户余额失败,userId信息为空:{}",userId);
@@ -75,7 +130,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 				}
 				String accountId = oldUserAccount.getId();
 				BigDecimal totalTaskMoney = oldUserAccount.getTaskMoney();
-				UserAccountRecord userAccountRecord = DbInstanceContact.initUserAccountRecord(userId,accountId,type,actualMoney,totalTaskMoney,title,remarks);
+				UserAccountRecord userAccountRecord = DbInstanceContact.initUserAccountRecord(userId,accountId,type,actualMoney,totalTaskMoney,uniqueId,title,remarks);
 				long dbResult = userAccountRecordDao.insert(userAccountRecord);
 				if(!CommonStaticContact.dbResult(dbResult)){
 					logger.error("增加任务账户余额失败,记录明细失败:{},{}",userId,accountId);
@@ -105,7 +160,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean addAccountBalance(String userId,int type,BigDecimal actualMoney,String title,String remarks) {
+	public boolean addAccountBalance(String userId,int type,BigDecimal actualMoney,String uniqueId,String title,String remarks) {
 		try {
 			if(StringUtils.isEmpty(userId)){
 				logger.error("增加账户总余额失败,userId信息为空:{}",userId);
@@ -119,7 +174,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 				}
 				String accountId = oldUserAccount.getId();
 				BigDecimal totalMoney = oldUserAccount.getTotalMoney();
-				UserAccountRecord userAccountRecord = DbInstanceContact.initUserAccountRecord(userId,accountId,type,actualMoney,totalMoney,title,remarks);
+				UserAccountRecord userAccountRecord = DbInstanceContact.initUserAccountRecord(userId,accountId,type,actualMoney,totalMoney,uniqueId,title,remarks);
 				long dbResult = userAccountRecordDao.insert(userAccountRecord);
 				if(!CommonStaticContact.dbResult(dbResult)){
 					logger.error("增加账户失败,记录明细失败:{},{}",userId,accountId);

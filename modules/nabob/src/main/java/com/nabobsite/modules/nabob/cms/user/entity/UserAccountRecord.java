@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 账户账务明显Entity
  * @author face
- * @version 2021-05-12
+ * @version 2021-05-13
  */
 @Table(name="t1_user_account_record", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -36,6 +36,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="unique", attrName="unique", label="唯一标识"),
 	}, orderBy="a.id DESC"
 )
 public class UserAccountRecord extends DataEntity<UserAccountRecord> {
@@ -50,6 +51,7 @@ public class UserAccountRecord extends DataEntity<UserAccountRecord> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private String unique;		// 唯一标识
 	
 	public UserAccountRecord() {
 		this(null);
@@ -139,6 +141,15 @@ public class UserAccountRecord extends DataEntity<UserAccountRecord> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	
+	@Length(min=0, max=128, message="唯一标识长度不能超过 128 个字符")
+	public String getUnique() {
+		return unique;
+	}
+
+	public void setUnique(String unique) {
+		this.unique = unique;
 	}
 	
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.product.web;
 
@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.product.service.UserProductBotService;
 /**
  * 用户产品机器人信息Controller
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-13
  */
 @Controller
 @RequestMapping(value = "${adminPath}/product/userProductBot")
@@ -33,7 +33,7 @@ public class UserProductBotController extends BaseController {
 
 	@Autowired
 	private UserProductBotService userProductBotService;
-
+	
 	/**
 	 * 获取数据
 	 */
@@ -41,7 +41,7 @@ public class UserProductBotController extends BaseController {
 	public UserProductBot get(String id, boolean isNewRecord) {
 		return userProductBotService.get(id, isNewRecord);
 	}
-
+	
 	/**
 	 * 查询列表
 	 */
@@ -51,7 +51,7 @@ public class UserProductBotController extends BaseController {
 		model.addAttribute("userProductBot", userProductBot);
 		return "cms/product/userProductBotList";
 	}
-
+	
 	/**
 	 * 查询列表数据
 	 */
@@ -84,7 +84,7 @@ public class UserProductBotController extends BaseController {
 		userProductBotService.save(userProductBot);
 		return renderResult(Global.TRUE, text("保存用户产品机器人信息成功！"));
 	}
-
+	
 	/**
 	 * 删除数据
 	 */
@@ -95,5 +95,5 @@ public class UserProductBotController extends BaseController {
 		userProductBotService.delete(userProductBot);
 		return renderResult(Global.TRUE, text("删除用户产品机器人信息成功！"));
 	}
-
+	
 }

@@ -33,13 +33,14 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="ai_assets_money", attrName="aiAssetsMoney", label="ai资产"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="increment_money", attrName="incrementMoney", label="增值账户"),
+		@Column(name="commission_money", attrName="commissionMoney", label="佣金账户"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
 		@Column(name="claimable_money", attrName="claimableMoney", label="可提取账户"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="task_money", attrName="taskMoney", label="任务账户"),
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
-		@Column(name="task_money", attrName="taskMoney", label="任务账户"),
 	}, orderBy="a.id DESC"
 )
 public class UserAccount extends DataEntity<UserAccount> {
@@ -54,10 +55,11 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private BigDecimal aiAssetsMoney;		// ai资产
 	private Date created;		// 创建时间
 	private BigDecimal incrementMoney;		// 增值账户
+	private BigDecimal commissionMoney;		// 佣金账户
 	private Date updated;		// 更新时间
 	private BigDecimal claimableMoney;		// 可提取账户
-	private String delFlag;		// 删除标志
 	private BigDecimal taskMoney;		// 任务账户
+	private String delFlag;		// 删除标志
 	
 	public UserAccount() {
 		this(null);
@@ -148,6 +150,14 @@ public class UserAccount extends DataEntity<UserAccount> {
 		this.incrementMoney = incrementMoney;
 	}
 	
+	public BigDecimal getCommissionMoney() {
+		return commissionMoney;
+	}
+
+	public void setCommissionMoney(BigDecimal commissionMoney) {
+		this.commissionMoney = commissionMoney;
+	}
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -165,6 +175,14 @@ public class UserAccount extends DataEntity<UserAccount> {
 		this.claimableMoney = claimableMoney;
 	}
 	
+	public BigDecimal getTaskMoney() {
+		return taskMoney;
+	}
+
+	public void setTaskMoney(BigDecimal taskMoney) {
+		this.taskMoney = taskMoney;
+	}
+	
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -172,14 +190,6 @@ public class UserAccount extends DataEntity<UserAccount> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
-	}
-	
-	public BigDecimal getTaskMoney() {
-		return taskMoney;
-	}
-
-	public void setTaskMoney(BigDecimal taskMoney) {
-		this.taskMoney = taskMoney;
 	}
 	
 }

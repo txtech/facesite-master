@@ -69,11 +69,11 @@ public class UserRegisterTrigger extends TriggerOperation {
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
 	public Boolean sendReward(BigDecimal rewardMoney,String title) {
 		try {
-			boolean isOkReward = userAccountApiService.addRewardRecord(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_1,rewardMoney,title,title);
-			if(!isOkReward){
+			String rewardId = userAccountApiService.addRewardRecord(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_1,rewardMoney,title,title);
+			if(StringUtils.isEmpty(rewardId)){
 				return false;
 			}
-			return userAccountApiService.addAccountBalance(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_2,rewardMoney,title,title);
+			return userAccountApiService.addAccountBalance(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_2,rewardMoney,rewardId,title,title);
 		} catch (Exception e) {
 			LOG.error("注册送奖励异常",e);
 			return false;

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.nabobsite.modules.nabob.cms.user.dao;
+package com.nabobsite.modules.nabob.api.dao;
 
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
@@ -12,11 +12,9 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
  * @author face
  * @version 2021-05-13
  */
-@MyBatisDao
-public interface UserAccountDao extends CrudDao<UserAccount> {
+public interface CustomUserAccountDao  {
+
     long updateAccountTotalMoney(UserAccount userAccount);
 
     long updateAccountTaskMoney(UserAccount userAccount);
-
-    long updateCommissionMoney(UserAccount userAccount);
 }

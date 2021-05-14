@@ -1,13 +1,16 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.product.entity;
 
-import javax.validation.constraints.NotNull;
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import com.jeesite.common.mybatis.annotation.JoinTable;
+import com.jeesite.common.mybatis.annotation.JoinTable.Type;
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
@@ -17,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户产品机器人信息Entity
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-13
  */
 @Table(name="t1_user_product_bot", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -37,19 +40,19 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class UserProductBot extends DataEntity<UserProductBot> {
-
+	
 	private static final long serialVersionUID = 1L;
-	private Long userId;		// 用户ID
-	private Long botId;		// 产品ID
-	private Long todayOrders;		// 今日订单数
-	private Double todayIncomeMoney;		// 今天收入
-	private Double todayTeamIncome;		// 今天团队收入
-	private Double yesterdayIncomeMoney;		// 昨日收入
-	private Double yesterdayTeamIncomeMoney;		// 昨日团队收入
+	private String userId;		// 用户ID
+	private String botId;		// 产品ID
+	private Integer todayOrders;		// 今日订单数
+	private BigDecimal todayIncomeMoney;		// 今天收入
+	private BigDecimal todayTeamIncome;		// 今天团队收入
+	private BigDecimal yesterdayIncomeMoney;		// 昨日收入
+	private BigDecimal yesterdayTeamIncomeMoney;		// 昨日团队收入
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-
+	
 	public UserProductBot() {
 		this(null);
 	}
@@ -57,70 +60,72 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public UserProductBot(String id){
 		super(id);
 	}
-
-	@NotNull(message="用户ID不能为空")
-	public Long getUserId() {
+	
+	@NotBlank(message="用户ID不能为空")
+	@Length(min=0, max=30, message="用户ID长度不能超过 30 个字符")
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-
-	@NotNull(message="产品ID不能为空")
-	public Long getBotId() {
+	
+	@NotBlank(message="产品ID不能为空")
+	@Length(min=0, max=30, message="产品ID长度不能超过 30 个字符")
+	public String getBotId() {
 		return botId;
 	}
 
-	public void setBotId(Long botId) {
+	public void setBotId(String botId) {
 		this.botId = botId;
 	}
-
+	
 	@NotNull(message="今日订单数不能为空")
-	public Long getTodayOrders() {
+	public Integer getTodayOrders() {
 		return todayOrders;
 	}
 
-	public void setTodayOrders(Long todayOrders) {
+	public void setTodayOrders(Integer todayOrders) {
 		this.todayOrders = todayOrders;
 	}
-
+	
 	@NotNull(message="今天收入不能为空")
-	public Double getTodayIncomeMoney() {
+	public BigDecimal getTodayIncomeMoney() {
 		return todayIncomeMoney;
 	}
 
-	public void setTodayIncomeMoney(Double todayIncomeMoney) {
+	public void setTodayIncomeMoney(BigDecimal todayIncomeMoney) {
 		this.todayIncomeMoney = todayIncomeMoney;
 	}
-
+	
 	@NotNull(message="今天团队收入不能为空")
-	public Double getTodayTeamIncome() {
+	public BigDecimal getTodayTeamIncome() {
 		return todayTeamIncome;
 	}
 
-	public void setTodayTeamIncome(Double todayTeamIncome) {
+	public void setTodayTeamIncome(BigDecimal todayTeamIncome) {
 		this.todayTeamIncome = todayTeamIncome;
 	}
-
+	
 	@NotNull(message="昨日收入不能为空")
-	public Double getYesterdayIncomeMoney() {
+	public BigDecimal getYesterdayIncomeMoney() {
 		return yesterdayIncomeMoney;
 	}
 
-	public void setYesterdayIncomeMoney(Double yesterdayIncomeMoney) {
+	public void setYesterdayIncomeMoney(BigDecimal yesterdayIncomeMoney) {
 		this.yesterdayIncomeMoney = yesterdayIncomeMoney;
 	}
-
+	
 	@NotNull(message="昨日团队收入不能为空")
-	public Double getYesterdayTeamIncomeMoney() {
+	public BigDecimal getYesterdayTeamIncomeMoney() {
 		return yesterdayTeamIncomeMoney;
 	}
 
-	public void setYesterdayTeamIncomeMoney(Double yesterdayTeamIncomeMoney) {
+	public void setYesterdayTeamIncomeMoney(BigDecimal yesterdayTeamIncomeMoney) {
 		this.yesterdayTeamIncomeMoney = yesterdayTeamIncomeMoney;
 	}
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -129,7 +134,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -138,7 +143,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-
+	
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -147,5 +152,5 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-
+	
 }

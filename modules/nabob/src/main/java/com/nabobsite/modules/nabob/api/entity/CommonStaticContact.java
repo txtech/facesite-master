@@ -34,6 +34,7 @@ public class CommonStaticContact {
     //账户奖励记录类型
     public final static int USER_ACCOUNT_REWARD_TYPE_1 = 1;//注册奖励
     public final static int USER_ACCOUNT_REWARD_TYPE_2 = 2;//用户完成任务奖励： 分享好友奖励,观看视频奖励,邀请好友奖励,定期投资奖励
+    public final static int USER_ACCOUNT_REWARD_TYPE_3 = 3;//无人机产品任务
 
     //用户账户状态
     public final static int USER_ACCOUNT_STATUS_OK = 1;//正常

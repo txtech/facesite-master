@@ -18,6 +18,9 @@ public class LogicStaticContact {
     public final static BigDecimal USER_REGISTER_REWARD = new BigDecimal("100");
     //用户注册奖励
     public final static BigDecimal USER_TACK_BASE_MONEY = new BigDecimal("990");
+    //用户注册奖励
+    public final static BigDecimal PRODUCT_COMMISSION_OTHER_RATE = new BigDecimal("0.5");
+
 
     //用户等级
     public final static int USER_LEVEL_0 = 0;

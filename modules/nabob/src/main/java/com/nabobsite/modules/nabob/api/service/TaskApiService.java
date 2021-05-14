@@ -68,7 +68,7 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 			synchronized (userId) {
 				BigDecimal rewardMoney = taskInfo.getRewardMoney();
 				String title = "完成任务:"+rewardMoney;
-				Boolean isOK = this.sendReward(userId,rewardMoney,title);
+				Boolean isOK = this.sendReward(userId,rewardMoney,taskId,title);
 				if(!isOK){
 					logger.error("新用户第一次做记录日志失败:{},{}",userId,taskId);
 					return ResultUtil.failed("Failed to do the task!");
@@ -116,13 +116,13 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 	 * @create 2021/5/13 8:16 下午
 	 */
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	public Boolean sendReward(String userId,BigDecimal rewardMoney, String title) {
+	public Boolean sendReward(String userId,BigDecimal rewardMoney,String taskId,String title) {
 		try {
-			boolean isOkReward = userAccountApiService.addRewardRecord(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_2,rewardMoney,title,title);
-			if(!isOkReward){
+			String rewardId= userAccountApiService.addRewardRecord(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_2,rewardMoney,title,title);
+			if(StringUtils.isEmpty(rewardId)){
 				return false;
 			}
-			return userAccountApiService.addAccountTaskBalance(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_3,rewardMoney,title,title);
+			return userAccountApiService.addAccountTaskBalance(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_3,rewardMoney,taskId,title,title);
 		} catch (Exception e) {
 			logger.error("完成任务送奖励异常",e);
 			return false;

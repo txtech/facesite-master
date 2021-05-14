@@ -109,7 +109,7 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 				return false;
 			}
 			String title = "充值成功:"+actualMoney;
-			isOk = userAccountApiService.addAccountBalance(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_1,actualMoney,title,orderNo);
+			isOk = userAccountApiService.addAccountBalance(userId,CommonStaticContact.USER_ACCOUNT_RECORD_TYPE_1,actualMoney,orderNo,title,orderNo);
 			if(!isOk){
 				logger.error("充值订单回调失败,更新账户失败:{},{}",orderNo,pOrderNo);
 				return false;

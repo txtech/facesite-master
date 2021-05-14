@@ -4,16 +4,29 @@
 package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.service.CrudService;
+import com.nabobsite.modules.nabob.api.entity.CommonStaticContact;
+import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
+import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
+import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductBotDao;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
+import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
+import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
+import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.cms.user.service.UserInfoService;
+import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.CommonResult;
 import com.nabobsite.modules.nabob.utils.ResultUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -26,9 +39,81 @@ import java.util.List;
 public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 
 	@Autowired
+	private RedisOpsUtil redisOpsUtil;
+	@Autowired
 	private ProductBotDao productBotDao;
 	@Autowired
 	private ProductWarehouseDao productWarehouseDao;
+	@Autowired
+	private UserAccountApiService userAccountApiService;
+	@Autowired
+	private UserInfoApiService userInfoApiService;
+
+	/**
+	 * @desc 无人机产品做任务
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> doBotTask(String botId,String token,String orderNo) {
+		try {
+			if(StringUtils.isEmpty(token)){
+				return ResultUtil.failed("获取失败,获取令牌为空");
+			}
+			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return ResultUtil.failed("获取失败,登陆令牌失效");
+			}
+			UserInfo userInfo = userInfoApiService.getUserInfoByUserId(userId);
+			if(userInfo== null){
+				return ResultUtil.failed("获取失败,用户信息为空");
+			}
+			ProductBot productBot = this.getProductBotInfoById(botId);
+			if(productBot == null){
+				return ResultUtil.failed("任务失败,产品不存在");
+			}
+			synchronized (userId) {
+				int userLevel = userInfo.getLevel();
+				int mustLevel = productBot.getLevel();
+				BigDecimal productBotPrice = productBot.getPrice();
+				if(userLevel < mustLevel){
+					return ResultUtil.failed("任务失败,当前等级不符合要求");
+				}
+				Boolean isOk =  this.updateAppreciationRate(userId,botId,mustLevel,productBotPrice);
+				if(isOk){
+					return ResultUtil.success(true);
+				}
+				return ResultUtil.failed("Failed to do the task!");
+			}
+		} catch (Exception e) {
+			logger.error("Failed to do the task!",e);
+			return ResultUtil.failed("Failed to do the task!");
+		}
+	}
+
+	/**
+	 * @desc 佣金和增值 升值率
+	 * @author nada
+	 * @create 2021/5/13 10:14 下午
+	*/
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean updateAppreciationRate(String userId,String botId,int level,BigDecimal money) {
+		try {
+			String title = "完成任务";
+			BigDecimal commissionOtherRate = LogicStaticContact.PRODUCT_COMMISSION_OTHER_RATE;//增值比例
+			BigDecimal commissionRate = LogicStaticContact.LEVEL_BALANCE_COMMISSION_RATE.get(level);//产品佣金比例
+			BigDecimal commissionMoney = CommonStaticContact.multiply(money,commissionRate);//佣金
+			BigDecimal incrementMoney = CommonStaticContact.multiply(commissionMoney,commissionOtherRate);//增值佣金
+			Boolean isOk = userAccountApiService.addAccountCommissionBalance(userId,CommonStaticContact.USER_ACCOUNT_REWARD_TYPE_3,commissionMoney,incrementMoney,botId,title,title);
+			if (isOk){
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
+			logger.error("佣金和增值失败",e);
+			return false;
+		}
+	}
 
 	/**
 	 * @desc 获取无人机产品列表
@@ -79,6 +164,23 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 	}
 
 	/**
+	 * @desc 获取无人机产品详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public ProductBot getProductBotInfoById(String id) {
+		try {
+			ProductBot productBotInfo = new ProductBot();
+			productBotInfo.setId(id);
+			return productBotDao.getByEntity(productBotInfo);
+		} catch (Exception e) {
+			logger.error("Failed to get product bot info!",e);
+			return null;
+		}
+	}
+
+	/**
 	 * @desc 获取云仓库产品详情
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
@@ -93,46 +195,4 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 			return ResultUtil.failed("Failed to get product warehouse info!");
 		}
 	}
-
-
-	/**
-	 * 获取单条数据
-	 * @param productBot
-	 * @return
-	 */
-	@Override
-	public ProductBot get(ProductBot productBot) {
-		return super.get(productBot);
-	}
-
-	/**
-	 * 保存数据（插入或更新）
-	 * @param productBot
-	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void save(ProductBot productBot) {
-		super.save(productBot);
-	}
-
-	/**
-	 * 更新状态
-	 * @param productBot
-	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void updateStatus(ProductBot productBot) {
-		super.updateStatus(productBot);
-	}
-
-	/**
-	 * 删除数据
-	 * @param productBot
-	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void delete(ProductBot productBot) {
-		super.delete(productBot);
-	}
-
 }

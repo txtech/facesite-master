@@ -81,7 +81,7 @@ public class DbInstanceContact {
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
-    public static UserAccountRecord initUserAccountRecord(String userId,String accountId,int type,BigDecimal payMoney,BigDecimal totalMoney,String title,String remarks){
+    public static UserAccountRecord initUserAccountRecord(String userId,String accountId,int type,BigDecimal payMoney,BigDecimal totalMoney,String uniqueId,String title,String remarks){
         synchronized (userId) {
             UserAccountRecord userAccountRecord = new UserAccountRecord();
             userAccountRecord.setIsNewRecord(true);
@@ -91,6 +91,7 @@ public class DbInstanceContact {
             userAccountRecord.setRemarks(remarks);
             userAccountRecord.setAccountId(accountId);
             userAccountRecord.setChangeMoney(payMoney);
+            userAccountRecord.setUnique(uniqueId);
             userAccountRecord.setTotalMoney(CommonStaticContact.add(totalMoney,payMoney));
             return userAccountRecord;
         }
