@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.sys.service.SysConfigService;
 /**
  * 用户任务Controller
  * @author face
- * @version 2021-05-14
+ * @version 2021-05-15
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/sysConfig")

@@ -18,9 +18,9 @@ import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 
 /**
- * 出款Entity
+ * 出款管理Entity
  * @author face
- * @version 2021-05-12
+ * @version 2021-05-15
  */
 @Table(name="t1_cash", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -34,7 +34,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="email", attrName="email", label="邮箱"),
 		@Column(name="phone_number", attrName="phoneNumber", label="手机号码"),
 		@Column(name="account_no", attrName="accountNo", label="提款账户"),
-		@Column(name="cash_message", attrName="cashMessage", label="提款豹纹"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
@@ -56,7 +55,6 @@ public class Cash extends DataEntity<Cash> {
 	private String email;		// 邮箱
 	private String phoneNumber;		// 手机号码
 	private String accountNo;		// 提款账户
-	private String cashMessage;		// 提款豹纹
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
@@ -158,15 +156,6 @@ public class Cash extends DataEntity<Cash> {
 
 	public void setAccountNo(String accountNo) {
 		this.accountNo = accountNo;
-	}
-	
-	@Length(min=0, max=3200, message="提款豹纹长度不能超过 3200 个字符")
-	public String getCashMessage() {
-		return cashMessage;
-	}
-
-	public void setCashMessage(String cashMessage) {
-		this.cashMessage = cashMessage;
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

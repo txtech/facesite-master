@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户账户Entity
  * @author face
- * @version 2021-05-14
+ * @version 2021-05-15
  */
 @Table(name="t1_user_account", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),

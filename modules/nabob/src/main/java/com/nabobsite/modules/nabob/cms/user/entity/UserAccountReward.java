@@ -18,13 +18,14 @@ import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 
 /**
- * 用户账户Entity
+ * 用户账户明细Entity
  * @author face
  * @version 2021-05-15
  */
-@Table(name="t1_user_account_detail", alias="a", columns={
+@Table(name="t1_user_account_reward", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="user_id", attrName="userId", label="用户id"),
+		@Column(name="account_id", attrName="accountId", label="账户ID"),
 		@Column(name="title", attrName="title", label="标题", queryType=QueryType.LIKE),
 		@Column(name="type", attrName="type", label="类型 1", comment="类型 1:总资金 20:佣金账户 30:仓库资金 40:奖励账户"),
 		@Column(name="unique", attrName="unique", label="唯一标识"),
@@ -39,17 +40,17 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="reward_money", attrName="rewardMoney", label="奖励账户"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
-		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
-		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
-		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
-		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
-		@Column(name="account_id", attrName="accountId", label="账户ID"),
+		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
+		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
+		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 	}, orderBy="a.id DESC"
 )
-public class UserAccountDetail extends DataEntity<UserAccountDetail> {
+public class UserAccountReward extends DataEntity<UserAccountReward> {
 	
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户id
+	private String accountId;		// 账户ID
 	private String title;		// 标题
 	private Integer type;		// 类型 1:总资金 20:佣金账户 30:仓库资金 40:奖励账户
 	private String unique;		// 唯一标识
@@ -65,13 +66,12 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	private String accountId;		// 账户ID
 	
-	public UserAccountDetail() {
+	public UserAccountReward() {
 		this(null);
 	}
 
-	public UserAccountDetail(String id){
+	public UserAccountReward(String id){
 		super(id);
 	}
 	
@@ -83,6 +83,16 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	
+	@NotBlank(message="账户ID不能为空")
+	@Length(min=0, max=50, message="账户ID长度不能超过 50 个字符")
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
 	}
 	
 	@NotBlank(message="标题不能为空")
@@ -220,16 +230,6 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
-	}
-	
-	@NotBlank(message="账户ID不能为空")
-	@Length(min=0, max=50, message="账户ID长度不能超过 50 个字符")
-	public String getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
 	}
 	
 }

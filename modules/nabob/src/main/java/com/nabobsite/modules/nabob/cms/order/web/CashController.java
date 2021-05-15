@@ -23,9 +23,9 @@ import com.nabobsite.modules.nabob.cms.order.entity.Cash;
 import com.nabobsite.modules.nabob.cms.order.service.CashService;
 
 /**
- * 出款Controller
+ * 出款管理Controller
  * @author face
- * @version 2021-05-12
+ * @version 2021-05-15
  */
 @Controller
 @RequestMapping(value = "${adminPath}/order/cash")
@@ -82,7 +82,7 @@ public class CashController extends BaseController {
 	@ResponseBody
 	public String save(@Validated Cash cash) {
 		cashService.save(cash);
-		return renderResult(Global.TRUE, text("保存出款成功！"));
+		return renderResult(Global.TRUE, text("保存出款管理成功！"));
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class CashController extends BaseController {
 	@ResponseBody
 	public String delete(Cash cash) {
 		cashService.delete(cash);
-		return renderResult(Global.TRUE, text("删除出款成功！"));
+		return renderResult(Global.TRUE, text("删除出款管理成功！"));
 	}
 	
 }

@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccountLog;
 /**
  * 用户账户DAO接口
  * @author face
- * @version 2021-05-14
+ * @version 2021-05-15
  */
 @MyBatisDao
 public interface UserAccountLogDao extends CrudDao<UserAccountLog> {

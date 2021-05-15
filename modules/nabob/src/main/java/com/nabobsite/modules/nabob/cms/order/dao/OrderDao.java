@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.order.entity.Order;
 /**
  * 订单DAO接口
  * @author face
- * @version 2021-05-14
+ * @version 2021-05-15
  */
 @MyBatisDao
 public interface OrderDao extends CrudDao<Order> {

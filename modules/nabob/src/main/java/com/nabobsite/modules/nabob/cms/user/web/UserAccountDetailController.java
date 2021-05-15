@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.user.service.UserAccountDetailService;
 /**
  * 用户账户Controller
  * @author face
- * @version 2021-05-14
+ * @version 2021-05-15
  */
 @Controller
 @RequestMapping(value = "${adminPath}/user/userAccountDetail")

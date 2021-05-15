@@ -14,9 +14,9 @@ import com.nabobsite.modules.nabob.cms.order.entity.Cash;
 import com.nabobsite.modules.nabob.cms.order.dao.CashDao;
 
 /**
- * 出款Service
+ * 出款管理Service
  * @author face
- * @version 2021-05-12
+ * @version 2021-05-15
  */
 @Service
 @Transactional(readOnly=true)
