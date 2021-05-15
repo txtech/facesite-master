@@ -35,29 +35,26 @@ public class ProductApiController extends BaseController {
 
 	@PostMapping(value = {"doBotTask"})
 	@ApiOperation(value = "产品刷单接口")
-	public String doBotTask(@RequestBody BotTaskReqModel botTaskReqModel, HttpServletRequest request) {
+	public CommonResult<Boolean> doBotTask(@RequestBody BotTaskReqModel botTaskReqModel, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<Boolean> result = productApiService.doBotTask(token,botTaskReqModel);
-		return renderResult(Global.TRUE,text("doBotTask"), result);
+		return productApiService.doBotTask(token,botTaskReqModel);
 	}
 
 	@RequestMapping(value = {"getProductBotInfo/{botId}"})
 	@ApiOperation(value = "无人机产品详情")
-	public String getProductBotInfo(@PathVariable String botId,HttpServletRequest request) {
+	public CommonResult<ProductBot> getProductBotInfo(@PathVariable String botId,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		ProductBot productBot = new ProductBot();
 		productBot.setId(botId);
-		CommonResult<ProductBot> result = productApiService.getProductBotInfo(productBot);
-		return renderResult(Global.TRUE,text("getProductBotInfo"), result);
+		return productApiService.getProductBotInfo(token,productBot);
 	}
 
 	@RequestMapping(value = {"getProductWarehouseInfo/{warehouseId}"})
 	@ApiOperation(value = "云仓库产品详情")
-	public String getProductWarehouseInfo(@PathVariable String warehouseId,HttpServletRequest request) {
+	public CommonResult<ProductWarehouse> getProductWarehouseInfo(@PathVariable String warehouseId,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		ProductWarehouse productWarehouse = new ProductWarehouse();
 		productWarehouse.setId(warehouseId);
-		CommonResult<ProductWarehouse> result = productApiService.getProductWarehouseInfo(productWarehouse);
-		return renderResult(Global.TRUE,text("getProductWarehouseInfo"), result);
+		return productApiService.getProductWarehouseInfo(token,productWarehouse);
 	}
 }

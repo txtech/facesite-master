@@ -5,7 +5,7 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
+import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.api.model.OrderInfoModel;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
@@ -65,7 +65,7 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 			order.setUserId(userId);
 			String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
 			synchronized (orderNo) {
-				long dbResult = orderDao.insert(DbInstanceContact.initOrderInfo(order,orderNo));
+				long dbResult = orderDao.insert(InstanceContact.initOrderInfo(order,orderNo));
 				if(CommonContact.dbResult(dbResult)){
 					orderInfoModel.setOrderNo(orderNo);
 					return ResultUtil.success(orderInfoModel);

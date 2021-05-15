@@ -44,19 +44,17 @@ public class TaskApiController extends BaseController {
 
 	@ApiOperation(value = "用户任务")
 	@PostMapping(value = "doUserTask/{taskId}")
-	public String doUserTask(@PathVariable String taskId,HttpServletRequest request) {
+	public CommonResult<Boolean> doUserTask(@PathVariable String taskId,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<Boolean> result = taskApiService.doUserTask(taskId,token);
-		return renderResult(Global.TRUE, text("userTask"),result);
+		return taskApiService.doUserTask(taskId,token);
 	}
 
 	@RequestMapping(value = {"getTaskInfo/{taskId}"})
 	@ApiOperation(value = "获取任务详情")
-	public String getTaskInfo(@PathVariable String taskId,HttpServletRequest request) {
+	public CommonResult<TaskInfo> getTaskInfo(@PathVariable String taskId,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		TaskInfo taskInfo = new TaskInfo();
 		taskInfo.setId(taskId);
-		CommonResult<TaskInfo> result = taskApiService.getTaskInfo(taskInfo);
-		return renderResult(Global.TRUE,text("getTaskInfo"), result);
+		return taskApiService.getTaskInfo(taskInfo,token);
 	}
 }

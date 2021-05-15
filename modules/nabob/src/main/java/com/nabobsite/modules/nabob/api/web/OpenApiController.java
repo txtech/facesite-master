@@ -51,11 +51,10 @@ public class OpenApiController extends BaseController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(dataType = "UserInfoModel", name = "userInfoModel", value = "用户注册(必须账户、密码,其它可选)", required = true, type="String")
 	})
-	public String register(@RequestBody UserInfoModel userInfoModel,HttpServletRequest request) {
+	public CommonResult<Boolean> register(@RequestBody UserInfoModel userInfoModel,HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		userInfoModel.setRegistIp(ip);
-		CommonResult<Boolean> result = userInfoApiService.register(userInfoModel);
-		return renderResult(Global.TRUE,text("register"),result);
+		return userInfoApiService.register(userInfoModel);
 	}
 
 	@PostMapping(value = {"login"})
@@ -63,41 +62,33 @@ public class OpenApiController extends BaseController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(dataType = "UserInfoModel", name = "userInfoModel", value = "用户登陆:(必须账户、密码)", required = true, type="String")
 	})
-	public String login(@RequestBody UserInfoModel userInfoModel, HttpServletRequest request) {
+	public CommonResult<UserInfoModel> login(@RequestBody UserInfoModel userInfoModel, HttpServletRequest request) {
 		String loginIp = HttpBrowserTools.getIpAddr(request);
 		userInfoModel.setLoginIp(loginIp);
-		CommonResult<UserInfoModel> result = userInfoApiService.login(userInfoModel);
-		return renderResult(Global.TRUE,text("login"), result);
+		return userInfoApiService.login(userInfoModel);
 	}
 
 	@ApiOperation(value = "获取系统配置")
 	@PostMapping(value = {"getSysConfig"})
-	public String getSysConfig(HttpServletRequest request){
-		CommonResult<JSONObject> result = userInfoApiService.getSysConfig();
-		return renderResult(Global.TRUE,text("getCountdown"),result);
+	public CommonResult<JSONObject> getSysConfig(HttpServletRequest request){
+		return userInfoApiService.getSysConfig();
 	}
 
 	@RequestMapping(value = {"getTaskList"})
 	@ApiOperation(value = "获取任务列表")
-	public String getTaskList(HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<List<TaskInfo>> result = taskApiService.getTaskList(new TaskInfo());
-		return renderResult(Global.TRUE,text("getTaskList"), result);
+	public CommonResult<List<TaskInfo>> getTaskList(HttpServletRequest request) {
+		return taskApiService.getTaskList(new TaskInfo());
 	}
 
 	@RequestMapping(value = {"getProductWarehouseList"})
 	@ApiOperation(value = "云仓库产品列表")
-	public String getProductWarehouseList(HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<List<ProductWarehouse>> result = productApiService.getProductWarehouseList(new ProductWarehouse());
-		return renderResult(Global.TRUE,text("getProductWarehouseList"), result);
+	public CommonResult<List<ProductWarehouse>> getProductWarehouseList(HttpServletRequest request) {
+		return productApiService.getProductWarehouseList(new ProductWarehouse());
 	}
 
 	@RequestMapping(value = {"getProductBotList"})
 	@ApiOperation(value = "无人机产品列表")
-	public String getProductBotList(HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<List<ProductBot>> result = productApiService.getProductBotList(new ProductBot());
-		return renderResult(Global.TRUE,text("getProductBotList"), result);
+	public CommonResult<List<ProductBot>> getProductBotList(HttpServletRequest request) {
+		return productApiService.getProductBotList(new ProductBot());
 	}
 }

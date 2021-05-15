@@ -127,7 +127,7 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<ProductBot> getProductBotInfo(ProductBot productBot) {
+	public CommonResult<ProductBot> getProductBotInfo(String token,ProductBot productBot) {
 		try {
 			ProductBot productBotInfo = productBotDao.getByEntity(productBot);
 			return ResultUtil.success(productBotInfo);
@@ -160,7 +160,7 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<ProductWarehouse> getProductWarehouseInfo(ProductWarehouse productWarehouse) {
+	public CommonResult<ProductWarehouse> getProductWarehouseInfo(String token,ProductWarehouse productWarehouse) {
 		try {
 			ProductWarehouse productWarehouseInfo = productWarehouseDao.getByEntity(productWarehouse);
 			return ResultUtil.success(productWarehouseInfo);

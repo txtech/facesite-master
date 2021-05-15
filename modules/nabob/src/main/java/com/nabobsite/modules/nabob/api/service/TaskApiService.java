@@ -5,7 +5,7 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
+import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
@@ -63,7 +63,7 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 				BigDecimal rewardMoney = taskInfo.getRewardMoney();
 				UserTask userTask = this.getUserTaskByUserIdAndTaskId(userId,taskId);
 				if(userTask == null){
-					UserTask initUserTask = DbInstanceContact.initUserTask(userId,taskId,1);
+					UserTask initUserTask = InstanceContact.initUserTask(userId,taskId,1);
 					long dbResult = userTaskDao.insert(initUserTask);
 					if(CommonContact.dbResult(dbResult)){
 						logger.info("新用户第一次做任务成功:{},{}",userId,taskId);
@@ -175,7 +175,7 @@ public class TaskApiService extends CrudService<TaskInfoDao, TaskInfo> {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<TaskInfo> getTaskInfo(TaskInfo taskInfo) {
+	public CommonResult<TaskInfo> getTaskInfo(TaskInfo taskInfo,String token) {
 		try {
 			TaskInfo result = taskInfoDao.getByEntity(taskInfo);
 			return ResultUtil.success(result);

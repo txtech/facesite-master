@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  * @Date 2021/5/11 11:23 上午
  * @Version 1.0
  */
-public class DbInstanceContact {
+public class InstanceContact {
 
     /**
      * @desc 初始化用户信息

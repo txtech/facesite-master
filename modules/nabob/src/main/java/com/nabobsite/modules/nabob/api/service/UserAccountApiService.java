@@ -5,9 +5,12 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
+import com.nabobsite.modules.nabob.api.entity.InstanceContact;
+import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
+import com.nabobsite.modules.nabob.utils.CommonResult;
+import com.nabobsite.modules.nabob.utils.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,28 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 	private UserAccountLogDao userAccountLogDao;
 	@Autowired
 	private UserAccountDetailDao userAccountDetailDao;
+	@Autowired
+	private UserInfoApiService userInfoApiService;
+
+	/**
+	 * @desc 获取用户详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<UserAccount> getUserAccountInfo(String token) {
+		try {
+			UserInfo userInfo = userInfoApiService.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed("获取失败,获取帐号信息为空");
+			}
+			UserAccount userAccount = this.getUserAccountByUserId(userInfo.getId());
+			return ResultUtil.success(userAccount);
+		} catch (Exception e) {
+			logger.error("Failed to get userinfo!",e);
+			return ResultUtil.failed("Failed to get userinfo!");
+		}
+	}
 
 	/**
 	 * @desc 修改账户总余额
@@ -40,7 +65,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 		try {
 			synchronized (userId){
 				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_1;
-				UserAccountDetail userAccountDetail = DbInstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
+				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
 				userAccountDetail.setTotalMoney(updateMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
@@ -78,7 +103,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 			}
 			synchronized (userId){
 				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_2;
-				UserAccountDetail userAccountDetail = DbInstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
+				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
 				userAccountDetail.setCommissionMoney(commissionMoney);
 				userAccountDetail.setIncrementMoney(incrementMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,commissionMoney,userAccountDetail);
@@ -113,7 +138,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 		try {
 			synchronized (userId){
 				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_4;
-				UserAccountDetail userAccountDetail = DbInstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
+				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
 				userAccountDetail.setRewardMoney(updateMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
@@ -166,7 +191,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 					return false;
 				}
 				String detailId = userAccountDetail.getId();
-				UserAccountLog userAccountLog = DbInstanceContact.initUserAccountLog(detailId,title,oldUserAccount);
+				UserAccountLog userAccountLog = InstanceContact.initUserAccountLog(detailId,title,oldUserAccount);
 				dbResult = userAccountLogDao.insert(userAccountLog);
 				if(!CommonContact.dbResult(dbResult)){
 					logger.error("修改账户余额验证失败,记录日志失败:{},{},{}",userId,accountId,updateMoney);

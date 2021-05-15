@@ -19,10 +19,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,29 +40,22 @@ public class CashApiController extends BaseController {
 
 	@PostMapping(value = {"cashOrder"})
 	@ApiOperation(value = "提款接口")
-	public String rechargeOrder(HttpServletRequest request) {
+	public CommonResult<Cash> rechargeOrder(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<Cash> result = cashApiService.cashOrder(new Cash());
-		return renderResult(Global.TRUE,text("cashOrder"), result);
+		return cashApiService.cashOrder(token,new Cash());
 	}
 
 	@PostMapping(value = {"getCashOrderList"})
 	@ApiOperation(value = "获取订单列表")
-	public String getCashOrderList(HttpServletRequest request) {
+	public CommonResult<List<Cash>> getCashOrderList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<List<Cash>> result = cashApiService.getCashOrderList(new Cash());
-		return renderResult(Global.TRUE,text("getCashOrderList"), result);
+		return cashApiService.getCashOrderList(token,new Cash());
 	}
 
-	@PostMapping(value = {"getCashOrderInfo"})
+	@PostMapping(value = {"getCashOrderInfo/{orderNo}"})
 	@ApiOperation(value = "获取订单详情")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "orderNo", value = "订单号"),
-			@ApiImplicitParam(name = "mark", value = "来者不善", required = false, type="String"),
-	})
-	public String getCashOrderInfo(HttpServletRequest request) {
+	public CommonResult<Cash> getCashOrderInfo(@PathVariable String orderNo,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<Cash> result = cashApiService.getCashOrderInfo(new Cash());
-		return renderResult(Global.TRUE,text("getCashOrderInfo"), result);
+		return cashApiService.getCashOrderInfo(token,new Cash());
 	}
 }

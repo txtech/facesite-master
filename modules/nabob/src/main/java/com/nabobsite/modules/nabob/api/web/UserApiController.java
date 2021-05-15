@@ -39,43 +39,38 @@ public class UserApiController extends BaseController {
 
 	@PostMapping(value = {"logout"})
 	@ApiOperation(value = "用户退出")
-	public String logout(HttpServletRequest request){
+	public CommonResult<Boolean> logout(HttpServletRequest request){
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<Boolean> result = userInfoApiService.logout(token);
-		return renderResult(Global.TRUE,text("logout"), result);
+		return userInfoApiService.logout(token);
 	}
 
 	@ApiOperation(value = "用户获取详情")
 	@PostMapping(value = {"getUserInfo"})
-	public String getUserInfo(HttpServletRequest request){
+	public CommonResult<UserInfoModel> getUserInfo(HttpServletRequest request){
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<UserInfoModel> result = userInfoApiService.getUserInfo(token);
-		return renderResult(Global.TRUE,text("getUserInfo"), result);
+		return userInfoApiService.getUserInfo(token);
 	}
 
 	@PostMapping(value = {"updatePwd"})
 	@ApiOperation(value = "用户修改密码")
-	public String updatePwd(@RequestBody UserInfoModel userInfoModel,HttpServletRequest request) {
+	public CommonResult<Boolean> updatePwd(@RequestBody UserInfoModel userInfoModel,HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		logger.info("用户修改密码,来者何人:{}",ip);
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<Boolean> result = userInfoApiService.updatePwd(userInfoModel,token);
-		return renderResult(Global.TRUE,text("updatePwd"),result);
+		return userInfoApiService.updatePwd(token,userInfoModel);
 	}
 
 	@ApiOperation(value = "用户邀请好友链接")
 	@RequestMapping(value = {"shareFriends"})
-	public String shareFriends(HttpServletRequest request){
+	public CommonResult<String> shareFriends(HttpServletRequest request){
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<String> result = userInfoApiService.shareFriends(token);
-		return renderResult(Global.TRUE,text("shareFriends"),result);
+		return userInfoApiService.shareFriends(token);
 	}
 
 	@ApiOperation(value = "用户切换语言")
 	@RequestMapping(value = "switchLang/{lang}")
-	public String switchLang(@PathVariable String lang,HttpServletRequest request) {
+	public CommonResult<Boolean> switchLang(@PathVariable String lang,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<Boolean> result = userInfoApiService.switchLang(token,lang);
-		return renderResult(Global.TRUE, text("switchLang"),ResultUtil.success(result));
+		return userInfoApiService.switchLang(token,lang);
 	}
 }

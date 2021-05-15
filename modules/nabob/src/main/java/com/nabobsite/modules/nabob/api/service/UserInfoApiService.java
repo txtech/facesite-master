@@ -11,7 +11,7 @@ import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
+import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
@@ -60,7 +60,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> updatePwd(UserInfoModel userInfoModel,String token) {
+	public CommonResult<Boolean> updatePwd(String token,UserInfoModel userInfoModel) {
 		try {
 			String accountNo = userInfoModel.getAccountNo();
 			String oldPassword = userInfoModel.getOldPassword();
@@ -293,11 +293,11 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				//生产唯一邀请码
 				Long seqId = sequenceService.getSequence();
 				userInfo.setInviteCode(String.valueOf(seqId));
-				UserInfo initUser = DbInstanceContact.initUserInfo(userInfo);
+				UserInfo initUser = InstanceContact.initUserInfo(userInfo);
 				long dbResult = userInfoDao.insert(initUser);
 				if(CommonContact.dbResult(dbResult)){
 					String userId = initUser.getId();
-					userAccountDao.insert(DbInstanceContact.initUserAccount(userId));
+					userAccountDao.insert(InstanceContact.initUserAccount(userId));
 					this.updateUserSecret(userId,parent1UserId);
 					triggerApiService.registerTrigger(userId);
 					return ResultUtil.success(Boolean.TRUE);

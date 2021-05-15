@@ -49,29 +49,26 @@ public class OrderApiController extends BaseController {
 			@ApiImplicitParam(name = "phoneNumber",value = "电话号码", required = true),
 			@ApiImplicitParam(name = "mark", value = "来者不善", required = false, type="String"),
 	})
-	public String rechargeOrder(@RequestBody OrderInfoModel orderInfoModel,HttpServletRequest request) {
+	public CommonResult<OrderInfoModel> rechargeOrder(@RequestBody OrderInfoModel orderInfoModel,HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		orderInfoModel.setIpaddress(ip);
-		CommonResult<OrderInfoModel> result = orderApiService.rechargeOrder(orderInfoModel,token);
-		return renderResult(Global.TRUE,text("rechargeOrder"), result);
+		return orderApiService.rechargeOrder(orderInfoModel,token);
 	}
 
 	@PostMapping(value = {"getOrderList"})
 	@ApiOperation(value = "获取订单列表")
-	public String getOrderList(HttpServletRequest request) {
+	public CommonResult<List<Order>> getOrderList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		CommonResult<List<Order>> result = orderApiService.getOrderList(new Order(),token);
-		return renderResult(Global.TRUE,text("getOrderList"), result);
+		return orderApiService.getOrderList(new Order(),token);
 	}
 
 	@PostMapping(value = {"getOrderInfo/{orderNo}"})
 	@ApiOperation(value = "获取订单详情")
-	public String getOrderInfo(@PathVariable String orderNo, HttpServletRequest request) {
+	public CommonResult<OrderInfoModel> getOrderInfo(@PathVariable String orderNo, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		Order order = new Order();
 		order.setOrderNo(orderNo);
-		CommonResult<OrderInfoModel> result = orderApiService.getOrderInfo(order,token);
-		return renderResult(Global.TRUE,text("getOrderInfo"), result);
+		return orderApiService.getOrderInfo(order,token);
 	}
 }

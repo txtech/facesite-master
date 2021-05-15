@@ -35,7 +35,7 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Cash> cashOrder(Cash cash) {
+	public CommonResult<Cash> cashOrder(String token,Cash cash) {
 		try {
 			long dbResult = cashDao.insert(cash);
 			return ResultUtil.success(cash);
@@ -51,7 +51,7 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<Cash>> getCashOrderList(Cash cash) {
+	public CommonResult<List<Cash>> getCashOrderList(String token,Cash cash) {
 		try {
 			List<Cash> result = cashDao.findList(cash);
 			return ResultUtil.success(result);
@@ -67,7 +67,7 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Cash> getCashOrderInfo(Cash cash) {
+	public CommonResult<Cash> getCashOrderInfo(String token,Cash cash) {
 		try {
 			Cash result = cashDao.getByEntity(cash);
 			return ResultUtil.success(result);
