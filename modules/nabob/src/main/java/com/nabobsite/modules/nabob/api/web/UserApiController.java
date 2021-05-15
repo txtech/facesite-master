@@ -5,6 +5,8 @@ package com.nabobsite.modules.nabob.api.web;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.config.Global;
 import com.jeesite.modules.sys.utils.UserUtils;
+import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.CommonResult;
@@ -29,107 +31,51 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping(value = "${frontPath}/api/user")
 @ConditionalOnProperty(name="web.swagger.nabob.enabled", havingValue="true", matchIfMissing=true)
-@Api(tags = "用户接口")
+@Api(tags = "用户接口(需要登陆)")
 public class UserApiController extends BaseController {
 
 	@Autowired
 	private UserInfoApiService userInfoApiService;
 
-	@PostMapping(value = {"register"})
-	@ApiOperation(value = "用户注册")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "accountNo", value = "注册账号(手机号码)", required = true, paramType="query", type="String"),
-			@ApiImplicitParam(name = "password",  value = "登陆密码", required = true),
-			@ApiImplicitParam(name = "param_parent",value = "邀请上级", required = false),
-			@ApiImplicitParam(name = "inviteCode",value = "邀请码", required = false),
-			@ApiImplicitParam(name = "favorite",  value = "最喜欢的人", required = false),
-			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en_US,en_IN,zh_CN", required = false),
-	})
-	public String register(String accountNo, String password, String inviteCode,String param_parent,String favorite,String param_lang,HttpServletRequest request) {
-		String ip = HttpBrowserTools.getIpAddr(request);
-		UserInfo userInfo = new UserInfo();
-		userInfo.setRegistIp(ip);
-		userInfo.setAccountNo(accountNo);
-		userInfo.setPassword(password);
-		userInfo.setFavorite(favorite);
-		userInfo.setInviteCode(inviteCode);
-		userInfo.setLang(param_lang);
-		CommonResult<Boolean> result = userInfoApiService.register(userInfo,param_parent);
-		return renderResult(Global.TRUE,text("register"), result);
-	}
-
-	@PostMapping(value = {"login"})
-	@ApiOperation(value = "用户登陆")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "accountNo", value = "登陆账号", required = true, paramType="query", type="String"),
-			@ApiImplicitParam(name = "password",  value = "登陆密码", required = true),
-			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en_US,en_IN,zh_CN", required = false),
-	})
-	public String login(String accountNo, String password,String param_lang,HttpServletRequest request) {
-		String loginIp = HttpBrowserTools.getIpAddr(request);
-		String ip = HttpBrowserTools.getIpAddr(request);
-		UserInfo userInfo = new UserInfo();
-		userInfo.setAccountNo(accountNo);
-		userInfo.setPassword(password);
-		userInfo.setLoginIp(loginIp);
-		CommonResult<UserInfo> result = userInfoApiService.login(userInfo,param_lang);
-		return renderResult(Global.TRUE,text("login"), result);
-	}
-
 	@PostMapping(value = {"logout"})
 	@ApiOperation(value = "用户退出")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
-	public String logout(String param_token) {
-		CommonResult<Boolean> result = userInfoApiService.logout(param_token);
+	public String logout(HttpServletRequest request){
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		CommonResult<Boolean> result = userInfoApiService.logout(token);
 		return renderResult(Global.TRUE,text("logout"), result);
 	}
 
 	@ApiOperation(value = "用户获取详情")
 	@PostMapping(value = {"getUserInfo"})
-	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
-	public String getUserInfo(String param_token) {
-		CommonResult<UserInfo> result = userInfoApiService.getUserInfo(param_token);
+	public String getUserInfo(HttpServletRequest request){
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		CommonResult<UserInfoModel> result = userInfoApiService.getUserInfo(token);
 		return renderResult(Global.TRUE,text("getUserInfo"), result);
 	}
 
 	@PostMapping(value = {"updatePwd"})
 	@ApiOperation(value = "用户修改密码")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "accountNo", value = "登陆账号", required = true, paramType="query", type="String"),
-			@ApiImplicitParam(name = "oldPassword",  value = "旧密码", required = true),
-			@ApiImplicitParam(name = "newPassword",  value = "新密码", required = true),
-			@ApiImplicitParam(name = "param_token",  value = "会话token", required = true),
-	})
-	public String updatePwd(String accountNo, String oldPassword,String newPassword,String param_token,HttpServletRequest request) {
+	public String updatePwd(@RequestBody UserInfoModel userInfoModel,HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
-		CommonResult<Boolean> result = userInfoApiService.updatePwd(accountNo,oldPassword,newPassword,param_token);
+		logger.info("用户修改密码,来者何人:{}",ip);
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		CommonResult<Boolean> result = userInfoApiService.updatePwd(userInfoModel,token);
 		return renderResult(Global.TRUE,text("updatePwd"),result);
 	}
 
-	@ApiOperation(value = "用户获取邀请好友链接")
-	@PostMapping(value = {"shareFriends"})
-	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
-	public String shareFriends(String param_token){
-		CommonResult<String> result = userInfoApiService.shareFriends(param_token);
+	@ApiOperation(value = "用户邀请好友链接")
+	@RequestMapping(value = {"shareFriends"})
+	public String shareFriends(HttpServletRequest request){
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		CommonResult<String> result = userInfoApiService.shareFriends(token);
 		return renderResult(Global.TRUE,text("shareFriends"),result);
 	}
 
-	@ApiOperation(value = "用户获取系统配置")
-	@PostMapping(value = {"getSysConfig"})
-	@ApiImplicitParams({ @ApiImplicitParam(name = "param_token", value = "会话令牌", required = true, paramType="query", type="String"),})
-	public String getSysConfig(String param_token){
-		CommonResult<JSONObject> result = userInfoApiService.getSysConfig(param_token);
-		return renderResult(Global.TRUE,text("getCountdown"),result);
-	}
-
 	@ApiOperation(value = "用户切换语言")
-	@RequestMapping(value = "switchLang")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "param_token",  value = "会话token", required = true),
-			@ApiImplicitParam(name = "param_lang",  value = "语言默认：en_US,en_IN,zh_CN", required = false),
-	})
-	public String switchLang(String param_token,String param_lang) {
-		CommonResult<Boolean> result = userInfoApiService.switchLang(param_token,param_lang);
+	@RequestMapping(value = "switchLang/{lang}")
+	public String switchLang(@PathVariable String lang,HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		CommonResult<Boolean> result = userInfoApiService.switchLang(token,lang);
 		return renderResult(Global.TRUE, text("switchLang"),ResultUtil.success(result));
 	}
 }

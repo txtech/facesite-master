@@ -1,5 +1,7 @@
 package com.nabobsite.modules.nabob.utils;
 
+import com.jeesite.common.lang.StringUtils;
+
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -61,6 +63,10 @@ public class SnowFlakeIDGenerator {
      */
     public final static long generateSnowFlakeId(){
         return snowFlake.nextId();
+    }
+
+    public final static String getSnowFlakeNo(){
+        return String.valueOf(generateSnowFlakeId());
     }
 
     static class SnowFlake{

@@ -4,6 +4,8 @@ import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.DigestUtils;
+
 import java.math.BigDecimal;
 
 /**
@@ -19,10 +21,9 @@ public class DbInstanceContact {
      * @author nada
      * @create 2021/5/12 2:58 下午
     */
-    public static UserInfo initUserInfo(UserInfo params){
-        String accountNo = params.getAccountNo();
+    public static UserInfo initUserInfo(UserInfo userInfo){
+        String accountNo = userInfo.getAccountNo();
         synchronized (accountNo) {
-            UserInfo userInfo = (UserInfo)params.clone();
             userInfo.setIsNewRecord(true);
             userInfo.setName(accountNo);
             userInfo.setPhoneNumber(accountNo);
@@ -31,19 +32,34 @@ public class DbInstanceContact {
             userInfo.setTeam1Num(0);
             userInfo.setTeam2Num(0);
             userInfo.setTeam3Num(0);
+            userInfo.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().getBytes()));
             userInfo.setLock(CommonContact.USER_LOCK_1);
             userInfo.setUserStatus(CommonContact.USER_STATUS_1);
-            if(StringUtils.isEmpty(params.getParentSysId())){
+            if(StringUtils.isEmpty(userInfo.getParentSysId())){
                 userInfo.setParentSysId("0");
             }
-            if(StringUtils.isEmpty(params.getParent1UserId())){
+            if(StringUtils.isEmpty(userInfo.getParent1UserId())){
                 userInfo.setParent1UserId("0");
             }
-            if(StringUtils.isEmpty(params.getParent2UserId())){
+            if(StringUtils.isEmpty(userInfo.getParent2UserId())){
                 userInfo.setParent2UserId("0");
             }
-            if(StringUtils.isEmpty(params.getParent3UserId())){
+            if(StringUtils.isEmpty(userInfo.getParent3UserId())){
                 userInfo.setParent3UserId("0");
+            }
+            String lang = userInfo.getLang();
+            if(StringUtils.isEmpty(lang)){
+                userInfo.setLang(I18nUtils.LANG_EN);
+            }else{
+                if(I18nUtils.LANG_EN.equalsIgnoreCase(lang)){
+                    userInfo.setLang(I18nUtils.LANG_EN);
+                }else if(I18nUtils.LANG_IN.equalsIgnoreCase(lang)){
+                    userInfo.setLang(I18nUtils.LANG_EN);
+                }else if(I18nUtils.LANG_ZH.equalsIgnoreCase(lang)){
+                    userInfo.setLang(I18nUtils.LANG_EN);
+                }else{
+                    userInfo.setLang(I18nUtils.LANG_EN);
+                }
             }
             return userInfo;
         }

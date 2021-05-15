@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.sys.utils.UserUtils;
+import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
 import com.nabobsite.modules.nabob.api.service.TaskApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
@@ -35,34 +36,24 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "${frontPath}/api/task")
-@Api(tags = "新用户任务接口")
+@Api(tags = "用户任务接口(需要登陆)")
 public class TaskApiController extends BaseController {
 
 	@Autowired
 	private TaskApiService taskApiService;
 
-	@ApiOperation(value = "新用户做任务")
-	@RequestMapping(value = "doUserTask")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "taskId", value = "任务ID", required = true, paramType="query", type="String"),
-			@ApiImplicitParam(name = "param_token",  value = "会话token", required = true),
-	})
-	public String doUserTask(String taskId,String param_token) {
-		CommonResult<Boolean> result = taskApiService.doUserTask(taskId,param_token);
+	@ApiOperation(value = "用户任务")
+	@PostMapping(value = "doUserTask/{taskId}")
+	public String doUserTask(@PathVariable String taskId,HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		CommonResult<Boolean> result = taskApiService.doUserTask(taskId,token);
 		return renderResult(Global.TRUE, text("userTask"),result);
 	}
 
-	@PostMapping(value = {"getTaskList"})
-	@ApiOperation(value = "获取任务列表")
-	public String getTaskList() {
-		CommonResult<List<TaskInfo>> result = taskApiService.getTaskList(new TaskInfo());
-		return renderResult(Global.TRUE,text("getTaskList"), result);
-	}
-
-	@PostMapping(value = {"getTaskInfo"})
+	@RequestMapping(value = {"getTaskInfo/{taskId}"})
 	@ApiOperation(value = "获取任务详情")
-	@ApiImplicitParams({ @ApiImplicitParam(name = "taskId", value = "任务ID", required = true, paramType="query", type="String"),})
-	public String getTaskInfo(String taskId) {
+	public String getTaskInfo(@PathVariable String taskId,HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		TaskInfo taskInfo = new TaskInfo();
 		taskInfo.setId(taskId);
 		CommonResult<TaskInfo> result = taskApiService.getTaskInfo(taskInfo);

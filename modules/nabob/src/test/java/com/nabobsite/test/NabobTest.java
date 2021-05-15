@@ -1,5 +1,8 @@
 package com.nabobsite.test;
 
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 
@@ -12,7 +15,20 @@ import com.jeesite.common.codec.DesUtils;
 public class NabobTest {
 
     public static void main(String[] args) {
-        testLogin();
+        testLoginHttp();
+    }
+
+    public static void testLoginHttp(){
+        String url = "http://192.168.1.100:9998/nabob/f/api/open/login";
+        JSONObject param = new JSONObject();
+        param.put("accountNo", "15118135523");
+        param.put("password", "123456");
+        String result = HttpRequest.post(url)
+                .body(param.toString())
+                .header("Content-Type","application/json")
+                .execute()
+                .body();
+        System.out.println(result);
     }
 
     public static void getSid(){

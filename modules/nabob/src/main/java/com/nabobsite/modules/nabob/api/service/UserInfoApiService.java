@@ -13,6 +13,7 @@ import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
+import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
@@ -59,19 +60,15 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> updatePwd(String accountNo, String oldPassword,String newPassword,String token) {
+	public CommonResult<Boolean> updatePwd(UserInfoModel userInfoModel,String token) {
 		try {
-			if(StringUtils.isEmpty(token)){
-				return ResultUtil.failed("修改失败,获取令牌为空");
-			}
+			String accountNo = userInfoModel.getAccountNo();
+			String oldPassword = userInfoModel.getOldPassword();
+			String newPassword = userInfoModel.getPassword();
 			if(StringUtils.isAnyEmpty(accountNo,oldPassword,newPassword)){
 				return ResultUtil.failed("修改失败,修改信息为空");
 			}
-			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
-			if(StringUtils.isEmpty(userId)){
-				return ResultUtil.failed("获取失败,登陆令牌失效");
-			}
-			UserInfo oldUserInfo = this.getUserInfoByUserId(userId);
+			UserInfo oldUserInfo = this.getUserInfoByToken(token);
 			if(oldUserInfo == null){
 				return ResultUtil.failed("修改失败,获取帐号信息为空");
 			}
@@ -126,14 +123,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<String> shareFriends(String token) {
 		try {
-			if(StringUtils.isEmpty(token)){
-				return ResultUtil.failed("获取失败,获取令牌为空");
-			}
-			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
-			if(StringUtils.isEmpty(userId)){
-				return ResultUtil.failed("获取失败,登陆令牌失效");
-			}
-			UserInfo userInfo = this.getUserInfoByUserId(userId);
+			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed("获取失败,获取帐号信息为空");
 			}
@@ -154,21 +144,14 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 * @create 2021/5/11 10:33 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<UserInfo> getUserInfo(String token) {
+	public CommonResult<UserInfoModel> getUserInfo(String token) {
 		try {
-			if(StringUtils.isEmpty(token)){
-				return ResultUtil.failed("获取失败,获取令牌为空");
-			}
-			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
-			if(StringUtils.isEmpty(userId)){
-				return ResultUtil.failed("获取失败,登陆令牌失效");
-			}
-			UserInfo userInfo = this.getUserInfoByUserId(userId);
+			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed("获取失败,获取帐号信息为空");
 			}
 			userInfo.setPassword("");
-			return ResultUtil.success(userInfo);
+			return ResultUtil.success((UserInfoModel)userInfo.clone());
 		} catch (Exception e) {
 			logger.error("Failed to get userinfo!",e);
 			return ResultUtil.failed("Failed to get userinfo!");
@@ -181,13 +164,14 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 * @create 2021/5/11 10:13 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<UserInfo> login(UserInfo userInfo,String param_lang) {
+	public CommonResult<UserInfoModel> login(UserInfoModel userInfoModel) {
 		try {
-			if(userInfo == null){
+			if(userInfoModel == null){
 				return ResultUtil.failed("登陆失败,登陆用户信息为空");
 			}
-			String accountNo = userInfo.getAccountNo();
-			String password = userInfo.getPassword();
+			String loginIp = userInfoModel.getLoginIp();
+			String accountNo = userInfoModel.getAccountNo();
+			String password = userInfoModel.getPassword();
 			if(StringUtils.isAnyBlank(accountNo,password)){
 				return ResultUtil.failed("登陆失败,账号或密码不能为空");
 			}
@@ -214,9 +198,9 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			if(redisOpsUtil.get(newTokenKey)!=null){
 				loginUserInfo.setPassword("");
 				loginUserInfo.setToken(newToken);
-				return ResultUtil.success(loginUserInfo);
+				return ResultUtil.success((UserInfoModel)loginUserInfo.clone());
 			}
-			this.updateLoginIp(userId,userInfo.getLoginIp());
+			this.updateLoginIp(userId,loginIp);
 			return ResultUtil.failed("Failed to login!");
 		} catch (Exception e) {
 			logger.error("Failed to login!",e);
@@ -224,32 +208,29 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 		}
 	}
 
-
-
 	/**
 	 * @desc 用户注册
 	 * @author nada
 	 * @create 2021/5/11 11:19 上午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> register(UserInfo userInfo,String param_parent) {
+	public CommonResult<Boolean> register(UserInfoModel userInfoModel) {
 		try {
-			if(userInfo == null){
+			if(userInfoModel == null){
 				return ResultUtil.failed("注册失败,注册信息为空");
 			}
-
-			String accountNo = userInfo.getAccountNo();
-			String password = userInfo.getPassword();
+			String accountNo = userInfoModel.getAccountNo();
+			String password = userInfoModel.getPassword();
+			String inviteSecret = userInfoModel.getInviteSecret();
+			String parentInviteCode = userInfoModel.getInviteCode();
 			if(StringUtils.isAnyBlank(accountNo,password)){
 				return ResultUtil.failed("注册失败,账号或密码不能为空");
 			}
 			if(accountNo.length() < 10 || password.length()<6 || accountNo.length() > 15 || password.length() > 20){
 				return ResultUtil.failed("注册失败,账号或密码不符合要求");
 			}
-			String md5Pass = DigestUtils.md5DigestAsHex(password.getBytes());
-			userInfo.setAccountNo(accountNo);
-			userInfo.setPassword(md5Pass);
 
+			UserInfo userInfo = (UserInfo)userInfoModel.clone();
 			//注册账户
 			synchronized (accountNo){
 				UserInfo checkUserInfo = this.getUserInfoByAccountNo(accountNo);
@@ -257,23 +238,25 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 					return ResultUtil.failed("注册失败,账号已经存在");
 				}
 				//邀请码信息
-				String parentInviteCode = userInfo.getInviteCode();
 				if(StringUtils.isNotEmpty(parentInviteCode)){
 					UserInfo inviteCodeUserInfo = this.getUserInfoByInviteCode(parentInviteCode);
 					if(inviteCodeUserInfo == null){
 						return ResultUtil.failed("注册失败,邀请码错误");
 					}
-					String parentUserId = userInfo.getId();
-					String parentSysId = userInfo.getParentSysId();
-					if(StringUtils.isNotEmpty(parentUserId) && StringUtils.isNotEmpty(parentSysId)){
+					String parentUserId = inviteCodeUserInfo.getId();
+					String parentSysId = inviteCodeUserInfo.getParentSysId();
+					if(CommonContact.isOkUserId(parentSysId)){
 						userInfo.setParentSysId(parentSysId);
+					}
+					if(CommonContact.isOkUserId(parentUserId)){
 						userInfo.setParent1UserId(parentUserId);
 					}
 				}
 				//邀请码链接信息
-				if(StringUtils.isNotEmpty(param_parent) && StringUtils.isEmpty(userInfo.getParent1UserId())){
+				String parent1UserId = userInfo.getParent1UserId();
+				if(StringUtils.isNotEmpty(inviteSecret) && StringUtils.isEmpty(parent1UserId)){
 					try {
-						String pidAndSid = HiDesUtils.desDeCode(param_parent);
+						String pidAndSid = HiDesUtils.desDeCode(inviteSecret);
 						if(StringUtils.isNotEmpty(pidAndSid)){
 							JSONObject pidAndSidJson = JSONObject.parseObject(pidAndSid);
 							String parentUserId = pidAndSidJson.getString("pid");
@@ -282,26 +265,27 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 							userInfo.setParent1UserId(parentUserId);
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
+						logger.error("邀请码链接信息解析异常",e);
 					}
 				}
 				//当前用户信息作为上级业务员
-				if(StringUtils.isEmpty(userInfo.getParentSysId()) || "0".equalsIgnoreCase(userInfo.getParentSysId())){
+				String parentSysId = userInfo.getParentSysId();
+				if(!CommonContact.isOkUserId(parentSysId)){
 					User user = UserUtils.getUser();
 					if(user!=null){
 						userInfo.setParentSysId(user.getId());
 					}
 				}
 				//根据父一级ID，写入父二级ID，父三级ID
-				String parent1UserId = userInfo.getParent1UserId();
-				if(StringUtils.isNotEmpty(parent1UserId) && !"0".equalsIgnoreCase(parent1UserId)){
+				if(CommonContact.isOkUserId(parent1UserId)){
 					UserInfo parent2UserInfo = this.getUserInfoByUserId(parent1UserId);
-					if(parent2UserInfo !=null && StringUtils.isNotEmpty(parent2UserInfo.getId())){
+					if(parent2UserInfo !=null && CommonContact.isOkUserId(parent2UserInfo.getId())){
 						String parent2UserId = parent2UserInfo.getId();
 						userInfo.setParent2UserId(parent2UserId);
 						UserInfo parent3UserInfo = this.getUserInfoByUserId(parent2UserId);
-						if(parent3UserInfo !=null && StringUtils.isNotEmpty(parent3UserInfo.getId())){
-							userInfo.setParent2UserId(parent3UserInfo.getId());
+						if(parent3UserInfo !=null && CommonContact.isOkUserId(parent3UserInfo.getId())){
+							String parent3UserId = parent3UserInfo.getId();
+							userInfo.setParent2UserId(parent3UserId);
 						}
 					}
 				}
@@ -327,24 +311,13 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	}
 
 	/**
-	 * @desc 获取倒计时时间
+	 * @desc 获取系统配置
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getSysConfig(String token) {
+	public CommonResult<JSONObject> getSysConfig() {
 		try {
-			if(StringUtils.isEmpty(token)){
-				return ResultUtil.failed("获取失败,获取令牌为空");
-			}
-			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
-			if(StringUtils.isEmpty(userId)){
-				return ResultUtil.failed("获取失败,登陆令牌失效");
-			}
-			UserInfo userInfo = this.getUserInfoByUserId(userId);
-			if(userInfo == null){
-				return ResultUtil.failed("获取失败,获取帐号信息为空");
-			}
 			SysConfig sysConfig = this.getSysConfigByKey(CommonContact.SYS_KEY_COUNTDOWN_TIME);
 			if(sysConfig == null){
 				return ResultUtil.failed("获取失败,获取配置为空");
@@ -366,20 +339,13 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> switchLang(String token, String lang) {
 		try {
-			if(StringUtils.isEmpty(token)){
-				return ResultUtil.failed("修改失败,获取令牌为空");
-			}
-			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
-			if(StringUtils.isEmpty(userId)){
-				return ResultUtil.failed("获取失败,登陆令牌失效");
-			}
-			UserInfo oldUserInfo = this.getUserInfoByUserId(userId);
+			UserInfo oldUserInfo = this.getUserInfoByToken(token);
 			if(oldUserInfo == null){
 				return ResultUtil.failed("修改失败,获取帐号信息为空");
 			}
 			UserInfo updateUserInfo = new UserInfo();
 			updateUserInfo.setId(oldUserInfo.getId());
-			updateUserInfo.setLang(token);
+			updateUserInfo.setLang(lang);
 			long dbResult = userInfoDao.update(updateUserInfo);
 			if(CommonContact.dbResult(dbResult)){
 				this.logout(token);
@@ -399,7 +365,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	public boolean updateUserSecret(String userId,String parentSysId) {
 		try {
-			if(StringUtils.isEmpty(userId) || "0".equalsIgnoreCase(userId)){
+			if(!CommonContact.isOkUserId(userId)){
 				return false;
 			}
 			UserInfo userInfo = new UserInfo();
@@ -423,7 +389,7 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	public boolean updateLoginIp(String userId,String ip) {
 		try {
-			if(StringUtils.isEmpty(userId) || "0".equalsIgnoreCase(userId)){
+			if(!CommonContact.isOkUserId(userId)){
 				return false;
 			}
 			UserInfo userInfo = new UserInfo();
@@ -482,12 +448,33 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	public UserInfo getUserInfoByUserId(String userId) {
 		try {
-			if(StringUtils.isEmpty(userId) || "0".equalsIgnoreCase(userId)){
+			if(!CommonContact.isOkUserId(userId)){
 				return null;
 			}
 			UserInfo userInfo = new UserInfo();
 			userInfo.setId(userId);
 			return userInfoDao.getByEntity(userInfo);
+		} catch (Exception e) {
+			logger.error("获取用户信息异常",e);
+			return null;
+		}
+	}
+
+	/**
+	 * @desc 获取用户信息
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public UserInfo getUserInfoByToken(String token) {
+		try {
+			if(StringUtils.isEmpty(token)){
+				return null;
+			}
+			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return null;
+			}
+			return this.getUserInfoByUserId(userId);
 		} catch (Exception e) {
 			logger.error("获取用户信息异常",e);
 			return null;

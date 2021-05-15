@@ -7,6 +7,7 @@ import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.DbInstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
+import com.nabobsite.modules.nabob.api.model.OrderInfoModel;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -43,32 +44,31 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 	 * @create 2021/5/12 1:10 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Order> rechargeOrder(Order order,String token) {
+	public CommonResult<OrderInfoModel> rechargeOrder(OrderInfoModel orderInfoModel,String token) {
 		try {
-			String name = order.getName();
-			String email = order.getEmail();
-			String phoneNumber = order.getPhoneNumber();
-			BigDecimal payMoney = order.getPayMoney();
+			String name = orderInfoModel.getName();
+			String email = orderInfoModel.getEmail();
+			String phoneNumber = orderInfoModel.getPhoneNumber();
+			BigDecimal payMoney = orderInfoModel.getPayMoney();
 			if(StringUtils.isAnyEmpty(token,name,email,phoneNumber)){
 				return ResultUtil.failed("充值失败,获取充值参数为空");
 			}
 			if(CommonContact.isLesserOrEqual(payMoney, CommonContact.ZERO)){
 				return ResultUtil.failed("充值失败,充值金额小于0");
 			}
-			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
-			if(StringUtils.isEmpty(userId)){
-				return ResultUtil.failed("获取失败,登陆令牌失效");
-			}
-			UserInfo oldUserInfo = userInfoApiService.getUserInfoByUserId(userId);
+			UserInfo oldUserInfo = userInfoApiService.getUserInfoByToken(token);
 			if(oldUserInfo == null){
 				return ResultUtil.failed("充值失败,获取帐号信息为空");
 			}
+			String userId = oldUserInfo.getId();
+			Order order = (Order)orderInfoModel.clone();
 			order.setUserId(userId);
-			Long orderNo = SnowFlakeIDGenerator.generateSnowFlakeId();
+			String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
 			synchronized (orderNo) {
-				long dbResult = orderDao.insert(DbInstanceContact.initOrderInfo(order,String.valueOf(orderNo)));
+				long dbResult = orderDao.insert(DbInstanceContact.initOrderInfo(order,orderNo));
 				if(CommonContact.dbResult(dbResult)){
-					return ResultUtil.success(order);
+					orderInfoModel.setOrderNo(orderNo);
+					return ResultUtil.success(orderInfoModel);
 				}
 			}
 			return ResultUtil.failed("Failed to recharge order!");
@@ -108,7 +108,7 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Order> getOrderInfo(Order order,String token) {
+	public CommonResult<OrderInfoModel> getOrderInfo(Order order, String token) {
 		try {
 			if(StringUtils.isAnyEmpty(token)){
 				return ResultUtil.failed("获取订单详情,获取令牌为空");
@@ -122,7 +122,7 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 			}
 			order.setUserId(userId);
 			Order result = orderDao.getByEntity(order);
-			return ResultUtil.success(result);
+			return ResultUtil.success((OrderInfoModel)result.clone());
 		} catch (Exception e) {
 			logger.error("Failed to get order info!",e);
 			return ResultUtil.failed("Failed to get order info!");

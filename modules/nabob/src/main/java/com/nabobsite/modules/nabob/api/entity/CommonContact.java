@@ -1,6 +1,7 @@
 package com.nabobsite.modules.nabob.api.entity;
 
 import com.jeesite.common.shiro.realms.Da;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -16,6 +17,7 @@ import java.util.Date;
  */
 public class CommonContact {
 
+    public final static String AUTHORIZATION = "Authorization";
     public final static BigDecimal ZERO = new BigDecimal("0");
 
     public final static String SYS_KEY_COUNTDOWN_TIME  = "sys.key.countdown.time";
@@ -148,6 +150,22 @@ public class CommonContact {
             return false;
         }
         return isEqual(num1,ZERO);
+    }
+
+    /**
+     * @desc userId是否合法
+     * @author nada
+     * @create 2021/5/15 11:25 下午
+    */
+    public static Boolean isOkUserId(String userId) {
+        try {
+            if(StringUtils.isEmpty(userId) || "0".equalsIgnoreCase(userId)){
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**

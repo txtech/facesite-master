@@ -1,22 +1,10 @@
 package com.nabobsite.modules.nabob.api.common.task;
 
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerOperation;
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerPoolManagerImpl;
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerThread;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
-import com.nabobsite.modules.nabob.api.entity.NabobI18n;
-import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
+import com.nabobsite.modules.nabob.api.entity.I18nUtils;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysI18nDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysI18n;
-import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import org.apache.commons.lang3.StringUtils;
-import org.aspectj.weaver.Lint;
-import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.stylesheets.LinkStyle;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +39,9 @@ public class InitLoadDbDataTrigger extends TriggerOperation {
 			enINMap.put(key,sysI18n.getInValue());
 			zhCNMap.put(key,sysI18n.getZhValue());
 		}
-		NabobI18n.LOCAL_CACHE.put(NabobI18n.LANG_EN,enUSMap);
-		NabobI18n.LOCAL_CACHE.put(NabobI18n.LANG_IN,enINMap);
-		NabobI18n.LOCAL_CACHE.put(NabobI18n.LANG_ZH,zhCNMap);
+		I18nUtils.LOCAL_CACHE.put(I18nUtils.LANG_EN,enUSMap);
+		I18nUtils.LOCAL_CACHE.put(I18nUtils.LANG_IN,enINMap);
+		I18nUtils.LOCAL_CACHE.put(I18nUtils.LANG_ZH,zhCNMap);
 	}
 
 	public SysI18nDao getSysI18nDao() {

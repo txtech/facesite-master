@@ -476,77 +476,75 @@ mybatis:
 #      mappingPath: mappings
 
 # Web 相关
-#web:
-#
-#  # MVC 视图相关
-#  view:
-#
-#    # 系统主题名称，主题视图优先级最高，如果主题下无这个视图文件则访问默认视图
-#    # 引入页面头部：'/themes/'+themeName+'/include/header.html'
-#    # 引入页面尾部：'/themes/'+themeName+'/include/footer.html'
-#    themeName: default
-#
-#  # MVC 拦截器
-#  interceptor:
-#
-#    # 后台管理日志记录拦截器
-#    log:
-#      enabled: true
-#      addPathPatterns: >
-#        ${adminPath}/**
-#      excludePathPatterns: >
-#        ${adminPath}/index,
-#        ${adminPath}/login,
-#        ${adminPath}/desktop,
-#        ${adminPath}/index/menuTree,
-#        ${adminPath}/sys/online/count,
-#        ${adminPath}/state/server/rtInfo,
-#        ${adminPath}/**/treeData,
-#        ${adminPath}/file/**,
-#        ${adminPath}/tags/*,
-#        ${adminPath}/msg/**
-#
-#    # 前台自动切换到手机视图拦截器
-#    mobile:
-#      enabled: false
-#      addPathPatterns: >
-#        ${frontPath}/**
-#      excludePathPatterns: ~
-#
-#  # 静态文件后缀，过滤静态文件，以提高访问性能。
-#  staticFile: .css,.js,.map,.png,.jpg,.gif,.jpeg,.bmp,.ico,.swf,.psd,.htc,.crx,.xpi,.exe,.ipa,.apk,.otf,.eot,.svg,.ttf,.woff,.woff2
-#
-#  # 静态文件后缀，排除的url路径，指定哪些uri路径不进行静态文件过滤。
-#  staticFileExcludeUri: /druid/
-#
-#  # 静态资源路径前缀，可做CDN加速优化
-#  staticPrefix: /static
-#
-#  # 严格模式（更严格的数据安全验证）
-#  strictMode: false
-#
-#  # 自定义正则表达式验证（主键、登录名）
-#  validator:
-#    id: '[a-zA-Z0-9_\-/#\u4e00-\u9fa5]{0,64}'
-#    user.loginCode: '[a-zA-Z0-9_\u4e00-\u9fa5]{4,20}'
-#
-#  # 核心模块的Web功能（仅作为微服务时设为false）
-#  core:
-#    enabled: true
-#
-#  # 在线API文档工具
-#  swagger:
-#    enabled: true
+web:
+  #MVC 视图相关
+  view:
+    # 系统主题名称，主题视图优先级最高，如果主题下无这个视图文件则访问默认视图
+    # 引入页面头部：'/themes/'+themeName+'/include/header.html'
+    # 引入页面尾部：'/themes/'+themeName+'/include/footer.html'
+    themeName: default
+
+  #MVC拦截器
+  interceptor:
+    # 后台管理日志记录拦截器
+    log:
+      enabled: true
+      addPathPatterns: >
+        ${adminPath}/**
+      excludePathPatterns: >
+        ${adminPath}/index,
+        ${adminPath}/login,
+        ${adminPath}/desktop,
+        ${adminPath}/index/menuTree,
+        ${adminPath}/sys/online/count,
+        ${adminPath}/state/server/rtInfo,
+        ${adminPath}/**/treeData,
+        ${adminPath}/file/**,
+        ${adminPath}/tags/*,
+        ${adminPath}/msg/**
+
+    # 前台自动切换到手机视图拦截器
+    mobile:
+      enabled: false
+      addPathPatterns: >
+        ${frontPath}/**
+      excludePathPatterns: ~
+      # 前台自动切换到api拦截器
+    api:
+      enabled: true
+      addPathPatterns: >
+        ${frontPath}/api/**
+      excludePathPatterns: >
+        ${frontPath}/api/open/**
+
+  # 静态文件后缀，过滤静态文件，以提高访问性能。
+  staticFile: .css,.js,.map,.png,.jpg,.gif,.jpeg,.bmp,.ico,.swf,.psd,.htc,.crx,.xpi,.exe,.ipa,.apk,.otf,.eot,.svg,.ttf,.woff,.woff2
+  # 静态文件后缀，排除的url路径，指定哪些uri路径不进行静态文件过滤。
+  staticFileExcludeUri: /druid/
+  # 静态资源路径前缀，可做CDN加速优化
+  staticPrefix: /static
+  # 严格模式（更严格的数据安全验证）
+  strictMode: false
+
+  # 自定义正则表达式验证（主键、登录名）
+  validator:
+    id: '[a-zA-Z0-9_\-/#\u4e00-\u9fa5]{0,64}'
+    user.loginCode: '[a-zA-Z0-9_\u4e00-\u9fa5]{4,20}'
+  # 核心模块的Web功能（仅作为微服务时设为false）
+  core:
+    enabled: true
+  # 在线API文档工具
+  swagger:
+    enabled: true
 
 # 错误页面500.html是否输出错误信息（正式环境，为提供安全性可设置为false）
-#error:
-#  page:
-#    printErrorInfo: true
+error:
+  page:
+    printErrorInfo: true
 
 #======================================#
 #======== FileUpload settings =========#
 #======================================#
-
 #file:
 #  enabled: true
 #

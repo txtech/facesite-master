@@ -6,7 +6,7 @@ package com.nabobsite.modules.nabob.api.service;
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
-import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
+import com.nabobsite.modules.nabob.api.model.req.BotTaskReqModel;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductBotDao;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
@@ -15,7 +15,6 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.CommonResult;
 import com.nabobsite.modules.nabob.utils.ResultUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,19 +48,15 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doBotTask(String botId,String token,String orderNo) {
+	public CommonResult<Boolean> doBotTask(String token, BotTaskReqModel botTaskReqModel) {
 		try {
-			if(StringUtils.isEmpty(token)){
-				return ResultUtil.failed("获取失败,获取令牌为空");
-			}
-			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
-			if(StringUtils.isEmpty(userId)){
-				return ResultUtil.failed("获取失败,登陆令牌失效");
-			}
-			UserInfo userInfo = userInfoApiService.getUserInfoByUserId(userId);
+			UserInfo userInfo = userInfoApiService.getUserInfoByToken(token);
 			if(userInfo== null){
 				return ResultUtil.failed("获取失败,用户信息为空");
 			}
+			String userId = userInfo.getId();
+			String botId = botTaskReqModel.getBotId();
+			String orderNo = botTaskReqModel.getOrderNo();
 			ProductBot productBot = this.getProductBotInfoById(botId);
 			if(productBot == null){
 				return ResultUtil.failed("任务失败,产品不存在");
