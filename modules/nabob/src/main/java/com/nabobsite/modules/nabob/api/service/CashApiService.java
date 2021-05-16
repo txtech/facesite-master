@@ -3,14 +3,11 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.cms.order.dao.CashDao;
-import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Cash;
-import com.nabobsite.modules.nabob.cms.order.entity.Order;
-import com.nabobsite.modules.nabob.utils.CommonResult;
-import com.nabobsite.modules.nabob.utils.ResultUtil;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

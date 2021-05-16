@@ -1,5 +1,6 @@
-package com.nabobsite.modules.nabob.config;
+package com.nabobsite.modules.nabob.api.common.service;
 
+import com.nabobsite.modules.nabob.config.FastJsonRedisSerializer;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -138,7 +139,7 @@ public class RedisOpsUtil {
      */
     public boolean setBeanValid2(String key, Object value,Long invalidTimer,Class clazz) {
         try {
-            return this.set(key,FastJsonRedisSerializer.serialize2(value),invalidTimer);
+            return this.set(key, FastJsonRedisSerializer.serialize2(value),invalidTimer);
         } catch (Exception e) {
             logger.error("异常",e);
         }

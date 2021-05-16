@@ -1,4 +1,4 @@
-package com.nabobsite.modules.nabob.utils;
+package com.nabobsite.modules.nabob.api.common.response;
 
 /**
  * @author nada

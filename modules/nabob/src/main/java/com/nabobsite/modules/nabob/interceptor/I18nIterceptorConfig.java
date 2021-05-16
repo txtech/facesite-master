@@ -5,10 +5,9 @@ package com.nabobsite.modules.nabob.interceptor;
 
 import com.jeesite.common.config.Global;
 import com.jeesite.common.lang.StringUtils;
-import com.jeesite.modules.sys.interceptor.LogInterceptor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import com.nabobsite.modules.nabob.api.common.service.RedisOpsUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -19,13 +18,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @version 2018年1月10日
  */
 @Configuration
-@EnableWebMvc
-@ConditionalOnProperty(name="web.interceptor.i18n.enabled", havingValue="true", matchIfMissing=true)
 public class I18nIterceptorConfig implements WebMvcConfigurer {
+
+	@Autowired
+	private RedisOpsUtil redisOpsUtil;
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		InterceptorRegistration registration = registry.addInterceptor(new I18nInterceptor());
+		InterceptorRegistration registration = registry.addInterceptor(new I18nInterceptor(redisOpsUtil));
 		String apps = Global.getProperty("web.interceptor.api.addPathPatterns");
 		String epps = Global.getProperty("web.interceptor.api.excludePathPatterns");
 		for (String uri : StringUtils.split(apps, ",")){

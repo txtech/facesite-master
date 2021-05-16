@@ -2,22 +2,14 @@
  * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.nabobsite.modules.nabob.api.web;
-import com.alibaba.fastjson.JSONObject;
-import com.jeesite.common.config.Global;
-import com.jeesite.modules.sys.utils.UserUtils;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.utils.CommonResult;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import com.jeesite.common.web.BaseController;
-import com.nabobsite.modules.nabob.utils.ResultUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;

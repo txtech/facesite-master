@@ -15,7 +15,17 @@ import com.jeesite.common.codec.DesUtils;
 public class NabobTest {
 
     public static void main(String[] args) {
-        testLoginHttp();
+        testGetUserInfoHttp();
+    }
+
+    public static void testGetUserInfoHttp(){
+        String url = "http://127.0.0.1:9998/nabob/f/api/user/getUserInfo";
+        String result = HttpRequest.post(url)
+                .header("Content-Type","application/json")
+                .header("Authorization","12643dd0e3b34e4ea5d187e8f8dc30b0")
+                .execute()
+                .body();
+        System.out.println(result);
     }
 
     public static void testLoginHttp(){

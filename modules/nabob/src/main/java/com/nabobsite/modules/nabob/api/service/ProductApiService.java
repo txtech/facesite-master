@@ -3,7 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.jeesite.common.service.CrudService;
+import com.nabobsite.modules.nabob.api.common.service.BaseUserService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.api.model.req.BotTaskReqModel;
@@ -12,9 +12,8 @@ import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.config.RedisOpsUtil;
-import com.nabobsite.modules.nabob.utils.CommonResult;
-import com.nabobsite.modules.nabob.utils.ResultUtil;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,18 +28,14 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly=true)
-public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
+public class ProductApiService extends BaseUserService {
 
-	@Autowired
-	private RedisOpsUtil redisOpsUtil;
 	@Autowired
 	private ProductBotDao productBotDao;
 	@Autowired
 	private ProductWarehouseDao productWarehouseDao;
 	@Autowired
 	private UserAccountApiService userAccountApiService;
-	@Autowired
-	private UserInfoApiService userInfoApiService;
 
 	/**
 	 * @desc 无人机产品做任务
@@ -50,7 +45,7 @@ public class ProductApiService extends CrudService<ProductBotDao, ProductBot> {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> doBotTask(String token, BotTaskReqModel botTaskReqModel) {
 		try {
-			UserInfo userInfo = userInfoApiService.getUserInfoByToken(token);
+			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo== null){
 				return ResultUtil.failed("获取失败,用户信息为空");
 			}

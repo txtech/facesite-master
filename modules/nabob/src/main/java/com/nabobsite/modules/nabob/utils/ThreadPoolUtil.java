@@ -1,5 +1,8 @@
 package com.nabobsite.modules.nabob.utils;
 
+import org.springframework.core.NamedThreadLocal;
+
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -9,6 +12,9 @@ import java.util.concurrent.TimeUnit;
  * @author nada
  */
 public class ThreadPoolUtil {
+
+    //private static final ThreadLocal<Map<String,String>> LangThreadLocal = new NamedThreadLocal<Map<String,String>>("I18nInterceptor Lang");
+
     /**
      * @desc 线程缓冲队列
      * @author nada

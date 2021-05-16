@@ -1,10 +1,12 @@
 package com.nabobsite.modules.nabob.api.entity;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.NamedThreadLocal;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @ClassName nada

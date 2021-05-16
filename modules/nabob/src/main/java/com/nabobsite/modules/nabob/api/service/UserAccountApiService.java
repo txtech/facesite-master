@@ -3,14 +3,13 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.jeesite.common.service.CrudService;
+import com.nabobsite.modules.nabob.api.common.service.BaseUserService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
-import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
-import com.nabobsite.modules.nabob.utils.CommonResult;
-import com.nabobsite.modules.nabob.utils.ResultUtil;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +24,12 @@ import java.math.BigDecimal;
  */
 @Service
 @Transactional(readOnly=true)
-public class UserAccountApiService extends CrudService<UserAccountDao, UserAccount> {
-	@Autowired
-	private UserAccountDao userAccountDao;
+public class UserAccountApiService extends BaseUserService {
+
 	@Autowired
 	private UserAccountLogDao userAccountLogDao;
 	@Autowired
 	private UserAccountDetailDao userAccountDetailDao;
-	//@Autowired
-	private UserInfoApiService userInfoApiService;
 
 	/**
 	 * @desc 获取用户详情
@@ -43,7 +39,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<UserAccount> getUserAccountInfo(String token) {
 		try {
-			UserInfo userInfo = userInfoApiService.getUserInfoByToken(token);
+			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed("获取失败,获取帐号信息为空");
 			}
@@ -202,26 +198,6 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 		} catch (Exception e) {
 			logger.error("修改账户余额验证异常:{},{}",userId,updateMoney,e);
 			return false;
-		}
-	}
-
-	/**
-	 * @desc 获取账户信息
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	@Transactional (readOnly = true, rollbackFor = Exception.class)
-	public UserAccount getUserAccountByUserId(String userId) {
-		try {
-			if(StringUtils.isEmpty(userId)){
-				return null;
-			}
-			UserAccount userAccount = new UserAccount();
-			userAccount.setUserId(userId);
-			return userAccountDao.getByEntity(userAccount);
-		} catch (Exception e) {
-			logger.error("获取账户信息异常",e);
-			return null;
 		}
 	}
 }

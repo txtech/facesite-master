@@ -3,18 +3,16 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.jeesite.common.service.CrudService;
+import com.nabobsite.modules.nabob.api.common.service.BaseUserService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.api.model.OrderInfoModel;
-import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.config.RedisOpsUtil;
-import com.nabobsite.modules.nabob.utils.CommonResult;
-import com.nabobsite.modules.nabob.utils.ResultUtil;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -31,14 +29,10 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly=true)
-public class OrderApiService extends CrudService<OrderDao, Order> {
+public class OrderApiService extends BaseUserService {
 
 	@Autowired
-	private RedisOpsUtil redisOpsUtil;
-	@Autowired
 	private OrderDao orderDao;
-	@Autowired
-	private UserInfoApiService userInfoApiService;
 
 	/**
 	 * @desc 充值订单
@@ -58,7 +52,7 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 			if(CommonContact.isLesserOrEqual(payMoney, CommonContact.ZERO)){
 				return ResultUtil.failed("充值失败,充值金额小于0");
 			}
-			UserInfo oldUserInfo = userInfoApiService.getUserInfoByToken(token);
+			UserInfo oldUserInfo = this.getUserInfoByToken(token);
 			if(oldUserInfo == null){
 				return ResultUtil.failed("充值失败,获取帐号信息为空");
 			}

@@ -2,13 +2,12 @@
  * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.nabobsite.modules.nabob.api.web;
-import com.jeesite.common.config.Global;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.model.req.BotTaskReqModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
-import com.nabobsite.modules.nabob.utils.CommonResult;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.jeesite.common.web.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +16,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * 产品控制

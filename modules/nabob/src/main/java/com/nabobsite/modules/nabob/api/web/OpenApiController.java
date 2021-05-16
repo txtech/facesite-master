@@ -4,10 +4,7 @@
 package com.nabobsite.modules.nabob.api.web;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ctc.wstx.shaded.msv_core.datatype.xsd.DateType;
-import com.jeesite.common.config.Global;
 import com.jeesite.common.web.BaseController;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
 import com.nabobsite.modules.nabob.api.service.TaskApiService;
@@ -15,11 +12,8 @@ import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccountLog;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.utils.CommonResult;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
-import com.nabobsite.modules.nabob.utils.ResultUtil;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
