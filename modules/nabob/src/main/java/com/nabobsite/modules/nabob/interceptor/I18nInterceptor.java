@@ -43,11 +43,10 @@ public class I18nInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         try {
             String ip = HttpBrowserTools.getIpAddr(request);
-            String sessionId = request.getRequestedSessionId();
-            String requestURI = request.getRequestURI();
+            String reqUrl = request.getRequestURI();
             String token = request.getHeader("Authorization");
             if(StringUtils.isEmpty(token)){
-                logger.error("请求被拦截，获取授权信息为空:{},{}",token,ip);
+                logger.error("请求被拦截，获取授权信息为空:{},{},{}",token,ip,reqUrl);
                 return false;
             }
             String newTokenKey = RedisPrefixContant.getTokenUserKey(token);
