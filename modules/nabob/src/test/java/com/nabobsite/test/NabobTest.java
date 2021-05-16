@@ -14,7 +14,7 @@ import org.junit.Test;
  */
 public class NabobTest {
 
-    private final static String Authorization = "ce39e7227440413d95c5092fa4624407";
+    private final static String Authorization = "26440d47baf4474cbe39890bb7112d8f";
     private final static String baseReqUrl = "http://localhost:9998/nabob/f/api/";
 
     @Test
@@ -81,16 +81,25 @@ public class NabobTest {
         System.out.println(result);
     }
 
-    public static void getSid(){
+    @Test
+    public void shareFriends(){
+        String url = baseReqUrl + "user/shareFriends";
+        String result = HttpRequest.post(url)
+                .header("Content-Type","application/json")
+                .header("Authorization",Authorization)
+                .execute().body();
+        System.out.println(result);
+    }
+
+
+    @Test
+    public void testEntryPassward(){
         String pidAndSid = "{pid:123456,sid:234234}";
         JSONObject jsonObject = JSONObject.parseObject(pidAndSid);
 
         System.out.println( jsonObject.getString("pid"));
         System.out.println( jsonObject.getString("sid"));
-    }
 
-
-    public static void testLogin(){
         String secretKey = "NabobBase64";
         String username = DesUtils.encode("15118135523", secretKey);
         String password = DesUtils.encode("123456", secretKey);
