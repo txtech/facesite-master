@@ -40,7 +40,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 	protected UserAccountDao userAccountDao;
 
 	/**
-	 * @desc 修改唯一邀请秘文
+	 * @desc 修改用户邀请秘文
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
@@ -58,7 +58,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			long dbResult = userInfoDao.update(userInfo);
 			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
-			logger.error("修改登陆IP异常",e);
+			logger.error("修改用户邀请秘文异常,{}",userId,e);
 			return true;
 		}
 	}
@@ -79,7 +79,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			long dbResult = userInfoDao.update(userInfo);
 			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
-			logger.error("修改登陆IP异常",e);
+			logger.error("修改登陆IP异常,{}",userId,e);
 			return true;
 		}
 	}
@@ -98,7 +98,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			userInfo.setAccountNo(accountNo);
 			return userInfoDao.getByEntity(userInfo);
 		} catch (Exception e) {
-			logger.error("获取用户信息异常",e);
+			logger.error("获取用户信息异常,{}",accountNo,e);
 			return null;
 		}
 	}
@@ -117,7 +117,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			userInfo.setInviteCode(inviteCode);
 			return userInfoDao.getByEntity(userInfo);
 		} catch (Exception e) {
-			logger.error("获取用户信息异常",e);
+			logger.error("获取用户信息异常,{}",inviteCode,e);
 			return null;
 		}
 	}
@@ -136,7 +136,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			userInfo.setId(userId);
 			return userInfoDao.getByEntity(userInfo);
 		} catch (Exception e) {
-			logger.error("获取用户信息异常",e);
+			logger.error("获取用户信息异常,{}",userId,e);
 			return null;
 		}
 	}
@@ -165,7 +165,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			redisOpsUtil.set(userTokenKey,token,RedisPrefixContant.CACHE_HALF_HOUR);
 			return userInfo;
 		} catch (Exception e) {
-			logger.error("获取用户信息异常",e);
+			logger.error("获取用户信息异常,{}",token,e);
 			return null;
 		}
 	}
@@ -184,7 +184,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			sysConfig.setKey(key);
 			return sysConfigDao.getByEntity(sysConfig);
 		} catch (Exception e) {
-			logger.error("获取配置异常",e);
+			logger.error("获取配置异常,{}",key,e);
 			return null;
 		}
 	}
@@ -204,7 +204,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			userAccount.setUserId(userId);
 			return userAccountDao.getByEntity(userAccount);
 		} catch (Exception e) {
-			logger.error("获取账户信息异常",e);
+			logger.error("获取账户信息异常,{}",userId,e);
 			return null;
 		}
 	}

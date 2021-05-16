@@ -12,4 +12,5 @@ public class I18nCode {
     public static final String CODE_101 = "101";
     public static final String CODE_102 = "102";
     public static final String CODE_103 = "103";
+    public static final String CODE_104 = "104";
 }

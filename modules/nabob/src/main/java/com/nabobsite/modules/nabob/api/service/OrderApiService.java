@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
@@ -68,8 +69,8 @@ public class OrderApiService extends BaseUserService {
 			}
 			return ResultUtil.failed("Failed to recharge order!");
 		} catch (Exception e) {
-			logger.error("Failed to recharge order!",e);
-			return ResultUtil.failed("Failed to recharge order!");
+			logger.error("充值订单异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -92,8 +93,8 @@ public class OrderApiService extends BaseUserService {
 			List<Order> result = orderDao.findList(order);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
-			logger.error("Failed to get order list!",e);
-			return ResultUtil.failed("Failed to get order list!");
+			logger.error("获取订单列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -121,8 +122,8 @@ public class OrderApiService extends BaseUserService {
 			BeanUtils.copyProperties(orderInfo, result);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
-			logger.error("Failed to get order info!",e);
-			return ResultUtil.failed("Failed to get order info!");
+			logger.error("获取订单详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 

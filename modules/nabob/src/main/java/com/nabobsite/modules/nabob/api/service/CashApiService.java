@@ -4,6 +4,7 @@
 package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.service.CrudService;
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.cms.order.dao.CashDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Cash;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
@@ -37,8 +38,8 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 			long dbResult = cashDao.insert(cash);
 			return ResultUtil.success(cash);
 		} catch (Exception e) {
-			logger.error("Failed to recharge order!",e);
-			return ResultUtil.failed("Failed to recharge order!");
+			logger.error("提款订单异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -53,8 +54,8 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 			List<Cash> result = cashDao.findList(cash);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
-			logger.error("Failed to get Cash order list!",e);
-			return ResultUtil.failed("Failed to get Cash order list!");
+			logger.error("获取提款订单列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -69,49 +70,8 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 			Cash result = cashDao.getByEntity(cash);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
-			logger.error("Failed to get Cash order info!",e);
-			return ResultUtil.failed("Failed to get Cash order info!");
+			logger.error("获取提款订单详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
-
-	/**
-	 * 获取单条数据
-	 * @param cash
-	 * @return
-	 */
-	@Override
-	public Cash get(Cash cash) {
-		return super.get(cash);
-	}
-
-	/**
-	 * 保存数据（插入或更新）
-	 * @param cash
-	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void save(Cash cash) {
-		super.save(cash);
-	}
-
-	/**
-	 * 更新状态
-	 * @param cash
-	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void updateStatus(Cash cash) {
-		super.updateStatus(cash);
-	}
-
-	/**
-	 * 删除数据
-	 * @param cash
-	 */
-	@Override
-	@Transactional(readOnly=false)
-	public void delete(Cash cash) {
-		super.delete(cash);
-	}
-
 }

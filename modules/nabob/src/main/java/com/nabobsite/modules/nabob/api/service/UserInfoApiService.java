@@ -89,8 +89,8 @@ public class UserInfoApiService extends BaseUserService {
 			}
 			return ResultUtil.failed("Failed to update password!");
 		} catch (Exception e) {
-			logger.error("Failed to update password!",e);
-			return ResultUtil.failed("Failed to update password!");
+			logger.error("用户修改密码异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -105,8 +105,8 @@ public class UserInfoApiService extends BaseUserService {
 			redisOpsUtil.remove(RedisPrefixContant.getTokenUserKey(token));
 			return ResultUtil.success(Boolean.TRUE);
 		} catch (Exception e) {
-			logger.error("Failed to logout user!",e);
-			return ResultUtil.failed("Failed to logout user!");
+			logger.error("用户退出异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -128,8 +128,8 @@ public class UserInfoApiService extends BaseUserService {
 			String registerUrl = "param_parent="+ HiDesUtils.desEnCode(jsonObject.toString());
 			return ResultUtil.success(registerUrl);
 		} catch (Exception e) {
-			logger.error("Failed to get share friends url!",e);
-			return ResultUtil.failed("Failed to get share friends url!");
+			logger.error("获取邀请好友链接异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -151,7 +151,7 @@ public class UserInfoApiService extends BaseUserService {
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取用户详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_101);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -203,8 +203,8 @@ public class UserInfoApiService extends BaseUserService {
 			this.updateLoginIp(userId,loginIp);
 			return ResultUtil.failed("Failed to login!");
 		} catch (Exception e) {
-			logger.error("Failed to login!",e);
-			return ResultUtil.failed("Failed to login!");
+			logger.error("用户登陆异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -305,8 +305,8 @@ public class UserInfoApiService extends BaseUserService {
 				return ResultUtil.failed("注册账号失败");
 			}
 		} catch (Exception e) {
-			logger.error("Failed to register user!",e);
-			return ResultUtil.failed("Failed to register user!");
+			logger.error("用户注册异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -326,8 +326,8 @@ public class UserInfoApiService extends BaseUserService {
 			configJson.put("countDown",sysConfig.getValue());
 			return ResultUtil.success(configJson);
 		} catch (Exception e) {
-			logger.error("Failed to get count down time!",e);
-			return ResultUtil.failed("Failed to get count down time!");
+			logger.error("获取系统配置异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -353,8 +353,8 @@ public class UserInfoApiService extends BaseUserService {
 			}
 			return ResultUtil.failed("Failed to set lang!");
 		} catch (Exception e) {
-			logger.error("Failed to set lang!",e);
-			return ResultUtil.failed("Failed to set lang!");
+			logger.error("用户设置语言异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 }

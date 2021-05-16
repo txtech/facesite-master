@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
@@ -31,7 +32,7 @@ public class UserAccountApiService extends BaseUserService {
 	private UserAccountDetailDao userAccountDetailDao;
 
 	/**
-	 * @desc 获取用户详情
+	 * @desc 获取用户账户
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
@@ -45,8 +46,8 @@ public class UserAccountApiService extends BaseUserService {
 			UserAccount userAccount = this.getUserAccountByUserId(userInfo.getId());
 			return ResultUtil.success(userAccount);
 		} catch (Exception e) {
-			logger.error("Failed to get userinfo!",e);
-			return ResultUtil.failed("Failed to get userinfo!");
+			logger.error("获取用户账户异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -79,7 +80,7 @@ public class UserAccountApiService extends BaseUserService {
 				return true;
 			}
 		} catch (Exception e) {
-			logger.error("修改账户总余额异常",e);
+			logger.error("修改账户总余额异常,{}",userId,e);
 			return false;
 		}
 	}
@@ -93,7 +94,6 @@ public class UserAccountApiService extends BaseUserService {
 	public boolean updateAccountCommissionMoney(String userId,BigDecimal commissionMoney,BigDecimal incrementMoney,String uniqueId, String title) {
 		try {
 			if(StringUtils.isEmpty(userId)){
-				logger.error("修改佣金账户失败,userId信息为空:{}",userId);
 				return false;
 			}
 			synchronized (userId){
@@ -118,7 +118,7 @@ public class UserAccountApiService extends BaseUserService {
 				return true;
 			}
 		} catch (Exception e) {
-			logger.error("增加佣金账户余额异常",e);
+			logger.error("增加佣金账户余额异常:{},{}",userId,e);
 			return false;
 		}
 	}
@@ -151,7 +151,7 @@ public class UserAccountApiService extends BaseUserService {
 				return true;
 			}
 		} catch (Exception e) {
-			logger.error("增加任务账户余额异常",e);
+			logger.error("增加任务账户余额异常:{}",userId,e);
 			return false;
 		}
 	}
@@ -165,17 +165,14 @@ public class UserAccountApiService extends BaseUserService {
 	public boolean prepareUpdateAccount(String userId,String title,BigDecimal updateMoney,UserAccountDetail userAccountDetail) {
 		try {
 			if(StringUtils.isEmpty(userId)){
-				logger.error("修改账户余额验证失败,userId信息为空:{}",userId);
 				return false;
 			}
 			if(CommonContact.isEqualZero(updateMoney)){
-				logger.error("修改账户余额验证失败,金额为零:{}",userId);
 				return false;
 			}
 			synchronized (userId){
 				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
 				if(oldUserAccount == null){
-					logger.error("修改账户余额验证失败,账户信息为空:{}",userId);
 					return false;
 				}
 				String accountId = oldUserAccount.getId();
@@ -195,7 +192,7 @@ public class UserAccountApiService extends BaseUserService {
 				return true;
 			}
 		} catch (Exception e) {
-			logger.error("修改账户余额验证异常:{},{}",userId,updateMoney,e);
+			logger.error("修改账户余额验证异常:{}",userId,e);
 			return false;
 		}
 	}

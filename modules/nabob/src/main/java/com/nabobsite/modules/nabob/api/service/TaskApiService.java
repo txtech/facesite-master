@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
@@ -88,10 +89,45 @@ public class TaskApiService extends BaseUserService {
 				return ResultUtil.failed("Failed to do the task!");
 			}
 		} catch (Exception e) {
-			logger.error("Failed to do the task!",e);
-			return ResultUtil.failed("Failed to do the task!");
+			logger.error("新用户做任务异常",taskId,e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
+
+	/**
+	 * @desc 获取任务列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<List<TaskInfo>> getTaskList(TaskInfo taskInfo) {
+		try {
+			List<TaskInfo> result = taskInfoDao.findList(taskInfo);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("获取任务列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
+		}
+	}
+
+
+	/**
+	 * @desc 获取任务详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<TaskInfo> getTaskInfo(TaskInfo taskInfo,String token) {
+		try {
+			TaskInfo result = taskInfoDao.getByEntity(taskInfo);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("获取任务详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
+		}
+	}
+
+
 
 	/**
 	 * @desc 完成任务送奖励
@@ -113,7 +149,7 @@ public class TaskApiService extends BaseUserService {
 	 * @desc 修改任务完成数量
 	 * @author nada
 	 * @create 2021/5/13 8:03 下午
-	*/
+	 */
 	public Boolean updateTaskFinishNumber(String id,int finishNumber){
 		try {
 			UserTask userTaskPrams = new UserTask();
@@ -131,7 +167,7 @@ public class TaskApiService extends BaseUserService {
 	 * @desc 获取用户任务
 	 * @author nada
 	 * @create 2021/5/13 7:32 下午
-	*/
+	 */
 	public UserTask getUserTaskByUserIdAndTaskId(String userId,String taskId){
 		try {
 			UserTask userTaskPrams = new UserTask();
@@ -146,40 +182,6 @@ public class TaskApiService extends BaseUserService {
 	}
 
 	/**
-	 * @desc 获取任务列表
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<TaskInfo>> getTaskList(TaskInfo taskInfo) {
-		try {
-			List<TaskInfo> result = taskInfoDao.findList(taskInfo);
-			return ResultUtil.success(result);
-		} catch (Exception e) {
-			logger.error("Failed to get task list!",e);
-			return ResultUtil.failed("Failed to get task list!");
-		}
-	}
-
-
-	/**
-	 * @desc 获取任务详情
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<TaskInfo> getTaskInfo(TaskInfo taskInfo,String token) {
-		try {
-			TaskInfo result = taskInfoDao.getByEntity(taskInfo);
-			return ResultUtil.success(result);
-		} catch (Exception e) {
-			logger.error("Failed to get task list!",e);
-			return ResultUtil.failed("Failed to get task info!");
-		}
-	}
-
-
-	/**
 	 * @desc 获取任务详情
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
@@ -191,7 +193,7 @@ public class TaskApiService extends BaseUserService {
 			taskInfo.setId(id);
 			return taskInfoDao.getByEntity(taskInfo);
 		} catch (Exception e) {
-			logger.error("Failed to get task list!",e);
+			logger.error("获取任务详情异常",e);
 			return null;
 		}
 	}

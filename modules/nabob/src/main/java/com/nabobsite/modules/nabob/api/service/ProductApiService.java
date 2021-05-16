@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.api.model.req.BotTaskReqModel;
@@ -78,8 +79,8 @@ public class ProductApiService extends BaseUserService {
 				return ResultUtil.failed("Failed to do the task!");
 			}
 		} catch (Exception e) {
-			logger.error("Failed to do the task!",e);
-			return ResultUtil.failed("Failed to do the task!");
+			logger.error("无人机产品做任务异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -94,8 +95,8 @@ public class ProductApiService extends BaseUserService {
 			List<ProductBot> list = productBotDao.findList(productBot);
 			return ResultUtil.success(list);
 		} catch (Exception e) {
-			logger.error("Failed to get product bot list!",e);
-			return ResultUtil.failed("Failed to get product bot list!");
+			logger.error("获取无人机产品列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -110,8 +111,8 @@ public class ProductApiService extends BaseUserService {
 			List<ProductWarehouse> list = productWarehouseDao.findList(productWarehouse);
 			return ResultUtil.success(list);
 		} catch (Exception e) {
-			logger.error("Failed to get product warehouse list!",e);
-			return ResultUtil.failed("Failed to get product warehouse list!");
+			logger.error("获取云仓库产品列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -126,8 +127,24 @@ public class ProductApiService extends BaseUserService {
 			ProductBot productBotInfo = productBotDao.getByEntity(productBot);
 			return ResultUtil.success(productBotInfo);
 		} catch (Exception e) {
-			logger.error("Failed to get product bot info!",e);
-			return ResultUtil.failed("Failed to get product bot info!");
+			logger.error("获取无人机产品详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
+		}
+	}
+
+	/**
+	 * @desc 获取云仓库产品详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<ProductWarehouse> getProductWarehouseInfo(String token,ProductWarehouse productWarehouse) {
+		try {
+			ProductWarehouse productWarehouseInfo = productWarehouseDao.getByEntity(productWarehouse);
+			return ResultUtil.success(productWarehouseInfo);
+		} catch (Exception e) {
+			logger.error("获取云仓库产品详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 
@@ -143,24 +160,8 @@ public class ProductApiService extends BaseUserService {
 			productBotInfo.setId(id);
 			return productBotDao.getByEntity(productBotInfo);
 		} catch (Exception e) {
-			logger.error("Failed to get product bot info!",e);
+			logger.error("获取无人机产品详情异常,{}",id,e);
 			return null;
-		}
-	}
-
-	/**
-	 * @desc 获取云仓库产品详情
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<ProductWarehouse> getProductWarehouseInfo(String token,ProductWarehouse productWarehouse) {
-		try {
-			ProductWarehouse productWarehouseInfo = productWarehouseDao.getByEntity(productWarehouse);
-			return ResultUtil.success(productWarehouseInfo);
-		} catch (Exception e) {
-			logger.error("Failed to get product warehouse info!",e);
-			return ResultUtil.failed("Failed to get product warehouse info!");
 		}
 	}
 }
