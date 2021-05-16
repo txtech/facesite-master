@@ -1,9 +1,11 @@
 package com.nabobsite.modules.nabob.api.model;
 
+import com.jeesite.common.entity.BaseEntity;
 import com.jeesite.common.lang.ObjectUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -12,8 +14,8 @@ import java.math.BigDecimal;
  * @Version 1.0
  */
 @ApiModel(value = "OrderInfoModel",description = "订单信息")
-public class OrderInfoModel {
-
+public class OrderInfoModel implements Serializable {
+    private static final long serialVersionUID = 1L;
     @ApiModelProperty("用户ID")
     private String userId;
     @ApiModelProperty("订单类型")

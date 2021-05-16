@@ -1,6 +1,7 @@
 package com.nabobsite.modules.nabob.interceptor;
 
 import com.jeesite.common.lang.StringUtils;
+import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.I18nUtils;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
@@ -13,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName nada
@@ -27,7 +30,8 @@ public class I18nInterceptor implements HandlerInterceptor {
     @Autowired
     private RedisOpsUtil redisOpsUtil;
 
-    private static final ThreadLocal<String> LangThreadLocal = new NamedThreadLocal<String>("I18nInterceptor Lang");
+
+    private static final ThreadLocal<Map<String,String>> LangThreadLocal = new NamedThreadLocal<Map<String,String>>("I18nInterceptor Lang");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -43,8 +47,12 @@ public class I18nInterceptor implements HandlerInterceptor {
                 logger.error("请求被拦截，获取授权用户为空:{},{}",token,ip);
                 return false;
             }
-            String lang = I18nUtils.getUserLang(token);
-            LangThreadLocal.set(lang);
+            String lang = I18nUtils.getUserLang(userId);
+            Map<String,String> threadLocal = new HashMap<>();
+            threadLocal.put(CommonContact.TOKEN,token);
+            threadLocal.put(CommonContact.USERID,userId);
+            threadLocal.put(CommonContact.LANG,lang);
+            LangThreadLocal.set(threadLocal);
             return true;
         } catch (Exception e) {
            logger.error("拦截器准备发生异常",e);
@@ -56,8 +64,8 @@ public class I18nInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
         try {
             if (LangThreadLocal != null){
-                String lang = LangThreadLocal.get();
-                I18nUtils.getText(lang);
+                Map<String,String> threadLocal = LangThreadLocal.get();
+                I18nUtils.getText(threadLocal.get(CommonContact.LANG));
                 LangThreadLocal.remove();
             }
         } catch (Exception e) {

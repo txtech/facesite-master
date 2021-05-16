@@ -13,29 +13,25 @@ public class CommonResult<T> implements Serializable{
     private static final long serialVersionUID = 1L;
 
     /**
+     * @desc 返回代码
+     * @author nada
+     * @create 2020/12/21 11:08 上午
+     */
+    private Integer code;
+
+    /**
      * @desc 失败消息
      * @author nada
      * @create 2020/12/21 11:08 上午
     */
     private String message;
-    /**
-     * @desc 返回代码
-     * @author nada
-     * @create 2020/12/21 11:08 上午
-    */
-    private Integer code;
+
     /**
      * @desc 结果对象
      * @author nada
      * @create 2020/12/21 11:08 上午
     */
     private T result;
-    /**
-     * @desc 时间戳
-     * @author nada
-     * @create 2020/12/21 11:11 上午
-    */
-    private long timestamp = System.currentTimeMillis();
 
     public CommonResult() {
         this.code = ResultCode.FAILED.getCode();
@@ -53,14 +49,6 @@ public class CommonResult<T> implements Serializable{
 
     public void setCode(Integer code) {
         this.code = code;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 
     public String getMessage() {

@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.service.ApiListing;
 
@@ -35,6 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "${frontPath}/api/order")
 @Api(tags = "订单接口(需要登陆)")
+@ConditionalOnProperty(name="web.swagger.nabob.enabled", havingValue="true", matchIfMissing=true)
 public class OrderApiController extends BaseController {
 
 	@Autowired

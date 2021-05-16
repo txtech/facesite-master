@@ -4,13 +4,17 @@ import com.jeesite.common.lang.ObjectUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * @ClassName nada
  * @Date 2021/5/15 9:46 下午
  * @Version 1.0
  */
 @ApiModel(value = "BotTaskReqModel",description = "无人机产品")
-public class BotTaskReqModel {
+public class BotTaskReqModel implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @ApiModelProperty("无人机ID")
     private String botId;
     @ApiModelProperty("订单号")

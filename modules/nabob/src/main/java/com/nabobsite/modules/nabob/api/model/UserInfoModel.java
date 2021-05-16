@@ -6,13 +6,17 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * @ClassName nada
  * @Date 2021/5/15 9:46 下午
  * @Version 1.0
  */
 @ApiModel(value = "UserInfoModel",description = "用户信息")
-public class UserInfoModel {
+public class UserInfoModel implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @ApiModelProperty("操作员上级")
     private String parentSysId;
     @ApiModelProperty("一级ID")

@@ -6,6 +6,7 @@ package com.nabobsite.modules.nabob.api.service;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
+import com.jeesite.common.lang.ObjectUtils;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
@@ -25,6 +26,7 @@ import com.nabobsite.modules.nabob.utils.CommonResult;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
 import com.nabobsite.modules.nabob.utils.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -151,7 +153,9 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 				return ResultUtil.failed("获取失败,获取帐号信息为空");
 			}
 			userInfo.setPassword("");
-			return ResultUtil.success((UserInfoModel)userInfo.clone());
+			UserInfoModel result = new UserInfoModel();
+			BeanUtils.copyProperties(userInfo, result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("Failed to get userinfo!",e);
 			return ResultUtil.failed("Failed to get userinfo!");
@@ -198,7 +202,10 @@ public class UserInfoApiService extends CrudService<UserInfoDao, UserInfo> {
 			if(redisOpsUtil.get(newTokenKey)!=null){
 				loginUserInfo.setPassword("");
 				loginUserInfo.setToken(newToken);
-				return ResultUtil.success((UserInfoModel)loginUserInfo.clone());
+
+				UserInfoModel result = new UserInfoModel();
+				BeanUtils.copyProperties(loginUserInfo, result);
+				return ResultUtil.success(result);
 			}
 			this.updateLoginIp(userId,loginIp);
 			return ResultUtil.failed("Failed to login!");

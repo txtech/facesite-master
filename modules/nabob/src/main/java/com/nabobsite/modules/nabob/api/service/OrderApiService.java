@@ -8,6 +8,7 @@ import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.api.model.OrderInfoModel;
+import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -16,6 +17,7 @@ import com.nabobsite.modules.nabob.utils.CommonResult;
 import com.nabobsite.modules.nabob.utils.ResultUtil;
 import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,8 +123,10 @@ public class OrderApiService extends CrudService<OrderDao, Order> {
 				return ResultUtil.failed("获取失败,登陆令牌失效");
 			}
 			order.setUserId(userId);
-			Order result = orderDao.getByEntity(order);
-			return ResultUtil.success((OrderInfoModel)result.clone());
+			Order orderInfo = orderDao.getByEntity(order);
+			OrderInfoModel result = new OrderInfoModel();
+			BeanUtils.copyProperties(orderInfo, result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("Failed to get order info!",e);
 			return ResultUtil.failed("Failed to get order info!");

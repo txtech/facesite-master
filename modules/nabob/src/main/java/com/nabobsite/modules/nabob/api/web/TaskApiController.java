@@ -22,6 +22,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.service.ApiListing;
 
@@ -36,6 +37,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "${frontPath}/api/task")
+@ConditionalOnProperty(name="web.swagger.nabob.enabled", havingValue="true", matchIfMissing=true)
 @Api(tags = "用户任务接口(需要登陆)")
 public class TaskApiController extends BaseController {
 

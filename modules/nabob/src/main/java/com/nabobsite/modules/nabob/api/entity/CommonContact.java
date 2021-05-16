@@ -1,11 +1,8 @@
 package com.nabobsite.modules.nabob.api.entity;
 
-import com.jeesite.common.shiro.realms.Da;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,6 +15,10 @@ import java.util.Date;
 public class CommonContact {
 
     public final static String AUTHORIZATION = "Authorization";
+    public final static String TOKEN = "token";
+    public final static String USERID = "userId";
+    public final static String LANG = "lang";
+
     public final static BigDecimal ZERO = new BigDecimal("0");
 
     public final static String SYS_KEY_COUNTDOWN_TIME  = "sys.key.countdown.time";

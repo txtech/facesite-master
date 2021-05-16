@@ -32,7 +32,7 @@ public class UserAccountApiService extends CrudService<UserAccountDao, UserAccou
 	private UserAccountLogDao userAccountLogDao;
 	@Autowired
 	private UserAccountDetailDao userAccountDetailDao;
-	@Autowired
+	//@Autowired
 	private UserInfoApiService userInfoApiService;
 
 	/**
