@@ -5,6 +5,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
+import org.junit.Test;
 
 /**
  * @ClassName nada
@@ -14,32 +15,31 @@ import com.jeesite.common.codec.DesUtils;
  */
 public class NabobTest {
 
-    public static void main(String[] args) {
-        testGetUserInfoHttp();
-    }
+    private final static String baseReqUrl = "http://localhost:9998";
 
-    public static void testGetUserInfoHttp(){
+    @Test
+    public void getUserInfo(){
         String url = "http://localhost:9998/nabob/f/api/user/getUserInfo";
         String result = HttpRequest.post(url)
                 .header("Content-Type","application/json")
                 .header("Authorization","07ea3eda0cfc40debf69ca98ca2b9e1a")
-                .execute()
-                .body();
+                .execute().body();
         System.out.println(result);
     }
 
-    public static void testLoginHttp(){
-        String url = "http://192.168.1.100:9998/nabob/f/api/open/login";
+    @Test
+    public void userLogin(){
+        String url = "http://localhost:9998/nabob/f/api/open/login";
         JSONObject param = new JSONObject();
         param.put("accountNo", "15118135523");
         param.put("password", "123456");
         String result = HttpRequest.post(url)
                 .body(param.toString())
                 .header("Content-Type","application/json")
-                .execute()
-                .body();
+                .execute().body();
         System.out.println(result);
     }
+
 
     public static void getSid(){
         String pidAndSid = "{pid:123456,sid:234234}";
@@ -48,6 +48,7 @@ public class NabobTest {
         System.out.println( jsonObject.getString("pid"));
         System.out.println( jsonObject.getString("sid"));
     }
+
 
     public static void testLogin(){
         String secretKey = "NabobBase64";

@@ -56,16 +56,20 @@ public class ApiResponseBody  implements ResponseBodyAdvice<CommonResult> {
         if(commonResult == null){
             return commonResult;
         }
+        String lang = I18nUtils.LANG_EN;
         if (I18nInterceptor.userThreadLocal != null && I18nInterceptor.userThreadLocal.get() !=null){
             Map<String,String> userLocal = I18nInterceptor.userThreadLocal.get();
-            String lang = I18nUtils.getLangStandard(userLocal.get(CommonContact.LANG));
-            String i8nCode = commonResult.getI8nCode();
-            if(StringUtils.isNoneEmpty(i8nCode)){
-                String msg = i18nUtils.getText(i8nCode,lang);
-                commonResult.setLang(lang);
-                if(StringUtils.isNoneEmpty(msg)){
-                    commonResult.setMsg(msg);
-                }
+            lang = userLocal.get(CommonContact.LANG);
+        }
+        lang = I18nUtils.getLangStandard(lang);
+        if(StringUtils.isNoneEmpty(lang)){
+            commonResult.setLang(lang);
+        }
+        String i8nCode = commonResult.getI8nCode();
+        if(StringUtils.isNoneEmpty(i8nCode)){
+            String msg = i18nUtils.getText(i8nCode,lang);
+            if(StringUtils.isNoneEmpty(msg)){
+                commonResult.setMsg(msg);
             }
         }
         return commonResult;

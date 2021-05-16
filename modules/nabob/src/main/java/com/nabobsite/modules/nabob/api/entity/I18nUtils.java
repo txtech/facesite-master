@@ -41,8 +41,8 @@ public class I18nUtils {
         Map<String, String> props = I18nUtils.LOCAL_CACHE.get(language);
         if (null != props && props.containsKey(code)) {
             String msg = props.get(code);
-            if(StringUtils.isEmpty(msg)){
-                return code;
+            if(StringUtils.isNotEmpty(msg)){
+                return msg;
             }
         }
         return code;
