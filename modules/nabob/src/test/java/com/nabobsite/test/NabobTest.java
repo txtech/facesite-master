@@ -23,12 +23,12 @@ public class NabobTest {
     public void userRegister(){
         String url = baseReqUrl + "open/register";
         JSONObject param = new JSONObject();
-        param.put("accountNo", "15118135522");
+        param.put("accountNo", "15118135528");
         param.put("password", "123456");
-        param.put("inviteCode", "");
-        param.put("inviteSecret", "");
-        param.put("favorite", "马斯克");
-        //param.put("lang", I18nUtils.LANG_IN);
+        //param.put("inviteCode", "100015");
+        param.put("inviteSecret", "4182927c1c3600e49f1553ba9ab50bc1aef9531d36b9e1918e74d14baaa769dc");
+        param.put("favorite", "Elon Musk");
+        param.put("lang", I18nUtils.LANG_IN);
         String result = HttpRequest.post(url)
                 .body(param.toString())
                 .header("Content-Type","application/json")
@@ -54,16 +54,16 @@ public class NabobTest {
         String url = baseReqUrl + "user/getUserInfo";
         String result = HttpRequest.post(url)
                 .header("Content-Type","application/json")
-                .header("Authorization","ca138daccc514789866aa54a87f58718")
+                .header("Authorization","98eb1dcbaf244419a0a08ba3f8524b98")
                 .execute().body();
         System.out.println(result);
     }
 
     @Test
     public void switchLang(){
-        String url = baseReqUrl + "user/switchLang/en_IN";
+        String url = baseReqUrl + "user/switchLang/en_US";
         String result = HttpRequest.post(url)
-                .header("Authorization","ca138daccc514789866aa54a87f58718")
+                .header("Authorization","98eb1dcbaf244419a0a08ba3f8524b98")
                 .execute().body();
         System.out.println(result);
     }
