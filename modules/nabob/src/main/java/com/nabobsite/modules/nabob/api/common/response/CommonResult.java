@@ -55,20 +55,24 @@ public class CommonResult<T> implements Serializable{
         this.msg = "";
         this.code = code;
         this.result = result;
+        this.i8nCode = "";
         this.i8nCode = String.valueOf(code);
     }
 
     public CommonResult(Integer code, String i8nCode) {
         this.msg = "";
         this.code = code;
+        this.result = null;
         this.i8nCode = i8nCode;
+        this.i8nCode = String.valueOf(code);
     }
 
-    public CommonResult(Integer code, String i8nCode, T result) {
-        this.msg = "";
+    public CommonResult(Integer code, String i8nCode, String defaultValue) {
+        this.msg = defaultValue;
         this.code = code;
+        this.result = null;
         this.i8nCode = i8nCode;
-        this.result = result;
+        this.i8nCode = String.valueOf(code);
     }
 
     public Integer getCode() {

@@ -1,12 +1,9 @@
 package com.nabobsite.test;
 
 import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.nabobsite.modules.nabob.api.entity.I18nUtils;
-import io.swagger.annotations.ApiModelProperty;
 import org.junit.Test;
 
 /**
@@ -17,6 +14,7 @@ import org.junit.Test;
  */
 public class NabobTest {
 
+    private final static String Authorization = "ce39e7227440413d95c5092fa4624407";
     private final static String baseReqUrl = "http://localhost:9998/nabob/f/api/";
 
     @Test
@@ -41,10 +39,34 @@ public class NabobTest {
         String url = baseReqUrl + "open/login";
         JSONObject param = new JSONObject();
         param.put("accountNo", "15118135523");
-        param.put("password", "123456");
+        param.put("password", "654321");
         String result = HttpRequest.post(url)
                 .body(param.toString())
                 .header("Content-Type","application/json")
+                .execute().body();
+        System.out.println(result);
+    }
+
+    @Test
+    public void updatePwd(){
+        String url = baseReqUrl + "user/updatePwd";
+        JSONObject param = new JSONObject();
+        param.put("accountNo", "15118135523");
+        param.put("password", "654321");
+        param.put("oldPassword", "123456");
+        String result = HttpRequest.post(url)
+                .body(param.toString())
+                .header("Content-Type","application/json")
+                .header("Authorization",Authorization)
+                .execute().body();
+        System.out.println(result);
+    }
+
+    @Test
+    public void logout(){
+        String url = baseReqUrl + "user/logout";
+        String result = HttpRequest.post(url)
+                .header("Authorization",Authorization)
                 .execute().body();
         System.out.println(result);
     }
@@ -54,16 +76,7 @@ public class NabobTest {
         String url = baseReqUrl + "user/getUserInfo";
         String result = HttpRequest.post(url)
                 .header("Content-Type","application/json")
-                .header("Authorization","98eb1dcbaf244419a0a08ba3f8524b98")
-                .execute().body();
-        System.out.println(result);
-    }
-
-    @Test
-    public void switchLang(){
-        String url = baseReqUrl + "user/switchLang/en_US";
-        String result = HttpRequest.post(url)
-                .header("Authorization","98eb1dcbaf244419a0a08ba3f8524b98")
+                .header("Authorization",Authorization)
                 .execute().body();
         System.out.println(result);
     }

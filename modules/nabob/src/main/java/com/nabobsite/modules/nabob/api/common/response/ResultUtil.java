@@ -24,7 +24,15 @@ public class ResultUtil<T> {
      * 失败返回结果
      */
     public static <T> CommonResult<T> failed(String i18nCode) {
-        int code = ResultCode.SUCCESS.getCode();
+        int code = ResultCode.FAILED.getCode();
         return new CommonResult<T>(code, i18nCode);
+    }
+
+    /**
+     * 失败返回结果
+     */
+    public static <T> CommonResult<T> failed(String i18nCode,String defaultValue) {
+        int code = ResultCode.FAILED.getCode();
+        return new CommonResult<T>(code, i18nCode,defaultValue);
     }
 }

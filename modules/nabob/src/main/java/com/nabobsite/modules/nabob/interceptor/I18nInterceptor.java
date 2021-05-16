@@ -1,6 +1,10 @@
 package com.nabobsite.modules.nabob.interceptor;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.lang.StringUtils;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.I18nUtils;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
@@ -28,6 +32,8 @@ public class I18nInterceptor implements HandlerInterceptor {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    public static String CHART_UTF ="UTF-8";
+
     private final RedisOpsUtil redisOpsUtil;
 
     public static final ThreadLocal<Map<String,String>> userThreadLocal = new NamedThreadLocal<Map<String,String>>("I18nInterceptor Lang");
@@ -44,12 +50,14 @@ public class I18nInterceptor implements HandlerInterceptor {
             String token = request.getHeader("Authorization");
             if(StringUtils.isEmpty(token)){
                 logger.error("请求被拦截，获取授权信息为空:{},{},{}",token,ip,reqUrl);
+                this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_103,"User not authorized"));
                 return false;
             }
             String newTokenKey = RedisPrefixContant.getTokenUserKey(token);
             String userId = (String) redisOpsUtil.get(newTokenKey);
             if(StringUtils.isEmpty(userId)){
                 logger.error("请求被拦截，获取授权用户为空:{},{}",token,ip);
+                this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_103,"User not authorized！"));
                 return false;
             }
             String lang = I18nUtils.getUserLang(userId);
@@ -61,6 +69,7 @@ public class I18nInterceptor implements HandlerInterceptor {
             return true;
         } catch (Exception e) {
            logger.error("拦截器准备发生异常",e);
+            this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_102,"Authorization error！"));
             return false;
         }
     }
@@ -82,5 +91,38 @@ public class I18nInterceptor implements HandlerInterceptor {
 
     public RedisOpsUtil getRedisOpsUtil() {
         return redisOpsUtil;
+    }
+
+    /**
+     * @描述:网关响应报文
+     * @作者:nada
+     * @时间:2019/3/15
+     **/
+    public ModelAndView writeResponse(HttpServletResponse response, CommonResult result) {
+        try {
+            this.initHttpServletRequest (null, response);
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().write(JSONObject.toJSONString(result));
+        } catch (Exception e) {
+            logger.error("Gateway write response exception", e);
+        }
+        return null;
+    }
+
+    /**
+     * @描述:初始化设置报文请求响应编码格式
+     * @时间:2017年12月18日 下午5:45:02
+     */
+    public void initHttpServletRequest(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            if (request != null) {
+                request.setCharacterEncoding(CHART_UTF);
+            }
+            if (response != null) {
+                response.setCharacterEncoding(CHART_UTF);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
