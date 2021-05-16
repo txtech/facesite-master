@@ -5,6 +5,8 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
+import com.nabobsite.modules.nabob.api.entity.I18nUtils;
+import io.swagger.annotations.ApiModelProperty;
 import org.junit.Test;
 
 /**
@@ -15,21 +17,28 @@ import org.junit.Test;
  */
 public class NabobTest {
 
-    private final static String baseReqUrl = "http://localhost:9998";
+    private final static String baseReqUrl = "http://localhost:9998/nabob/f/api/";
 
     @Test
-    public void getUserInfo(){
-        String url = "http://localhost:9998/nabob/f/api/user/getUserInfo";
+    public void userRegister(){
+        String url = baseReqUrl + "open/register";
+        JSONObject param = new JSONObject();
+        param.put("accountNo", "15118135522");
+        param.put("password", "123456");
+        param.put("inviteCode", "");
+        param.put("inviteSecret", "");
+        param.put("favorite", "马斯克");
+        //param.put("lang", I18nUtils.LANG_IN);
         String result = HttpRequest.post(url)
+                .body(param.toString())
                 .header("Content-Type","application/json")
-                .header("Authorization","07ea3eda0cfc40debf69ca98ca2b9e1a")
                 .execute().body();
         System.out.println(result);
     }
 
     @Test
     public void userLogin(){
-        String url = "http://localhost:9998/nabob/f/api/open/login";
+        String url = baseReqUrl + "open/login";
         JSONObject param = new JSONObject();
         param.put("accountNo", "15118135523");
         param.put("password", "123456");
@@ -40,6 +49,24 @@ public class NabobTest {
         System.out.println(result);
     }
 
+    @Test
+    public void getUserInfo(){
+        String url = baseReqUrl + "user/getUserInfo";
+        String result = HttpRequest.post(url)
+                .header("Content-Type","application/json")
+                .header("Authorization","ca138daccc514789866aa54a87f58718")
+                .execute().body();
+        System.out.println(result);
+    }
+
+    @Test
+    public void switchLang(){
+        String url = baseReqUrl + "user/switchLang/en_IN";
+        String result = HttpRequest.post(url)
+                .header("Authorization","ca138daccc514789866aa54a87f58718")
+                .execute().body();
+        System.out.println(result);
+    }
 
     public static void getSid(){
         String pidAndSid = "{pid:123456,sid:234234}";

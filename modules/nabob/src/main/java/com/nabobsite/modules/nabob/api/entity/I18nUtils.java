@@ -3,27 +3,14 @@ package com.nabobsite.modules.nabob.api.entity;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.jeesite.common.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ResourceLoaderAware;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.AbstractMessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-@Service
 public class I18nUtils {
-
     //英语(美国)
     public static final String LANG_EN = "en_US";
     //英语(印度)
@@ -37,7 +24,7 @@ public class I18nUtils {
     public static final Map<String, Map<String, String>> LOCAL_CACHE = new ConcurrentHashMap<>(256);
     private static Cache<String, List> cache = CacheBuilder.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).build();
 
-    public String getText(String code,String language) {
+    public static String getText(String code,String language) {
         Map<String, String> props = I18nUtils.LOCAL_CACHE.get(language);
         if (null != props && props.containsKey(code)) {
             String msg = props.get(code);
@@ -60,13 +47,17 @@ public class I18nUtils {
         }
     }
 
-    public static String getUserLang(String token) {
-        String lang = USER_LANG_CACHE.get(token);
-        if(StringUtils.isEmpty(lang)){
-            //lang = LANG_EN;
-            lang = LANG_IN;
+    public static String getUserLang(String userId) {
+        String lang = USER_LANG_CACHE.get(userId);
+        if(StringUtils.isNotEmpty(lang)){
+            return lang;
         }
-        return lang;
+        return LANG_IN;
+    }
+
+    public static Boolean setUserLang(String userId,String lang) {
+        USER_LANG_CACHE.put(userId,lang);
+        return true;
     }
 
     /**

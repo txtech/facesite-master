@@ -9,6 +9,7 @@ import com.jeesite.modules.sys.utils.UserUtils;
 import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.entity.I18nUtils;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.api.model.UserInfoModel;
@@ -166,6 +167,7 @@ public class UserInfoApiService extends BaseUserService {
 			if(userInfoModel == null){
 				return ResultUtil.failed(I18nCode.CODE_107);
 			}
+			String lang = userInfoModel.getLang();
 			String loginIp = userInfoModel.getLoginIp();
 			String accountNo = userInfoModel.getAccountNo();
 			String password = userInfoModel.getPassword();
@@ -189,18 +191,20 @@ public class UserInfoApiService extends BaseUserService {
 			if(StringUtils.isNotEmpty(oldToken)){
 				redisOpsUtil.remove(RedisPrefixContant.getTokenUserKey(oldToken));
 			}
+			if(StringUtils.isNotEmpty(lang)){
+				this.updateUserLang(userId,lang);
+			}
 			//设置新的token
 			redisOpsUtil.set(newTokenKey,userId,RedisPrefixContant.CACHE_HALF_HOUR);
 			redisOpsUtil.set(userTokenKey,newToken,RedisPrefixContant.CACHE_HALF_HOUR);
 			if(redisOpsUtil.get(newTokenKey)!=null){
 				loginUserInfo.setPassword("");
 				loginUserInfo.setToken(newToken);
-
 				UserInfoModel result = new UserInfoModel();
 				BeanUtils.copyProperties(loginUserInfo, result);
+				this.updateLoginIp(userId,loginIp);
 				return ResultUtil.success(result);
 			}
-			this.updateLoginIp(userId,loginIp);
 			return ResultUtil.failed(I18nCode.CODE_104);
 		} catch (Exception e) {
 			logger.error("用户登陆异常",e);
@@ -219,6 +223,7 @@ public class UserInfoApiService extends BaseUserService {
 			if(userInfoModel == null){
 				return ResultUtil.failed(I18nCode.CODE_107);
 			}
+			String lang = userInfoModel.getLang();
 			String accountNo = userInfoModel.getAccountNo();
 			String password = userInfoModel.getPassword();
 			String inviteSecret = userInfoModel.getInviteSecret();
@@ -230,7 +235,8 @@ public class UserInfoApiService extends BaseUserService {
 				return ResultUtil.failed(I18nCode.CODE_107);
 			}
 
-			UserInfo userInfo = (UserInfo)userInfoModel.clone();
+			UserInfo userInfo = new UserInfo();
+			BeanUtils.copyProperties(userInfoModel, userInfo);
 			//注册账户
 			synchronized (accountNo){
 				UserInfo checkUserInfo = this.getUserInfoByAccountNo(accountNo);
@@ -299,6 +305,9 @@ public class UserInfoApiService extends BaseUserService {
 					String userId = initUser.getId();
 					userAccountDao.insert(InstanceContact.initUserAccount(userId));
 					this.updateUserSecret(userId,parent1UserId);
+					if(StringUtils.isNotEmpty(lang)){
+						this.updateUserLang(userId,lang);
+					}
 					triggerApiService.registerTrigger(userId);
 					return ResultUtil.success(Boolean.TRUE);
 				}
@@ -343,12 +352,9 @@ public class UserInfoApiService extends BaseUserService {
 			if(oldUserInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_105);
 			}
-			UserInfo updateUserInfo = new UserInfo();
-			updateUserInfo.setId(oldUserInfo.getId());
-			updateUserInfo.setLang(lang);
-			long dbResult = userInfoDao.update(updateUserInfo);
-			if(CommonContact.dbResult(dbResult)){
-				this.logout(token);
+			String userId = oldUserInfo.getId();
+			Boolean isOk = this.updateUserLang(userId,lang);
+			if(isOk){
 				return ResultUtil.success(true);
 			}
 			return ResultUtil.failed(I18nCode.CODE_104);

@@ -67,6 +67,7 @@ public class InstanceContact {
             userAccount.setWarehouseMoney(new BigDecimal("0"));
             userAccount.setAiAssetsMoney(new BigDecimal("0"));
             userAccount.setIncomeMoney(new BigDecimal("0"));
+            userAccount.setCommissionMoney(new BigDecimal("0"));
             userAccount.setRewardMoney(LogicStaticContact.USER_TACK_BASE_MONEY);
             userAccount.setAccountStatus(CommonContact.USER_ACCOUNT_STATUS_OK);
             return userAccount;

@@ -56,8 +56,10 @@ public class OrderApiService extends BaseUserService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_109);
 			}
+
+			Order order = new Order();
+			BeanUtils.copyProperties(orderInfoModel, order);
 			String userId = userInfo.getId();
-			Order order = (Order)orderInfoModel.clone();
 			order.setUserId(userId);
 			String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
 			synchronized (orderNo) {

@@ -33,9 +33,6 @@ public class ApiResponseBody  implements ResponseBodyAdvice<CommonResult> {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private I18nUtils i18nUtils;
-
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
         Method method = methodParameter.getMethod();
@@ -67,7 +64,7 @@ public class ApiResponseBody  implements ResponseBodyAdvice<CommonResult> {
         }
         String i8nCode = commonResult.getI8nCode();
         if(StringUtils.isNoneEmpty(i8nCode)){
-            String msg = i18nUtils.getText(i8nCode,lang);
+            String msg = I18nUtils.getText(i8nCode,lang);
             if(StringUtils.isNoneEmpty(msg)){
                 commonResult.setMsg(msg);
             }
