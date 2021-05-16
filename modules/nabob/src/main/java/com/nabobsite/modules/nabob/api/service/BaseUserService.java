@@ -9,6 +9,7 @@ import com.jeesite.common.config.Global;
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.I18nUtils;
+import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
@@ -41,10 +42,27 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 	protected UserAccountDao userAccountDao;
 
 	/**
+	 * @desc 初始化用户账户
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public boolean saveInitUserAccount(String userId) {
+		try {
+			long dbResult = userAccountDao.insert(InstanceContact.initUserAccount(userId));
+			return CommonContact.dbResult(dbResult);
+		} catch (Exception e) {
+			logger.error("初始化用户账户异常,{}",userId,e);
+			return true;
+		}
+	}
+
+	/**
 	 * @desc 修改用户语言
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public boolean updateUserLang(String userId,String lang) {
 		try {
 			if(!CommonContact.isOkUserId(userId)){
@@ -68,6 +86,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public boolean updateUserSecret(String userId,String parentSysId) {
 		try {
 			if(!CommonContact.isOkUserId(userId)){
@@ -92,6 +111,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public boolean updateLoginIp(String userId,String ip) {
 		try {
 			if(!CommonContact.isOkUserId(userId)){
@@ -221,7 +241,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Transactional (readOnly = true, rollbackFor = Exception.class)
 	public UserAccount getUserAccountByUserId(String userId) {
 		try {
-			if(CommonContact.isOkUserId(userId)){
+			if(!CommonContact.isOkUserId(userId)){
 				return null;
 			}
 			UserAccount userAccount = new UserAccount();

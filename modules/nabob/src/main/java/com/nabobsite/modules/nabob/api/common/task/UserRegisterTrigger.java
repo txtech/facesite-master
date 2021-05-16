@@ -54,7 +54,7 @@ public class UserRegisterTrigger extends TriggerOperation {
 		String parent2UserId = curUserInfo.getParent2UserId();
 		String parent3UserId = curUserInfo.getParent3UserId();
 		boolean isok = this.updateTeam(parent1UserId,parent2UserId,parent3UserId,1);
-		if(isok){
+		if(!isok){
 			LOG.error("用户注册触发器,修改团队人数失败:{}",userId);
 			return;
 		}
@@ -68,7 +68,7 @@ public class UserRegisterTrigger extends TriggerOperation {
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
 	public Boolean updateTeam(String parent1UserId,String parent2UserId,String parent3UserId,int num) {
 		try {
-			if(StringUtils.isNotEmpty(parent1UserId) && !"0".equalsIgnoreCase(parent1UserId)){
+			if(CommonContact.isOkUserId(parent1UserId)){
 				UserInfo userInfo = new UserInfo();
 				userInfo.setId(parent1UserId);
 				userInfo.setTeam1Num(num);
@@ -77,7 +77,7 @@ public class UserRegisterTrigger extends TriggerOperation {
 					LOG.info("修改1级团队人数:{}",parent1UserId);
 				}
 			}
-			if(StringUtils.isNotEmpty(parent2UserId) && !"0".equalsIgnoreCase(parent2UserId)){
+			if(CommonContact.isOkUserId(parent2UserId)){
 				UserInfo userInfo = new UserInfo();
 				userInfo.setId(parent2UserId);
 				userInfo.setTeam2Num(num);
@@ -86,7 +86,7 @@ public class UserRegisterTrigger extends TriggerOperation {
 					LOG.info("修改2级团队人数:{}",parent2UserId);
 				}
 			}
-			if(StringUtils.isNotEmpty(parent3UserId) && !"0".equalsIgnoreCase(parent3UserId)){
+			if(CommonContact.isOkUserId(parent3UserId)){
 				UserInfo userInfo = new UserInfo();
 				userInfo.setId(parent3UserId);
 				userInfo.setTeam3Num(num);

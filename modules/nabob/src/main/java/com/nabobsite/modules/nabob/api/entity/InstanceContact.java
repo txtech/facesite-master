@@ -4,6 +4,7 @@ import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
 
 import java.math.BigDecimal;
@@ -89,6 +90,15 @@ public class InstanceContact {
             userAccountDetail.setTitle(title);
             userAccountDetail.setType(type);
             userAccountDetail.setUnique(uniqueId);
+            userAccountDetail.setTotalMoney(new BigDecimal("0"));
+            userAccountDetail.setAvailableMoney(new BigDecimal("0"));
+            userAccountDetail.setWarehouseMoney(new BigDecimal("0"));
+            userAccountDetail.setAiAssetsMoney(new BigDecimal("0"));
+            userAccountDetail.setIncomeMoney(new BigDecimal("0"));
+            userAccountDetail.setIncrementMoney(new BigDecimal("0"));
+            userAccountDetail.setCommissionMoney(new BigDecimal("0"));
+            userAccountDetail.setClaimableMoney(new BigDecimal("0"));
+            userAccountDetail.setRewardMoney(new BigDecimal("0"));
             return userAccountDetail;
         }
     }
@@ -99,7 +109,8 @@ public class InstanceContact {
      * @create 2021/5/12 2:58 下午
      */
     public static UserAccountLog initUserAccountLog(String detailId,String title,UserAccount olduUerAccount){
-        UserAccountLog userAccountLog = (UserAccountLog)olduUerAccount.clone();
+        UserAccountLog userAccountLog = new UserAccountLog();
+        BeanUtils.copyProperties(olduUerAccount, userAccountLog);
         userAccountLog.setIsNewRecord(true);
         userAccountLog.setTitle(title);
         userAccountLog.setDetailId(detailId);

@@ -249,13 +249,13 @@ public class UserInfoApiService extends BaseUserService {
 					if(inviteCodeUserInfo == null){
 						return ResultUtil.failed(I18nCode.CODE_107);
 					}
-					String parentUserId = inviteCodeUserInfo.getId();
+					String parent1UserId = inviteCodeUserInfo.getId();
 					String parentSysId = inviteCodeUserInfo.getParentSysId();
 					if(CommonContact.isOkUserId(parentSysId)){
 						userInfo.setParentSysId(parentSysId);
 					}
-					if(CommonContact.isOkUserId(parentUserId)){
-						userInfo.setParent1UserId(parentUserId);
+					if(CommonContact.isOkUserId(parent1UserId)){
+						userInfo.setParent1UserId(parent1UserId);
 					}
 				}
 				//邀请码链接信息
@@ -284,14 +284,14 @@ public class UserInfoApiService extends BaseUserService {
 				}
 				//根据父一级ID，写入父二级ID，父三级ID
 				if(CommonContact.isOkUserId(parent1UserId)){
-					UserInfo parent2UserInfo = this.getUserInfoByUserId(parent1UserId);
-					if(parent2UserInfo !=null && CommonContact.isOkUserId(parent2UserInfo.getId())){
-						String parent2UserId = parent2UserInfo.getId();
+					UserInfo parent1UserInfo = this.getUserInfoByUserId(parent1UserId);
+					if(parent1UserInfo !=null){
+						String parent2UserId = parent1UserInfo.getParent1UserId();
 						userInfo.setParent2UserId(parent2UserId);
-						UserInfo parent3UserInfo = this.getUserInfoByUserId(parent2UserId);
-						if(parent3UserInfo !=null && CommonContact.isOkUserId(parent3UserInfo.getId())){
-							String parent3UserId = parent3UserInfo.getId();
-							userInfo.setParent2UserId(parent3UserId);
+						UserInfo parent2UserInfo = this.getUserInfoByUserId(parent2UserId);
+						if(parent2UserInfo !=null){
+							String parent3UserId = parent2UserInfo.getParent1UserId();
+							userInfo.setParent3UserId(parent3UserId);
 						}
 					}
 				}
@@ -303,12 +303,14 @@ public class UserInfoApiService extends BaseUserService {
 				long dbResult = userInfoDao.insert(initUser);
 				if(CommonContact.dbResult(dbResult)){
 					String userId = initUser.getId();
-					userAccountDao.insert(InstanceContact.initUserAccount(userId));
 					this.updateUserSecret(userId,parent1UserId);
 					if(StringUtils.isNotEmpty(lang)){
 						this.updateUserLang(userId,lang);
 					}
-					triggerApiService.registerTrigger(userId);
+					Boolean isOk = this.saveInitUserAccount(userId);
+					if(isOk){
+						triggerApiService.registerTrigger(userId);
+					}
 					return ResultUtil.success(Boolean.TRUE);
 				}
 				return ResultUtil.failed(I18nCode.CODE_104);

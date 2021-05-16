@@ -21,10 +21,10 @@ public class NabobTest {
     public void userRegister(){
         String url = baseReqUrl + "open/register";
         JSONObject param = new JSONObject();
-        param.put("accountNo", "15118135528");
+        param.put("accountNo", "15118135523");
         param.put("password", "123456");
-        //param.put("inviteCode", "100015");
-        param.put("inviteSecret", "4182927c1c3600e49f1553ba9ab50bc1aef9531d36b9e1918e74d14baaa769dc");
+        param.put("inviteCode", "100038");
+        //param.put("inviteSecret", "4182927c1c3600e49f1553ba9ab50bc1aef9531d36b9e1918e74d14baaa769dc");
         param.put("favorite", "Elon Musk");
         param.put("lang", I18nUtils.LANG_IN);
         String result = HttpRequest.post(url)
