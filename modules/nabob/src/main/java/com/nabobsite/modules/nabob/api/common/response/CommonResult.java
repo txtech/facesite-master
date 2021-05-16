@@ -24,7 +24,7 @@ public class CommonResult<T> implements Serializable{
      * @author nada
      * @create 2020/12/21 11:08 上午
      */
-    private String i8nCode;
+    private String i18n;
 
     /**
      * @desc 语言
@@ -55,24 +55,21 @@ public class CommonResult<T> implements Serializable{
         this.msg = "";
         this.code = code;
         this.result = result;
-        this.i8nCode = "";
-        this.i8nCode = String.valueOf(code);
+        this.i18n = String.valueOf(code);
     }
 
     public CommonResult(Integer code, String i8nCode) {
         this.msg = "";
         this.code = code;
         this.result = null;
-        this.i8nCode = i8nCode;
-        this.i8nCode = String.valueOf(code);
+        this.i18n = i8nCode;
     }
 
     public CommonResult(Integer code, String i8nCode, String defaultValue) {
         this.msg = defaultValue;
         this.code = code;
         this.result = null;
-        this.i8nCode = i8nCode;
-        this.i8nCode = String.valueOf(code);
+        this.i18n = i8nCode;
     }
 
     public Integer getCode() {
@@ -99,12 +96,12 @@ public class CommonResult<T> implements Serializable{
         this.lang = lang;
     }
 
-    public String getI8nCode() {
-        return i8nCode;
+    public String getI18n() {
+        return i18n;
     }
 
-    public void setI8nCode(String i8nCode) {
-        this.i8nCode = i8nCode;
+    public void setI18n(String i18n) {
+        this.i18n = i18n;
     }
 
     public String getMsg() {

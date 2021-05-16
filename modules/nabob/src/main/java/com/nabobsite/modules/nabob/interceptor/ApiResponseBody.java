@@ -6,8 +6,6 @@ import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.I18nUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -16,10 +14,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import javax.management.monitor.StringMonitor;
-import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -62,7 +57,7 @@ public class ApiResponseBody  implements ResponseBodyAdvice<CommonResult> {
         if(StringUtils.isNoneEmpty(lang)){
             commonResult.setLang(lang);
         }
-        String i8nCode = commonResult.getI8nCode();
+        String i8nCode = commonResult.getI18n();
         if(StringUtils.isNoneEmpty(i8nCode)){
             String msg = I18nUtils.getText(i8nCode,lang);
             if(StringUtils.isNoneEmpty(msg)){
