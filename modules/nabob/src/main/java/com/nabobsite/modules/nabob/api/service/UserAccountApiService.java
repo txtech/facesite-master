@@ -41,7 +41,7 @@ public class UserAccountApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed("获取失败,获取帐号信息为空");
+				return ResultUtil.failed(I18nCode.CODE_106);
 			}
 			UserAccount userAccount = this.getUserAccountByUserId(userInfo.getId());
 			return ResultUtil.success(userAccount);

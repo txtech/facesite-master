@@ -47,14 +47,14 @@ public class ProductApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo== null){
-				return ResultUtil.failed("获取失败,用户信息为空");
+				return ResultUtil.failed(I18nCode.CODE_105);
 			}
 			String userId = userInfo.getId();
 			String botId = botTaskReqModel.getBotId();
 			String orderNo = botTaskReqModel.getOrderNo();
 			ProductBot productBot = this.getProductBotInfoById(botId);
 			if(productBot == null){
-				return ResultUtil.failed("任务失败,产品不存在");
+				return ResultUtil.failed(I18nCode.CODE_106);
 			}
 			synchronized (userId) {
 				int userLevel = userInfo.getLevel();
@@ -76,7 +76,7 @@ public class ProductApiService extends BaseUserService {
 				if(isOk){
 					return ResultUtil.success(true);
 				}
-				return ResultUtil.failed("Failed to do the task!");
+				return ResultUtil.failed(I18nCode.CODE_104);
 			}
 		} catch (Exception e) {
 			logger.error("无人机产品做任务异常",e);

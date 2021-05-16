@@ -61,11 +61,11 @@ public class UserInfoApiService extends BaseUserService {
 			String oldPassword = userInfoModel.getOldPassword();
 			String newPassword = userInfoModel.getPassword();
 			if(StringUtils.isAnyEmpty(accountNo,oldPassword,newPassword)){
-				return ResultUtil.failed("修改失败,修改信息为空");
+				return ResultUtil.failed(I18nCode.CODE_107);
 			}
 			UserInfo oldUserInfo = this.getUserInfoByToken(token);
 			if(oldUserInfo == null){
-				return ResultUtil.failed("修改失败,获取帐号信息为空");
+				return ResultUtil.failed(I18nCode.CODE_105);
 			}
 			if (oldPassword.equalsIgnoreCase(newPassword)) {
 				return ResultUtil.failed("修改失败,新旧密码不能一样");
@@ -87,7 +87,7 @@ public class UserInfoApiService extends BaseUserService {
 				this.logout(token);
 				return ResultUtil.success(true);
 			}
-			return ResultUtil.failed("Failed to update password!");
+			return ResultUtil.failed(I18nCode.CODE_104);
 		} catch (Exception e) {
 			logger.error("用户修改密码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_104);
@@ -120,7 +120,7 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed("获取失败,获取帐号信息为空");
+				return ResultUtil.failed(I18nCode.CODE_105);
 			}
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("pid",userInfo.getId());
@@ -143,7 +143,7 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed("获取失败,获取帐号信息为空");
+				return ResultUtil.failed(I18nCode.CODE_105);
 			}
 			userInfo.setPassword("");
 			UserInfoModel result = new UserInfoModel();
@@ -164,20 +164,20 @@ public class UserInfoApiService extends BaseUserService {
 	public CommonResult<UserInfoModel> login(UserInfoModel userInfoModel) {
 		try {
 			if(userInfoModel == null){
-				return ResultUtil.failed("登陆失败,登陆用户信息为空");
+				return ResultUtil.failed(I18nCode.CODE_107);
 			}
 			String loginIp = userInfoModel.getLoginIp();
 			String accountNo = userInfoModel.getAccountNo();
 			String password = userInfoModel.getPassword();
 			if(StringUtils.isAnyBlank(accountNo,password)){
-				return ResultUtil.failed("登陆失败,账号或密码不能为空");
+				return ResultUtil.failed(I18nCode.CODE_107);
 			}
 			UserInfo loginUserInfo = this.getUserInfoByAccountNo(accountNo);
 			if(loginUserInfo == null){
-				return ResultUtil.failed("登陆失败,获取帐号信息为空");
+				return ResultUtil.failed(I18nCode.CODE_105);
 			}
 			if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(loginUserInfo.getPassword())) {
-				return ResultUtil.failed("登陆失败,帐号密码错误");
+				return ResultUtil.failed(I18nCode.CODE_107);
 			}
 			String userId = loginUserInfo.getId();
 			String newToken = UUID.randomUUID().toString().replaceAll("-","");
@@ -201,7 +201,7 @@ public class UserInfoApiService extends BaseUserService {
 				return ResultUtil.success(result);
 			}
 			this.updateLoginIp(userId,loginIp);
-			return ResultUtil.failed("Failed to login!");
+			return ResultUtil.failed(I18nCode.CODE_104);
 		} catch (Exception e) {
 			logger.error("用户登陆异常",e);
 			return ResultUtil.failed(I18nCode.CODE_104);
@@ -217,17 +217,17 @@ public class UserInfoApiService extends BaseUserService {
 	public CommonResult<Boolean> register(UserInfoModel userInfoModel) {
 		try {
 			if(userInfoModel == null){
-				return ResultUtil.failed("注册失败,注册信息为空");
+				return ResultUtil.failed(I18nCode.CODE_107);
 			}
 			String accountNo = userInfoModel.getAccountNo();
 			String password = userInfoModel.getPassword();
 			String inviteSecret = userInfoModel.getInviteSecret();
 			String parentInviteCode = userInfoModel.getInviteCode();
 			if(StringUtils.isAnyBlank(accountNo,password)){
-				return ResultUtil.failed("注册失败,账号或密码不能为空");
+				return ResultUtil.failed(I18nCode.CODE_107);
 			}
 			if(accountNo.length() < 10 || password.length()<6 || accountNo.length() > 15 || password.length() > 20){
-				return ResultUtil.failed("注册失败,账号或密码不符合要求");
+				return ResultUtil.failed(I18nCode.CODE_107);
 			}
 
 			UserInfo userInfo = (UserInfo)userInfoModel.clone();
@@ -235,13 +235,13 @@ public class UserInfoApiService extends BaseUserService {
 			synchronized (accountNo){
 				UserInfo checkUserInfo = this.getUserInfoByAccountNo(accountNo);
 				if(checkUserInfo !=null){
-					return ResultUtil.failed("注册失败,账号已经存在");
+					return ResultUtil.failed(I18nCode.CODE_108);
 				}
 				//邀请码信息
 				if(StringUtils.isNotEmpty(parentInviteCode)){
 					UserInfo inviteCodeUserInfo = this.getUserInfoByInviteCode(parentInviteCode);
 					if(inviteCodeUserInfo == null){
-						return ResultUtil.failed("注册失败,邀请码错误");
+						return ResultUtil.failed(I18nCode.CODE_107);
 					}
 					String parentUserId = inviteCodeUserInfo.getId();
 					String parentSysId = inviteCodeUserInfo.getParentSysId();
@@ -265,7 +265,7 @@ public class UserInfoApiService extends BaseUserService {
 							userInfo.setParent1UserId(parentUserId);
 						}
 					} catch (Exception e) {
-						logger.error("邀请码链接信息解析异常",e);
+						logger.error("邀请码链接信息解析异常,{},{}",accountNo,inviteSecret,e);
 					}
 				}
 				//当前用户信息作为上级业务员
@@ -302,7 +302,7 @@ public class UserInfoApiService extends BaseUserService {
 					triggerApiService.registerTrigger(userId);
 					return ResultUtil.success(Boolean.TRUE);
 				}
-				return ResultUtil.failed("注册账号失败");
+				return ResultUtil.failed(I18nCode.CODE_104);
 			}
 		} catch (Exception e) {
 			logger.error("用户注册异常",e);
@@ -320,7 +320,7 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			SysConfig sysConfig = this.getSysConfigByKey(CommonContact.SYS_KEY_COUNTDOWN_TIME);
 			if(sysConfig == null){
-				return ResultUtil.failed("获取失败,获取配置为空");
+				return ResultUtil.failed(I18nCode.CODE_106);
 			}
 			JSONObject configJson = new JSONObject();
 			configJson.put("countDown",sysConfig.getValue());
@@ -341,7 +341,7 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			UserInfo oldUserInfo = this.getUserInfoByToken(token);
 			if(oldUserInfo == null){
-				return ResultUtil.failed("修改失败,获取帐号信息为空");
+				return ResultUtil.failed(I18nCode.CODE_105);
 			}
 			UserInfo updateUserInfo = new UserInfo();
 			updateUserInfo.setId(oldUserInfo.getId());
@@ -351,7 +351,7 @@ public class UserInfoApiService extends BaseUserService {
 				this.logout(token);
 				return ResultUtil.success(true);
 			}
-			return ResultUtil.failed("Failed to set lang!");
+			return ResultUtil.failed(I18nCode.CODE_104);
 		} catch (Exception e) {
 			logger.error("用户设置语言异常",e);
 			return ResultUtil.failed(I18nCode.CODE_104);

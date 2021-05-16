@@ -47,16 +47,16 @@ public class OrderApiService extends BaseUserService {
 			String phoneNumber = orderInfoModel.getPhoneNumber();
 			BigDecimal payMoney = orderInfoModel.getPayMoney();
 			if(StringUtils.isAnyEmpty(token,name,email,phoneNumber)){
-				return ResultUtil.failed("充值失败,获取充值参数为空");
+				return ResultUtil.failed(I18nCode.CODE_107);
 			}
 			if(CommonContact.isLesserOrEqual(payMoney, CommonContact.ZERO)){
-				return ResultUtil.failed("充值失败,充值金额小于0");
+				return ResultUtil.failed(I18nCode.CODE_107);
 			}
-			UserInfo oldUserInfo = this.getUserInfoByToken(token);
-			if(oldUserInfo == null){
-				return ResultUtil.failed("充值失败,获取帐号信息为空");
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_109);
 			}
-			String userId = oldUserInfo.getId();
+			String userId = userInfo.getId();
 			Order order = (Order)orderInfoModel.clone();
 			order.setUserId(userId);
 			String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
@@ -67,7 +67,7 @@ public class OrderApiService extends BaseUserService {
 					return ResultUtil.success(orderInfoModel);
 				}
 			}
-			return ResultUtil.failed("Failed to recharge order!");
+			return ResultUtil.failed(I18nCode.CODE_104);
 		} catch (Exception e) {
 			logger.error("充值订单异常",e);
 			return ResultUtil.failed(I18nCode.CODE_104);
@@ -82,13 +82,11 @@ public class OrderApiService extends BaseUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<Order>> getOrderList(Order order,String token) {
 		try {
-			if(StringUtils.isAnyEmpty(token)){
-				return ResultUtil.failed("充值失败,获取令牌为空");
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_109);
 			}
-			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
-			if(StringUtils.isEmpty(userId)){
-				return ResultUtil.failed("获取失败,登陆令牌失效");
-			}
+			String userId = userInfo.getId();
 			order.setUserId(userId);
 			List<Order> result = orderDao.findList(order);
 			return ResultUtil.success(result);
@@ -106,16 +104,14 @@ public class OrderApiService extends BaseUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<OrderInfoModel> getOrderInfo(Order order, String token) {
 		try {
-			if(StringUtils.isAnyEmpty(token)){
-				return ResultUtil.failed("获取订单详情,获取令牌为空");
-			}
 			if(order.getOrderNo() == null){
-				return ResultUtil.failed("获取订单详情,获取订单号为空");
+				return ResultUtil.failed(I18nCode.CODE_107);
 			}
-			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
-			if(StringUtils.isEmpty(userId)){
-				return ResultUtil.failed("获取失败,登陆令牌失效");
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_109);
 			}
+			String userId = userInfo.getId();
 			order.setUserId(userId);
 			Order orderInfo = orderDao.getByEntity(order);
 			OrderInfoModel result = new OrderInfoModel();

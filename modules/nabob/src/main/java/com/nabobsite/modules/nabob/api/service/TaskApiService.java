@@ -46,12 +46,12 @@ public class TaskApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed("获取失败,获取帐号信息为空");
+				return ResultUtil.failed(I18nCode.CODE_109);
 			}
 			String userId = userInfo.getId();
 			TaskInfo taskInfo = this.getTaskInfoById(taskId);
 			if(taskInfo == null){
-				return ResultUtil.failed("获取失败,任务不存在");
+				return ResultUtil.failed(I18nCode.CODE_106);
 			}
 			synchronized (userId) {
 				BigDecimal rewardMoney = taskInfo.getRewardMoney();
@@ -64,7 +64,7 @@ public class TaskApiService extends BaseUserService {
 						return ResultUtil.success(true);
 					}
 					logger.error("新用户第一次做任务失败:{},{}",userId,taskId);
-					return ResultUtil.failed("Failed to do the task!");
+					return ResultUtil.failed(I18nCode.CODE_104);
 				}
 
 				int taskStatus = userTask.getTaskStatus();
@@ -72,12 +72,12 @@ public class TaskApiService extends BaseUserService {
 				if(taskStatus == CommonContact.USER_TASK_STATUS_3){
 					logger.error("新用户任务已经完毕:{},{}",userId,taskId);
 					this.sendReward(userId,rewardMoney,taskId);
-					return ResultUtil.failed("Failed to do the task!");
+					return ResultUtil.failed(I18nCode.CODE_104);
 				}
 				int taskNum = taskInfo.getTaskNumber();
 				if(taskFinishNumber >= taskNum){
 					logger.error("新用户任务已经完毕:{},{}",userId,taskId);
-					return ResultUtil.failed("Failed to do the task!");
+					return ResultUtil.failed(I18nCode.CODE_104);
 				}
 				Boolean isOk = this.updateTaskFinishNumber(userTask.getId(),taskFinishNumber+1);
 				if(isOk){
@@ -86,7 +86,7 @@ public class TaskApiService extends BaseUserService {
 					return ResultUtil.success(true);
 				}
 				logger.error("新用户做任务失败:{},{}",userId,taskId);
-				return ResultUtil.failed("Failed to do the task!");
+				return ResultUtil.failed(I18nCode.CODE_104);
 			}
 		} catch (Exception e) {
 			logger.error("新用户做任务异常",taskId,e);

@@ -50,7 +50,7 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 				switch (oldStatus) {
 					case CommonContact.ORDER_STATUS_1:
 					case CommonContact.ORDER_STATUS_2:
-						return this.doExecute(oldOrder,pOrderNo,backStatus,message);
+						return this.doExecute(orderNo,pOrderNo,oldOrder,backStatus,message);
 					case CommonContact.ORDER_STATUS_3:
 						logger.error("充值订单回调失败,订单已经失败:{},{}",orderNo,pOrderNo);
 						return true;
@@ -66,7 +66,7 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Failed to recharge order!",e);
+			logger.error("充值订单回调异常",e);
 			return false;
 		}
 	}
@@ -78,12 +78,11 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 	 * @create 2021/5/12 7:03 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean doExecute(Order oldOrder,String pOrderNo,int backStatus,String message) {
+	public boolean doExecute(String orderNo,String pOrderNo,Order oldOrder,int backStatus,String message) {
 		try {
 			String id = oldOrder.getId();
 			int type = oldOrder.getType();
 			String userId = oldOrder.getUserId();
-			String orderNo = oldOrder.getOrderNo();
 			BigDecimal payMoney = oldOrder.getPayMoney();
 			BigDecimal actualMoney = oldOrder.getActualMoney();
 			Order newOrder = new Order();
@@ -118,7 +117,7 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 			}
 			return true;
 		} catch (Exception e) {
-			logger.error("Failed to doExecute order!",e);
+			logger.error("执行回调逻辑异常,{}",orderNo,e);
 			return false;
 		}
 	}

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.management.monitor.StringMonitor;
+import java.lang.reflect.AnnotatedType;
+import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
 
@@ -36,7 +38,12 @@ public class ApiResponseBody  implements ResponseBodyAdvice<CommonResult> {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
-        return true;
+        Method method = methodParameter.getMethod();
+        Class type = method.getReturnType();
+        if(type.getName().equalsIgnoreCase(CommonResult.class.getName())){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -52,7 +59,6 @@ public class ApiResponseBody  implements ResponseBodyAdvice<CommonResult> {
         if (I18nInterceptor.userThreadLocal != null && I18nInterceptor.userThreadLocal.get() !=null){
             Map<String,String> userLocal = I18nInterceptor.userThreadLocal.get();
             String lang = I18nUtils.getLangStandard(userLocal.get(CommonContact.LANG));
-            //LocaleContextHolder.setLocale(I18nUtils.getLocale(lang));
             String i8nCode = commonResult.getI8nCode();
             if(StringUtils.isNoneEmpty(i8nCode)){
                 String msg = i18nUtils.getText(i8nCode,lang);

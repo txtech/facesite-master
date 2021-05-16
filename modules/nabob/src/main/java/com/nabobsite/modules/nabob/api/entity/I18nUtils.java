@@ -40,9 +40,12 @@ public class I18nUtils {
     public String getText(String code,String language) {
         Map<String, String> props = I18nUtils.LOCAL_CACHE.get(language);
         if (null != props && props.containsKey(code)) {
-            return props.get(code);
+            String msg = props.get(code);
+            if(StringUtils.isEmpty(msg)){
+                return code;
+            }
         }
-        return "";
+        return code;
     }
 
     public static Locale getLocale(String lang) {
