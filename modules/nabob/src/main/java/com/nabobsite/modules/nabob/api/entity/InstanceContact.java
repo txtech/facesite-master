@@ -47,20 +47,7 @@ public class InstanceContact {
             if(StringUtils.isEmpty(userInfo.getParent3UserId())){
                 userInfo.setParent3UserId("0");
             }
-            String lang = userInfo.getLang();
-            if(StringUtils.isEmpty(lang)){
-                userInfo.setLang(I18nUtils.LANG_EN);
-            }else{
-                if(I18nUtils.LANG_EN.equalsIgnoreCase(lang)){
-                    userInfo.setLang(I18nUtils.LANG_EN);
-                }else if(I18nUtils.LANG_IN.equalsIgnoreCase(lang)){
-                    userInfo.setLang(I18nUtils.LANG_EN);
-                }else if(I18nUtils.LANG_ZH.equalsIgnoreCase(lang)){
-                    userInfo.setLang(I18nUtils.LANG_EN);
-                }else{
-                    userInfo.setLang(I18nUtils.LANG_EN);
-                }
-            }
+            userInfo.setLang(I18nUtils.getLangStandard(userInfo.getLang()));
             return userInfo;
         }
     }

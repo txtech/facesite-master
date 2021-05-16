@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.nabobsite.modules.nabob.api.common.TriggerApiService;
-import com.nabobsite.modules.nabob.api.common.service.BaseUserService;
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
@@ -17,6 +17,7 @@ import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.interceptor.I18nInterceptor;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -148,8 +150,8 @@ public class UserInfoApiService extends BaseUserService {
 			BeanUtils.copyProperties(userInfo, result);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
-			logger.error("Failed to get userinfo!",e);
-			return ResultUtil.failed("Failed to get userinfo!");
+			logger.error("获取用户详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_101);
 		}
 	}
 

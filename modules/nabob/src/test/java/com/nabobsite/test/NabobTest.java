@@ -19,10 +19,10 @@ public class NabobTest {
     }
 
     public static void testGetUserInfoHttp(){
-        String url = "http://127.0.0.1:9998/nabob/f/api/user/getUserInfo";
+        String url = "http://localhost:9998/nabob/f/api/user/getUserInfo";
         String result = HttpRequest.post(url)
                 .header("Content-Type","application/json")
-                .header("Authorization","12643dd0e3b34e4ea5d187e8f8dc30b0")
+                .header("Authorization","07ea3eda0cfc40debf69ca98ca2b9e1a")
                 .execute()
                 .body();
         System.out.println(result);

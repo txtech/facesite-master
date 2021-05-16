@@ -20,11 +20,25 @@ public class CommonResult<T> implements Serializable{
     private Integer code;
 
     /**
-     * @desc 失败消息
+     * @desc 返回code
+     * @author nada
+     * @create 2020/12/21 11:08 上午
+     */
+    private String i8nCode;
+
+    /**
+     * @desc 语言
+     * @author nada
+     * @create 2020/12/21 11:08 上午
+     */
+    private String lang;
+
+    /**
+     * @desc 返回消息
      * @author nada
      * @create 2020/12/21 11:08 上午
     */
-    private String message;
+    private String msg;
 
     /**
      * @desc 结果对象
@@ -37,9 +51,20 @@ public class CommonResult<T> implements Serializable{
         this.code = ResultCode.FAILED.getCode();
     }
 
-    public CommonResult(Integer code, String message, T result) {
+    public CommonResult(Integer code, T result) {
         this.code = code;
-        this.message = message;
+        this.result = result;
+        this.i8nCode = String.valueOf(code);
+    }
+
+    public CommonResult(Integer code, String i8nCode) {
+        this.code = code;
+        this.i8nCode = i8nCode;
+    }
+
+    public CommonResult(Integer code, String i8nCode, T result) {
+        this.code = code;
+        this.i8nCode = i8nCode;
         this.result = result;
     }
 
@@ -51,19 +76,35 @@ public class CommonResult<T> implements Serializable{
         this.code = code;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public T getResult() {
         return result;
     }
 
     public void setResult(T result) {
         this.result = result;
+    }
+
+    public String getLang() {
+        return lang;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
+    public String getI8nCode() {
+        return i8nCode;
+    }
+
+    public void setI8nCode(String i8nCode) {
+        this.i8nCode = i8nCode;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

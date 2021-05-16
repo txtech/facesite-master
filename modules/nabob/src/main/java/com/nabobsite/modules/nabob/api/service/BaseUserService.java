@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-Now  All rights reserved.
  */
-package com.nabobsite.modules.nabob.api.common.service;
+package com.nabobsite.modules.nabob.api.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
@@ -155,7 +155,15 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			if(StringUtils.isEmpty(userId)){
 				return null;
 			}
-			return this.getUserInfoByUserId(userId);
+			UserInfo userInfo = this.getUserInfoByUserId(userId);
+			if(userInfo == null){
+				return null;
+			}
+			String newTokenKey = RedisPrefixContant.getTokenUserKey(token);
+			String userTokenKey = RedisPrefixContant.getUserTokenKey(userId);
+			redisOpsUtil.set(newTokenKey,userId,RedisPrefixContant.CACHE_HALF_HOUR);
+			redisOpsUtil.set(userTokenKey,token,RedisPrefixContant.CACHE_HALF_HOUR);
+			return userInfo;
 		} catch (Exception e) {
 			logger.error("获取用户信息异常",e);
 			return null;

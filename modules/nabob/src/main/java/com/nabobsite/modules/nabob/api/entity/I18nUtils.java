@@ -2,6 +2,7 @@ package com.nabobsite.modules.nabob.api.entity;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.jeesite.common.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -20,8 +21,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-@Service("i18nUtils")
-public class I18nUtils extends AbstractMessageSource implements ResourceLoaderAware {
+@Service
+public class I18nUtils {
 
     //英语(美国)
     public static final String LANG_EN = "en_US";
@@ -36,86 +37,52 @@ public class I18nUtils extends AbstractMessageSource implements ResourceLoaderAw
     public static final Map<String, Map<String, String>> LOCAL_CACHE = new ConcurrentHashMap<>(256);
     private static Cache<String, List> cache = CacheBuilder.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).build();
 
-    ResourceLoader resourceLoader;
-    @Autowired
-    private HttpServletRequest request;
-
-    public static String getText(String code) {
-        return getText(code, null);
-    }
-
-    public static String getText(String code, Object[] args) {
-        return getText(code, args, "");
-    }
-
-    public static String getText(String code, Object[] args, String defaultMessage) {
-        Locale locale = LocaleContextHolder.getLocale();
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("i18n/messages");
-        String content;
-        try{
-            content = messageSource.getMessage(code, args, locale);
-        }catch (Exception e){
-            content = defaultMessage;
-        }
-        return content;
-    }
-
-    public static String getUserLang(String token) {
-        return USER_LANG_CACHE.get(token);
-    }
-
-    /**
-     * @desc 从缓存中取出国际化配置对应的数据 或者从父级获取
-     * @author nada
-     * @create 2021/5/14 9:40 下午
-    */
-    public String getSourceFromCache(String code, Locale locale) {
-        String language = locale == null ? RequestContextUtils.getLocale(request).getLanguage() : locale.getLanguage();
+    public String getText(String code,String language) {
         Map<String, String> props = I18nUtils.LOCAL_CACHE.get(language);
         if (null != props && props.containsKey(code)) {
             return props.get(code);
         }
-        if (null != this.getParentMessageSource()) {
-            return this.getParentMessageSource().getMessage(code, null, locale);
+        return "";
+    }
+
+    public static Locale getLocale(String lang) {
+        if(I18nUtils.LANG_EN.equalsIgnoreCase(lang)){
+            return Locale.US;
+        }else if(I18nUtils.LANG_IN.equalsIgnoreCase(lang)){
+            return new Locale("en","IN");
+        }else if(I18nUtils.LANG_ZH.equalsIgnoreCase(lang)){
+            return Locale.SIMPLIFIED_CHINESE;
+        }else{
+            return Locale.US;
         }
-        return code;
     }
 
-    @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourceLoader = (resourceLoader == null ? new DefaultResourceLoader() : resourceLoader);
+    public static String getUserLang(String token) {
+        String lang = USER_LANG_CACHE.get(token);
+        if(StringUtils.isEmpty(lang)){
+            //lang = LANG_EN;
+            lang = LANG_IN;
+        }
+        return lang;
     }
 
-    @Override
-    protected MessageFormat resolveCode(String code, Locale locale) {
-        String msg = getSourceFromCache(code, locale);
-        MessageFormat messageFormat = new MessageFormat(msg, locale);
-        return messageFormat;
+    /**
+     * @desc 格式化语言
+     * @author nada
+     * @create 2021/5/16 2:10 下午
+    */
+    public static String getLangStandard(String lang) {
+        if(StringUtils.isEmpty(lang)){
+            return I18nUtils.LANG_EN;
+        }
+        if(I18nUtils.LANG_EN.equalsIgnoreCase(lang)){
+            return I18nUtils.LANG_EN;
+        }else if(I18nUtils.LANG_IN.equalsIgnoreCase(lang)){
+            return I18nUtils.LANG_IN;
+        }else if(I18nUtils.LANG_ZH.equalsIgnoreCase(lang)){
+            return I18nUtils.LANG_ZH;
+        }else{
+            return I18nUtils.LANG_EN;
+        }
     }
-
-    @Override
-    protected String resolveCodeWithoutArguments(String code, Locale locale) {
-        return getSourceFromCache(code, locale);
-    }
-
-    //    public Map<String, Map<Integer, CardInfoDO>> getAllCardInfo() {
-//        List<Map<String, Map<Integer, CardInfoDO>>> allCardList = null;
-//        try {
-//            allCardList = cache.get(CARD_INFO,new Callable<List<Map<String, Map<Integer, CardInfoDO>>>>() {
-//                                @Override
-//                                public List<Map<String, Map<Integer, CardInfoDO>>> call()
-//                                        throws Exception {
-//                                    return buildCardInfo();
-//                                }
-//                            });
-//        } catch (ExecutionException e) {
-//            LOG.error("get card info exception ", e);
-//            return null;
-//        }
-//        if (CollectionUtils.isEmpty(allCardList)) {
-//            return null;
-//        }
-//        return allCardList.get(0);
-//    }
 }

@@ -6,24 +6,24 @@ package com.nabobsite.modules.nabob.api.common.response;
  * @create 2020/12/21 11:47 上午
 */
 public enum ResultCode {
-    //操作成功
-    SUCCESS(200, "操作成功"),
-    //操作失败
-    FAILED(500, "操作失败");
+    SUCCESS(200, "Successful"),
+    ERROR(101, "Error"),
+    EXCEPTION(102, "Exception"),
+    FAILED(103, "Failed");
 
     private Integer code;
-    private String message;
+    private String msg;
 
-    ResultCode(Integer code, String message) {
+    ResultCode(Integer code, String msg) {
         this.code = code;
-        this.message = message;
+        this.msg = msg;
     }
 
     public Integer getCode() {
         return code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 }

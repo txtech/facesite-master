@@ -3,7 +3,6 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.nabobsite.modules.nabob.api.common.service.BaseUserService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.user.dao.*;

@@ -1,4 +1,4 @@
-package com.nabobsite.modules.nabob.api.common.service;
+package com.nabobsite.modules.nabob.api.service;
 
 import com.nabobsite.modules.nabob.config.FastJsonRedisSerializer;
 import org.apache.commons.lang3.StringUtils;

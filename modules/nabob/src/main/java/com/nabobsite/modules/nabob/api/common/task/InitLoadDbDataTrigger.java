@@ -35,6 +35,7 @@ public class InitLoadDbDataTrigger extends TriggerOperation {
 		final Map<String, String> zhCNMap = new HashMap<>(sysI18nList.size());
 		for (SysI18n sysI18n: sysI18nList) {
 			String key = sysI18n.getKey();
+			LOG.info("缓存数据:{},{},{},{}",key,sysI18n.getZhValue(),sysI18n.getEnValue(),sysI18n.getZhValue());
 			enUSMap.put(key,sysI18n.getEnValue());
 			enINMap.put(key,sysI18n.getInValue());
 			zhCNMap.put(key,sysI18n.getZhValue());
