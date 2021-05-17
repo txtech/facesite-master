@@ -47,6 +47,45 @@ public class UserInfoApiService extends BaseUserService {
 	private SequenceService sequenceService;
 	@Autowired
 	private TriggerApiService triggerApiService;
+	@Autowired
+	private SysApiService sysApiService;
+
+	/**
+	 * @desc 用户忘记密码
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> forgetPwd(UserInfoModel userInfoModel) {
+		try {
+			String smsCode = userInfoModel.getSmsCode();
+			String accountNo = userInfoModel.getAccountNo();
+			String newPassword = userInfoModel.getPassword();
+			if(StringUtils.isAnyEmpty(accountNo,smsCode,newPassword)){
+				return ResultUtil.failed(I18nCode.CODE_10007);
+			}
+			Boolean isOk = sysApiService.verifSmsCode(accountNo,smsCode);
+			if(isOk){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			UserInfo oldUserInfo = this.getUserInfoByAccountNo(accountNo);
+			if(oldUserInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			String md5NewPwd = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+			UserInfo updateUserInfo = new UserInfo();
+			updateUserInfo.setId(oldUserInfo.getId());
+			updateUserInfo.setPassword(md5NewPwd);
+			long dbResult = userInfoDao.update(updateUserInfo);
+			if(CommonContact.dbResult(dbResult)){
+				return ResultUtil.success(true);
+			}
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		} catch (Exception e) {
+			logger.error("用户忘记密码异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
 
 	/**
 	 * @desc 用户修改密码

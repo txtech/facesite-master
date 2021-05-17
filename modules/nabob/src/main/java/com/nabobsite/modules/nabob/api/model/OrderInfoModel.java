@@ -39,11 +39,6 @@ public class OrderInfoModel implements Serializable {
     @ApiModelProperty("电话号码")
     private String phoneNumber;
 
-    @Override
-    public Object clone() {
-        return ObjectUtils.cloneBean(this);
-    }
-
     public String getUserId() {
         return userId;
     }

@@ -5,8 +5,10 @@ package com.nabobsite.modules.nabob.api.web;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
+import com.nabobsite.modules.nabob.api.model.SmsModel;
 import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
+import com.nabobsite.modules.nabob.api.service.SysApiService;
 import com.nabobsite.modules.nabob.api.service.TaskApiService;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
@@ -34,6 +36,8 @@ import java.util.List;
 public class OpenApiController extends BaseController {
 
 	@Autowired
+	private SysApiService sysApiService;
+	@Autowired
 	private TaskApiService taskApiService;
 	@Autowired
 	private ProductApiService productApiService;
@@ -49,6 +53,17 @@ public class OpenApiController extends BaseController {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		userInfoModel.setRegistIp(ip);
 		return userInfoApiService.register(userInfoModel);
+	}
+
+	@PostMapping(value = {"forgetPwd"})
+	@ApiOperation(value = "忘记密码")
+	@ApiImplicitParams({
+			@ApiImplicitParam(dataType = "UserInfoModel", name = "userInfoModel", value = "用户注册(必须账户、密码、验证码,其它可选)", required = true, type="String")
+	})
+	public CommonResult<Boolean> forgetPwd(@RequestBody UserInfoModel userInfoModel,HttpServletRequest request) {
+		String ip = HttpBrowserTools.getIpAddr(request);
+		userInfoModel.setRegistIp(ip);
+		return userInfoApiService.forgetPwd(userInfoModel);
 	}
 
 	@PostMapping(value = {"login"})
@@ -84,5 +99,19 @@ public class OpenApiController extends BaseController {
 	@ApiOperation(value = "无人机产品列表")
 	public CommonResult<List<ProductBot>> getProductBotList(HttpServletRequest request) {
 		return productApiService.getProductBotList(new ProductBot());
+	}
+
+	@RequestMapping(value = {"sendSms"})
+	@ApiOperation(value = "发送短信验证码")
+	public CommonResult<Boolean> sendSms(@RequestBody SmsModel smsModel, HttpServletRequest request) {
+		String ipAddr = HttpBrowserTools.getIpAddr(request);
+		return sysApiService.sendSms(smsModel);
+	}
+
+	@RequestMapping(value = {"checkSmsCode"})
+	@ApiOperation(value = "验证短信验证码")
+	public CommonResult<Boolean> checkSmsCode(@RequestBody SmsModel smsModel, HttpServletRequest request) {
+		String ipAddr = HttpBrowserTools.getIpAddr(request);
+		return sysApiService.checkSmsCode(smsModel);
 	}
 }

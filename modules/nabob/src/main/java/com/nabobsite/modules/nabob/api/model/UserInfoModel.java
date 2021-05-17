@@ -41,8 +41,13 @@ public class UserInfoModel implements Serializable {
     private String favorite;
     @ApiModelProperty("语言")
     private String lang;
+    @ApiModelProperty("验证吗")
+    private String smsCode;
+    @ApiModelProperty("注册IP")
     private String registIp;
+    @ApiModelProperty("登陆Ip")
     private String loginIp;
+
 
 
     public String getParentSysId() {
@@ -149,16 +154,19 @@ public class UserInfoModel implements Serializable {
         this.loginIp = loginIp;
     }
 
-    @Override
-    public Object clone() {
-        return ObjectUtils.cloneBean(this);
-    }
-
     public String getOldPassword() {
         return oldPassword;
     }
 
     public void setOldPassword(String oldPassword) {
         this.oldPassword = oldPassword;
+    }
+
+    public String getSmsCode() {
+        return smsCode;
+    }
+
+    public void setSmsCode(String smsCode) {
+        this.smsCode = smsCode;
     }
 }
