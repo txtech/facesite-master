@@ -20,14 +20,16 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 订单Entity
  * @author face
- * @version 2021-05-15
+ * @version 2021-05-17
  */
 @Table(name="t1_order", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="user_id", attrName="userId", label="用户ID"),
 		@Column(name="type", attrName="type", label="订单类型"),
+		@Column(name="channel_id", attrName="channelId", label="通道ID"),
 		@Column(name="order_status", attrName="orderStatus", label="1", comment="1: 待支付 2:支付中 3:支付失败 4:支付成功 9:退款"),
 		@Column(name="order_no", attrName="orderNo", label="订单号"),
+		@Column(name="pay_type", attrName="payType", label="支付类型"),
 		@Column(name="p_order_no", attrName="porderNo", label="上游订单号"),
 		@Column(name="pay_money", attrName="payMoney", label="支付金额"),
 		@Column(name="actual_money", attrName="actualMoney", label="真实到账金额"),
@@ -48,8 +50,10 @@ public class Order extends DataEntity<Order> {
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户ID
 	private Integer type;		// 订单类型
+	private String channelId;		// 通道ID
 	private Integer orderStatus;		// 1: 待支付 2:支付中 3:支付失败 4:支付成功 9:退款
 	private String orderNo;		// 订单号
+	private Integer payType;		// 支付类型
 	private String porderNo;		// 上游订单号
 	private BigDecimal payMoney;		// 支付金额
 	private BigDecimal actualMoney;		// 真实到账金额
@@ -88,6 +92,16 @@ public class Order extends DataEntity<Order> {
 		this.type = type;
 	}
 	
+	@NotBlank(message="通道ID不能为空")
+	@Length(min=0, max=30, message="通道ID长度不能超过 30 个字符")
+	public String getChannelId() {
+		return channelId;
+	}
+
+	public void setChannelId(String channelId) {
+		this.channelId = channelId;
+	}
+	
 	@NotNull(message="1不能为空")
 	public Integer getOrderStatus() {
 		return orderStatus;
@@ -105,6 +119,15 @@ public class Order extends DataEntity<Order> {
 
 	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
+	}
+	
+	@NotNull(message="支付类型不能为空")
+	public Integer getPayType() {
+		return payType;
+	}
+
+	public void setPayType(Integer payType) {
+		this.payType = payType;
 	}
 	
 	@Length(min=0, max=50, message="上游订单号长度不能超过 50 个字符")

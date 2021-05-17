@@ -6,12 +6,9 @@ import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.model.BotTaskReqModel;
 import com.nabobsite.modules.nabob.api.model.WarehouseTaskReqModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
+import com.nabobsite.modules.nabob.cms.product.entity.*;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.jeesite.common.web.BaseController;
-import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
-import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,22 +93,22 @@ public class ProductApiController extends BaseController {
 
 	@RequestMapping(value = {"getUserWarehousePersonalIncomeList"})
 	@ApiOperation(value = "用户云仓库个人收入记录")
-	public CommonResult<UserProductWarehouse> getUserWarehousePersonalIncomeList(@PathVariable String warehouseId, HttpServletRequest request) {
+	public CommonResult<UserProductWarehouseLog> getUserWarehousePersonalIncomeList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return productApiService.getUserWarehouseInfo(token,warehouseId);
+		return productApiService.getUserWarehousePersonalIncomeList(token);
 	}
 
 	@RequestMapping(value = {"getUserWarehouseTeamIncomeList"})
 	@ApiOperation(value = "用户云仓库团队收入记录")
-	public CommonResult<UserProductWarehouse> getUserWarehouseTeamIncomeList(@PathVariable String warehouseId, HttpServletRequest request) {
+	public CommonResult<UserProductWarehouseLog> getUserWarehouseTeamIncomeList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return productApiService.getUserWarehouseInfo(token,warehouseId);
+		return productApiService.getUserWarehouseTeamIncomeList(token);
 	}
 
 	@RequestMapping(value = {"getUserWarehouseOperationList"})
 	@ApiOperation(value = "用户云仓库操纵记录")
-	public CommonResult<UserProductWarehouse> getUserWarehouseOperationList(@PathVariable String warehouseId, HttpServletRequest request) {
+	public CommonResult<UserProductWarehouseRecord> getUserWarehouseOperationList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return productApiService.getUserWarehouseInfo(token,warehouseId);
+		return productApiService.getUserWarehouseOperationList(token);
 	}
 }

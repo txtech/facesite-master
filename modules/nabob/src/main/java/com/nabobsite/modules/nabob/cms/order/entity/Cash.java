@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 出款管理Entity
  * @author face
- * @version 2021-05-15
+ * @version 2021-05-17
  */
 @Table(name="t1_cash", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -40,6 +40,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="channel_id", attrName="channelId", label="出款通道"),
+		@Column(name="account_name", attrName="accountName", label="账户名称", queryType=QueryType.LIKE),
+		@Column(name="account_card", attrName="accountCard", label="账户卡号"),
 	}, orderBy="a.id DESC"
 )
 public class Cash extends DataEntity<Cash> {
@@ -58,6 +61,9 @@ public class Cash extends DataEntity<Cash> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private String channelId;		// 出款通道
+	private String accountName;		// 账户名称
+	private String accountCard;		// 账户卡号
 	
 	public Cash() {
 		this(null);
@@ -183,6 +189,33 @@ public class Cash extends DataEntity<Cash> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	
+	@NotBlank(message="出款通道不能为空")
+	@Length(min=0, max=50, message="出款通道长度不能超过 50 个字符")
+	public String getChannelId() {
+		return channelId;
+	}
+
+	public void setChannelId(String channelId) {
+		this.channelId = channelId;
+	}
+	
+	@Length(min=0, max=255, message="账户名称长度不能超过 255 个字符")
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+	
+	public String getAccountCard() {
+		return accountCard;
+	}
+
+	public void setAccountCard(String accountCard) {
+		this.accountCard = accountCard;
 	}
 	
 }

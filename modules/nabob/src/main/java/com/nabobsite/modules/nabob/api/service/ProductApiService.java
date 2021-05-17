@@ -43,6 +43,76 @@ public class ProductApiService extends BaseUserService {
 	private UserProductBotLogDao userProductBotLogDao;
 	@Autowired
 	private UserProductWarehouseDao userProductWarehouseDao;
+	@Autowired
+	private UserProductWarehouseLogDao userProductWarehouseLogDao;
+	@Autowired
+	private UserProductWarehouseRecordDao userProductWarehouseRecordDao;
+	/**
+	 * @desc 用户云仓库个人收入记录
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<UserProductWarehouseLog> getUserWarehousePersonalIncomeList(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
+			userProductWarehouseLog.setUserId(userInfo.getId());
+			userProductWarehouseLog.setType(CommonContact.WAREHOUSE_TYPE_1);
+			UserProductWarehouseLog result = userProductWarehouseLogDao.getByEntity(userProductWarehouseLog);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("用户云仓库产品异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+	/**
+	 * @desc 用户云仓库团队收入记录
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<UserProductWarehouseLog> getUserWarehouseTeamIncomeList(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
+			userProductWarehouseLog.setUserId(userInfo.getId());
+			userProductWarehouseLog.setType(CommonContact.WAREHOUSE_TYPE_2);
+			UserProductWarehouseLog result = userProductWarehouseLogDao.getByEntity(userProductWarehouseLog);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("用户云仓库产品异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+	/**
+	 * @desc 用户云仓库操纵记录
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<UserProductWarehouseRecord> getUserWarehouseOperationList(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			UserProductWarehouseRecord userProductWarehouseRecord = new UserProductWarehouseRecord();
+			userProductWarehouseRecord.setUserId(userInfo.getId());
+			UserProductWarehouseRecord result = userProductWarehouseRecordDao.getByEntity(userProductWarehouseRecord);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("用户云仓库产品异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
 
 	/**
 	 * @desc 云仓库收益提取到余额

@@ -77,6 +77,10 @@ public class CommonContact {
     public final static int USER_TASK_STATUS_2 = 2;
     public final static int USER_TASK_STATUS_3 = 3;
 
+    //用户状态
+    public final static int WAREHOUSE_TYPE_1 = 1;//个人
+    public final static int WAREHOUSE_TYPE_2 = 2;//团队
+
     /**
      * @desc 解析数据库返回接口
      * @author nada
