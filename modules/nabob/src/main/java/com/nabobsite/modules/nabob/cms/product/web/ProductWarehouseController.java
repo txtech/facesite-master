@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.product.web;
 
@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.product.service.ProductWarehouseService;
 /**
  * 产品仓库Controller
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-17
  */
 @Controller
 @RequestMapping(value = "${adminPath}/product/productWarehouse")
@@ -33,7 +33,7 @@ public class ProductWarehouseController extends BaseController {
 
 	@Autowired
 	private ProductWarehouseService productWarehouseService;
-
+	
 	/**
 	 * 获取数据
 	 */
@@ -41,7 +41,7 @@ public class ProductWarehouseController extends BaseController {
 	public ProductWarehouse get(String id, boolean isNewRecord) {
 		return productWarehouseService.get(id, isNewRecord);
 	}
-
+	
 	/**
 	 * 查询列表
 	 */
@@ -51,7 +51,7 @@ public class ProductWarehouseController extends BaseController {
 		model.addAttribute("productWarehouse", productWarehouse);
 		return "cms/product/productWarehouseList";
 	}
-
+	
 	/**
 	 * 查询列表数据
 	 */
@@ -84,7 +84,7 @@ public class ProductWarehouseController extends BaseController {
 		productWarehouseService.save(productWarehouse);
 		return renderResult(Global.TRUE, text("保存产品仓库成功！"));
 	}
-
+	
 	/**
 	 * 删除数据
 	 */
@@ -95,5 +95,5 @@ public class ProductWarehouseController extends BaseController {
 		productWarehouseService.delete(productWarehouse);
 		return renderResult(Global.TRUE, text("删除产品仓库成功！"));
 	}
-
+	
 }

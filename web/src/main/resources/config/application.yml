@@ -9,7 +9,7 @@ demoMode: false
 #======================================#
 #Server settings
 server:
-  port: 9998
+  port: 9999
   servlet:
     context-path: /nabob
   tomcat:

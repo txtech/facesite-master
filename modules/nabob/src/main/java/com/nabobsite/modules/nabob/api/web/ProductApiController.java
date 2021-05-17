@@ -4,6 +4,7 @@
 package com.nabobsite.modules.nabob.api.web;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.model.BotTaskReqModel;
+import com.nabobsite.modules.nabob.api.model.WarehouseTaskReqModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
@@ -33,8 +34,29 @@ public class ProductApiController extends BaseController {
 	@Autowired
 	private ProductApiService productApiService;
 
+	@PostMapping(value = {"doWarehouseDeposit"})
+	@ApiOperation(value = "云仓库产品存款")
+	public CommonResult<Boolean> doWarehouseDeposit(@RequestBody WarehouseTaskReqModel warehouseTaskReqModel, HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return productApiService.doWarehouseDeposit(token,warehouseTaskReqModel);
+	}
+
+	@PostMapping(value = {"doWarehouseWithdraw"})
+	@ApiOperation(value = "云仓库产品定投撤资")
+	public CommonResult<Boolean> doWarehouseWithdraw(@RequestBody WarehouseTaskReqModel warehouseTaskReqModel, HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return productApiService.doWarehouseWithdraw(token,warehouseTaskReqModel);
+	}
+
+	@PostMapping(value = {"doWarehouseToBalance"})
+	@ApiOperation(value = "云仓库收益提取到余额")
+	public CommonResult<Boolean> doWarehouseToBalance(@RequestBody WarehouseTaskReqModel warehouseTaskReqModel, HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return productApiService.doWarehouseToBalance(token,warehouseTaskReqModel);
+	}
+
 	@PostMapping(value = {"doBotTask"})
-	@ApiOperation(value = "产品刷单接口")
+	@ApiOperation(value = "无人机产品刷单接口")
 	public CommonResult<Boolean> doBotTask(@RequestBody BotTaskReqModel botTaskReqModel, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.doBotTask(token,botTaskReqModel);

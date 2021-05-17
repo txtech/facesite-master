@@ -7,6 +7,7 @@ import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.api.model.BotTaskReqModel;
+import com.nabobsite.modules.nabob.api.model.WarehouseTaskReqModel;
 import com.nabobsite.modules.nabob.cms.product.dao.*;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.plaf.basic.BasicMenuItemUI;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -41,6 +43,126 @@ public class ProductApiService extends BaseUserService {
 	private UserProductBotLogDao userProductBotLogDao;
 	@Autowired
 	private UserProductWarehouseDao userProductWarehouseDao;
+
+	/**
+	 * @desc 云仓库收益提取到余额
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> doWarehouseToBalance(String token, WarehouseTaskReqModel warehouseTaskReqModel) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo== null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			String userId = userInfo.getId();
+			String warehouseId = warehouseTaskReqModel.getWarehouseId();
+			BigDecimal amount = warehouseTaskReqModel.getAmount();
+			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
+			if(productWarehouse == null){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			BigDecimal limitPrice = productWarehouse.getLimitPrice();
+			if(CommonContact.isLesser(amount,limitPrice)){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			synchronized (userId){
+				UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
+				userProductWarehouse.setUserId(userId);
+				userProductWarehouse.setWarehouseId(warehouseId);
+				userProductWarehouse.setAsstesHeldMoney(amount);
+				long dbResult = userProductWarehouseDao.insert(userProductWarehouse);
+				if(CommonContact.dbResult(dbResult)){
+					return ResultUtil.success(true);
+				}
+				return ResultUtil.failed(I18nCode.CODE_10004);
+			}
+		} catch (Exception e) {
+			logger.error("云仓库收益提取到余额异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 云仓库产品定投撤资
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> doWarehouseWithdraw(String token, WarehouseTaskReqModel warehouseTaskReqModel) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo== null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			String userId = userInfo.getId();
+			String warehouseId = warehouseTaskReqModel.getWarehouseId();
+			BigDecimal amount = warehouseTaskReqModel.getAmount();
+			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
+			if(productWarehouse == null){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			BigDecimal limitPrice = productWarehouse.getLimitPrice();
+			if(CommonContact.isLesser(amount,limitPrice)){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			synchronized (userId){
+				UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
+				userProductWarehouse.setUserId(userId);
+				userProductWarehouse.setWarehouseId(warehouseId);
+				userProductWarehouse.setAsstesHeldMoney(amount);
+				long dbResult = userProductWarehouseDao.insert(userProductWarehouse);
+				if(CommonContact.dbResult(dbResult)){
+					return ResultUtil.success(true);
+				}
+				return ResultUtil.failed(I18nCode.CODE_10004);
+			}
+		} catch (Exception e) {
+			logger.error("云仓库产品任务异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 云仓库产品存款
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> doWarehouseDeposit(String token, WarehouseTaskReqModel warehouseTaskReqModel) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo== null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			String userId = userInfo.getId();
+			String warehouseId = warehouseTaskReqModel.getWarehouseId();
+			BigDecimal amount = warehouseTaskReqModel.getAmount();
+			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
+			if(productWarehouse == null){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			BigDecimal limitPrice = productWarehouse.getLimitPrice();
+			if(CommonContact.isLesser(amount,limitPrice)){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			synchronized (userId) {
+				UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
+				userProductWarehouse.setUserId(userId);
+				userProductWarehouse.setWarehouseId(warehouseId);
+				userProductWarehouse.setAsstesHeldMoney(amount);
+				long dbResult = userProductWarehouseDao.insert(userProductWarehouse);
+				if(CommonContact.dbResult(dbResult)){
+					return ResultUtil.success(true);
+				}
+				return ResultUtil.failed(I18nCode.CODE_10004);
+			}
+		} catch (Exception e) {
+			logger.error("云仓库产品任务异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
 
 	/**
 	 * @desc 无人机产品做任务
@@ -161,23 +283,6 @@ public class ProductApiService extends BaseUserService {
 	}
 
 	/**
-	 * @desc 获取无人机产品详情
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public ProductBot getProductBotInfoById(String id) {
-		try {
-			ProductBot productBotInfo = new ProductBot();
-			productBotInfo.setId(id);
-			return productBotDao.getByEntity(productBotInfo);
-		} catch (Exception e) {
-			logger.error("获取无人机产品详情异常,{}",id,e);
-			return null;
-		}
-	}
-
-	/**
 	 * @desc 用户无人机产品
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
@@ -220,6 +325,41 @@ public class ProductApiService extends BaseUserService {
 		} catch (Exception e) {
 			logger.error("用户云仓库产品异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+
+	/**
+	 * @desc 获取云仓库产品详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public ProductWarehouse getProductWarehouseById(String id) {
+		try {
+			ProductWarehouse productWarehouse = new ProductWarehouse();
+			productWarehouse.setId(id);
+			return productWarehouseDao.getByEntity(productWarehouse);
+		} catch (Exception e) {
+			logger.error("获取云仓库产品详情异常,{}",id,e);
+			return null;
+		}
+	}
+
+	/**
+	 * @desc 获取无人机产品详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public ProductBot getProductBotInfoById(String id) {
+		try {
+			ProductBot productBotInfo = new ProductBot();
+			productBotInfo.setId(id);
+			return productBotDao.getByEntity(productBotInfo);
+		} catch (Exception e) {
+			logger.error("获取无人机产品详情异常,{}",id,e);
+			return null;
 		}
 	}
 }
