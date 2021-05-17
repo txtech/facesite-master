@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @author nada
  * @create 2021/5/12 5:40 下午
 */
-public class UserRegisterTrigger extends TriggerOperation {
+public class UserProfitTrigger extends TriggerOperation {
 
 	private UserInfoDao userInfoDao;
 	private UserAccountDao userAccountDao;
 	private TriggerPoolManagerImpl triggerPoolManager;
 
-	public UserRegisterTrigger(String userId,UserInfoDao userInfoDao,UserAccountDao userAccountDao,TriggerPoolManagerImpl triggerPoolManager) {
+	public UserProfitTrigger(String userId, UserInfoDao userInfoDao, UserAccountDao userAccountDao, TriggerPoolManagerImpl triggerPoolManager) {
 		super(userId);
 		this.userId = userId;
 		this.userInfoDao = userInfoDao;

@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
@@ -30,6 +31,8 @@ public class UserAccountApiService extends BaseUserService {
 	private UserAccountLogDao userAccountLogDao;
 	@Autowired
 	private UserAccountDetailDao userAccountDetailDao;
+	@Autowired
+	private TriggerApiService triggerApiService;
 
 	/**
 	 * @desc 获取用户账户
@@ -77,6 +80,7 @@ public class UserAccountApiService extends BaseUserService {
 					logger.error("修改账户总余额失败,修改账户失败:{},{}",userId,updateMoney);
 					return false;
 				}
+				triggerApiService.balanceTrigger(userId,updateMoney);
 				return true;
 			}
 		} catch (Exception e) {

@@ -5,10 +5,9 @@ import com.nabobsite.modules.nabob.api.common.task.UserBalanceTrigger;
 import com.nabobsite.modules.nabob.api.common.task.UserRegisterTrigger;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerPoolManagerImpl;
 import com.nabobsite.modules.nabob.api.common.trigger.TriggerThread;
-import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysI18nDao;
+import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
-import com.nabobsite.modules.nabob.config.InitializationCommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +28,21 @@ public class TriggerApiService {
     @Autowired
     private UserInfoDao userInfoDao;
     @Autowired
-    private SysI18nDao sysI18nDao;
+    private UserAccountDao userAccountDao;
     @Autowired
-    private UserAccountApiService userAccountApiService;
+    private SysI18nDao sysI18nDao;
     @Autowired
     private TriggerPoolManagerImpl triggerPoolManager;
 
     /**
-     * @desc 用户余额触发器
+     * @desc 系统启动触发器
      * @author nada
      * @create 2021/5/11 10:33 下午
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void systemStartTrigger() {
         logger.info("系统启动成功,开始加载数据到内存");
-        TriggerThread callback = new InitLoadDbDataTrigger(sysI18nDao);
+        TriggerThread callback = new InitLoadDbDataTrigger(sysI18nDao,userInfoDao);
         triggerPoolManager.submit(callback);
     }
 
@@ -54,7 +53,7 @@ public class TriggerApiService {
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void registerTrigger(String userId) {
-        TriggerThread callback = new UserRegisterTrigger(userId, userInfoDao, userAccountApiService, triggerPoolManager);
+        TriggerThread callback = new UserRegisterTrigger(userId, userInfoDao, userAccountDao, triggerPoolManager);
         triggerPoolManager.submit(callback);
     }
 
@@ -64,8 +63,8 @@ public class TriggerApiService {
      * @create 2021/5/11 10:33 下午
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
-    public void balanceTrigger(String userId, BigDecimal payMoney) {
-        TriggerThread callback = new UserBalanceTrigger(userId, payMoney, userInfoDao, userAccountApiService);
+    public void balanceTrigger(String userId, BigDecimal updateMoney) {
+        TriggerThread callback = new UserBalanceTrigger(userId, updateMoney, userInfoDao, userAccountDao);
         triggerPoolManager.submit(callback);
     }
 }

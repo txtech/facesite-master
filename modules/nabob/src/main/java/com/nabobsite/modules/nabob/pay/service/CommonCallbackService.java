@@ -26,8 +26,6 @@ import java.math.BigDecimal;
 public class CommonCallbackService extends CrudService<OrderDao, Order> {
 
 	@Autowired
-	private TriggerApiService triggerApiService;
-	@Autowired
 	private OrderApiService orderApiService;
 	@Autowired
 	private UserAccountApiService userAccountApiService;
@@ -111,9 +109,6 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 			if(!isOk){
 				logger.error("充值订单回调失败,更新账户失败:{},{}",orderNo,pOrderNo);
 				return false;
-			}
-			if(type == CommonContact.ORDER_TYPE_RECHANGE){
-				triggerApiService.balanceTrigger(userId,payMoney);
 			}
 			return true;
 		} catch (Exception e) {

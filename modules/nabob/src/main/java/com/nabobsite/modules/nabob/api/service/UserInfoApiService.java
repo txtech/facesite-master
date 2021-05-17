@@ -8,10 +8,7 @@ import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.I18nUtils;
-import com.nabobsite.modules.nabob.api.entity.InstanceContact;
-import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
+import com.nabobsite.modules.nabob.api.entity.*;
 import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
@@ -30,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,7 +42,7 @@ public class UserInfoApiService extends BaseUserService {
 
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
-	private UserAccountDao userAccountDao;
+	private UserAccountApiService userAccountApiService;
 	@Autowired
 	private SequenceService sequenceService;
 	@Autowired
@@ -308,6 +306,12 @@ public class UserInfoApiService extends BaseUserService {
 						this.updateUserLang(userId,lang);
 					}
 					Boolean isOk = this.saveInitUserAccount(userId);
+					if(!isOk){
+						return ResultUtil.failed(I18nCode.CODE_104);
+					}
+					//注册新用户送奖励
+					BigDecimal rewardMoney = LogicStaticContact.USER_REGISTER_REWARD;
+					isOk = userAccountApiService.updateAccountBalance(userId,rewardMoney,userId,CommonContact.USER_ACCOUNT_DETAIL_TITLE_2);
 					if(isOk){
 						triggerApiService.registerTrigger(userId);
 					}

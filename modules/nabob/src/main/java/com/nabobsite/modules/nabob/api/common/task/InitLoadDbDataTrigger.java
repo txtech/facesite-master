@@ -4,6 +4,8 @@ import com.nabobsite.modules.nabob.api.common.trigger.TriggerOperation;
 import com.nabobsite.modules.nabob.api.entity.I18nUtils;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysI18nDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysI18n;
+import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,10 +19,12 @@ import java.util.Map;
 public class InitLoadDbDataTrigger extends TriggerOperation {
 
 	private SysI18nDao sysI18nDao;
+	private UserInfoDao userInfoDao;
 
-	public InitLoadDbDataTrigger(SysI18nDao sysI18nDao) {
+	public InitLoadDbDataTrigger(SysI18nDao sysI18nDao,UserInfoDao userInfoDao) {
 		super("");
 		this.sysI18nDao = sysI18nDao;
+		this.userInfoDao = userInfoDao;
 	}
 
 	@Override
@@ -43,6 +47,13 @@ public class InitLoadDbDataTrigger extends TriggerOperation {
 		I18nUtils.LOCAL_CACHE.put(I18nUtils.LANG_EN,enUSMap);
 		I18nUtils.LOCAL_CACHE.put(I18nUtils.LANG_IN,enINMap);
 		I18nUtils.LOCAL_CACHE.put(I18nUtils.LANG_ZH,zhCNMap);
+
+		List<UserInfo> userInfoList = userInfoDao.findList(new UserInfo());
+		for (UserInfo userInfo : userInfoList) {
+			String userId = userInfo.getId();
+			String lang = I18nUtils.getUserLang(userInfo.getLang());
+			I18nUtils.USER_LANG_CACHE.put(userId,lang);
+		}
 	}
 
 	public SysI18nDao getSysI18nDao() {
