@@ -3,7 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.model.req.BotTaskReqModel;
+import com.nabobsite.modules.nabob.api.model.BotTaskReqModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;

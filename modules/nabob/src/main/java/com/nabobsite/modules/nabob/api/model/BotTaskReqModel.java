@@ -1,10 +1,11 @@
-package com.nabobsite.modules.nabob.api.model.req;
+package com.nabobsite.modules.nabob.api.model;
 
 import com.jeesite.common.lang.ObjectUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @ClassName nada
@@ -19,6 +20,14 @@ public class BotTaskReqModel implements Serializable {
     private String botId;
     @ApiModelProperty("订单号")
     private String orderNo;
+    @ApiModelProperty("订单金额")
+    private String orderAmount;
+    @ApiModelProperty("订单收益")
+    private String incomeMoney;
+    @ApiModelProperty("订单收益比例")
+    private String incomeRate;
+    @ApiModelProperty("orderTime")
+    private String orderTime;
     @ApiModelProperty("请求IP")
     private String reqIp;
 
@@ -49,5 +58,37 @@ public class BotTaskReqModel implements Serializable {
 
     public void setReqIp(String reqIp) {
         this.reqIp = reqIp;
+    }
+
+    public String getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(String orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    public String getIncomeMoney() {
+        return incomeMoney;
+    }
+
+    public void setIncomeMoney(String incomeMoney) {
+        this.incomeMoney = incomeMoney;
+    }
+
+    public String getIncomeRate() {
+        return incomeRate;
+    }
+
+    public void setIncomeRate(String incomeRate) {
+        this.incomeRate = incomeRate;
+    }
+
+    public String getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(String orderTime) {
+        this.orderTime = orderTime;
     }
 }

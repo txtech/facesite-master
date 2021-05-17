@@ -6,18 +6,13 @@ package com.nabobsite.modules.nabob.api.service;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
-import com.nabobsite.modules.nabob.api.model.req.BotTaskReqModel;
-import com.nabobsite.modules.nabob.cms.product.dao.ProductBotDao;
-import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
-import com.nabobsite.modules.nabob.cms.product.dao.UserProductBotDao;
-import com.nabobsite.modules.nabob.cms.product.dao.UserProductWarehouseDao;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
-import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
-import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouse;
+import com.nabobsite.modules.nabob.api.model.BotTaskReqModel;
+import com.nabobsite.modules.nabob.cms.product.dao.*;
+import com.nabobsite.modules.nabob.cms.product.entity.*;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +37,8 @@ public class ProductApiService extends BaseUserService {
 	private UserAccountApiService userAccountApiService;
 	@Autowired
 	private UserProductBotDao userProductBotDao;
+	@Autowired
+	private UserProductBotLogDao userProductBotLogDao;
 	@Autowired
 	private UserProductWarehouseDao userProductWarehouseDao;
 
@@ -70,6 +67,13 @@ public class ProductApiService extends BaseUserService {
 				BigDecimal productBotPrice = productBot.getPrice();
 				if(userLevel < mustLevel){
 					return ResultUtil.failed("任务失败,当前等级不符合要求");
+				}
+				UserProductBotLog userProductBotLog = new UserProductBotLog();
+				BeanUtils.copyProperties(botTaskReqModel, userProductBotLog);
+				userProductBotLog.setUserId(userId);
+				long dbResult = userProductBotLogDao.insert(userProductBotLog);
+				if(CommonContact.dbResult(dbResult)){
+					return ResultUtil.failed("任务失败,保存记录失败");
 				}
 				String title = CommonContact.USER_ACCOUNT_DETAIL_TITLE_4;
 				//增值比例
