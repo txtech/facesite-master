@@ -109,6 +109,30 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('团队收益')}：</label>
+					<div class="control-inline">
+						<#form:input path="teamMoney" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('一级团队收益')}：</label>
+					<div class="control-inline">
+						<#form:input path="team1Money" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('二级团队收益')}：</label>
+					<div class="control-inline">
+						<#form:input path="team2Money" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('三级团队收益')}：</label>
+					<div class="control-inline">
+						<#form:input path="team3Money" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -141,6 +165,10 @@ $('#dataGrid').dataGrid({
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
+		{header:'${text("团队收益")}', name:'teamMoney', index:'a.team_money', width:150, align:"left"},
+		{header:'${text("一级团队收益")}', name:'team1Money', index:'a.team1_money', width:150, align:"left"},
+		{header:'${text("二级团队收益")}', name:'team2Money', index:'a.team2_money', width:150, align:"left"},
+		{header:'${text("三级团队收益")}', name:'team3Money', index:'a.team3_money', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:userAccount:edit')){ %>

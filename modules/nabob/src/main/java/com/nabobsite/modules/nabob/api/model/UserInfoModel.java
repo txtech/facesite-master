@@ -30,7 +30,7 @@ public class UserInfoModel implements Serializable {
     @ApiModelProperty("旧密码")
     private String oldPassword;
     @ApiModelProperty("新密码")
-    private String password;
+    private String newPassword;
     @ApiModelProperty("邀请码")
     private String inviteCode;
     @ApiModelProperty("会话令牌")
@@ -88,14 +88,6 @@ public class UserInfoModel implements Serializable {
 
     public void setAccountNo(String accountNo) {
         this.accountNo = accountNo;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getInviteCode() {
@@ -168,5 +160,13 @@ public class UserInfoModel implements Serializable {
 
     public void setSmsCode(String smsCode) {
         this.smsCode = smsCode;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户控制
@@ -41,6 +42,13 @@ public class UserApiController extends BaseController {
 	public CommonResult<UserInfoModel> getUserInfo(HttpServletRequest request){
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return userInfoApiService.getUserInfo(token);
+	}
+
+	@ApiOperation(value = "用户获取直接团队列表")
+	@PostMapping(value = {"getUserDirectTeamList"})
+	public CommonResult<List<UserInfoModel>> getUserDirectTeamList(HttpServletRequest request){
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return userInfoApiService.getUserDirectTeamList(token);
 	}
 
 	@PostMapping(value = {"updatePwd"})

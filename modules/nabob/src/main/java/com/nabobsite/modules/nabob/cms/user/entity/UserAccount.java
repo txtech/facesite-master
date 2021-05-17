@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户账户Entity
  * @author face
- * @version 2021-05-15
+ * @version 2021-05-17
  */
 @Table(name="t1_user_account", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -41,6 +41,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="team_money", attrName="teamMoney", label="团队收益"),
+		@Column(name="team1_money", attrName="team1Money", label="一级团队收益"),
+		@Column(name="team2_money", attrName="team2Money", label="二级团队收益"),
+		@Column(name="team3_money", attrName="team3Money", label="三级团队收益"),
 	}, orderBy="a.id DESC"
 )
 public class UserAccount extends DataEntity<UserAccount> {
@@ -60,6 +64,10 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private BigDecimal teamMoney;		// 团队收益
+	private BigDecimal team1Money;		// 一级团队收益
+	private BigDecimal team2Money;		// 二级团队收益
+	private BigDecimal team3Money;		// 三级团队收益
 	
 	public UserAccount() {
 		this(null);
@@ -194,6 +202,42 @@ public class UserAccount extends DataEntity<UserAccount> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	
+	@NotNull(message="团队收益不能为空")
+	public BigDecimal getTeamMoney() {
+		return teamMoney;
+	}
+
+	public void setTeamMoney(BigDecimal teamMoney) {
+		this.teamMoney = teamMoney;
+	}
+	
+	@NotNull(message="一级团队收益不能为空")
+	public BigDecimal getTeam1Money() {
+		return team1Money;
+	}
+
+	public void setTeam1Money(BigDecimal team1Money) {
+		this.team1Money = team1Money;
+	}
+	
+	@NotNull(message="二级团队收益不能为空")
+	public BigDecimal getTeam2Money() {
+		return team2Money;
+	}
+
+	public void setTeam2Money(BigDecimal team2Money) {
+		this.team2Money = team2Money;
+	}
+	
+	@NotNull(message="三级团队收益不能为空")
+	public BigDecimal getTeam3Money() {
+		return team3Money;
+	}
+
+	public void setTeam3Money(BigDecimal team3Money) {
+		this.team3Money = team3Money;
 	}
 	
 }

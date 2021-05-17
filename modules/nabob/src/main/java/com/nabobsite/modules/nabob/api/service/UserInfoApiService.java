@@ -13,6 +13,7 @@ import com.nabobsite.modules.nabob.api.model.UserInfoModel;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.interceptor.I18nInterceptor;
@@ -28,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -60,7 +63,7 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			String smsCode = userInfoModel.getSmsCode();
 			String accountNo = userInfoModel.getAccountNo();
-			String newPassword = userInfoModel.getPassword();
+			String newPassword = userInfoModel.getNewPassword();
 			if(StringUtils.isAnyEmpty(accountNo,smsCode,newPassword)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
@@ -97,7 +100,7 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			String accountNo = userInfoModel.getAccountNo();
 			String oldPassword = userInfoModel.getOldPassword();
-			String newPassword = userInfoModel.getPassword();
+			String newPassword = userInfoModel.getNewPassword();
 			if(StringUtils.isAnyEmpty(accountNo,oldPassword,newPassword)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
@@ -194,6 +197,37 @@ public class UserInfoApiService extends BaseUserService {
 	}
 
 	/**
+	 * @desc 获取用户详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<List<UserInfoModel>> getUserDirectTeamList(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			UserInfo parms = new UserInfo();
+			parms.setParent1UserId(userInfo.getId());
+			List<UserInfo> userInfoList = userInfoDao.findList(parms);
+			if(userInfoList == null || userInfoList.isEmpty()){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			List<UserInfoModel> userInfoModelList = new ArrayList<>();
+			for (UserInfo userInfo1 : userInfoList) {
+				UserInfoModel userInfoModel1 = new UserInfoModel();
+				BeanUtils.copyProperties(userInfo1,userInfoModel1);
+				userInfoModelList.add(userInfoModel1);
+			}
+			return ResultUtil.success(userInfoModelList);
+		} catch (Exception e) {
+			logger.error("获取用户详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
 	 * @desc 用户登陆
 	 * @author nada
 	 * @create 2021/5/11 10:13 下午
@@ -207,7 +241,7 @@ public class UserInfoApiService extends BaseUserService {
 			String lang = userInfoModel.getLang();
 			String loginIp = userInfoModel.getLoginIp();
 			String accountNo = userInfoModel.getAccountNo();
-			String password = userInfoModel.getPassword();
+			String password = userInfoModel.getNewPassword();
 			if(StringUtils.isAnyBlank(accountNo,password)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
@@ -262,7 +296,7 @@ public class UserInfoApiService extends BaseUserService {
 			}
 			String lang = userInfoModel.getLang();
 			String accountNo = userInfoModel.getAccountNo();
-			String password = userInfoModel.getPassword();
+			String password = userInfoModel.getNewPassword();
 			String inviteSecret = userInfoModel.getInviteSecret();
 			String parentInviteCode = userInfoModel.getInviteCode();
 			if(StringUtils.isAnyBlank(accountNo,password)){

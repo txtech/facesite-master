@@ -71,6 +71,10 @@ public class InstanceContact {
             userAccount.setIncrementMoney(new BigDecimal("0"));
             userAccount.setCommissionMoney(new BigDecimal("0"));
             userAccount.setClaimableMoney(new BigDecimal("0"));
+            userAccount.setTeamMoney(new BigDecimal("0"));
+            userAccount.setTeam1Money(new BigDecimal("0"));
+            userAccount.setTeam2Money(new BigDecimal("0"));
+            userAccount.setTeam3Money(new BigDecimal("0"));
             userAccount.setRewardMoney(LogicStaticContact.USER_TACK_BASE_MONEY);
             userAccount.setAccountStatus(CommonContact.USER_ACCOUNT_STATUS_OK);
             return userAccount;
