@@ -33,58 +33,17 @@ public class RedisPrefixContant {
     /**
      * 商城用户缓存+ID
      */
-    public final static String FRONT_USER_INFO_CACHE = "front:user:info:id:";
+    public final static String FRONT_USER_SMS_CODE_CACHE = "front:user:sms:code:";
     /**
      * 商城用户缓存+ID
      */
     public final static String FRONT_USER_TOKEN_INFO_CACHE = "front:member:info:token:";
 
-    /**
-     * 商城产品详情缓存+ID
-     */
-    public final static String FRONT_PRODUCT_INFO_CACHE = "front:product:info:id:";
-    /**
-     * 商城面板结构缓存
-     */
-    public final static String FRONT_HOME_PANEL_CACHE = "front:home:panel:position:";
-    /**
-     * 商城面板和产品缓存
-     */
-    public final static String FRONT_PRODUCT_PANEL_CACHE = "front:product:panel:position:";
-    /**
-     * 商城专题导航栏缓存
-     */
-    public final static String FRONT_PRODUCT_PANEL_SPECIAL_CACHE = "front:product:panel:panelId:";
-    /**
-     * 商城产品二级所有分类+cid
-     */
-    public final static String FRONT_PRODUCT_CATEGORY_SUB_CACHE = "front:product:category:sub:cid:";
-    /**
-     * 商城产品所有分类+parentId + cid
-     */
-    public final static String FRONT_PRODUCT_CATEGORY_CACHE = "front:product:category:parentid:cid:";
-    /**
-     * 商城系统设置缓存
-     */
-    public final static String FRONT_HOME_SYSTEM_CACHE = "front:home:system:list";
-    /**
-     * 商城系统设置缓存
-     */
-    public final static String FRONT_HOME_SYSTEM_INFO_CACHE = "front:home:system:info:id";
-
-    /**
-     * 运营后台产品详情缓存+ID
-     */
-    public final static String CMS_PANEL_NODE_CACHE = "cms:panel:node:position:";
-    /**
-     * 运营后台会员缓存+ID
-     */
-    public final static String CMS_MEMBER_INFO_CACHE = "cms:member:info:id:";
-
 
     public static String getTokenUserKey(String token){
         return RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+token;
     }
+
     public static String getUserTokenKey(String userId){
         return RedisPrefixContant.FRONT_USER_TOKEN_INFO_CACHE+userId;
     }
