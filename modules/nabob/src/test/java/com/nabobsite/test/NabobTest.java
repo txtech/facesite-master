@@ -63,6 +63,35 @@ public class NabobTest {
     }
 
     @Test
+    public void forgetPwd(){
+        String url = baseReqUrl + "open/forgetPwd";
+        JSONObject param = new JSONObject();
+        param.put("accountNo", "15118135523");
+        param.put("password", "123456");
+        param.put("smsCode", "123456");
+        String result = HttpRequest.post(url)
+                .body(param.toString())
+                .header("Content-Type","application/json")
+                .header("Authorization",Authorization)
+                .execute().body();
+        System.out.println(result);
+    }
+
+    @Test
+    public void checkSmsCode(){
+        String url = baseReqUrl + "open/checkSmsCode";
+        JSONObject param = new JSONObject();
+        param.put("phoneNumber", "15118135523");
+        param.put("smsCode", "654321");
+        String result = HttpRequest.post(url)
+                .body(param.toString())
+                .header("Content-Type","application/json")
+                .header("Authorization",Authorization)
+                .execute().body();
+        System.out.println(result);
+    }
+
+    @Test
     public void logout(){
         String url = baseReqUrl + "user/logout";
         String result = HttpRequest.post(url)

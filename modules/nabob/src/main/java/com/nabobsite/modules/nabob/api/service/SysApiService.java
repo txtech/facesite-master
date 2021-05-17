@@ -73,7 +73,10 @@ public class SysApiService extends BaseUserService {
 			String phoneNumber = smsModel.getPhoneNumber();
 			String smsCode = smsModel.getSmsCode();
 			Boolean isOk = this.verifSmsCode(phoneNumber,smsCode);
-			return ResultUtil.success(isOk);
+			if(isOk){
+				return ResultUtil.success(isOk);
+			}
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
 			logger.error("验证短信验证码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

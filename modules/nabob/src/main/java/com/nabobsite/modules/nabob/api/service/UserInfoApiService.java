@@ -65,7 +65,7 @@ public class UserInfoApiService extends BaseUserService {
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			Boolean isOk = sysApiService.verifSmsCode(accountNo,smsCode);
-			if(isOk){
+			if(!isOk){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserInfo oldUserInfo = this.getUserInfoByAccountNo(accountNo);
