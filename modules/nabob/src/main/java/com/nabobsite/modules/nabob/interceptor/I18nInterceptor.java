@@ -50,14 +50,14 @@ public class I18nInterceptor implements HandlerInterceptor {
             String token = request.getHeader("Authorization");
             if(StringUtils.isEmpty(token)){
                 logger.error("请求被拦截，获取授权信息为空:{},{},{}",token,ip,reqUrl);
-                this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_103,"User not authorized"));
+                this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_10003,"User not authorized"));
                 return false;
             }
             String newTokenKey = RedisPrefixContant.getTokenUserKey(token);
             String userId = (String) redisOpsUtil.get(newTokenKey);
             if(StringUtils.isEmpty(userId)){
                 logger.error("请求被拦截，获取授权用户为空:{},{}",token,ip);
-                this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_103,"User not authorized！"));
+                this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_10003,"User not authorized！"));
                 return false;
             }
             String lang = I18nUtils.getUserLang(userId);
@@ -69,7 +69,7 @@ public class I18nInterceptor implements HandlerInterceptor {
             return true;
         } catch (Exception e) {
            logger.error("拦截器准备发生异常",e);
-            this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_102,"Authorization error！"));
+            this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_10002,"Authorization error！"));
             return false;
         }
     }

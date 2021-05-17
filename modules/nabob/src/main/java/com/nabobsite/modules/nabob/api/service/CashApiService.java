@@ -39,7 +39,7 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 			return ResultUtil.success(cash);
 		} catch (Exception e) {
 			logger.error("提款订单异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取提款订单列表异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -71,7 +71,7 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取提款订单详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 }

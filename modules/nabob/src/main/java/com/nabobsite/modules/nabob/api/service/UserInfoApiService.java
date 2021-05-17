@@ -60,11 +60,11 @@ public class UserInfoApiService extends BaseUserService {
 			String oldPassword = userInfoModel.getOldPassword();
 			String newPassword = userInfoModel.getPassword();
 			if(StringUtils.isAnyEmpty(accountNo,oldPassword,newPassword)){
-				return ResultUtil.failed(I18nCode.CODE_107);
+				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			UserInfo oldUserInfo = this.getUserInfoByToken(token);
 			if(oldUserInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_105);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			if (oldPassword.equalsIgnoreCase(newPassword)) {
 				return ResultUtil.failed("修改失败,新旧密码不能一样");
@@ -86,10 +86,10 @@ public class UserInfoApiService extends BaseUserService {
 				this.logout(token);
 				return ResultUtil.success(true);
 			}
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
 			logger.error("用户修改密码异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -105,7 +105,7 @@ public class UserInfoApiService extends BaseUserService {
 			return ResultUtil.success(Boolean.TRUE);
 		} catch (Exception e) {
 			logger.error("用户退出异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -119,7 +119,7 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_105);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("pid",userInfo.getId());
@@ -128,7 +128,7 @@ public class UserInfoApiService extends BaseUserService {
 			return ResultUtil.success(registerUrl);
 		} catch (Exception e) {
 			logger.error("获取邀请好友链接异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -142,7 +142,7 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_105);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			userInfo.setPassword("");
 			UserInfoModel result = new UserInfoModel();
@@ -150,7 +150,7 @@ public class UserInfoApiService extends BaseUserService {
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取用户详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -163,21 +163,21 @@ public class UserInfoApiService extends BaseUserService {
 	public CommonResult<UserInfoModel> login(UserInfoModel userInfoModel) {
 		try {
 			if(userInfoModel == null){
-				return ResultUtil.failed(I18nCode.CODE_107);
+				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			String lang = userInfoModel.getLang();
 			String loginIp = userInfoModel.getLoginIp();
 			String accountNo = userInfoModel.getAccountNo();
 			String password = userInfoModel.getPassword();
 			if(StringUtils.isAnyBlank(accountNo,password)){
-				return ResultUtil.failed(I18nCode.CODE_107);
+				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			UserInfo loginUserInfo = this.getUserInfoByAccountNo(accountNo);
 			if(loginUserInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_105);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(loginUserInfo.getPassword())) {
-				return ResultUtil.failed(I18nCode.CODE_107);
+				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			String userId = loginUserInfo.getId();
 			String newToken = UUID.randomUUID().toString().replaceAll("-","");
@@ -203,10 +203,10 @@ public class UserInfoApiService extends BaseUserService {
 				this.updateLoginIp(userId,loginIp);
 				return ResultUtil.success(result);
 			}
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
 			logger.error("用户登陆异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -219,7 +219,7 @@ public class UserInfoApiService extends BaseUserService {
 	public CommonResult<Boolean> register(UserInfoModel userInfoModel) {
 		try {
 			if(userInfoModel == null){
-				return ResultUtil.failed(I18nCode.CODE_107);
+				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			String lang = userInfoModel.getLang();
 			String accountNo = userInfoModel.getAccountNo();
@@ -227,10 +227,10 @@ public class UserInfoApiService extends BaseUserService {
 			String inviteSecret = userInfoModel.getInviteSecret();
 			String parentInviteCode = userInfoModel.getInviteCode();
 			if(StringUtils.isAnyBlank(accountNo,password)){
-				return ResultUtil.failed(I18nCode.CODE_107);
+				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			if(accountNo.length() < 10 || password.length()<6 || accountNo.length() > 15 || password.length() > 20){
-				return ResultUtil.failed(I18nCode.CODE_107);
+				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 
 			UserInfo userInfo = new UserInfo();
@@ -239,13 +239,13 @@ public class UserInfoApiService extends BaseUserService {
 			synchronized (accountNo){
 				UserInfo checkUserInfo = this.getUserInfoByAccountNo(accountNo);
 				if(checkUserInfo !=null){
-					return ResultUtil.failed(I18nCode.CODE_108);
+					return ResultUtil.failed(I18nCode.CODE_10008);
 				}
 				//邀请码信息
 				if(StringUtils.isNotEmpty(parentInviteCode)){
 					UserInfo inviteCodeUserInfo = this.getUserInfoByInviteCode(parentInviteCode);
 					if(inviteCodeUserInfo == null){
-						return ResultUtil.failed(I18nCode.CODE_107);
+						return ResultUtil.failed(I18nCode.CODE_10007);
 					}
 					String parent1UserId = inviteCodeUserInfo.getId();
 					String parentSysId = inviteCodeUserInfo.getParentSysId();
@@ -307,7 +307,7 @@ public class UserInfoApiService extends BaseUserService {
 					}
 					Boolean isOk = this.saveInitUserAccount(userId);
 					if(!isOk){
-						return ResultUtil.failed(I18nCode.CODE_104);
+						return ResultUtil.failed(I18nCode.CODE_10004);
 					}
 					//注册新用户送奖励
 					BigDecimal rewardMoney = LogicStaticContact.USER_REGISTER_REWARD;
@@ -317,11 +317,11 @@ public class UserInfoApiService extends BaseUserService {
 					}
 					return ResultUtil.success(Boolean.TRUE);
 				}
-				return ResultUtil.failed(I18nCode.CODE_104);
+				return ResultUtil.failed(I18nCode.CODE_10004);
 			}
 		} catch (Exception e) {
 			logger.error("用户注册异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -335,14 +335,14 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			SysConfig sysConfig = this.getSysConfigByKey(CommonContact.SYS_KEY_COUNTDOWN_TIME);
 			if(sysConfig == null){
-				return ResultUtil.failed(I18nCode.CODE_106);
+				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
 			JSONObject configJson = new JSONObject();
 			configJson.put("countDown",sysConfig.getValue());
 			return ResultUtil.success(configJson);
 		} catch (Exception e) {
 			logger.error("获取系统配置异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -356,17 +356,17 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			UserInfo oldUserInfo = this.getUserInfoByToken(token);
 			if(oldUserInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_105);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = oldUserInfo.getId();
 			Boolean isOk = this.updateUserLang(userId,lang);
 			if(isOk){
 				return ResultUtil.success(true);
 			}
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
 			logger.error("用户设置语言异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 }

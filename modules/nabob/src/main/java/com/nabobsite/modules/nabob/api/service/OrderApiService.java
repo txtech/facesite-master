@@ -47,14 +47,14 @@ public class OrderApiService extends BaseUserService {
 			String phoneNumber = orderInfoModel.getPhoneNumber();
 			BigDecimal payMoney = orderInfoModel.getPayMoney();
 			if(StringUtils.isAnyEmpty(token,name,email,phoneNumber)){
-				return ResultUtil.failed(I18nCode.CODE_107);
+				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			if(CommonContact.isLesserOrEqual(payMoney, CommonContact.ZERO)){
-				return ResultUtil.failed(I18nCode.CODE_107);
+				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_109);
+				return ResultUtil.failed(I18nCode.CODE_10009);
 			}
 
 			Order order = new Order();
@@ -69,10 +69,10 @@ public class OrderApiService extends BaseUserService {
 					return ResultUtil.success(orderInfoModel);
 				}
 			}
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
 			logger.error("充值订单异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class OrderApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_109);
+				return ResultUtil.failed(I18nCode.CODE_10009);
 			}
 			String userId = userInfo.getId();
 			order.setUserId(userId);
@@ -94,7 +94,7 @@ public class OrderApiService extends BaseUserService {
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取订单列表异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -107,11 +107,11 @@ public class OrderApiService extends BaseUserService {
 	public CommonResult<OrderInfoModel> getOrderInfo(Order order, String token) {
 		try {
 			if(order.getOrderNo() == null){
-				return ResultUtil.failed(I18nCode.CODE_107);
+				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_109);
+				return ResultUtil.failed(I18nCode.CODE_10009);
 			}
 			String userId = userInfo.getId();
 			order.setUserId(userId);
@@ -121,7 +121,7 @@ public class OrderApiService extends BaseUserService {
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取订单详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 

@@ -46,12 +46,12 @@ public class TaskApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_109);
+				return ResultUtil.failed(I18nCode.CODE_10009);
 			}
 			String userId = userInfo.getId();
 			TaskInfo taskInfo = this.getTaskInfoById(taskId);
 			if(taskInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_106);
+				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
 			synchronized (userId) {
 				BigDecimal rewardMoney = taskInfo.getRewardMoney();
@@ -64,7 +64,7 @@ public class TaskApiService extends BaseUserService {
 						return ResultUtil.success(true);
 					}
 					logger.error("新用户第一次做任务失败:{},{}",userId,taskId);
-					return ResultUtil.failed(I18nCode.CODE_104);
+					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
 
 				int taskStatus = userTask.getTaskStatus();
@@ -72,12 +72,12 @@ public class TaskApiService extends BaseUserService {
 				if(taskStatus == CommonContact.USER_TASK_STATUS_3){
 					logger.error("新用户任务已经完毕:{},{}",userId,taskId);
 					this.sendReward(userId,rewardMoney,taskId);
-					return ResultUtil.failed(I18nCode.CODE_104);
+					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
 				int taskNum = taskInfo.getTaskNumber();
 				if(taskFinishNumber >= taskNum){
 					logger.error("新用户任务已经完毕:{},{}",userId,taskId);
-					return ResultUtil.failed(I18nCode.CODE_104);
+					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
 				Boolean isOk = this.updateTaskFinishNumber(userTask.getId(),taskFinishNumber+1);
 				if(isOk){
@@ -86,11 +86,11 @@ public class TaskApiService extends BaseUserService {
 					return ResultUtil.success(true);
 				}
 				logger.error("新用户做任务失败:{},{}",userId,taskId);
-				return ResultUtil.failed(I18nCode.CODE_104);
+				return ResultUtil.failed(I18nCode.CODE_10004);
 			}
 		} catch (Exception e) {
 			logger.error("新用户做任务异常",taskId,e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -106,7 +106,7 @@ public class TaskApiService extends BaseUserService {
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取任务列表异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -123,7 +123,7 @@ public class TaskApiService extends BaseUserService {
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取任务详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 

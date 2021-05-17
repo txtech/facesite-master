@@ -55,14 +55,14 @@ public class ProductApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo== null){
-				return ResultUtil.failed(I18nCode.CODE_105);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
 			String botId = botTaskReqModel.getBotId();
 			String orderNo = botTaskReqModel.getOrderNo();
 			ProductBot productBot = this.getProductBotInfoById(botId);
 			if(productBot == null){
-				return ResultUtil.failed(I18nCode.CODE_106);
+				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
 			synchronized (userId) {
 				int userLevel = userInfo.getLevel();
@@ -84,11 +84,11 @@ public class ProductApiService extends BaseUserService {
 				if(isOk){
 					return ResultUtil.success(true);
 				}
-				return ResultUtil.failed(I18nCode.CODE_104);
+				return ResultUtil.failed(I18nCode.CODE_10004);
 			}
 		} catch (Exception e) {
 			logger.error("无人机产品做任务异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -104,7 +104,7 @@ public class ProductApiService extends BaseUserService {
 			return ResultUtil.success(list);
 		} catch (Exception e) {
 			logger.error("获取无人机产品列表异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -120,7 +120,7 @@ public class ProductApiService extends BaseUserService {
 			return ResultUtil.success(list);
 		} catch (Exception e) {
 			logger.error("获取云仓库产品列表异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -136,7 +136,7 @@ public class ProductApiService extends BaseUserService {
 			return ResultUtil.success(productBotInfo);
 		} catch (Exception e) {
 			logger.error("获取无人机产品详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -152,7 +152,7 @@ public class ProductApiService extends BaseUserService {
 			return ResultUtil.success(productWarehouseInfo);
 		} catch (Exception e) {
 			logger.error("获取云仓库产品详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -183,7 +183,7 @@ public class ProductApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_106);
+				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
 			UserProductBot userProductBot = new UserProductBot();
 			userProductBot.setUserId(userInfo.getId());
@@ -192,7 +192,7 @@ public class ProductApiService extends BaseUserService {
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户无人机产品异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
@@ -206,7 +206,7 @@ public class ProductApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_106);
+				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
 			UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
 			userProductWarehouse.setUserId(userInfo.getId());
@@ -215,7 +215,7 @@ public class ProductApiService extends BaseUserService {
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 }

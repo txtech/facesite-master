@@ -44,13 +44,13 @@ public class UserAccountApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_106);
+				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
 			UserAccount userAccount = this.getUserAccountByUserId(userInfo.getId());
 			return ResultUtil.success(userAccount);
 		} catch (Exception e) {
 			logger.error("获取用户账户异常",e);
-			return ResultUtil.failed(I18nCode.CODE_104);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 

@@ -61,7 +61,7 @@ public class ApiResponseBody  implements ResponseBodyAdvice<CommonResult> {
         if(StringUtils.isNoneEmpty(i8nCode)){
             String msg = I18nUtils.getText(i8nCode,lang);
             if(StringUtils.isNoneEmpty(msg)){
-                commonResult.setMsg(msg);
+                commonResult.setMessage(msg);
             }
         }
         return commonResult;

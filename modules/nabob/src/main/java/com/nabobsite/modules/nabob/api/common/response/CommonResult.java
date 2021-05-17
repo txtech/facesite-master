@@ -38,7 +38,7 @@ public class CommonResult<T> implements Serializable{
      * @author nada
      * @create 2020/12/21 11:08 上午
     */
-    private String msg;
+    private String message;
 
     /**
      * @desc 结果对象
@@ -52,21 +52,21 @@ public class CommonResult<T> implements Serializable{
     }
 
     public CommonResult(Integer code, T result) {
-        this.msg = "";
+        this.message = "";
         this.code = code;
         this.result = result;
         this.i18n = String.valueOf(code);
     }
 
     public CommonResult(Integer code, String i8nCode) {
-        this.msg = "";
+        this.message = "";
         this.code = code;
         this.result = null;
         this.i18n = i8nCode;
     }
 
     public CommonResult(Integer code, String i8nCode, String defaultValue) {
-        this.msg = defaultValue;
+        this.message = defaultValue;
         this.code = code;
         this.result = null;
         this.i18n = i8nCode;
@@ -104,11 +104,11 @@ public class CommonResult<T> implements Serializable{
         this.i18n = i18n;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
