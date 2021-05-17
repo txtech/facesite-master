@@ -3,20 +3,21 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
+import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.api.common.response.CommonResult;
-import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -33,6 +34,8 @@ public class TaskApiService extends BaseUserService {
 	private TaskInfoDao taskInfoDao;
 	@Autowired
 	private UserTaskDao userTaskDao;
+	@Autowired
+	private UserTaskRewardDao userTaskRewardDao;
 	@Autowired
 	private UserAccountApiService userAccountApiService;
 
@@ -110,6 +113,28 @@ public class TaskApiService extends BaseUserService {
 		}
 	}
 
+	/**
+	 * @desc 获取任务奖励列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<UserTaskReward> getTaskRewardList(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10009);
+			}
+			String userId = userInfo.getId();
+			UserTaskReward userTaskReward = new UserTaskReward();
+			userTaskReward.setUserId(userId);
+			UserTaskReward result = userTaskRewardDao.getByEntity(userTaskReward);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("获取任务详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
 
 	/**
 	 * @desc 获取任务详情
@@ -126,8 +151,6 @@ public class TaskApiService extends BaseUserService {
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
-
-
 
 	/**
 	 * @desc 完成任务送奖励

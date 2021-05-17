@@ -35,4 +35,18 @@ public class AccountApiController extends BaseController {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return userAccountApiService.getUserAccountInfo(token);
 	}
+
+	@PostMapping(value = {"claim"})
+	@ApiOperation(value = "认领增值账户")
+	public CommonResult<Boolean> claim(HttpServletRequest request){
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return userAccountApiService.claim(token);
+	}
+
+	@PostMapping(value = {"getLedgerRecordList"})
+	@ApiOperation(value = "获取收支总账记录")
+	public CommonResult<Boolean> getLedgerRecordList(HttpServletRequest request){
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return userAccountApiService.getLedgerRecordList(token);
+	}
 }

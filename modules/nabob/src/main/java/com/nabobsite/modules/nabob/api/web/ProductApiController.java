@@ -80,7 +80,6 @@ public class ProductApiController extends BaseController {
 		return productApiService.getProductWarehouseInfo(token,productWarehouse);
 	}
 
-
 	@RequestMapping(value = {"getUserBotInfo/{botId}"})
 	@ApiOperation(value = "用户无人机产品详情")
 	public CommonResult<UserProductBot> getUserBotInfo(@PathVariable String botId, HttpServletRequest request) {
@@ -91,6 +90,27 @@ public class ProductApiController extends BaseController {
 	@RequestMapping(value = {"getUserWarehouseInfo/{warehouseId}"})
 	@ApiOperation(value = "用户云仓库产品详情")
 	public CommonResult<UserProductWarehouse> getUserWarehouseInfo(@PathVariable String warehouseId, HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return productApiService.getUserWarehouseInfo(token,warehouseId);
+	}
+
+	@RequestMapping(value = {"getUserWarehousePersonalIncomeList"})
+	@ApiOperation(value = "用户云仓库个人收入记录")
+	public CommonResult<UserProductWarehouse> getUserWarehousePersonalIncomeList(@PathVariable String warehouseId, HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return productApiService.getUserWarehouseInfo(token,warehouseId);
+	}
+
+	@RequestMapping(value = {"getUserWarehouseTeamIncomeList"})
+	@ApiOperation(value = "用户云仓库团队收入记录")
+	public CommonResult<UserProductWarehouse> getUserWarehouseTeamIncomeList(@PathVariable String warehouseId, HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return productApiService.getUserWarehouseInfo(token,warehouseId);
+	}
+
+	@RequestMapping(value = {"getUserWarehouseOperationList"})
+	@ApiOperation(value = "用户云仓库操纵记录")
+	public CommonResult<UserProductWarehouse> getUserWarehouseOperationList(@PathVariable String warehouseId, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.getUserWarehouseInfo(token,warehouseId);
 	}

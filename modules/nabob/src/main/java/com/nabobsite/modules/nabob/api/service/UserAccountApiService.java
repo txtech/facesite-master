@@ -35,6 +35,44 @@ public class UserAccountApiService extends BaseUserService {
 	private TriggerApiService triggerApiService;
 
 	/**
+	 * @desc 获取收支总账记录
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> getLedgerRecordList(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			return ResultUtil.success(Boolean.TRUE);
+		} catch (Exception e) {
+			logger.error("认领增值账户异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 认领增值账户
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> claim(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			return ResultUtil.success(Boolean.TRUE);
+		} catch (Exception e) {
+			logger.error("认领增值账户异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
 	 * @desc 获取用户账户
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午

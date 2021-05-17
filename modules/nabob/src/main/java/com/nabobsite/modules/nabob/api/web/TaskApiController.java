@@ -8,6 +8,7 @@ import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.service.TaskApiService;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,12 @@ public class TaskApiController extends BaseController {
 		TaskInfo taskInfo = new TaskInfo();
 		taskInfo.setId(taskId);
 		return taskApiService.getTaskInfo(taskInfo,token);
+	}
+
+	@RequestMapping(value = {"getTaskRewardList"})
+	@ApiOperation(value = "获取任务奖励列表")
+	public CommonResult<UserTaskReward> getTaskRewardList(HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return taskApiService.getTaskRewardList(token);
 	}
 }
