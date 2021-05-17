@@ -31,9 +31,7 @@ public class SmsTest {
             param.put("secretkey", "yfJxfYDN");
             param.put("phone", phone);
             param.put("content", URLEncoder.encode(content,"UTF-8"));//短信内容,必须做urlencode(UFT-8)
-            String result = HttpRequest.post(smsUrl)
-                    .form(param)
-                    .execute().body();
+            String result = HttpRequest.post(smsUrl).form(param).execute().body();
             System.out.println(result);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

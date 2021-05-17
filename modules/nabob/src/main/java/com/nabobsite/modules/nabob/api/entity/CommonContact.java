@@ -1,12 +1,17 @@
 package com.nabobsite.modules.nabob.api.entity;
 
+import com.alibaba.fastjson.JSONObject;
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.NamedThreadLocal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * @ClassName nada
@@ -16,6 +21,9 @@ import java.util.Map;
  */
 public class CommonContact {
 
+    private static final Logger logger = LoggerFactory.getLogger(CommonContact.class);
+
+    public static String CHART_UTF ="UTF-8";
     public final static String AUTHORIZATION = "Authorization";
     public final static String TOKEN = "token";
     public final static String USERID = "userId";
@@ -190,5 +198,64 @@ public class CommonContact {
             e.printStackTrace();
             return null;
         }
+    }
+
+    //成功返回
+    public static JSONObject successMsg(String msg){
+        JSONObject result = new JSONObject();
+        result.put("code",I18nCode.CODE_10000);
+        result.put("message","操作成功");
+        if(StringUtils.isEmpty(msg)){
+            result.put("message",msg);
+        }
+        return result;
+    }
+
+    //失败返回
+    public static JSONObject failedMsg(String msg){
+        JSONObject result = new JSONObject();
+        result.put("code",I18nCode.CODE_10001);
+        result.put("message","操作失败");
+        if(StringUtils.isEmpty(msg)){
+            result.put("message",msg);
+        }
+        return result;
+    }
+
+    /**
+     * @描述:初始化设置报文请求响应编码格式
+     * @时间:2017年12月18日 下午5:45:02
+     */
+    public static void initHttpServletRequest(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            if (request != null) {
+                request.setCharacterEncoding(CommonContact.CHART_UTF);
+            }
+            if (response != null) {
+                response.setCharacterEncoding(CommonContact.CHART_UTF);
+            }
+        } catch (Exception e) {
+            logger.error("初始化设置报文请求响应编码格式异常", e);
+        }
+    }
+
+    /**
+     * @描述:网关响应报文
+     * @作者:nada
+     * @时间:2019/3/15
+     **/
+    public static ModelAndView writeResponse(HttpServletResponse response, JSONObject result) {
+        try {
+            initHttpServletRequest (null, response);
+            response.setContentType("application/json;charset=utf-8");
+            if(result == null || result.isEmpty ()){
+                response.getWriter().write(result.toString());
+                return null;
+            }
+            response.getWriter().write(result.toString());
+        } catch (Exception e) {
+            logger.error("Gateway write response exception", e);
+        }
+        return null;
     }
 }
