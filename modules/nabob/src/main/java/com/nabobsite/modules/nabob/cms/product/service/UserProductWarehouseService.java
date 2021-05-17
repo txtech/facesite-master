@@ -1,7 +1,9 @@
 /**
- * Copyright (c) 2013-Now  All rights reserved.
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
 package com.nabobsite.modules.nabob.cms.product.service;
+
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +16,12 @@ import com.nabobsite.modules.nabob.cms.product.dao.UserProductWarehouseDao;
 /**
  * 用户产品仓库信息Service
  * @author face
- * @version 2021-05-10
+ * @version 2021-05-17
  */
 @Service
 @Transactional(readOnly=true)
 public class UserProductWarehouseService extends CrudService<UserProductWarehouseDao, UserProductWarehouse> {
-
+	
 	/**
 	 * 获取单条数据
 	 * @param userProductWarehouse
@@ -29,7 +31,7 @@ public class UserProductWarehouseService extends CrudService<UserProductWarehous
 	public UserProductWarehouse get(UserProductWarehouse userProductWarehouse) {
 		return super.get(userProductWarehouse);
 	}
-
+	
 	/**
 	 * 查询分页数据
 	 * @param userProductWarehouse 查询条件
@@ -40,7 +42,7 @@ public class UserProductWarehouseService extends CrudService<UserProductWarehous
 	public Page<UserProductWarehouse> findPage(UserProductWarehouse userProductWarehouse) {
 		return super.findPage(userProductWarehouse);
 	}
-
+	
 	/**
 	 * 保存数据（插入或更新）
 	 * @param userProductWarehouse
@@ -50,7 +52,7 @@ public class UserProductWarehouseService extends CrudService<UserProductWarehous
 	public void save(UserProductWarehouse userProductWarehouse) {
 		super.save(userProductWarehouse);
 	}
-
+	
 	/**
 	 * 更新状态
 	 * @param userProductWarehouse
@@ -60,7 +62,7 @@ public class UserProductWarehouseService extends CrudService<UserProductWarehous
 	public void updateStatus(UserProductWarehouse userProductWarehouse) {
 		super.updateStatus(userProductWarehouse);
 	}
-
+	
 	/**
 	 * 删除数据
 	 * @param userProductWarehouse
@@ -70,5 +72,5 @@ public class UserProductWarehouseService extends CrudService<UserProductWarehous
 	public void delete(UserProductWarehouse userProductWarehouse) {
 		super.delete(userProductWarehouse);
 	}
-
+	
 }

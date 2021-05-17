@@ -9,8 +9,12 @@ import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.api.model.req.BotTaskReqModel;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductBotDao;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
+import com.nabobsite.modules.nabob.cms.product.dao.UserProductBotDao;
+import com.nabobsite.modules.nabob.cms.product.dao.UserProductWarehouseDao;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouse;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
@@ -36,6 +40,10 @@ public class ProductApiService extends BaseUserService {
 	private ProductWarehouseDao productWarehouseDao;
 	@Autowired
 	private UserAccountApiService userAccountApiService;
+	@Autowired
+	private UserProductBotDao userProductBotDao;
+	@Autowired
+	private UserProductWarehouseDao userProductWarehouseDao;
 
 	/**
 	 * @desc 无人机产品做任务
@@ -162,6 +170,52 @@ public class ProductApiService extends BaseUserService {
 		} catch (Exception e) {
 			logger.error("获取无人机产品详情异常,{}",id,e);
 			return null;
+		}
+	}
+
+	/**
+	 * @desc 用户无人机产品
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<UserProductBot> getUserBotInfo(String token,String botId) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_106);
+			}
+			UserProductBot userProductBot = new UserProductBot();
+			userProductBot.setUserId(userInfo.getId());
+			userProductBot.setId(botId);
+			UserProductBot result = userProductBotDao.getByEntity(userProductBot);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("用户无人机产品异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
+		}
+	}
+
+	/**
+	 * @desc 用户云仓库产品
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<UserProductWarehouse> getUserWarehouseInfo(String token, String warehouseId) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_106);
+			}
+			UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
+			userProductWarehouse.setUserId(userInfo.getId());
+			userProductWarehouse.setWarehouseId(warehouseId);
+			UserProductWarehouse result = userProductWarehouseDao.getByEntity(userProductWarehouse);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("用户云仓库产品异常",e);
+			return ResultUtil.failed(I18nCode.CODE_104);
 		}
 	}
 }

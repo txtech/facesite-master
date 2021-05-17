@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
 /**
  * 用户产品机器人信息DAO接口
  * @author face
- * @version 2021-05-13
+ * @version 2021-05-17
  */
 @MyBatisDao
 public interface UserProductBotDao extends CrudDao<UserProductBot> {

@@ -9,6 +9,8 @@ import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.jeesite.common.web.BaseController;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +56,20 @@ public class ProductApiController extends BaseController {
 		ProductWarehouse productWarehouse = new ProductWarehouse();
 		productWarehouse.setId(warehouseId);
 		return productApiService.getProductWarehouseInfo(token,productWarehouse);
+	}
+
+
+	@RequestMapping(value = {"getUserBotInfo/{botId}"})
+	@ApiOperation(value = "用户无人机产品详情")
+	public CommonResult<UserProductBot> getUserBotInfo(@PathVariable String botId, HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return productApiService.getUserBotInfo(token,botId);
+	}
+
+	@RequestMapping(value = {"getUserWarehouseInfo/{warehouseId}"})
+	@ApiOperation(value = "用户云仓库产品详情")
+	public CommonResult<UserProductWarehouse> getUserWarehouseInfo(@PathVariable String warehouseId, HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return productApiService.getUserWarehouseInfo(token,warehouseId);
 	}
 }

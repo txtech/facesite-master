@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户产品机器人信息Entity
  * @author face
- * @version 2021-05-13
+ * @version 2021-05-17
  */
 @Table(name="t1_user_product_bot", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -33,10 +33,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="yesterday_team_income_money", attrName="yesterdayTeamIncomeMoney", label="昨日团队收入"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
-		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
-		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
-		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
-		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
+		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
+		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 	}, orderBy="a.id DESC"
 )
 public class UserProductBot extends DataEntity<UserProductBot> {
@@ -62,7 +62,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	}
 	
 	@NotBlank(message="用户ID不能为空")
-	@Length(min=0, max=30, message="用户ID长度不能超过 30 个字符")
+	@Length(min=0, max=50, message="用户ID长度不能超过 50 个字符")
 	public String getUserId() {
 		return userId;
 	}
@@ -72,7 +72,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	}
 	
 	@NotBlank(message="产品ID不能为空")
-	@Length(min=0, max=30, message="产品ID长度不能超过 30 个字符")
+	@Length(min=0, max=50, message="产品ID长度不能超过 50 个字符")
 	public String getBotId() {
 		return botId;
 	}

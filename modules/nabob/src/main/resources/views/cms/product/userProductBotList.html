@@ -19,13 +19,13 @@
 				<div class="form-group">
 					<label class="control-label">${text('用户ID')}：</label>
 					<div class="control-inline">
-						<#form:input path="userId" maxlength="30" class="form-control width-120"/>
+						<#form:input path="userId" maxlength="50" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('产品ID')}：</label>
 					<div class="control-inline">
-						<#form:input path="botId" maxlength="30" class="form-control width-120"/>
+						<#form:input path="botId" maxlength="50" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -111,8 +111,8 @@ $('#dataGrid').dataGrid({
 		{header:'${text("昨日团队收入")}', name:'yesterdayTeamIncomeMoney', index:'a.yesterday_team_income_money', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
+		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('product:userProductBot:edit')){ %>

@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.product.service.UserProductBotService;
 /**
  * 用户产品机器人信息Controller
  * @author face
- * @version 2021-05-13
+ * @version 2021-05-17
  */
 @Controller
 @RequestMapping(value = "${adminPath}/product/userProductBot")

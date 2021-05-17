@@ -16,7 +16,7 @@ import com.nabobsite.modules.nabob.cms.product.dao.UserProductBotDao;
 /**
  * 用户产品机器人信息Service
  * @author face
- * @version 2021-05-13
+ * @version 2021-05-17
  */
 @Service
 @Transactional(readOnly=true)
