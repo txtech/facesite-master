@@ -206,9 +206,6 @@ public class UserInfoApiService extends BaseUserService {
 			UserInfo parms = new UserInfo();
 			parms.setParent1UserId(userInfo.getId());
 			List<UserInfo> userInfoList = userInfoDao.findList(parms);
-			if(userInfoList == null || userInfoList.isEmpty()){
-				return ResultUtil.failed(I18nCode.CODE_10006);
-			}
 			JSONArray result = new JSONArray();
 			for (UserInfo entity : userInfoList) {
 				result.add(CommonContact.toJSONObject(entity));

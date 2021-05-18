@@ -3,11 +3,13 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 用户账户Service
@@ -41,13 +44,21 @@ public class UserAccountApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> getLedgerRecordList(String token) {
+	public CommonResult<JSONArray> getLedgerRecordList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failed(I18nCode.CODE_10009);
 			}
-			return ResultUtil.successToBoolean(true);
+			String userId = userInfo.getId();
+			UserAccountDetail userAccountDetail = new UserAccountDetail();
+			userAccountDetail.setUserId(userId);
+			List<UserAccountDetail> userAccountDetailList = userAccountDetailDao.findList(userAccountDetail);
+			JSONArray result = new JSONArray();
+			for (UserAccountDetail entity : userAccountDetailList) {
+				result.add(CommonContact.toJSONObject(entity));
+			}
+			return ResultUtil.successToJsonArray(result);
 		} catch (Exception e) {
 			logger.error("认领增值账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

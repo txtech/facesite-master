@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
@@ -50,7 +51,7 @@ public class TaskApiController extends BaseController {
 
 	@RequestMapping(value = {"getTaskRewardList"})
 	@ApiOperation(value = "获取任务奖励列表")
-	public CommonResult<JSONObject> getTaskRewardList(HttpServletRequest request) {
+	public CommonResult<JSONArray> getTaskRewardList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return taskApiService.getTaskRewardList(token);
 	}

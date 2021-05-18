@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
@@ -45,8 +46,8 @@ public class AccountApiController extends BaseController {
 	}
 
 	@PostMapping(value = {"getLedgerRecordList"})
-	@ApiOperation(value = "获取收支总账记录")
-	public CommonResult<Boolean> getLedgerRecordList(HttpServletRequest request){
+	@ApiOperation(value = "获取收支总账记录列表")
+	public CommonResult<JSONArray> getLedgerRecordList(HttpServletRequest request){
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return userAccountApiService.getLedgerRecordList(token);
 	}

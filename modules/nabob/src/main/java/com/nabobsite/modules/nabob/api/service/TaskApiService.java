@@ -10,6 +10,7 @@ import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
+import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
@@ -125,7 +126,7 @@ public class TaskApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getTaskRewardList(String token) {
+	public CommonResult<JSONArray> getTaskRewardList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -134,8 +135,12 @@ public class TaskApiService extends BaseUserService {
 			String userId = userInfo.getId();
 			UserTaskReward userTaskReward = new UserTaskReward();
 			userTaskReward.setUserId(userId);
-			UserTaskReward result = userTaskRewardDao.getByEntity(userTaskReward);
-			return ResultUtil.successToJson(result);
+			List<UserTaskReward> userTaskRewardList = userTaskRewardDao.findList(userTaskReward);
+			JSONArray result = new JSONArray();
+			for (UserTaskReward entity : userTaskRewardList) {
+				result.add(CommonContact.toJSONObject(entity));
+			}
+			return ResultUtil.successToJsonArray(result);
 		} catch (Exception e) {
 			logger.error("获取任务详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
