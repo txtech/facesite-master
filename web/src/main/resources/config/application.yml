@@ -1,6 +1,6 @@
 #======================================#
 #Project settings
-productName: nabob
+productName: Aurora
 companyName: nada
 productVersion: V4.2
 copyrightYear: 2021
@@ -11,7 +11,7 @@ demoMode: false
 server:
   port: 9999
   servlet:
-    context-path: /nabob
+    context-path: /aurora
   tomcat:
     uri-encoding: UTF-8
   #将请求协议转换为 https
@@ -514,8 +514,8 @@ web:
       enabled: true
       addPathPatterns: >
         ${frontPath}/api/**
-      excludePathPatterns: >
-        ${frontPath}/api/open/**
+      excludePathPatterns: ~
+        # ${frontPath}/api/open/**
 
   # 静态文件后缀，过滤静态文件，以提高访问性能。
   staticFile: .css,.js,.map,.png,.jpg,.gif,.jpeg,.bmp,.ico,.swf,.psd,.htc,.crx,.xpi,.exe,.ipa,.apk,.otf,.eot,.svg,.ttf,.woff,.woff2

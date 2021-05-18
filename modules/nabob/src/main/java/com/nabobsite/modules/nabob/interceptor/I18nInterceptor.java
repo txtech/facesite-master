@@ -45,10 +45,13 @@ public class I18nInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         try {
-            String ip = HttpBrowserTools.getIpAddr(request);
             String reqUrl = request.getRequestURI();
+            String ip = HttpBrowserTools.getIpAddr(request);
             String token = request.getHeader("Authorization");
             if(StringUtils.isEmpty(token)){
+                if(StringUtils.isNotEmpty(reqUrl) && reqUrl.contains("/api/open/")){
+                    return true;
+                }
                 logger.error("请求被拦截，获取授权信息为空:{},{},{}",token,ip,reqUrl);
                 this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_10003,"User not authorized"));
                 return false;
