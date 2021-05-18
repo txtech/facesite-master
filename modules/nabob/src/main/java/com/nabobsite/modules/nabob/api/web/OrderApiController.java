@@ -3,6 +3,8 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.model.OrderInfoModel;
@@ -44,7 +46,7 @@ public class OrderApiController extends BaseController {
 			@ApiImplicitParam(name = "phoneNumber",value = "电话号码", required = true),
 			@ApiImplicitParam(name = "mark", value = "来者不善", required = false, type="String"),
 	})
-	public CommonResult<OrderInfoModel> rechargeOrder(@RequestBody OrderInfoModel orderInfoModel,HttpServletRequest request) {
+	public CommonResult<JSONObject> rechargeOrder(@RequestBody OrderInfoModel orderInfoModel, HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		orderInfoModel.setIpaddress(ip);
@@ -53,14 +55,14 @@ public class OrderApiController extends BaseController {
 
 	@PostMapping(value = {"getOrderList"})
 	@ApiOperation(value = "获取订单列表")
-	public CommonResult<List<Order>> getOrderList(HttpServletRequest request) {
+	public CommonResult<JSONArray> getOrderList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return orderApiService.getOrderList(new Order(),token);
 	}
 
 	@PostMapping(value = {"getOrderInfo/{orderNo}"})
 	@ApiOperation(value = "获取订单详情")
-	public CommonResult<OrderInfoModel> getOrderInfo(@PathVariable String orderNo, HttpServletRequest request) {
+	public CommonResult<JSONObject> getOrderInfo(@PathVariable String orderNo, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		Order order = new Order();
 		order.setOrderNo(orderNo);

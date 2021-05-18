@@ -74,7 +74,7 @@ public class SysApiService extends BaseUserService {
 
 			String cacheKey = RedisPrefixContant.FRONT_USER_RANDOM_CODE_CACHE + codeKey;
 			redisOpsUtil.set(cacheKey,imgCode,10*RedisPrefixContant.CACHE_ONE_SECONDS);
-			return ResultUtil.success(result);
+			return ResultUtil.successJson(result);
 		} catch (Exception e) {
 			logger.error("获取随机码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -93,7 +93,7 @@ public class SysApiService extends BaseUserService {
 			String codeKey = verificationCodeModel.getCodeKey();
 			Boolean isOk = this.verifImgRandomCode(codeKey,code);
 			if(isOk){
-				return ResultUtil.success(isOk);
+				return ResultUtil.successToBoolean(isOk);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
@@ -135,7 +135,7 @@ public class SysApiService extends BaseUserService {
 			String randomCode = smsModel.getSmsCode();
 			Boolean isOk = this.verifRandomCode(phoneNumber,randomCode);
 			if(isOk){
-				return ResultUtil.success(isOk);
+				return ResultUtil.successToBoolean(isOk);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
@@ -156,7 +156,7 @@ public class SysApiService extends BaseUserService {
 			int smsCode = SnowFlakeIDGenerator.getRandom6();
 			Boolean isOk = this.sendSmsCode(phone,smsCode);
 			if(isOk){
-				return ResultUtil.success(true);
+				return ResultUtil.successToBoolean(true);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
@@ -177,7 +177,7 @@ public class SysApiService extends BaseUserService {
 			String smsCode = smsModel.getSmsCode();
 			Boolean isOk = this.verifSmsCode(phoneNumber,smsCode);
 			if(isOk){
-				return ResultUtil.success(isOk);
+				return ResultUtil.successToBoolean(isOk);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {

@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
@@ -31,7 +32,7 @@ public class AccountApiController extends BaseController {
 
 	@PostMapping(value = {"getUserAccountInfo"})
 	@ApiOperation(value = "获取账户详情")
-	public CommonResult<UserAccount> getUserAccountInfo(HttpServletRequest request) {
+	public CommonResult<JSONObject> getUserAccountInfo(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return userAccountApiService.getUserAccountInfo(token);
 	}

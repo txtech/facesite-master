@@ -14,15 +14,15 @@ import org.junit.Test;
  */
 public class NabobTest {
 
-    private final static String Authorization = "26440d47baf4474cbe39890bb7112d8f";
-    private final static String baseReqUrl = "http://localhost:9998/nabob/f/api/";
+    private final static String Authorization = "109f3fff945a441aa2c917ca2b23d21e";
+    private final static String baseReqUrl = "http://localhost:9999/aurora/f/api/";
 
     @Test
     public void userRegister(){
         String url = baseReqUrl + "open/register";
         JSONObject param = new JSONObject();
         param.put("accountNo", "15118135523");
-        param.put("password", "123456");
+        param.put("newPassword", "123456");
         param.put("inviteCode", "100038");
         //param.put("inviteSecret", "4182927c1c3600e49f1553ba9ab50bc1aef9531d36b9e1918e74d14baaa769dc");
         param.put("favorite", "Elon Musk");
@@ -39,7 +39,7 @@ public class NabobTest {
         String url = baseReqUrl + "open/login";
         JSONObject param = new JSONObject();
         param.put("accountNo", "15118135523");
-        param.put("password", "654321");
+        param.put("password", "123456");
         String result = HttpRequest.post(url)
                 .body(param.toString())
                 .header("Content-Type","application/json")
@@ -103,6 +103,16 @@ public class NabobTest {
     @Test
     public void getUserInfo(){
         String url = baseReqUrl + "user/getUserInfo";
+        String result = HttpRequest.post(url)
+                .header("Content-Type","application/json")
+                .header("Authorization",Authorization)
+                .execute().body();
+        System.out.println(result);
+    }
+
+    @Test
+    public void getUserDirectTeamList(){
+        String url = baseReqUrl + "user/getUserDirectTeamList";
         String result = HttpRequest.post(url)
                 .header("Content-Type","application/json")
                 .header("Authorization",Authorization)

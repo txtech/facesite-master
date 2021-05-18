@@ -3,6 +3,8 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
@@ -64,7 +66,7 @@ public class TaskApiService extends BaseUserService {
 					long dbResult = userTaskDao.insert(initUserTask);
 					if(CommonContact.dbResult(dbResult)){
 						logger.info("新用户第一次做任务成功:{},{}",userId,taskId);
-						return ResultUtil.success(true);
+						return ResultUtil.successToBoolean(true);
 					}
 					logger.error("新用户第一次做任务失败:{},{}",userId,taskId);
 					return ResultUtil.failed(I18nCode.CODE_10004);
@@ -86,7 +88,7 @@ public class TaskApiService extends BaseUserService {
 				if(isOk){
 					logger.info("新用户做任务成功:{},{}",userId,taskId);
 					this.sendReward(userId,rewardMoney,taskId);
-					return ResultUtil.success(true);
+					return ResultUtil.successToBoolean(true);
 				}
 				logger.error("新用户做任务失败:{},{}",userId,taskId);
 				return ResultUtil.failed(I18nCode.CODE_10004);
@@ -103,10 +105,14 @@ public class TaskApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<TaskInfo>> getTaskList(TaskInfo taskInfo) {
+	public CommonResult<JSONArray> getTaskList(TaskInfo taskInfo) {
 		try {
-			List<TaskInfo> result = taskInfoDao.findList(taskInfo);
-			return ResultUtil.success(result);
+			List<TaskInfo> taskInfoList = taskInfoDao.findList(taskInfo);
+			JSONArray result = new JSONArray();
+			for (TaskInfo entity : taskInfoList) {
+				result.add(CommonContact.toJSONObject(entity));
+			}
+			return ResultUtil.successToJsonArray(result);
 		} catch (Exception e) {
 			logger.error("获取任务列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -119,7 +125,7 @@ public class TaskApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<UserTaskReward> getTaskRewardList(String token) {
+	public CommonResult<JSONObject> getTaskRewardList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -129,7 +135,7 @@ public class TaskApiService extends BaseUserService {
 			UserTaskReward userTaskReward = new UserTaskReward();
 			userTaskReward.setUserId(userId);
 			UserTaskReward result = userTaskRewardDao.getByEntity(userTaskReward);
-			return ResultUtil.success(result);
+			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
 			logger.error("获取任务详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -142,10 +148,10 @@ public class TaskApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<TaskInfo> getTaskInfo(TaskInfo taskInfo,String token) {
+	public CommonResult<JSONObject> getTaskInfo(TaskInfo taskInfo,String token) {
 		try {
 			TaskInfo result = taskInfoDao.getByEntity(taskInfo);
-			return ResultUtil.success(result);
+			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
 			logger.error("获取任务详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

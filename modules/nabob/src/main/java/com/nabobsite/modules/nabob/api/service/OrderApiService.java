@@ -3,6 +3,8 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
@@ -40,7 +42,7 @@ public class OrderApiService extends BaseUserService {
 	 * @create 2021/5/12 1:10 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<OrderInfoModel> rechargeOrder(OrderInfoModel orderInfoModel,String token) {
+	public CommonResult<JSONObject> rechargeOrder(OrderInfoModel orderInfoModel, String token) {
 		try {
 			String name = orderInfoModel.getName();
 			String email = orderInfoModel.getEmail();
@@ -66,7 +68,7 @@ public class OrderApiService extends BaseUserService {
 				long dbResult = orderDao.insert(InstanceContact.initOrderInfo(order,orderNo));
 				if(CommonContact.dbResult(dbResult)){
 					orderInfoModel.setOrderNo(orderNo);
-					return ResultUtil.success(orderInfoModel);
+					return ResultUtil.successToJson(orderInfoModel);
 				}
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -82,7 +84,7 @@ public class OrderApiService extends BaseUserService {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<Order>> getOrderList(Order order,String token) {
+	public CommonResult<JSONArray> getOrderList(Order order, String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -90,8 +92,12 @@ public class OrderApiService extends BaseUserService {
 			}
 			String userId = userInfo.getId();
 			order.setUserId(userId);
-			List<Order> result = orderDao.findList(order);
-			return ResultUtil.success(result);
+			List<Order> orderList = orderDao.findList(order);
+			JSONArray result = new JSONArray();
+			for (Order entity : orderList) {
+				result.add(CommonContact.toJSONObject(entity));
+			}
+			return ResultUtil.successToJsonArray(result);
 		} catch (Exception e) {
 			logger.error("获取订单列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -104,7 +110,7 @@ public class OrderApiService extends BaseUserService {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<OrderInfoModel> getOrderInfo(Order order, String token) {
+	public CommonResult<JSONObject> getOrderInfo(Order order, String token) {
 		try {
 			if(order.getOrderNo() == null){
 				return ResultUtil.failed(I18nCode.CODE_10007);
@@ -115,10 +121,8 @@ public class OrderApiService extends BaseUserService {
 			}
 			String userId = userInfo.getId();
 			order.setUserId(userId);
-			Order orderInfo = orderDao.getByEntity(order);
-			OrderInfoModel result = new OrderInfoModel();
-			BeanUtils.copyProperties(orderInfo, result);
-			return ResultUtil.success(result);
+			Order result = orderDao.getByEntity(order);
+			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
 			logger.error("获取订单详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

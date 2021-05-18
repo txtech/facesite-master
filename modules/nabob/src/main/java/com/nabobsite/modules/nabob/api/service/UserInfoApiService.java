@@ -4,6 +4,7 @@
 package com.nabobsite.modules.nabob.api.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
@@ -64,7 +65,7 @@ public class UserInfoApiService extends BaseUserService {
 		try {
 			String smsCode = userInfoModel.getSmsCode();
 			String accountNo = userInfoModel.getAccountNo();
-			String newPassword = userInfoModel.getNewPassword();
+			String newPassword = userInfoModel.getPassword();
 			if(StringUtils.isAnyEmpty(accountNo,smsCode,newPassword)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
@@ -82,7 +83,7 @@ public class UserInfoApiService extends BaseUserService {
 			updateUserInfo.setPassword(md5NewPwd);
 			long dbResult = userInfoDao.update(updateUserInfo);
 			if(CommonContact.dbResult(dbResult)){
-				return ResultUtil.success(true);
+				return ResultUtil.successToBoolean(true);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
@@ -97,11 +98,11 @@ public class UserInfoApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> updatePwd(String token,UserInfoModel userInfoModel) {
+	public CommonResult<Boolean> updatePwd(String token,UserInfo userInfo) {
 		try {
-			String accountNo = userInfoModel.getAccountNo();
-			String oldPassword = userInfoModel.getOldPassword();
-			String newPassword = userInfoModel.getNewPassword();
+			String accountNo = userInfo.getAccountNo();
+			String oldPassword = userInfo.getOldPassword();
+			String newPassword = userInfo.getPassword();
 			if(StringUtils.isAnyEmpty(accountNo,oldPassword,newPassword)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
@@ -127,7 +128,7 @@ public class UserInfoApiService extends BaseUserService {
 			long dbResult = userInfoDao.update(updateUserInfo);
 			if(CommonContact.dbResult(dbResult)){
 				this.logout(token);
-				return ResultUtil.success(true);
+				return ResultUtil.successToBoolean(true);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
@@ -145,7 +146,7 @@ public class UserInfoApiService extends BaseUserService {
 	public CommonResult<Boolean> logout(String token) {
 		try {
 			redisOpsUtil.remove(RedisPrefixContant.getTokenUserKey(token));
-			return ResultUtil.success(Boolean.TRUE);
+			return ResultUtil.successToBoolean(true);
 		} catch (Exception e) {
 			logger.error("用户退出异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -158,7 +159,7 @@ public class UserInfoApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<String> shareFriends(String token) {
+	public CommonResult<JSONObject> shareFriends(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -168,7 +169,9 @@ public class UserInfoApiService extends BaseUserService {
 			jsonObject.put("pid",userInfo.getId());
 			jsonObject.put("sid",userInfo.getParentSysId());
 			String registerUrl = "param_parent="+ HiDesUtils.desEnCode(jsonObject.toString());
-			return ResultUtil.success(registerUrl);
+			JSONObject result = new JSONObject();
+			result.put("shareUrl",registerUrl);
+			return ResultUtil.successJson(result);
 		} catch (Exception e) {
 			logger.error("获取邀请好友链接异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -181,16 +184,13 @@ public class UserInfoApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<UserInfoModel> getUserInfo(String token) {
+	public CommonResult<JSONObject> getUserInfo(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			userInfo.setPassword("");
-			UserInfoModel result = new UserInfoModel();
-			BeanUtils.copyProperties(userInfo, result);
-			return ResultUtil.success(result);
+			return ResultUtil.successToJson(userInfo);
 		} catch (Exception e) {
 			logger.error("获取用户详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -203,7 +203,7 @@ public class UserInfoApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<UserInfoModel>> getUserDirectTeamList(String token) {
+	public CommonResult<JSONArray> getUserDirectTeamList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -215,13 +215,11 @@ public class UserInfoApiService extends BaseUserService {
 			if(userInfoList == null || userInfoList.isEmpty()){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
-			List<UserInfoModel> userInfoModelList = new ArrayList<>();
-			for (UserInfo userInfo1 : userInfoList) {
-				UserInfoModel userInfoModel1 = new UserInfoModel();
-				BeanUtils.copyProperties(userInfo1,userInfoModel1);
-				userInfoModelList.add(userInfoModel1);
+			JSONArray result = new JSONArray();
+			for (UserInfo entity : userInfoList) {
+				result.add(CommonContact.toJSONObject(entity));
 			}
-			return ResultUtil.success(userInfoModelList);
+			return ResultUtil.successToJsonArray(result);
 		} catch (Exception e) {
 			logger.error("获取用户详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -234,7 +232,7 @@ public class UserInfoApiService extends BaseUserService {
 	 * @create 2021/5/11 10:13 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<UserInfoModel> login(UserInfoModel userInfoModel) {
+	public CommonResult<JSONObject> login(UserInfoModel userInfoModel) {
 		try {
 			if(userInfoModel == null){
 				return ResultUtil.failed(I18nCode.CODE_10007);
@@ -242,7 +240,7 @@ public class UserInfoApiService extends BaseUserService {
 			String lang = userInfoModel.getLang();
 			String loginIp = userInfoModel.getLoginIp();
 			String accountNo = userInfoModel.getAccountNo();
-			String password = userInfoModel.getNewPassword();
+			String password = userInfoModel.getPassword();
 			String imgCodeKey = userInfoModel.getCodeKey();
 			String imgCode = userInfoModel.getImgCode();
 			if(StringUtils.isAnyBlank(accountNo,password)){
@@ -278,12 +276,9 @@ public class UserInfoApiService extends BaseUserService {
 			redisOpsUtil.set(newTokenKey,userId,RedisPrefixContant.CACHE_HALF_HOUR);
 			redisOpsUtil.set(userTokenKey,newToken,RedisPrefixContant.CACHE_HALF_HOUR);
 			if(redisOpsUtil.get(newTokenKey)!=null){
-				loginUserInfo.setPassword("");
 				loginUserInfo.setToken(newToken);
-				UserInfoModel result = new UserInfoModel();
-				BeanUtils.copyProperties(loginUserInfo, result);
 				this.updateLoginIp(userId,loginIp);
-				return ResultUtil.success(result);
+				return ResultUtil.successToJson(loginUserInfo);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
@@ -298,16 +293,15 @@ public class UserInfoApiService extends BaseUserService {
 	 * @create 2021/5/11 11:19 上午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> register(UserInfoModel userInfoModel) {
+	public CommonResult<Boolean> register(UserInfo userInfo) {
 		try {
-			if(userInfoModel == null){
+			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			String lang = userInfoModel.getLang();
-			String accountNo = userInfoModel.getAccountNo();
-			String password = userInfoModel.getNewPassword();
-			String inviteSecret = userInfoModel.getInviteSecret();
-			String parentInviteCode = userInfoModel.getInviteCode();
+			String accountNo = userInfo.getAccountNo();
+			String password = userInfo.getPassword();
+			String inviteSecret = userInfo.getInviteSecret();
+			String parentInviteCode = userInfo.getInviteCode();
 			if(StringUtils.isAnyBlank(accountNo,password)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
@@ -315,8 +309,6 @@ public class UserInfoApiService extends BaseUserService {
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 
-			UserInfo userInfo = new UserInfo();
-			BeanUtils.copyProperties(userInfoModel, userInfo);
 			//注册账户
 			synchronized (accountNo){
 				UserInfo checkUserInfo = this.getUserInfoByAccountNo(accountNo);
@@ -400,7 +392,7 @@ public class UserInfoApiService extends BaseUserService {
 					logger.error("注册用户成功,用户送奖励失败,{}",userId);
 				}
 				triggerApiService.registerTrigger(userId);
-				return ResultUtil.success(Boolean.TRUE);
+				return ResultUtil.successToBoolean(true);
 			}
 		} catch (Exception e) {
 			logger.error("用户注册异常",e);
@@ -437,7 +429,7 @@ public class UserInfoApiService extends BaseUserService {
 					configJson.put("appDownloadUrl",value);
 				}
 			}
-			return ResultUtil.success(configJson);
+			return ResultUtil.successJson(configJson);
 		} catch (Exception e) {
 			logger.error("获取系统配置异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -459,7 +451,7 @@ public class UserInfoApiService extends BaseUserService {
 			String userId = oldUserInfo.getId();
 			Boolean isOk = this.updateUserLang(userId,lang);
 			if(isOk){
-				return ResultUtil.success(true);
+				return ResultUtil.successToBoolean(true);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {

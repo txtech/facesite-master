@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.service.TaskApiService;
@@ -40,7 +41,7 @@ public class TaskApiController extends BaseController {
 
 	@RequestMapping(value = {"getTaskInfo/{taskId}"})
 	@ApiOperation(value = "获取任务详情")
-	public CommonResult<TaskInfo> getTaskInfo(@PathVariable String taskId,HttpServletRequest request) {
+	public CommonResult<JSONObject> getTaskInfo(@PathVariable String taskId, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		TaskInfo taskInfo = new TaskInfo();
 		taskInfo.setId(taskId);
@@ -49,7 +50,7 @@ public class TaskApiController extends BaseController {
 
 	@RequestMapping(value = {"getTaskRewardList"})
 	@ApiOperation(value = "获取任务奖励列表")
-	public CommonResult<UserTaskReward> getTaskRewardList(HttpServletRequest request) {
+	public CommonResult<JSONObject> getTaskRewardList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return taskApiService.getTaskRewardList(token);
 	}

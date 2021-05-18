@@ -2,6 +2,7 @@
  * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.nabobsite.modules.nabob.api.web;
+import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.model.BotTaskReqModel;
 import com.nabobsite.modules.nabob.api.model.WarehouseTaskReqModel;
@@ -61,7 +62,7 @@ public class ProductApiController extends BaseController {
 
 	@RequestMapping(value = {"getProductBotInfo/{botId}"})
 	@ApiOperation(value = "无人机产品详情")
-	public CommonResult<ProductBot> getProductBotInfo(@PathVariable String botId,HttpServletRequest request) {
+	public CommonResult<JSONObject> getProductBotInfo(@PathVariable String botId, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		ProductBot productBot = new ProductBot();
 		productBot.setId(botId);
@@ -70,7 +71,7 @@ public class ProductApiController extends BaseController {
 
 	@RequestMapping(value = {"getProductWarehouseInfo/{warehouseId}"})
 	@ApiOperation(value = "云仓库产品详情")
-	public CommonResult<ProductWarehouse> getProductWarehouseInfo(@PathVariable String warehouseId,HttpServletRequest request) {
+	public CommonResult<JSONObject> getProductWarehouseInfo(@PathVariable String warehouseId,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		ProductWarehouse productWarehouse = new ProductWarehouse();
 		productWarehouse.setId(warehouseId);
@@ -79,35 +80,35 @@ public class ProductApiController extends BaseController {
 
 	@RequestMapping(value = {"getUserBotInfo/{botId}"})
 	@ApiOperation(value = "用户无人机产品详情")
-	public CommonResult<UserProductBot> getUserBotInfo(@PathVariable String botId, HttpServletRequest request) {
+	public CommonResult<JSONObject> getUserBotInfo(@PathVariable String botId, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.getUserBotInfo(token,botId);
 	}
 
 	@RequestMapping(value = {"getUserWarehouseInfo/{warehouseId}"})
 	@ApiOperation(value = "用户云仓库产品详情")
-	public CommonResult<UserProductWarehouse> getUserWarehouseInfo(@PathVariable String warehouseId, HttpServletRequest request) {
+	public CommonResult<JSONObject> getUserWarehouseInfo(@PathVariable String warehouseId, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.getUserWarehouseInfo(token,warehouseId);
 	}
 
 	@RequestMapping(value = {"getUserWarehousePersonalIncomeList"})
 	@ApiOperation(value = "用户云仓库个人收入记录")
-	public CommonResult<UserProductWarehouseLog> getUserWarehousePersonalIncomeList(HttpServletRequest request) {
+	public CommonResult<JSONObject> getUserWarehousePersonalIncomeList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.getUserWarehousePersonalIncomeList(token);
 	}
 
 	@RequestMapping(value = {"getUserWarehouseTeamIncomeList"})
 	@ApiOperation(value = "用户云仓库团队收入记录")
-	public CommonResult<UserProductWarehouseLog> getUserWarehouseTeamIncomeList(HttpServletRequest request) {
+	public CommonResult<JSONObject> getUserWarehouseTeamIncomeList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.getUserWarehouseTeamIncomeList(token);
 	}
 
 	@RequestMapping(value = {"getUserWarehouseOperationList"})
 	@ApiOperation(value = "用户云仓库操纵记录")
-	public CommonResult<UserProductWarehouseRecord> getUserWarehouseOperationList(HttpServletRequest request) {
+	public CommonResult<JSONObject> getUserWarehouseOperationList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.getUserWarehouseOperationList(token);
 	}

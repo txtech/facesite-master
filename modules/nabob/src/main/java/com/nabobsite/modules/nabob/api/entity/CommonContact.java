@@ -250,6 +250,10 @@ public class CommonContact {
         return result;
     }
 
+    public static JSONObject toJSONObject(Object object){
+        return  (JSONObject)JSONObject.toJSON(object);
+    }
+
     /**
      * @描述:初始化设置报文请求响应编码格式
      * @时间:2017年12月18日 下午5:45:02

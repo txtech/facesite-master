@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
@@ -46,7 +47,7 @@ public class UserAccountApiService extends BaseUserService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			return ResultUtil.success(Boolean.TRUE);
+			return ResultUtil.successToBoolean(true);
 		} catch (Exception e) {
 			logger.error("认领增值账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -65,7 +66,7 @@ public class UserAccountApiService extends BaseUserService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			return ResultUtil.success(Boolean.TRUE);
+			return ResultUtil.successToBoolean(true);
 		} catch (Exception e) {
 			logger.error("认领增值账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -78,14 +79,14 @@ public class UserAccountApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<UserAccount> getUserAccountInfo(String token) {
+	public CommonResult<JSONObject> getUserAccountInfo(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
-			UserAccount userAccount = this.getUserAccountByUserId(userInfo.getId());
-			return ResultUtil.success(userAccount);
+			UserAccount result = this.getUserAccountByUserId(userInfo.getId());
+			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
 			logger.error("获取用户账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

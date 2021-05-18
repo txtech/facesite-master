@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.model.SmsModel;
@@ -16,6 +17,7 @@ import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +52,10 @@ public class OpenApiController extends BaseController {
 	@ApiImplicitParams({
 			@ApiImplicitParam(dataType = "UserInfoModel", name = "userInfoModel", value = "用户注册(必须账户、密码,其它可选)", required = true, type="String")
 	})
-	public CommonResult<Boolean> register(@RequestBody UserInfoModel userInfoModel,HttpServletRequest request) {
+	public CommonResult<Boolean> register(@RequestBody UserInfo userInfo, HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
-		userInfoModel.setRegistIp(ip);
-		return userInfoApiService.register(userInfoModel);
+		userInfo.setRegistIp(ip);
+		return userInfoApiService.register(userInfo);
 	}
 
 	@PostMapping(value = {"forgetPwd"})
@@ -72,7 +74,7 @@ public class OpenApiController extends BaseController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(dataType = "UserInfoModel", name = "userInfoModel", value = "用户登陆:(必须账户、密码)", required = true, type="String")
 	})
-	public CommonResult<UserInfoModel> login(@RequestBody UserInfoModel userInfoModel, HttpServletRequest request) {
+	public CommonResult<JSONObject> login(@RequestBody UserInfoModel userInfoModel, HttpServletRequest request) {
 		String loginIp = HttpBrowserTools.getIpAddr(request);
 		userInfoModel.setLoginIp(loginIp);
 		return userInfoApiService.login(userInfoModel);
@@ -86,19 +88,19 @@ public class OpenApiController extends BaseController {
 
 	@RequestMapping(value = {"getTaskList"})
 	@ApiOperation(value = "获取任务列表")
-	public CommonResult<List<TaskInfo>> getTaskList(HttpServletRequest request) {
+	public CommonResult<JSONArray> getTaskList(HttpServletRequest request) {
 		return taskApiService.getTaskList(new TaskInfo());
 	}
 
 	@RequestMapping(value = {"getProductWarehouseList"})
 	@ApiOperation(value = "云仓库产品列表")
-	public CommonResult<List<ProductWarehouse>> getProductWarehouseList(HttpServletRequest request) {
+	public CommonResult<JSONArray> getProductWarehouseList(HttpServletRequest request) {
 		return productApiService.getProductWarehouseList(new ProductWarehouse());
 	}
 
 	@RequestMapping(value = {"getProductBotList"})
 	@ApiOperation(value = "无人机产品列表")
-	public CommonResult<List<ProductBot>> getProductBotList(HttpServletRequest request) {
+	public CommonResult<JSONArray> getProductBotList(HttpServletRequest request) {
 		return productApiService.getProductBotList(new ProductBot());
 	}
 
