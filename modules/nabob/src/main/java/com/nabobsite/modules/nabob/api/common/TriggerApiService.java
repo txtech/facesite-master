@@ -53,7 +53,7 @@ public class TriggerApiService {
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void registerTrigger(String userId) {
-        TriggerThread callback = new UserRegisterTrigger(userId, userInfoDao, userAccountDao, triggerPoolManager);
+        TriggerThread callback = new UserRegisterTrigger(userId,userInfoDao);
         triggerPoolManager.submit(callback);
     }
 
@@ -63,8 +63,8 @@ public class TriggerApiService {
      * @create 2021/5/11 10:33 下午
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
-    public void balanceTrigger(String userId, BigDecimal updateMoney) {
-        TriggerThread callback = new UserBalanceTrigger(userId, updateMoney, userInfoDao, userAccountDao);
+    public void balanceTrigger(String userId,int type,BigDecimal updateMoney) {
+        TriggerThread callback = new UserBalanceTrigger(userId,type,updateMoney, userInfoDao, userAccountDao);
         triggerPoolManager.submit(callback);
     }
 }

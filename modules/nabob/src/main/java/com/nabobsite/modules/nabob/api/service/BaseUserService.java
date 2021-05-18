@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import java.util.List;
+
 /**
  * 会员用户Service
  * @author face
@@ -229,6 +231,22 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			return sysConfigDao.getByEntity(sysConfig);
 		} catch (Exception e) {
 			logger.error("获取配置异常,{}",key,e);
+			return null;
+		}
+	}
+
+	/**
+	 * @desc 获取配置列表
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public List<SysConfig> getSysConfigList() {
+		try {
+			SysConfig sysConfig = new SysConfig();
+			List<SysConfig> list = sysConfigDao.findList(sysConfig);
+			return list;
+		} catch (Exception e) {
+			logger.error("获取配置列表异常",e);
 			return null;
 		}
 	}

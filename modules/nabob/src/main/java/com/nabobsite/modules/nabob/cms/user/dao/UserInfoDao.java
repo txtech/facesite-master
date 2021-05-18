@@ -10,21 +10,9 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 /**
  * 会员用户DAO接口
  * @author face
- * @version 2021-05-14
+ * @version 2021-05-18
  */
 @MyBatisDao
 public interface UserInfoDao extends CrudDao<UserInfo> {
-    /**
-     * @desc 修改团队人数
-     * @author nada
-     * @create 2021/5/14 2:49 下午
-     */
-    long updateTeamNum(UserInfo userInfo);
-
-    /**
-     * @desc 获取达到等级的直推团队人数
-     * @author nada
-     * @create 2021/5/14 2:44 下午
-     */
-    Integer getOkLevelTeam1Num(UserInfo userInfo);
+	
 }

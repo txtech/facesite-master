@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
@@ -372,25 +373,26 @@ public class UserInfoApiService extends BaseUserService {
 				userInfo.setInviteCode(String.valueOf(seqId));
 				UserInfo initUser = InstanceContact.initUserInfo(userInfo);
 				long dbResult = userInfoDao.insert(initUser);
-				if(CommonContact.dbResult(dbResult)){
-					String userId = initUser.getId();
-					this.updateUserSecret(userId,parent1UserId);
-					if(StringUtils.isNotEmpty(lang)){
-						this.updateUserLang(userId,lang);
-					}
-					Boolean isOk = this.saveInitUserAccount(userId);
-					if(!isOk){
-						return ResultUtil.failed(I18nCode.CODE_10004);
-					}
-					//注册新用户送奖励
-					BigDecimal rewardMoney = LogicStaticContact.USER_REGISTER_REWARD;
-					isOk = userAccountApiService.updateAccountBalance(userId,rewardMoney,userId,CommonContact.USER_ACCOUNT_DETAIL_TITLE_2);
-					if(isOk){
-						triggerApiService.registerTrigger(userId);
-					}
-					return ResultUtil.success(Boolean.TRUE);
+				if(!CommonContact.dbResult(dbResult)){
+					logger.error("注册用户失败,保存用户失败");
+					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				return ResultUtil.failed(I18nCode.CODE_10004);
+				//修改邀请秘文
+				String userId = initUser.getId();
+				this.updateUserSecret(userId,parent1UserId);
+				//初始化账户
+				Boolean isOk = this.saveInitUserAccount(userId);
+				if(!isOk){
+					return ResultUtil.failed(I18nCode.CODE_10004);
+				}
+				//注册新用户送奖励
+				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_2;
+				isOk = userAccountApiService.updateAccountBalance(userId,type,LogicStaticContact.USER_REGISTER_REWARD,userId,CommonContact.USER_ACCOUNT_DETAIL_TITLE_2);
+				if(!isOk){
+					logger.error("注册用户成功,用户送奖励失败,{}",userId);
+				}
+				triggerApiService.registerTrigger(userId);
+				return ResultUtil.success(Boolean.TRUE);
 			}
 		} catch (Exception e) {
 			logger.error("用户注册异常",e);
@@ -406,12 +408,27 @@ public class UserInfoApiService extends BaseUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<JSONObject> getSysConfig() {
 		try {
-			SysConfig sysConfig = this.getSysConfigByKey(CommonContact.SYS_KEY_COUNTDOWN_TIME);
-			if(sysConfig == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
-			}
 			JSONObject configJson = new JSONObject();
-			configJson.put("countDown",sysConfig.getValue());
+			List<SysConfig> sysConfigList = getSysConfigList();
+			for (SysConfig sysConfig : sysConfigList) {
+				String key = sysConfig.getKey();
+				String value = sysConfig.getValue();
+				if(StringUtils.isAnyBlank(key,value)){
+					continue;
+				}
+				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_COUNTDOWN_TIME)){
+					configJson.put("countDownTime",value);
+				}
+				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_CURRENT_VERSION)){
+					configJson.put("appCurrentVersion",value);
+				}
+				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_UPDATE_VERSION)){
+					configJson.put("appUpdateVersion",value);
+				}
+				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_APP_DOWNLOAD_URL)){
+					configJson.put("appDownloadUrl",value);
+				}
+			}
 			return ResultUtil.success(configJson);
 		} catch (Exception e) {
 			logger.error("获取系统配置异常",e);

@@ -7,6 +7,8 @@ import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -18,32 +20,30 @@ import java.math.BigDecimal;
 */
 public class UserBalanceTrigger extends TriggerOperation {
 
+	private int type;
 	private BigDecimal updateMoney;
-	private UserInfoDao userInfoDao;
 	private UserAccountDao userAccountDao;
 
-	public UserBalanceTrigger(String userId,BigDecimal updateMoney, UserInfoDao userInfoDao, UserAccountDao userAccountDao) {
-		super(userId);
+	public UserBalanceTrigger(String userId,int type,BigDecimal updateMoney, UserInfoDao userInfoDao, UserAccountDao userAccountDao) {
+		super(userId,userInfoDao);
+		this.type = type;
 		this.userId = userId;
 		this.updateMoney = updateMoney;
-		this.userInfoDao = userInfoDao;
 		this.userAccountDao = userAccountDao;
 	}
 
 	@Override
 	public void execute() {
-		LOG.info("用户余额触发，userId:{},money:{}",userId,updateMoney);
+		logger.info("用户余额触发，userId:{},type:{},money:{}",userId,type,updateMoney);
 		UserInfo userInfo = this.getUserInfoByUserId(userId);
 		if(userInfo == null){
-			LOG.error("用户余额触发,用户为空:{}",userId);
 			return;
 		}
 		UserAccount userAccount = this.getUserAccountByUserId(userId);
 		if(userInfo == null){
-			LOG.error("用户余额触发,用户账户为空:{}",userId);
 			return;
 		}
-		int oldLock = userInfo.getLock();
+		int currentLock = userInfo.getLock();
 		int currentLevel = userInfo.getLevel();
 		String parent1Id = userInfo.getParent1UserId();
 		BigDecimal currentTotalMoney = userAccount.getTotalMoney();
@@ -53,15 +53,15 @@ public class UserBalanceTrigger extends TriggerOperation {
 			int userLock = this.getUserLock(userId,currentLevel,updateMoney);
 			Boolean isUpLevelOk = this.updateUpLevel(userId,maxLevel,userLock);
 			if(isUpLevelOk){
-				LOG.info("用户余额触发,用户升级且解锁:{},{}",userId,isUpLevelOk);
+				logger.info("用户余额触发,用户升级且解锁:{},{}",userId,isUpLevelOk);
 				isUpLevelOk = this.updateParentUpLock(parent1Id);
-				LOG.info("用户余额触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
+				logger.info("用户余额触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
 			}
 		}else{
 			int userLock = this.getUserLock(userId,currentLevel,updateMoney);
-			if(oldLock != CommonContact.USER_LOCK_1 && userLock == CommonContact.USER_LOCK_1){
+			if(currentLock != CommonContact.USER_LOCK_1 && userLock == CommonContact.USER_LOCK_1){
 				Boolean isUpLevelOk = this.updateLock(userId,userLock);
-				LOG.info("用户余额触发,用户不升级只解锁:{},{}",userId,isUpLevelOk);
+				logger.info("用户余额触发,用户不升级只解锁:{},{}",userId,isUpLevelOk);
 			}
 		}
 	}
@@ -80,11 +80,11 @@ public class UserBalanceTrigger extends TriggerOperation {
 			int teamNum = this.getLevelUpTeamNum(parent1Id);
 			if(teamNum >= LogicStaticContact.USER_LEVEL_UP_TEAM_NUM){
 				Boolean isUpLevelOk = this.updateLock(parent1Id, CommonContact.USER_LOCK_1);
-				LOG.info("用户余额触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
+				logger.info("用户余额触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
 			}
 			return true;
 		} catch (Exception e) {
-			LOG.error("上级用户解锁异常",e);
+			logger.error("上级用户解锁异常",e);
 			return false;
 		}
 	}
@@ -106,7 +106,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			long dbResult = userInfoDao.update(userInfo);
 			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
-			LOG.error("根据账号ID升级异常",e);
+			logger.error("根据账号ID升级异常",e);
 			return null;
 		}
 	}
@@ -127,7 +127,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			long dbResult = userInfoDao.update(userInfo);
 			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
-			LOG.error("根据账号ID升级异常",e);
+			logger.error("根据账号ID升级异常",e);
 			return null;
 		}
 	}
@@ -155,25 +155,6 @@ public class UserBalanceTrigger extends TriggerOperation {
 	}
 
 	/**
-	 * @desc 获取用户信息
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	public UserInfo getUserInfoByUserId(String userId) {
-		try {
-			if(!CommonContact.isOkUserId(userId)){
-				return null;
-			}
-			UserInfo userInfo = new UserInfo();
-			userInfo.setId(userId);
-			return userInfoDao.getByEntity(userInfo);
-		} catch (Exception e) {
-			LOG.error("获取用户信息异常",e);
-			return null;
-		}
-	}
-
-	/**
 	 * @desc 获取用户团队个数
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
@@ -187,7 +168,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			userInfo.setId(userId);
 			return userInfoDao.getOkLevelTeam1Num(userInfo);
 		} catch (Exception e) {
-			LOG.error("获取用户团队个数异常",e);
+			logger.error("获取用户团队个数异常",e);
 			return 0;
 		}
 	}
@@ -206,7 +187,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			userAccount.setId(userId);
 			return userAccountDao.getByEntity(userAccount);
 		} catch (Exception e) {
-			LOG.error("获取账户信息异常",e);
+			logger.error("获取账户信息异常",e);
 			return null;
 		}
 	}
@@ -221,19 +202,19 @@ public class UserBalanceTrigger extends TriggerOperation {
 		this.userId = userId;
 	}
 
-	public UserInfoDao getUserInfoDao() {
-		return userInfoDao;
-	}
-
-	public void setUserInfoDao(UserInfoDao userInfoDao) {
-		this.userInfoDao = userInfoDao;
-	}
-
 	public BigDecimal getUpdateMoney() {
 		return updateMoney;
 	}
 
 	public void setUpdateMoney(BigDecimal updateMoney) {
 		this.updateMoney = updateMoney;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 }

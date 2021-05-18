@@ -105,7 +105,8 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 				logger.error("充值订单回调失败,更新订单失败:{},{}",orderNo,pOrderNo);
 				return false;
 			}
-			isOk = userAccountApiService.updateAccountBalance(userId,actualMoney,orderNo,CommonContact.USER_ACCOUNT_DETAIL_TITLE_1);
+			int updateType = CommonContact.USER_ACCOUNT_DETAIL_TYPE_2;
+			isOk = userAccountApiService.updateAccountBalance(userId,updateType,payMoney,orderNo,CommonContact.USER_ACCOUNT_DETAIL_TITLE_1);
 			if(!isOk){
 				logger.error("充值订单回调失败,更新账户失败:{},{}",orderNo,pOrderNo);
 				return false;

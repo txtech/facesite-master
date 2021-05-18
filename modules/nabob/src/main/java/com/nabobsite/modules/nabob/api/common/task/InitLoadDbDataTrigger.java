@@ -22,14 +22,14 @@ public class InitLoadDbDataTrigger extends TriggerOperation {
 	private UserInfoDao userInfoDao;
 
 	public InitLoadDbDataTrigger(SysI18nDao sysI18nDao,UserInfoDao userInfoDao) {
-		super("");
+		super("",userInfoDao);
 		this.sysI18nDao = sysI18nDao;
 		this.userInfoDao = userInfoDao;
 	}
 
 	@Override
 	public void execute() {
-		LOG.info("系统启动触发器");
+		logger.info("系统启动触发器");
 		List<SysI18n> sysI18nList = sysI18nDao.findList(new SysI18n());
 		if(sysI18nList == null){
 			return;
@@ -39,7 +39,7 @@ public class InitLoadDbDataTrigger extends TriggerOperation {
 		final Map<String, String> zhCNMap = new HashMap<>(sysI18nList.size());
 		for (SysI18n sysI18n: sysI18nList) {
 			String key = sysI18n.getKey();
-			LOG.info("缓存数据:{},{},{},{}",key,sysI18n.getZhValue(),sysI18n.getEnValue(),sysI18n.getZhValue());
+			logger.info("缓存数据:{},{},{},{}",key,sysI18n.getZhValue(),sysI18n.getEnValue(),sysI18n.getZhValue());
 			enUSMap.put(key,sysI18n.getEnValue());
 			enINMap.put(key,sysI18n.getInValue());
 			zhCNMap.put(key,sysI18n.getZhValue());

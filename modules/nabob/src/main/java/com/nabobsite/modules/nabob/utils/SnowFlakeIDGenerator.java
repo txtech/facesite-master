@@ -65,6 +65,15 @@ public class SnowFlakeIDGenerator {
         return snowFlake.nextId();
     }
 
+    /**
+     * @desc 获取6位随机数
+     * @author nada
+     * @create 2021/5/18 12:50 下午
+     */
+    public static synchronized int getRandom6(){
+        return  (int)((Math.random()*9+1)*100000);
+    }
+
     public final static String getSnowFlakeNo(){
         return String.valueOf(generateSnowFlakeId());
     }

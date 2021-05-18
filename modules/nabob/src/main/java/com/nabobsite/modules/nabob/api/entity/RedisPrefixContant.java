@@ -30,13 +30,11 @@ public class RedisPrefixContant {
      */
     public final static long CACHE_ONE_HOURS = 3600000;
 
-    /**
-     * 商城用户缓存+ID
-     */
+    //随机码缓存
+    public final static String FRONT_USER_RANDOM_CODE_CACHE = "front:user:random:code:";
+    //发送短信
     public final static String FRONT_USER_SMS_CODE_CACHE = "front:user:sms:code:";
-    /**
-     * 商城用户缓存+ID
-     */
+    //用户token
     public final static String FRONT_USER_TOKEN_INFO_CACHE = "front:member:info:token:";
 
 

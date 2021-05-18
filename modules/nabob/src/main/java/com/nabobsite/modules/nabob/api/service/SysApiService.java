@@ -24,6 +24,7 @@ import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
+import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,48 @@ public class SysApiService extends BaseUserService {
 	private static final String smsUrl = "http://api.wftqm.com/api/sms/mtsend";
 
 	/**
+	 * @desc 获取随机码
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> getRandomCode(SmsModel smsModel) {
+		try {
+			String phone = smsModel.getPhoneNumber();
+			SnowFlakeIDGenerator.generateSnowFlakeId();
+			int randomCode = SnowFlakeIDGenerator.getRandom6();
+			redisOpsUtil.set("",randomCode);
+			String codeKey = RedisPrefixContant.FRONT_USER_RANDOM_CODE_CACHE + phone;
+			redisOpsUtil.set(codeKey,randomCode,2*RedisPrefixContant.CACHE_ONE_SECONDS);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		} catch (Exception e) {
+			logger.error("获取随机码异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 验证随机码
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> checkRandomCode(SmsModel smsModel) {
+		try {
+			String phoneNumber = smsModel.getPhoneNumber();
+			String randomCode = smsModel.getSmsCode();
+			Boolean isOk = this.verifRandomCode(phoneNumber,randomCode);
+			if(isOk){
+				return ResultUtil.success(isOk);
+			}
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		} catch (Exception e) {
+			logger.error("验证随机码异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
 	 * @desc 发送短信验证码
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
@@ -54,7 +97,7 @@ public class SysApiService extends BaseUserService {
 	public CommonResult<Boolean> sendSms( SmsModel smsModel) {
 		try {
 			String phone = smsModel.getPhoneNumber();
-			String smsCode = smsModel.getSmsCode();
+			int smsCode = SnowFlakeIDGenerator.getRandom6();
 			Boolean isOk = this.sendSmsCode(phone,smsCode);
 			if(isOk){
 				return ResultUtil.success(true);
@@ -84,6 +127,29 @@ public class SysApiService extends BaseUserService {
 		} catch (Exception e) {
 			logger.error("验证短信验证码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 验证随机码
+	 * @author nada
+	 * @create 2021/5/17 1:26 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean verifRandomCode(String phone, String randomCode) {
+		try {
+			if(StringUtils.isAnyEmpty(phone,randomCode)){
+				return false;
+			}
+			String randomCodeKey = RedisPrefixContant.FRONT_USER_RANDOM_CODE_CACHE + phone;
+			String cacheCode = (String) redisOpsUtil.get(randomCodeKey);
+			if(randomCode.equalsIgnoreCase(cacheCode)){
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
+			logger.error("验证随机码异常",e);
+			return false;
 		}
 	}
 
@@ -118,7 +184,7 @@ public class SysApiService extends BaseUserService {
 	 * @author nada
 	 * @create 2021/5/17 1:58 下午
 	*/
-	public boolean sendSmsCode(String phone,String code){
+	public boolean sendSmsCode(String phone,int code){
 		try {
 			String content = "动态验证码:"+code+",您正在办理修改手机号业务,请输入六位动态验证码完成手机号码验证。如非本人操作，请忽略此短信。";
 			JSONObject param = new JSONObject();

@@ -32,6 +32,9 @@ public class CommonContact {
     public final static BigDecimal ZERO = new BigDecimal("0");
 
     public final static String SYS_KEY_COUNTDOWN_TIME  = "sys.key.countdown.time";
+    public final static String SYS_KEY_CURRENT_VERSION  = "sys.key.app.current.version";
+    public final static String SYS_KEY_UPDATE_VERSION  = "sys.key.app.update.version";
+    public final static String SYS_KEY_APP_DOWNLOAD_URL  = "sys.key.app.download.url";
 
     //用户状态
     public final static int USER_STATUS_1 = 1;//正常
@@ -43,12 +46,13 @@ public class CommonContact {
 
     //账户明细类型
     public final static int USER_ACCOUNT_DETAIL_TYPE_1 = 1;//余额账户
-    public final static int USER_ACCOUNT_DETAIL_TYPE_2 = 20;//佣金账户
-    public final static int USER_ACCOUNT_DETAIL_TYPE_3 = 30;//仓库资金
-    public final static int USER_ACCOUNT_DETAIL_TYPE_4 = 40;//奖励账户
+    public final static int USER_ACCOUNT_DETAIL_TYPE_2 = 2;//新用户注册送奖励
+    public final static int USER_ACCOUNT_DETAIL_TYPE_20 = 20;//佣金账户
+    public final static int USER_ACCOUNT_DETAIL_TYPE_30 = 30;//仓库资金
+    public final static int USER_ACCOUNT_DETAIL_TYPE_40 = 40;//奖励账户
 
     //账户明细标题
-    public final static String USER_ACCOUNT_DETAIL_TITLE_1 = "订单充值";
+    public final static String USER_ACCOUNT_DETAIL_TITLE_1 = "用户充值";
     public final static String USER_ACCOUNT_DETAIL_TITLE_2 = "注册奖励";
     public final static String USER_ACCOUNT_DETAIL_TITLE_3 = "任务奖励";
     public final static String USER_ACCOUNT_DETAIL_TITLE_4 = "刷单佣金";

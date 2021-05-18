@@ -98,10 +98,9 @@ public class UserAccountApiService extends BaseUserService {
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean updateAccountBalance(String userId,BigDecimal updateMoney,String uniqueId,String title) {
+	public boolean updateAccountBalance(String userId,int type,BigDecimal updateMoney,String uniqueId,String title) {
 		try {
 			synchronized (userId){
-				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_1;
 				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
 				userAccountDetail.setTotalMoney(updateMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
@@ -118,7 +117,7 @@ public class UserAccountApiService extends BaseUserService {
 					logger.error("修改账户总余额失败,修改账户失败:{},{}",userId,updateMoney);
 					return false;
 				}
-				triggerApiService.balanceTrigger(userId,updateMoney);
+				triggerApiService.balanceTrigger(userId,type,updateMoney);
 				return true;
 			}
 		} catch (Exception e) {
@@ -139,7 +138,7 @@ public class UserAccountApiService extends BaseUserService {
 				return false;
 			}
 			synchronized (userId){
-				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_2;
+				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_20;
 				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
 				userAccountDetail.setCommissionMoney(commissionMoney);
 				userAccountDetail.setIncrementMoney(incrementMoney);
@@ -174,7 +173,7 @@ public class UserAccountApiService extends BaseUserService {
 	public boolean updateAccountRewardMoney(String userId,BigDecimal updateMoney,String uniqueId, String title) {
 		try {
 			synchronized (userId){
-				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_4;
+				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_40;
 				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
 				userAccountDetail.setRewardMoney(updateMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
@@ -221,14 +220,14 @@ public class UserAccountApiService extends BaseUserService {
 				userAccountDetail.setAccountId(accountId);
 				long dbResult = userAccountDetailDao.insert(userAccountDetail);
 				if(!CommonContact.dbResult(dbResult)){
-					logger.error("修改账户余额验证失败,记录明细失败:{},{},{}",userId,accountId,updateMoney);
+					logger.error("修改账户失败,记录明细失败:{},{},{}",userId,accountId,updateMoney);
 					return false;
 				}
 				String detailId = userAccountDetail.getId();
 				UserAccountLog userAccountLog = InstanceContact.initUserAccountLog(detailId,title,oldUserAccount);
 				dbResult = userAccountLogDao.insert(userAccountLog);
 				if(!CommonContact.dbResult(dbResult)){
-					logger.error("修改账户余额验证失败,记录日志失败:{},{},{}",userId,accountId,updateMoney);
+					logger.error("修改账失败,记录日志失败:{},{},{}",userId,accountId,updateMoney);
 					return false;
 				}
 				return true;

@@ -114,4 +114,17 @@ public class OpenApiController extends BaseController {
 		String ipAddr = HttpBrowserTools.getIpAddr(request);
 		return sysApiService.checkSmsCode(smsModel);
 	}
+
+	@RequestMapping(value = {"getRandomCode"})
+	@ApiOperation(value = "获取随机码")
+	public CommonResult<Boolean> getRandomCode(@RequestBody SmsModel smsModel,HttpServletRequest request) {
+		return sysApiService.getRandomCode(smsModel);
+	}
+
+	@RequestMapping(value = {"checkRandomCode"})
+	@ApiOperation(value = "验证随机码")
+	public CommonResult<Boolean> checkRandomCode(@RequestBody SmsModel smsModel, HttpServletRequest request) {
+		String ipAddr = HttpBrowserTools.getIpAddr(request);
+		return sysApiService.checkRandomCode(smsModel);
+	}
 }
