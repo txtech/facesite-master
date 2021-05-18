@@ -2,14 +2,16 @@
  * Copyright (c) 2013-Now  All rights reserved.
  */
 package com.nabobsite.modules.nabob.api.web;
+
 import com.alibaba.fastjson.JSONObject;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.model.BotTaskReqModel;
-import com.nabobsite.modules.nabob.api.model.WarehouseTaskReqModel;
-import com.nabobsite.modules.nabob.api.service.ProductApiService;
-import com.nabobsite.modules.nabob.cms.product.entity.*;
-import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.jeesite.common.web.BaseController;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.service.ProductApiService;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductBotLog;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouseRecord;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,30 +36,30 @@ public class ProductApiController extends BaseController {
 
 	@PostMapping(value = {"doWarehouseDeposit"})
 	@ApiOperation(value = "云仓库产品存款")
-	public CommonResult<Boolean> doWarehouseDeposit(@RequestBody WarehouseTaskReqModel warehouseTaskReqModel, HttpServletRequest request) {
+	public CommonResult<Boolean> doWarehouseDeposit(@RequestBody UserProductWarehouseRecord userProductWarehouseRecord, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return productApiService.doWarehouseDeposit(token,warehouseTaskReqModel);
+		return productApiService.doWarehouseDeposit(token,userProductWarehouseRecord);
 	}
 
 	@PostMapping(value = {"doWarehouseWithdraw"})
 	@ApiOperation(value = "云仓库产品定投撤资")
-	public CommonResult<Boolean> doWarehouseWithdraw(@RequestBody WarehouseTaskReqModel warehouseTaskReqModel, HttpServletRequest request) {
+	public CommonResult<Boolean> doWarehouseWithdraw(@RequestBody UserProductWarehouseRecord userProductWarehouseRecord, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return productApiService.doWarehouseWithdraw(token,warehouseTaskReqModel);
+		return productApiService.doWarehouseWithdraw(token,userProductWarehouseRecord);
 	}
 
 	@PostMapping(value = {"doWarehouseToBalance"})
 	@ApiOperation(value = "云仓库收益提取到余额")
-	public CommonResult<Boolean> doWarehouseToBalance(@RequestBody WarehouseTaskReqModel warehouseTaskReqModel, HttpServletRequest request) {
+	public CommonResult<Boolean> doWarehouseToBalance(@RequestBody UserProductWarehouseRecord userProductWarehouseRecord, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return productApiService.doWarehouseToBalance(token,warehouseTaskReqModel);
+		return productApiService.doWarehouseToBalance(token,userProductWarehouseRecord);
 	}
 
 	@PostMapping(value = {"doBotTask"})
 	@ApiOperation(value = "无人机产品刷单接口")
-	public CommonResult<Boolean> doBotTask(@RequestBody BotTaskReqModel botTaskReqModel, HttpServletRequest request) {
+	public CommonResult<Boolean> doBotTask(@RequestBody UserProductBotLog userProductBotLog, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return productApiService.doBotTask(token,botTaskReqModel);
+		return productApiService.doBotTask(token,userProductBotLog);
 	}
 
 	@RequestMapping(value = {"getProductBotInfo/{botId}"})

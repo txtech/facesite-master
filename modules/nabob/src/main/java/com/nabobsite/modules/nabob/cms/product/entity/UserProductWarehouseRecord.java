@@ -37,16 +37,16 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class UserProductWarehouseRecord extends DataEntity<UserProductWarehouseRecord> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户ID
-	private Integer warehouseId;		// 产品仓库ID
+	private String warehouseId;		// 产品仓库ID
 	private Integer type;		// 类型 1:存款 2:撤资
 	private BigDecimal money;		// 持有资产
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+
 	public UserProductWarehouseRecord() {
 		this(null);
 	}
@@ -54,7 +54,7 @@ public class UserProductWarehouseRecord extends DataEntity<UserProductWarehouseR
 	public UserProductWarehouseRecord(String id){
 		super(id);
 	}
-	
+
 	@NotBlank(message="用户ID不能为空")
 	@Length(min=0, max=50, message="用户ID长度不能超过 50 个字符")
 	public String getUserId() {
@@ -64,16 +64,6 @@ public class UserProductWarehouseRecord extends DataEntity<UserProductWarehouseR
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
-	@NotNull(message="产品仓库ID不能为空")
-	public Integer getWarehouseId() {
-		return warehouseId;
-	}
-
-	public void setWarehouseId(Integer warehouseId) {
-		this.warehouseId = warehouseId;
-	}
-	
 	@NotNull(message="类型 1不能为空")
 	public Integer getType() {
 		return type;
@@ -82,7 +72,7 @@ public class UserProductWarehouseRecord extends DataEntity<UserProductWarehouseR
 	public void setType(Integer type) {
 		this.type = type;
 	}
-	
+
 	@NotNull(message="持有资产不能为空")
 	public BigDecimal getMoney() {
 		return money;
@@ -91,7 +81,7 @@ public class UserProductWarehouseRecord extends DataEntity<UserProductWarehouseR
 	public void setMoney(BigDecimal money) {
 		this.money = money;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -100,7 +90,7 @@ public class UserProductWarehouseRecord extends DataEntity<UserProductWarehouseR
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -109,7 +99,7 @@ public class UserProductWarehouseRecord extends DataEntity<UserProductWarehouseR
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -118,5 +108,12 @@ public class UserProductWarehouseRecord extends DataEntity<UserProductWarehouseR
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
+	public String getWarehouseId() {
+		return warehouseId;
+	}
+
+	public void setWarehouseId(String warehouseId) {
+		this.warehouseId = warehouseId;
+	}
 }

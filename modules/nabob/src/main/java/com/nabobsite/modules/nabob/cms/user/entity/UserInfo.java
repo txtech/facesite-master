@@ -84,6 +84,9 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	private String appVersion;		// 使用版本
+	private String smsCode;
+	private String codeKey;
+	private String imgCode;
 
 	public UserInfo() {
 		this(null);
@@ -341,5 +344,29 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setOldPassword(String oldPassword) {
 		this.oldPassword = oldPassword;
+	}
+
+	public String getSmsCode() {
+		return smsCode;
+	}
+
+	public void setSmsCode(String smsCode) {
+		this.smsCode = smsCode;
+	}
+
+	public String getCodeKey() {
+		return codeKey;
+	}
+
+	public void setCodeKey(String codeKey) {
+		this.codeKey = codeKey;
+	}
+
+	public String getImgCode() {
+		return imgCode;
+	}
+
+	public void setImgCode(String imgCode) {
+		this.imgCode = imgCode;
 	}
 }

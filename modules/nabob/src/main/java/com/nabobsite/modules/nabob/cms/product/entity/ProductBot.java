@@ -41,7 +41,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class ProductBot extends DataEntity<ProductBot> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private Integer seq;		// 排序
 	private String name;		// 产品名称
@@ -54,7 +54,8 @@ public class ProductBot extends DataEntity<ProductBot> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+	private String orderNo;
+
 	public ProductBot() {
 		this(null);
 	}
@@ -62,7 +63,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public ProductBot(String id){
 		super(id);
 	}
-	
+
 	@NotNull(message="排序不能为空")
 	public Integer getSeq() {
 		return seq;
@@ -71,7 +72,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setSeq(Integer seq) {
 		this.seq = seq;
 	}
-	
+
 	@NotBlank(message="产品名称不能为空")
 	@Length(min=0, max=520, message="产品名称长度不能超过 520 个字符")
 	public String getName() {
@@ -81,7 +82,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@NotNull(message="限制等级不能为空")
 	public Integer getLevel() {
 		return level;
@@ -90,7 +91,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setLevel(Integer level) {
 		this.level = level;
 	}
-	
+
 	public BigDecimal getPrice() {
 		return price;
 	}
@@ -98,7 +99,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
-	
+
 	@NotNull(message="佣金比例不能为空")
 	public BigDecimal getCommissionRate() {
 		return commissionRate;
@@ -107,7 +108,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setCommissionRate(BigDecimal commissionRate) {
 		this.commissionRate = commissionRate;
 	}
-	
+
 	@NotNull(message="额外佣金比例不能为空")
 	public BigDecimal getCommissionRateOther() {
 		return commissionRateOther;
@@ -116,7 +117,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setCommissionRateOther(BigDecimal commissionRateOther) {
 		this.commissionRateOther = commissionRateOther;
 	}
-	
+
 	@NotBlank(message="产品图片不能为空")
 	@Length(min=0, max=1024, message="产品图片长度不能超过 1024 个字符")
 	public String getProductUrl() {
@@ -126,7 +127,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setProductUrl(String productUrl) {
 		this.productUrl = productUrl;
 	}
-	
+
 	@Length(min=0, max=2024, message="产品描述长度不能超过 2024 个字符")
 	public String getDesc() {
 		return desc;
@@ -135,7 +136,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -144,7 +145,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -153,7 +154,7 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -162,5 +163,12 @@ public class ProductBot extends DataEntity<ProductBot> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
 }

@@ -5,22 +5,19 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
-import com.nabobsite.modules.nabob.api.model.BotTaskReqModel;
-import com.nabobsite.modules.nabob.api.model.WarehouseTaskReqModel;
 import com.nabobsite.modules.nabob.cms.product.dao.*;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.api.common.response.CommonResult;
-import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.plaf.basic.BasicMenuItemUI;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -122,15 +119,15 @@ public class ProductApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doWarehouseToBalance(String token, WarehouseTaskReqModel warehouseTaskReqModel) {
+	public CommonResult<Boolean> doWarehouseToBalance(String token,UserProductWarehouseRecord userProductWarehouseRecord) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo== null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
-			String warehouseId = warehouseTaskReqModel.getWarehouseId();
-			BigDecimal amount = warehouseTaskReqModel.getAmount();
+			String warehouseId = userProductWarehouseRecord.getWarehouseId();
+			BigDecimal amount = userProductWarehouseRecord.getMoney();
 			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
 			if(productWarehouse == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
@@ -162,15 +159,15 @@ public class ProductApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doWarehouseWithdraw(String token, WarehouseTaskReqModel warehouseTaskReqModel) {
+	public CommonResult<Boolean> doWarehouseWithdraw(String token, UserProductWarehouseRecord userProductWarehouseRecord) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo== null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
-			String warehouseId = warehouseTaskReqModel.getWarehouseId();
-			BigDecimal amount = warehouseTaskReqModel.getAmount();
+			String warehouseId = userProductWarehouseRecord.getWarehouseId();
+			BigDecimal amount = userProductWarehouseRecord.getMoney();
 			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
 			if(productWarehouse == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
@@ -202,15 +199,15 @@ public class ProductApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doWarehouseDeposit(String token, WarehouseTaskReqModel warehouseTaskReqModel) {
+	public CommonResult<Boolean> doWarehouseDeposit(String token,UserProductWarehouseRecord userProductWarehouseRecord) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo== null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
-			String warehouseId = warehouseTaskReqModel.getWarehouseId();
-			BigDecimal amount = warehouseTaskReqModel.getAmount();
+			String warehouseId = userProductWarehouseRecord.getWarehouseId();
+			BigDecimal amount = userProductWarehouseRecord.getMoney();
 			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
 			if(productWarehouse == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
@@ -242,15 +239,14 @@ public class ProductApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doBotTask(String token, BotTaskReqModel botTaskReqModel) {
+	public CommonResult<Boolean> doBotTask(String token,UserProductBotLog userProductBotLog) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo== null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
-			String botId = botTaskReqModel.getBotId();
-			String orderNo = botTaskReqModel.getOrderNo();
+			String botId = userProductBotLog.getId();
 			ProductBot productBot = this.getProductBotInfoById(botId);
 			if(productBot == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
@@ -262,8 +258,6 @@ public class ProductApiService extends BaseUserService {
 				if(userLevel < mustLevel){
 					return ResultUtil.failed("任务失败,当前等级不符合要求");
 				}
-				UserProductBotLog userProductBotLog = new UserProductBotLog();
-				BeanUtils.copyProperties(botTaskReqModel, userProductBotLog);
 				userProductBotLog.setUserId(userId);
 				long dbResult = userProductBotLogDao.insert(userProductBotLog);
 				if(CommonContact.dbResult(dbResult)){

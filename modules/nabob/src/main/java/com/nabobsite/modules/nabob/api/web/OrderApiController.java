@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.model.OrderInfoModel;
 import com.nabobsite.modules.nabob.api.service.OrderApiService;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
@@ -46,11 +45,11 @@ public class OrderApiController extends BaseController {
 			@ApiImplicitParam(name = "phoneNumber",value = "电话号码", required = true),
 			@ApiImplicitParam(name = "mark", value = "来者不善", required = false, type="String"),
 	})
-	public CommonResult<JSONObject> rechargeOrder(@RequestBody OrderInfoModel orderInfoModel, HttpServletRequest request) {
+	public CommonResult<JSONObject> rechargeOrder(@RequestBody Order order, HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		orderInfoModel.setIpaddress(ip);
-		return orderApiService.rechargeOrder(orderInfoModel,token);
+		order.setIpaddress(ip);
+		return orderApiService.rechargeOrder(order,token);
 	}
 
 	@PostMapping(value = {"getOrderList"})
