@@ -25,7 +25,7 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- 核心模块 -->
+			<!-- 公共模块 -->
 			<dependency>
 				<groupId>com.jeesite</groupId>
 				<artifactId>jeesite-common</artifactId>
@@ -36,13 +36,6 @@
 			<dependency>
 				<groupId>com.jeesite</groupId>
 				<artifactId>jeesite-module-core</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
-
-			<!--商城模块-->
-			<dependency>
-				<groupId>com.jeesite</groupId>
-				<artifactId>jeesite-module-mall</artifactId>
 				<version>${project.parent.version}</version>
 			</dependency>
 
