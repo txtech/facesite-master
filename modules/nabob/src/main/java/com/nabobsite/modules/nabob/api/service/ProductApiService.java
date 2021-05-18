@@ -10,6 +10,7 @@ import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
+import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.product.dao.*;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -46,72 +47,6 @@ public class ProductApiService extends BaseUserService {
 	private UserProductWarehouseLogDao userProductWarehouseLogDao;
 	@Autowired
 	private UserProductWarehouseRecordDao userProductWarehouseRecordDao;
-	/**
-	 * @desc 用户云仓库个人收入记录
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getUserWarehousePersonalIncomeList(String token) {
-		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
-			}
-			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
-			userProductWarehouseLog.setUserId(userInfo.getId());
-			userProductWarehouseLog.setType(CommonContact.WAREHOUSE_TYPE_1);
-			UserProductWarehouseLog result = userProductWarehouseLogDao.getByEntity(userProductWarehouseLog);
-			return ResultUtil.successToJson(result);
-		} catch (Exception e) {
-			logger.error("用户云仓库产品异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-	/**
-	 * @desc 用户云仓库团队收入记录
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getUserWarehouseTeamIncomeList(String token) {
-		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
-			}
-			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
-			userProductWarehouseLog.setUserId(userInfo.getId());
-			userProductWarehouseLog.setType(CommonContact.WAREHOUSE_TYPE_2);
-			UserProductWarehouseLog result = userProductWarehouseLogDao.getByEntity(userProductWarehouseLog);
-			return ResultUtil.successToJson(result);
-		} catch (Exception e) {
-			logger.error("用户云仓库产品异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-	/**
-	 * @desc 用户云仓库操纵记录
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getUserWarehouseOperationList(String token) {
-		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
-			}
-			UserProductWarehouseRecord userProductWarehouseRecord = new UserProductWarehouseRecord();
-			userProductWarehouseRecord.setUserId(userInfo.getId());
-			UserProductWarehouseRecord result = userProductWarehouseRecordDao.getByEntity(userProductWarehouseRecord);
-			return ResultUtil.successToJson(result);
-		} catch (Exception e) {
-			logger.error("用户云仓库产品异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
 
 	/**
 	 * @desc 云仓库收益提取到余额
@@ -284,25 +219,6 @@ public class ProductApiService extends BaseUserService {
 		}
 	}
 
-	/**
-	 * @desc 获取无人机产品列表
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getProductBotList(ProductBot productBot) {
-		try {
-			List<ProductBot> list = productBotDao.findList(productBot);
-			JSONArray result = new JSONArray();
-			for (ProductBot entity : list) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
-		} catch (Exception e) {
-			logger.error("获取无人机产品列表异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
 
 	/**
 	 * @desc 获取云仓库产品列表
@@ -324,8 +240,28 @@ public class ProductApiService extends BaseUserService {
 		}
 	}
 
+
 	/**
-	 * @desc 获取无人机产品详情
+	 * @desc 获取无人机产品列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONArray> getProductBotList(ProductBot productBot) {
+		try {
+			List<ProductBot> list = productBotDao.findList(productBot);
+			JSONArray result = new JSONArray();
+			for (ProductBot entity : list) {
+				result.add(CommonContact.toJSONObject(entity));
+			}
+			return ResultUtil.successToJsonArray(result);
+		} catch (Exception e) {
+			logger.error("获取无人机产品列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+	/**
+	 * @desc 无人机产品详情
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
@@ -335,29 +271,12 @@ public class ProductApiService extends BaseUserService {
 			ProductBot productBotInfo = productBotDao.getByEntity(productBot);
 			return ResultUtil.successToJson(productBotInfo);
 		} catch (Exception e) {
-			logger.error("获取无人机产品详情异常",e);
+			logger.error("无人机产品详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
-
 	/**
-	 * @desc 获取云仓库产品详情
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getProductWarehouseInfo(String token,ProductWarehouse productWarehouse) {
-		try {
-			ProductWarehouse productWarehouseInfo = productWarehouseDao.getByEntity(productWarehouse);
-			return ResultUtil.successToJson(productWarehouseInfo);
-		} catch (Exception e) {
-			logger.error("获取云仓库产品详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 用户无人机产品
+	 * @desc 用户无人机产品详情
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
@@ -374,13 +293,30 @@ public class ProductApiService extends BaseUserService {
 			UserProductBot result = userProductBotDao.getByEntity(userProductBot);
 			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
-			logger.error("用户无人机产品异常",e);
+			logger.error("用户无人机产品详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
+
+
 	/**
-	 * @desc 用户云仓库产品
+	 * @desc 云仓库产品详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONObject> getProductWarehouseInfo(String token,ProductWarehouse productWarehouse) {
+		try {
+			ProductWarehouse productWarehouseInfo = productWarehouseDao.getByEntity(productWarehouse);
+			return ResultUtil.successToJson(productWarehouseInfo);
+		} catch (Exception e) {
+			logger.error("云仓库产品详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+	/**
+	 * @desc 用户云仓库产品详情
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
@@ -397,7 +333,88 @@ public class ProductApiService extends BaseUserService {
 			UserProductWarehouse result = userProductWarehouseDao.getByEntity(userProductWarehouse);
 			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
-			logger.error("用户云仓库产品异常",e);
+			logger.error("用户云仓库产品详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+
+
+
+	/**
+	 * @desc 用户云仓库个人收入记录列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONArray> getUserWarehousePersonalIncomeList(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
+			userProductWarehouseLog.setUserId(userInfo.getId());
+			userProductWarehouseLog.setType(CommonContact.WAREHOUSE_TYPE_1);
+			List<UserProductWarehouseLog> userProductWarehouseLogList = userProductWarehouseLogDao.findList(userProductWarehouseLog);
+			JSONArray result = new JSONArray();
+			for (UserProductWarehouseLog entity : userProductWarehouseLogList) {
+				result.add(CommonContact.toJSONObject(entity));
+			}
+			return ResultUtil.successToJsonArray(result);
+		} catch (Exception e) {
+			logger.error("用户云仓库个人收入记录列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+	/**
+	 * @desc 用户云仓库团队收入记录列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONArray> getUserWarehouseTeamIncomeList(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
+			userProductWarehouseLog.setUserId(userInfo.getId());
+			userProductWarehouseLog.setType(CommonContact.WAREHOUSE_TYPE_2);
+			List<UserProductWarehouseLog> userProductWarehouseLogList = userProductWarehouseLogDao.findList(userProductWarehouseLog);
+			JSONArray result = new JSONArray();
+			for (UserProductWarehouseLog entity : userProductWarehouseLogList) {
+				result.add(CommonContact.toJSONObject(entity));
+			}
+			return ResultUtil.successToJsonArray(result);
+		} catch (Exception e) {
+			logger.error("用户云仓库团队收入记录列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+	/**
+	 * @desc 用户云仓库操纵记录列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONArray> getUserWarehouseOperationList(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			UserProductWarehouseRecord userProductWarehouseRecord = new UserProductWarehouseRecord();
+			userProductWarehouseRecord.setUserId(userInfo.getId());
+			List<UserProductWarehouseRecord> userProductWarehouseRecordList = userProductWarehouseRecordDao.findList(userProductWarehouseRecord);
+			JSONArray result = new JSONArray();
+			for (UserProductWarehouseRecord entity : userProductWarehouseRecordList) {
+				result.add(CommonContact.toJSONObject(entity));
+			}
+			return ResultUtil.successToJsonArray(result);
+		} catch (Exception e) {
+			logger.error("用户云仓库操纵记录列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
