@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.CircleCaptcha;
 import org.patchca.background.BackgroundFactory;
 import org.patchca.color.ColorFactory;
 import org.patchca.filter.predefined.CurvesRippleFilterFactory;
@@ -220,10 +222,35 @@ public class CaptchaUtils {
 		return result;
 	}
 
+	/**
+	 * 生成验证码
+	 */
+	public static Map<String,String> generateSimpleBase64Captcha(){
+		Map<String,String> result = new HashMap<>();
+		try {
+			CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(50, 30, 4, 5);
+			captcha.createCode();
+			String imgCode = captcha.getCode();
+			String imgBase64 = captcha.getImageBase64Data();
+			result.put("imgCode",imgCode);
+			result.put("imgBase64",imgBase64);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	public static void main(String[] args) throws IOException {
 		FileOutputStream fos = new FileOutputStream("/Users/lihai/02space/nabobsite-master/modules/core/src/main/java/com/jeesite/modules/sys/web/captcha.png");
-		String s = generateCaptcha(fos);
-		System.out.println(s);
-		fos.close();
+		//String s = generateCaptcha(fos);
+//		System.out.println(s);
+//		fos.close();
+
+		CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(50, 30, 4,5);
+		captcha.createCode();
+		String imgCode = captcha.getCode();
+		String imgBase64 = captcha.getImageBase64Data();
+		System.out.println(imgBase64);
+		System.out.println(imgCode);
 	}
 }

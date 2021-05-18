@@ -58,7 +58,7 @@ public class SysApiService extends BaseUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<JSONObject> getImgRandomCode() {
 		try {
-			Map<String,String> codeMap = CaptchaUtils.generateBase64Captcha();
+			Map<String,String> codeMap = CaptchaUtils.generateSimpleBase64Captcha();
 			if(codeMap == null || codeMap.isEmpty()){
 				return ResultUtil.failed(I18nCode.CODE_10004);
 			}
