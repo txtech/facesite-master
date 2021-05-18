@@ -7,6 +7,7 @@ import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
+import com.jeesite.common.image.CaptchaUtils;
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
@@ -17,6 +18,7 @@ import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.api.model.SmsModel;
 import com.nabobsite.modules.nabob.api.model.UserInfoModel;
+import com.nabobsite.modules.nabob.api.model.VerificationCodeModel;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
@@ -34,6 +36,8 @@ import org.springframework.util.DigestUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * 会员用户Service
@@ -45,6 +49,58 @@ import java.net.URLEncoder;
 public class SysApiService extends BaseUserService {
 
 	private static final String smsUrl = "http://api.wftqm.com/api/sms/mtsend";
+
+	/**
+	 * @desc 获取随机码
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONObject> getImgRandomCode() {
+		try {
+			Map<String,String> codeMap = CaptchaUtils.generateBase64Captcha();
+			if(codeMap == null || codeMap.isEmpty()){
+				return ResultUtil.failed(I18nCode.CODE_10004);
+			}
+			String imgCode = codeMap.containsKey("imgCode")?codeMap.get("imgCode"):"";
+			String imgBase64 = codeMap.containsKey("imgBase64")?codeMap.get("imgBase64"):"";
+			if(StringUtils.isAnyBlank(imgCode,imgBase64)){
+				return ResultUtil.failed(I18nCode.CODE_10004);
+			}
+			String codeKey = UUID.randomUUID().toString().replaceAll("-","");
+			JSONObject result = new JSONObject();
+			result.put("codeKey",codeKey);
+			result.put("imgBase64",imgBase64);
+
+			String cacheKey = RedisPrefixContant.FRONT_USER_RANDOM_CODE_CACHE + codeKey;
+			redisOpsUtil.set(cacheKey,imgCode,10*RedisPrefixContant.CACHE_ONE_SECONDS);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("获取随机码异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 获取随机码
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> checkImgRandomCode(VerificationCodeModel verificationCodeModel) {
+		try {
+			String code = verificationCodeModel.getCode();
+			String codeKey = verificationCodeModel.getCodeKey();
+			Boolean isOk = this.verifImgRandomCode(codeKey,code);
+			if(isOk){
+				return ResultUtil.success(isOk);
+			}
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		} catch (Exception e) {
+			logger.error("获取随机码异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
 
 	/**
 	 * @desc 获取随机码
@@ -127,6 +183,29 @@ public class SysApiService extends BaseUserService {
 		} catch (Exception e) {
 			logger.error("验证短信验证码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 验证图形随机码
+	 * @author nada
+	 * @create 2021/5/17 1:26 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean verifImgRandomCode(String codeKey, String randomCode) {
+		try {
+			if(StringUtils.isAnyEmpty(codeKey,randomCode)){
+				return false;
+			}
+			String randomCodeKey = RedisPrefixContant.FRONT_USER_RANDOM_CODE_CACHE + codeKey;
+			String cacheCode = (String) redisOpsUtil.get(randomCodeKey);
+			if(randomCode.equalsIgnoreCase(cacheCode)){
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
+			logger.error("验证图形随机码异常",e);
+			return false;
 		}
 	}
 

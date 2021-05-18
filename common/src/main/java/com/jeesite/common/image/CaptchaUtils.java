@@ -6,8 +6,13 @@ package com.jeesite.common.image;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import org.patchca.background.BackgroundFactory;
@@ -18,10 +23,14 @@ import org.patchca.filter.predefined.DoubleRippleFilterFactory;
 import org.patchca.filter.predefined.MarbleRippleFilterFactory;
 import org.patchca.filter.predefined.WobbleRippleFilterFactory;
 import org.patchca.font.RandomFontFactory;
+import org.patchca.service.Captcha;
 import org.patchca.service.ConfigurableCaptchaService;
 import org.patchca.text.renderer.BestFitTextRenderer;
 import org.patchca.utils.encoder.EncoderHelper;
 import org.patchca.word.RandomWordFactory;
+import sun.misc.BASE64Encoder;
+
+import javax.imageio.ImageIO;
 
 /**
  * 验证码工具
@@ -50,6 +59,7 @@ public class CaptchaUtils {
 	        		ccs.setHeight(28);
 
 	            	// 设置文字数量
+					// 随机字符生成器,去除掉容易混淆的字母和数字,如o和0等
 	        		RandomWordFactory wf = new RandomWordFactory();
 	        		wf.setCharacters("ABDEFGHKMNRSWX2345689");
 	        		wf.setMinLength(4);
@@ -126,7 +136,6 @@ public class CaptchaUtils {
 	        		crff = new CurvesRippleFilterFactory(ccs.getColorFactory()); // 曲线波纹
 	        		drff = new DiffuseRippleFilterFactory(); 	// 漫纹波
 	        		mrff = new MarbleRippleFilterFactory(); 	// 大理石
-
         		}
 			}
         }
@@ -134,16 +143,12 @@ public class CaptchaUtils {
 
 	/**
 	 * 生成验证码
-	 * @param request
-	 * @param response
 	 * @throws IOException
 	 * @return 验证码字符
 	 */
 	public static String generateCaptcha(OutputStream outputStream) throws IOException{
-
 		// 初始化设置
 		initialize();
-
         // 随机选择一个样式
         switch (random.nextInt(3)) {
 		case 0:
@@ -162,20 +167,63 @@ public class CaptchaUtils {
 			ccs.setFilterFactory(mrff); // 大理石
 			break;
 		}
-
         // 生成验证码
         String s = EncoderHelper.getChallangeAndWriteImage(ccs, "png", outputStream);
 //        System.out.println(s);
-
 		return s;
 	}
 
-//	public static void main(String[] args) throws IOException {
-//
-//		FileOutputStream fos = new FileOutputStream("x:\\captcha.png");
-//		String s = generateCaptcha(fos);
-//		System.out.println(s);
-//		fos.close();
-//
-//	}
+	/**
+	 * 生成验证码
+	 * @return 验证码字符
+	 */
+	public static Map<String,String> generateBase64Captcha(){
+		Map<String,String> result = new HashMap<>();
+		try {
+			// 初始化设置
+			initialize();
+			// 随机选择一个样式
+			switch (random.nextInt(3)) {
+				case 0:
+					ccs.setFilterFactory(wrff); // 摆波纹
+					break;
+				case 1:
+					ccs.setFilterFactory(doff); // 双波纹
+					break;
+				case 2:
+					ccs.setFilterFactory(crff); // 曲线波纹
+					break;
+				case 3:
+					ccs.setFilterFactory(drff); // 漫纹波
+					break;
+				case 4:
+					ccs.setFilterFactory(mrff); // 大理石
+					break;
+			}
+			// 得到验证码对象,有验证码图片和验证码字符串
+			Captcha captcha = ccs.getCaptcha();
+			String validationCode = captcha.getChallenge();
+			// 取得验证码图片并输出
+			BufferedImage bufferedImage = captcha.getImage();
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();//io流
+			ImageIO.write(bufferedImage, "png", baos);//写入流中
+			byte[] bytes = baos.toByteArray();//转换成字节
+			BASE64Encoder encoder = new BASE64Encoder();
+			String png_base64 = encoder.encodeBuffer(bytes).trim();//转换成base64串
+			png_base64 = png_base64.replaceAll("\n", "").replaceAll("\r", "");//删除 \r\n
+			String imgBase64 = "data:image/png;base64,"+png_base64;
+			result.put("imgCode",validationCode);
+			result.put("imgBase64",imgBase64);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public static void main(String[] args) throws IOException {
+		FileOutputStream fos = new FileOutputStream("/Users/lihai/02space/nabobsite-master/modules/core/src/main/java/com/jeesite/modules/sys/web/captcha.png");
+		String s = generateCaptcha(fos);
+		System.out.println(s);
+		fos.close();
+	}
 }

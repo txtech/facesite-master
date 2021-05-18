@@ -243,8 +243,16 @@ public class UserInfoApiService extends BaseUserService {
 			String loginIp = userInfoModel.getLoginIp();
 			String accountNo = userInfoModel.getAccountNo();
 			String password = userInfoModel.getNewPassword();
+			String imgCodeKey = userInfoModel.getCodeKey();
+			String imgCode = userInfoModel.getImgCode();
 			if(StringUtils.isAnyBlank(accountNo,password)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
+			}
+			if(StringUtils.isNotEmpty(imgCodeKey) && StringUtils.isNotEmpty(imgCode)){
+				Boolean isOk = sysApiService.verifImgRandomCode(imgCodeKey,imgCode);
+				if(!isOk){
+					return ResultUtil.failed(I18nCode.CODE_10005);
+				}
 			}
 			UserInfo loginUserInfo = this.getUserInfoByAccountNo(accountNo);
 			if(loginUserInfo == null){

@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.model.SmsModel;
 import com.nabobsite.modules.nabob.api.model.UserInfoModel;
+import com.nabobsite.modules.nabob.api.model.VerificationCodeModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
 import com.nabobsite.modules.nabob.api.service.SysApiService;
 import com.nabobsite.modules.nabob.api.service.TaskApiService;
@@ -126,5 +127,17 @@ public class OpenApiController extends BaseController {
 	public CommonResult<Boolean> checkRandomCode(@RequestBody SmsModel smsModel, HttpServletRequest request) {
 		String ipAddr = HttpBrowserTools.getIpAddr(request);
 		return sysApiService.checkRandomCode(smsModel);
+	}
+
+	@RequestMapping(value = {"getImgRandomCode"})
+	@ApiOperation(value = "获取图片随机码")
+	public CommonResult<JSONObject> getImgRandomCode(HttpServletRequest request) {
+		return sysApiService.getImgRandomCode();
+	}
+
+	@RequestMapping(value = {"checkImgRandomCode"})
+	@ApiOperation(value = "验证图片随机码")
+	public CommonResult<Boolean> checkImgRandomCode(@RequestBody VerificationCodeModel verificationCodeModel, HttpServletRequest request) {
+		return sysApiService.checkImgRandomCode(verificationCodeModel);
 	}
 }

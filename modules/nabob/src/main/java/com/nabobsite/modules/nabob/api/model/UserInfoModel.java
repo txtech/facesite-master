@@ -41,8 +41,12 @@ public class UserInfoModel implements Serializable {
     private String favorite;
     @ApiModelProperty("语言")
     private String lang;
-    @ApiModelProperty("验证吗")
+    @ApiModelProperty("短信验证码")
     private String smsCode;
+    @ApiModelProperty("图片验证码key")
+    private String codeKey;
+    @ApiModelProperty("图片验证码")
+    private String imgCode;
     @ApiModelProperty("注册IP")
     private String registIp;
     @ApiModelProperty("登陆Ip")
@@ -168,5 +172,21 @@ public class UserInfoModel implements Serializable {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getCodeKey() {
+        return codeKey;
+    }
+
+    public void setCodeKey(String codeKey) {
+        this.codeKey = codeKey;
+    }
+
+    public String getImgCode() {
+        return imgCode;
+    }
+
+    public void setImgCode(String imgCode) {
+        this.imgCode = imgCode;
     }
 }
