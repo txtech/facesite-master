@@ -5,20 +5,20 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.api.common.response.CommonResult;
-import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -50,11 +50,11 @@ public class OrderApiService extends BaseUserService {
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			if(CommonContact.isLesserOrEqual(payMoney, CommonContact.ZERO)){
-				return ResultUtil.failed(I18nCode.CODE_10007);
+				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10009);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
 			order.setUserId(userId);
@@ -83,7 +83,7 @@ public class OrderApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10009);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
 			order.setUserId(userId);
@@ -107,12 +107,12 @@ public class OrderApiService extends BaseUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<JSONObject> getOrderInfo(Order order, String token) {
 		try {
-			if(order.getOrderNo() == null){
+			if(order == null){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10009);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
 			order.setUserId(userId);

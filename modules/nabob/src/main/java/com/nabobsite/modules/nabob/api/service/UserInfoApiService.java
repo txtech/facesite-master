@@ -65,11 +65,11 @@ public class UserInfoApiService extends BaseUserService {
 			}
 			Boolean isOk = sysApiService.verifSmsCode(accountNo,smsCode);
 			if(!isOk){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failed(I18nCode.CODE_10010);
 			}
 			UserInfo oldUserInfo = this.getUserInfoByAccountNo(accountNo);
 			if(oldUserInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failed(I18nCode.CODE_10011);
 			}
 			String md5NewPwd = DigestUtils.md5DigestAsHex(newPassword.getBytes());
 			UserInfo updateUserInfo = new UserInfo();
@@ -105,15 +105,15 @@ public class UserInfoApiService extends BaseUserService {
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			if (oldPassword.equalsIgnoreCase(newPassword)) {
-				return ResultUtil.failed("修改失败,新旧密码不能一样");
+				return ResultUtil.failed(I18nCode.CODE_10012);
 			}
 			String oldDbPwd = oldUserInfo.getPassword();
 			String md5OldPwd = DigestUtils.md5DigestAsHex(oldPassword.getBytes());
 			if (!oldDbPwd.equalsIgnoreCase(md5OldPwd)) {
-				return ResultUtil.failed("修改失败,旧密码输入错误");
+				return ResultUtil.failed(I18nCode.CODE_10013);
 			}
 			if(!accountNo.equalsIgnoreCase(oldUserInfo.getAccountNo())){
-				return ResultUtil.failed("修改失败,账户输入错误");
+				return ResultUtil.failed(I18nCode.CODE_10014);
 			}
 			String md5NewPwd = DigestUtils.md5DigestAsHex(newPassword.getBytes());
 			UserInfo updateUserInfo = new UserInfo();
@@ -240,15 +240,15 @@ public class UserInfoApiService extends BaseUserService {
 			if(StringUtils.isNotEmpty(imgCodeKey) && StringUtils.isNotEmpty(imgCode)){
 				Boolean isOk = sysApiService.verifImgRandomCode(imgCodeKey,imgCode);
 				if(!isOk){
-					return ResultUtil.failed(I18nCode.CODE_10005);
+					return ResultUtil.failed(I18nCode.CODE_10010);
 				}
 			}
 			UserInfo loginUserInfo = this.getUserInfoByAccountNo(accountNo);
 			if(loginUserInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failed(I18nCode.CODE_10011);
 			}
 			if (!DigestUtils.md5DigestAsHex(password.getBytes()).equals(loginUserInfo.getPassword())) {
-				return ResultUtil.failed(I18nCode.CODE_10007);
+				return ResultUtil.failed(I18nCode.CODE_10015);
 			}
 			String userId = loginUserInfo.getId();
 			String newToken = UUID.randomUUID().toString().replaceAll("-","");
@@ -296,21 +296,20 @@ public class UserInfoApiService extends BaseUserService {
 			if(StringUtils.isAnyBlank(accountNo,password)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			if(accountNo.length() < 10 || password.length()<6 || accountNo.length() > 15 || password.length() > 20){
-				return ResultUtil.failed(I18nCode.CODE_10007);
+			if(accountNo.length() < 10 || accountNo.length() > 20 || password.length()<6  || password.length() > 20){
+				return ResultUtil.failed(I18nCode.CODE_10016);
 			}
 
-			//注册账户
 			synchronized (accountNo){
 				UserInfo checkUserInfo = this.getUserInfoByAccountNo(accountNo);
 				if(checkUserInfo !=null){
-					return ResultUtil.failed(I18nCode.CODE_10008);
+					return ResultUtil.failed(I18nCode.CODE_10017);
 				}
 				//邀请码信息
 				if(StringUtils.isNotEmpty(parentInviteCode)){
 					UserInfo inviteCodeUserInfo = this.getUserInfoByInviteCode(parentInviteCode);
 					if(inviteCodeUserInfo == null){
-						return ResultUtil.failed(I18nCode.CODE_10007);
+						return ResultUtil.failed(I18nCode.CODE_10018);
 					}
 					String parent1UserId = inviteCodeUserInfo.getId();
 					String parentSysId = inviteCodeUserInfo.getParentSysId();

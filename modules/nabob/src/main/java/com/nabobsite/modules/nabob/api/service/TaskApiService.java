@@ -52,12 +52,12 @@ public class TaskApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10009);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
 			TaskInfo taskInfo = this.getTaskInfoById(taskId);
 			if(taskInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10019);
 			}
 			synchronized (userId) {
 				BigDecimal rewardMoney = taskInfo.getRewardMoney();
@@ -65,33 +65,30 @@ public class TaskApiService extends BaseUserService {
 				if(userTask == null){
 					UserTask initUserTask = InstanceContact.initUserTask(userId,taskId,1);
 					long dbResult = userTaskDao.insert(initUserTask);
-					if(CommonContact.dbResult(dbResult)){
-						logger.info("新用户第一次做任务成功:{},{}",userId,taskId);
-						return ResultUtil.successToBoolean(true);
+					if(!CommonContact.dbResult(dbResult)){
+						logger.error("初始化任务失败:{},{}",userId,taskId);
+						return ResultUtil.failed(I18nCode.CODE_10004);
 					}
-					logger.error("新用户第一次做任务失败:{},{}",userId,taskId);
-					return ResultUtil.failed(I18nCode.CODE_10004);
+					return ResultUtil.successToBoolean(true);
 				}
 
 				int taskStatus = userTask.getTaskStatus();
 				int taskFinishNumber = userTask.getFinishNumber();
 				if(taskStatus == CommonContact.USER_TASK_STATUS_3){
-					logger.error("新用户任务已经完毕:{},{}",userId,taskId);
+					logger.error("任务已经完成:{},{}",userId,taskId);
 					this.sendReward(userId,rewardMoney,taskId);
-					return ResultUtil.failed(I18nCode.CODE_10004);
+					return ResultUtil.failed(I18nCode.CODE_10008);
 				}
 				int taskNum = taskInfo.getTaskNumber();
 				if(taskFinishNumber >= taskNum){
-					logger.error("新用户任务已经完毕:{},{}",userId,taskId);
-					return ResultUtil.failed(I18nCode.CODE_10004);
+					logger.error("任务已经完成:{},{}",userId,taskId);
+					return ResultUtil.failed(I18nCode.CODE_10008);
 				}
 				Boolean isOk = this.updateTaskFinishNumber(userTask.getId(),taskFinishNumber+1);
 				if(isOk){
-					logger.info("新用户做任务成功:{},{}",userId,taskId);
 					this.sendReward(userId,rewardMoney,taskId);
 					return ResultUtil.successToBoolean(true);
 				}
-				logger.error("新用户做任务失败:{},{}",userId,taskId);
 				return ResultUtil.failed(I18nCode.CODE_10004);
 			}
 		} catch (Exception e) {
@@ -130,7 +127,7 @@ public class TaskApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10009);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
 			UserTaskReward userTaskReward = new UserTaskReward();

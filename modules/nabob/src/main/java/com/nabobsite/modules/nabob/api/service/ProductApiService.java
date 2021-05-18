@@ -70,7 +70,7 @@ public class ProductApiService extends BaseUserService {
 			}
 			BigDecimal limitPrice = productWarehouse.getLimitPrice();
 			if(CommonContact.isLesser(amount,limitPrice)){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
 			synchronized (userId){
 				UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
@@ -110,7 +110,7 @@ public class ProductApiService extends BaseUserService {
 			}
 			BigDecimal limitPrice = productWarehouse.getLimitPrice();
 			if(CommonContact.isLesser(amount,limitPrice)){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
 			synchronized (userId){
 				UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
@@ -152,7 +152,7 @@ public class ProductApiService extends BaseUserService {
 			}
 			BigDecimal limitPrice = productWarehouse.getLimitPrice();
 			if(CommonContact.isLesser(amount,limitPrice)){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
 			synchronized (userId) {
 				UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
@@ -196,12 +196,12 @@ public class ProductApiService extends BaseUserService {
 				int mustLevel = productBot.getLevel();
 				BigDecimal productBotPrice = productBot.getPrice();
 				if(userLevel < mustLevel){
-					return ResultUtil.failed("任务失败,当前等级不符合要求");
+					return ResultUtil.failed(I18nCode.CODE_10101);
 				}
 				userProductBotLog.setUserId(userId);
 				long dbResult = userProductBotLogDao.insert(userProductBotLog);
 				if(CommonContact.dbResult(dbResult)){
-					return ResultUtil.failed("任务失败,保存记录失败");
+					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
 				String title = CommonContact.USER_ACCOUNT_DETAIL_TITLE_4;
 				//增值比例
@@ -290,7 +290,7 @@ public class ProductApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserProductBot userProductBot = new UserProductBot();
 			userProductBot.setUserId(userInfo.getId());
@@ -330,7 +330,7 @@ public class ProductApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
 			userProductWarehouse.setUserId(userInfo.getId());
@@ -356,7 +356,7 @@ public class ProductApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
 			userProductWarehouseLog.setUserId(userInfo.getId());
@@ -382,7 +382,7 @@ public class ProductApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
 			userProductWarehouseLog.setUserId(userInfo.getId());
@@ -408,7 +408,7 @@ public class ProductApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserProductWarehouseRecord userProductWarehouseRecord = new UserProductWarehouseRecord();
 			userProductWarehouseRecord.setUserId(userInfo.getId());

@@ -48,7 +48,7 @@ public class UserAccountApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10009);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
 			UserAccountDetail userAccountDetail = new UserAccountDetail();
@@ -60,13 +60,13 @@ public class UserAccountApiService extends BaseUserService {
 			}
 			return ResultUtil.successToJsonArray(result);
 		} catch (Exception e) {
-			logger.error("认领增值账户异常",e);
+			logger.error("获取收支总账记录异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
 	/**
-	 * @desc 认领增值账户
+	 * @desc 用户认领增值账户
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
@@ -79,7 +79,7 @@ public class UserAccountApiService extends BaseUserService {
 			}
 			return ResultUtil.successToBoolean(true);
 		} catch (Exception e) {
-			logger.error("认领增值账户异常",e);
+			logger.error("用户认领增值账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
@@ -94,7 +94,7 @@ public class UserAccountApiService extends BaseUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserAccount result = this.getUserAccountByUserId(userInfo.getId());
 			return ResultUtil.successToJson(result);

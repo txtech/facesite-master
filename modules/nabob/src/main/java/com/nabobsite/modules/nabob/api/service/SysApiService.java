@@ -33,7 +33,7 @@ public class SysApiService extends BaseUserService {
 	private static final String smsUrl = "http://api.wftqm.com/api/sms/mtsend";
 
 	/**
-	 * @desc 获取随机码
+	 * @desc 获取图片验证码
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
@@ -47,24 +47,23 @@ public class SysApiService extends BaseUserService {
 			String imgCode = codeMap.containsKey("imgCode")?codeMap.get("imgCode"):"";
 			String imgBase64 = codeMap.containsKey("imgBase64")?codeMap.get("imgBase64"):"";
 			if(StringUtils.isAnyBlank(imgCode,imgBase64)){
-				return ResultUtil.failed(I18nCode.CODE_10004);
+				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
 			String codeKey = UUID.randomUUID().toString().replaceAll("-","");
 			JSONObject result = new JSONObject();
 			result.put("codeKey",codeKey);
 			result.put("imgBase64",imgBase64);
-
 			String cacheKey = RedisPrefixContant.FRONT_USER_RANDOM_CODE_CACHE + codeKey;
-			redisOpsUtil.set(cacheKey,imgCode,10*RedisPrefixContant.CACHE_ONE_SECONDS);
+			redisOpsUtil.set(cacheKey,imgCode,5*RedisPrefixContant.CACHE_ONE_SECONDS);
 			return ResultUtil.successJson(result);
 		} catch (Exception e) {
-			logger.error("获取随机码异常",e);
+			logger.error("获取图片验证码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
 	/**
-	 * @desc 获取随机码
+	 * @desc 验证图片验证码
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
@@ -74,10 +73,10 @@ public class SysApiService extends BaseUserService {
 			String code = verificationCodeModel.getCode();
 			String codeKey = verificationCodeModel.getCodeKey();
 			Boolean isOk = this.verifImgRandomCode(codeKey,code);
-			if(isOk){
-				return ResultUtil.successToBoolean(isOk);
+			if(!isOk){
+				return ResultUtil.failed(I18nCode.CODE_10010);
 			}
-			return ResultUtil.failed(I18nCode.CODE_10004);
+			return ResultUtil.successToBoolean(isOk);
 		} catch (Exception e) {
 			logger.error("获取随机码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -85,7 +84,7 @@ public class SysApiService extends BaseUserService {
 	}
 
 	/**
-	 * @desc 获取随机码
+	 * @desc 获取数字随机码
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
@@ -99,13 +98,13 @@ public class SysApiService extends BaseUserService {
 			redisOpsUtil.set(codeKey,randomCode,2*RedisPrefixContant.CACHE_ONE_SECONDS);
 			return ResultUtil.successToBoolean(true);
 		} catch (Exception e) {
-			logger.error("获取随机码异常",e);
+			logger.error("获取数字随机码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 
 	/**
-	 * @desc 验证随机码
+	 * @desc 验证数字随机码
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
@@ -115,12 +114,12 @@ public class SysApiService extends BaseUserService {
 			String phoneNumber = smsModel.getPhoneNumber();
 			String randomCode = smsModel.getSmsCode();
 			Boolean isOk = this.verifRandomCode(phoneNumber,randomCode);
-			if(isOk){
-				return ResultUtil.successToBoolean(isOk);
+			if(!isOk){
+				return ResultUtil.failed(I18nCode.CODE_10010);
 			}
-			return ResultUtil.failed(I18nCode.CODE_10004);
+			return ResultUtil.successToBoolean(isOk);
 		} catch (Exception e) {
-			logger.error("验证随机码异常",e);
+			logger.error("验证数字随机码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
@@ -136,10 +135,10 @@ public class SysApiService extends BaseUserService {
 			String phone = smsModel.getPhoneNumber();
 			int smsCode = SnowFlakeIDGenerator.getRandom6();
 			Boolean isOk = this.sendSmsCode(phone,smsCode);
-			if(isOk){
-				return ResultUtil.successToBoolean(true);
+			if(!isOk){
+				return ResultUtil.failed(I18nCode.CODE_10020);
 			}
-			return ResultUtil.failed(I18nCode.CODE_10004);
+			return ResultUtil.successToBoolean(true);
 		} catch (Exception e) {
 			logger.error("发送短信验证码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -157,10 +156,10 @@ public class SysApiService extends BaseUserService {
 			String phoneNumber = smsModel.getPhoneNumber();
 			String smsCode = smsModel.getSmsCode();
 			Boolean isOk = this.verifSmsCode(phoneNumber,smsCode);
-			if(isOk){
-				return ResultUtil.successToBoolean(isOk);
+			if(!isOk){
+				return ResultUtil.failed(I18nCode.CODE_10010);
 			}
-			return ResultUtil.failed(I18nCode.CODE_10004);
+			return ResultUtil.successToBoolean(isOk);
 		} catch (Exception e) {
 			logger.error("验证短信验证码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
