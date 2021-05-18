@@ -95,10 +95,9 @@ public class SysApiService extends BaseUserService {
 			String phone = smsModel.getPhoneNumber();
 			SnowFlakeIDGenerator.generateSnowFlakeId();
 			int randomCode = SnowFlakeIDGenerator.getRandom6();
-			redisOpsUtil.set("",randomCode);
 			String codeKey = RedisPrefixContant.FRONT_USER_RANDOM_CODE_CACHE + phone;
 			redisOpsUtil.set(codeKey,randomCode,2*RedisPrefixContant.CACHE_ONE_SECONDS);
-			return ResultUtil.failed(I18nCode.CODE_10004);
+			return ResultUtil.successToBoolean(true);
 		} catch (Exception e) {
 			logger.error("获取随机码异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
