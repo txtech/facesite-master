@@ -24,13 +24,15 @@ public class CommonContact {
     private static final Logger logger = LoggerFactory.getLogger(CommonContact.class);
 
     public static String CHART_UTF ="UTF-8";
-    public final static String AUTHORIZATION = "Authorization";
+    public final static String LANG = "lang";
     public final static String TOKEN = "token";
     public final static String USERID = "userId";
-    public final static String LANG = "lang";
+    public final static String AUTHORIZATION = "Authorization";
+
 
     public final static BigDecimal ZERO = new BigDecimal("0");
 
+    //系统配置key
     public final static String SYS_KEY_COUNTDOWN_TIME  = "sys.key.countdown.time";
     public final static String SYS_KEY_CURRENT_VERSION  = "sys.key.app.current.version";
     public final static String SYS_KEY_UPDATE_VERSION  = "sys.key.app.update.version";
@@ -43,6 +45,15 @@ public class CommonContact {
     //用户解锁状态
     public final static int USER_LOCK_1 = 1;//正常
     public final static int USER_LOCK_2 = 2;//锁定
+
+    //用户任务 1:未开始 2:进行中 3:完成
+    public final static int USER_TASK_STATUS_1 = 1;
+    public final static int USER_TASK_STATUS_2 = 2;
+    public final static int USER_TASK_STATUS_3 = 3;
+
+    //用户云仓库日志类型
+    public final static int WAREHOUSE_TYPE_1 = 1;//个人
+    public final static int WAREHOUSE_TYPE_2 = 2;//团队
 
     //账户明细类型
     public final static int USER_ACCOUNT_DETAIL_TYPE_1 = 1;//余额账户
@@ -58,17 +69,27 @@ public class CommonContact {
     public final static String USER_ACCOUNT_DETAIL_TITLE_4 = "刷单佣金";
 
     //奖励明细类型
-    public final static int USER_ACCOUNT_REWARD_TYPE_1 = 1;//注册奖励
-    public final static int USER_ACCOUNT_REWARD_TYPE_2 = 2;//新手任务奖励： 分享好友奖励,观看视频奖励,邀请好友奖励,定期投资奖励
+    public final static int USER_ACCOUNT_REWARD_TYPE_1 = 1;//分享好友奖励
+    public final static int USER_ACCOUNT_REWARD_TYPE_2 = 2;//观看视频奖励
+    public final static int USER_ACCOUNT_REWARD_TYPE_3 = 3;//邀请好友奖励
+    public final static int USER_ACCOUNT_REWARD_TYPE_4 = 4;//定期投资奖励
 
     //用户账户状态
-    public final static int USER_ACCOUNT_STATUS_OK = 1;//正常
-    public final static int USER_ACCOUNT_STATUS_ENABLE = 2;//冻结
+    public final static int USER_ACCOUNT_STATUS_1 = 1;//正常
+    public final static int USER_ACCOUNT_STATUS_2 = 2;//冻结
 
     //订单类型
     public final static int ORDER_TYPE_RECHANGE = 1;//充值
 
-    //订单类型
+    /**
+     * @desc 订单支付类型
+     * @author nada
+     * @create 2021/5/18 4:36 下午
+    */
+    public final static int ORDER_PAY_TYPE_1 = 1;//转卡支付
+    public final static int ORDER_PAY_TYPE_2 = 2;//扫码支付
+
+    //支付订单类型
     //1: 待支付 2:支付中 3:支付失败 4:支付成功 9:退款
     public final static int ORDER_STATUS_1 = 1;
     public final static int ORDER_STATUS_2 = 2;
@@ -76,14 +97,13 @@ public class CommonContact {
     public final static int ORDER_STATUS_4 = 4;
     public final static int ORDER_STATUS_9 = 9;
 
-    //用户任务 1:未开始 2:进行中 3:完成
-    public final static int USER_TASK_STATUS_1 = 1;
-    public final static int USER_TASK_STATUS_2 = 2;
-    public final static int USER_TASK_STATUS_3 = 3;
-
-    //用户状态
-    public final static int WAREHOUSE_TYPE_1 = 1;//个人
-    public final static int WAREHOUSE_TYPE_2 = 2;//团队
+    //出款类型
+    //1: 待支付 2:支付中 3:支付失败 4:支付成功 9:退款
+    public final static int CASH_STATUS_1 = 1;
+    public final static int CASH_STATUS_2 = 2;
+    public final static int CASH_STATUS_3 = 3;
+    public final static int CASH_STATUS_4 = 4;
+    public final static int CASH_STATUS_9 = 9;
 
     /**
      * @desc 解析数据库返回接口
