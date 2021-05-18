@@ -403,7 +403,7 @@ public class UserInfoApiService extends BaseUserService {
 	public CommonResult<JSONObject> getSysConfig() {
 		try {
 			JSONObject configJson = new JSONObject();
-			List<SysConfig> sysConfigList = getSysConfigList();
+			List<SysConfig> sysConfigList = this.getSysConfigList();
 			for (SysConfig sysConfig : sysConfigList) {
 				String key = sysConfig.getKey();
 				String value = sysConfig.getValue();
@@ -412,15 +412,19 @@ public class UserInfoApiService extends BaseUserService {
 				}
 				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_COUNTDOWN_TIME)){
 					configJson.put("countDownTime",value);
+					continue;
 				}
 				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_CURRENT_VERSION)){
 					configJson.put("appCurrentVersion",value);
+					continue;
 				}
 				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_UPDATE_VERSION)){
 					configJson.put("appUpdateVersion",value);
+					continue;
 				}
 				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_APP_DOWNLOAD_URL)){
 					configJson.put("appDownloadUrl",value);
+					continue;
 				}
 			}
 			return ResultUtil.successJson(configJson);

@@ -243,6 +243,7 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 	public List<SysConfig> getSysConfigList() {
 		try {
 			SysConfig sysConfig = new SysConfig();
+			sysConfig.setStatus("1");
 			List<SysConfig> list = sysConfigDao.findList(sysConfig);
 			return list;
 		} catch (Exception e) {

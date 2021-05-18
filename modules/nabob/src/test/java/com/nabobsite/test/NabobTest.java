@@ -22,7 +22,7 @@ public class NabobTest {
         String url = baseReqUrl + "open/register";
         JSONObject param = new JSONObject();
         param.put("accountNo", "15118135523");
-        param.put("newPassword", "123456");
+        param.put("password", "123456");
         param.put("inviteCode", "100038");
         //param.put("inviteSecret", "4182927c1c3600e49f1553ba9ab50bc1aef9531d36b9e1918e74d14baaa769dc");
         param.put("favorite", "Elon Musk");

@@ -2,6 +2,7 @@ package com.nabobsite.modules.nabob.api.entity;
 
 import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -251,7 +252,8 @@ public class CommonContact {
     }
 
     public static JSONObject toJSONObject(Object object){
-        return  (JSONObject)JSONObject.toJSON(object);
+        JSONObject result =  (JSONObject)JSONObject.toJSON(object);
+        return ResultUtil.filterResult(result);
     }
 
     /**
