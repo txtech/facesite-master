@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.product.service.UserProductWarehouseServi
 /**
  * 用户产品仓库信息Controller
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-18
  */
 @Controller
 @RequestMapping(value = "${adminPath}/product/userProductWarehouse")

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -116,6 +117,8 @@ public class ProductApiService extends BaseUserService {
 				userProductWarehouse.setUserId(userId);
 				userProductWarehouse.setWarehouseId(warehouseId);
 				userProductWarehouse.setAsstesHeldMoney(amount);
+				userProductWarehouse.setTeamUpdateTime(new Date());
+				userProductWarehouse.setPsersonUpdateTime(new Date());
 				long dbResult = userProductWarehouseDao.insert(userProductWarehouse);
 				if(CommonContact.dbResult(dbResult)){
 					return ResultUtil.successToBoolean(true);
@@ -156,6 +159,8 @@ public class ProductApiService extends BaseUserService {
 				userProductWarehouse.setUserId(userId);
 				userProductWarehouse.setWarehouseId(warehouseId);
 				userProductWarehouse.setAsstesHeldMoney(amount);
+				userProductWarehouse.setTeamUpdateTime(new Date());
+				userProductWarehouse.setPsersonUpdateTime(new Date());
 				long dbResult = userProductWarehouseDao.insert(userProductWarehouse);
 				if(CommonContact.dbResult(dbResult)){
 					return ResultUtil.successToBoolean(true);
