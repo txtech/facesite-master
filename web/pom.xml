@@ -11,10 +11,10 @@
 
 	<artifactId>jeesite-nabob-web</artifactId>
 	<packaging>war</packaging>
-	<name>JeeSite nabob web</name>
+	<name>JeeSite aurora web</name>
 
 	<properties>
-		<finalName>nabob</finalName>
+		<finalName>aurora</finalName>
 		<start-class>com.jeesite.modules.Application</start-class>
 		<!--<eclipse-plugin-download-sources>false</eclipse-plugin-download-sources>
 		<eclipse-plugin-download-javadocs>false</eclipse-plugin-download-javadocs>-->

@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 订单Entity
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-18
  */
 @Table(name="t1_order", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -40,6 +40,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="pay_rate", attrName="payRate", label="支付费率"),
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
@@ -63,6 +64,7 @@ public class Order extends DataEntity<Order> {
 	private String phoneNumber;		// 电话号码
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
+	private BigDecimal payRate;		// 支付费率
 	private String delFlag;		// 删除标志
 	
 	public Order() {
@@ -213,6 +215,15 @@ public class Order extends DataEntity<Order> {
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+	
+	@NotNull(message="支付费率不能为空")
+	public BigDecimal getPayRate() {
+		return payRate;
+	}
+
+	public void setPayRate(BigDecimal payRate) {
+		this.payRate = payRate;
 	}
 	
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")

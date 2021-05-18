@@ -16,7 +16,7 @@ import com.nabobsite.modules.nabob.cms.sys.dao.SysChannelDao;
 /**
  * 通道配置Service
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-18
  */
 @Service
 @Transactional(readOnly=true)

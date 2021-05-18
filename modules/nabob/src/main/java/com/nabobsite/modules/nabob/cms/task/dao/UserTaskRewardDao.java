@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 /**
  * 用户任务奖励DAO接口
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-18
  */
 @MyBatisDao
 public interface UserTaskRewardDao extends CrudDao<UserTaskReward> {

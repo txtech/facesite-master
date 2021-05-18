@@ -5,10 +5,10 @@ package com.nabobsite.modules.nabob.cms.task.entity;
 
 import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import com.jeesite.common.mybatis.annotation.JoinTable;
 import com.jeesite.common.mybatis.annotation.JoinTable.Type;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -20,15 +20,16 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户任务奖励Entity
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-18
  */
 @Table(name="t1_user_task_reward", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="user_id", attrName="userId", label="用户id"),
 		@Column(name="account_id", attrName="accountId", label="账户ID"),
 		@Column(name="title", attrName="title", label="标题", queryType=QueryType.LIKE),
-		@Column(name="type", attrName="type", label="类型 1", comment="类型 1:分享 2:观看视频 3:邀请好友 4:定期投资"),
+		@Column(name="task_id", attrName="taskId", label="任务ID"),
 		@Column(name="reward_money", attrName="rewardMoney", label="奖励金额"),
+		@Column(name="finish_num", attrName="finishNum", label="完成个数"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
 		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
@@ -43,8 +44,9 @@ public class UserTaskReward extends DataEntity<UserTaskReward> {
 	private String userId;		// 用户id
 	private String accountId;		// 账户ID
 	private String title;		// 标题
-	private Integer type;		// 类型 1:分享 2:观看视频 3:邀请好友 4:定期投资
+	private String taskId;		// 任务ID
 	private BigDecimal rewardMoney;		// 奖励金额
+	private Integer finishNum;		// 完成个数
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
@@ -87,13 +89,14 @@ public class UserTaskReward extends DataEntity<UserTaskReward> {
 		this.title = title;
 	}
 	
-	@NotNull(message="类型 1不能为空")
-	public Integer getType() {
-		return type;
+	@NotBlank(message="任务ID不能为空")
+	@Length(min=0, max=30, message="任务ID长度不能超过 30 个字符")
+	public String getTaskId() {
+		return taskId;
 	}
 
-	public void setType(Integer type) {
-		this.type = type;
+	public void setTaskId(String taskId) {
+		this.taskId = taskId;
 	}
 	
 	@NotNull(message="奖励金额不能为空")
@@ -103,6 +106,15 @@ public class UserTaskReward extends DataEntity<UserTaskReward> {
 
 	public void setRewardMoney(BigDecimal rewardMoney) {
 		this.rewardMoney = rewardMoney;
+	}
+	
+	@NotNull(message="完成个数不能为空")
+	public Integer getFinishNum() {
+		return finishNum;
+	}
+
+	public void setFinishNum(Integer finishNum) {
+		this.finishNum = finishNum;
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

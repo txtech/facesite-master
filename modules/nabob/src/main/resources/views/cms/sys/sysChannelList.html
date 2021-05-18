@@ -48,10 +48,22 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('支付费率')}：</label>
+					<div class="control-inline">
+						<#form:input path="payRate" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('更新时间')}：</label>
 					<div class="control-inline">
 						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('出款费率')}：</label>
+					<div class="control-inline">
+						<#form:input path="cashRate" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -89,7 +101,9 @@ $('#dataGrid').dataGrid({
 		{header:'${text("配置no")}', name:'merchNo', index:'a.merch_no', width:150, align:"left"},
 		{header:'${text("配置key")}', name:'merchKey', index:'a.merch_key', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("支付费率")}', name:'payRate', index:'a.pay_rate', width:150, align:"left"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
+		{header:'${text("出款费率")}', name:'cashRate', index:'a.cash_rate', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){

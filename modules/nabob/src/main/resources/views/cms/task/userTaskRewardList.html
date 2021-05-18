@@ -35,15 +35,21 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('类型 1')}：</label>
+					<label class="control-label">${text('任务ID')}：</label>
 					<div class="control-inline">
-						<#form:input path="type" class="form-control width-120"/>
+						<#form:input path="taskId" maxlength="30" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('奖励金额')}：</label>
 					<div class="control-inline">
 						<#form:input path="rewardMoney" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('完成个数')}：</label>
+					<div class="control-inline">
+						<#form:input path="finishNum" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -93,8 +99,9 @@ $('#dataGrid').dataGrid({
 		}},
 		{header:'${text("账户ID")}', name:'accountId', index:'a.account_id', width:150, align:"left"},
 		{header:'${text("标题")}', name:'title', index:'a.title', width:150, align:"left"},
-		{header:'${text("类型 1")}', name:'type', index:'a.type', width:150, align:"center"},
+		{header:'${text("任务ID")}', name:'taskId', index:'a.task_id', width:150, align:"left"},
 		{header:'${text("奖励金额")}', name:'rewardMoney', index:'a.reward_money', width:150, align:"left"},
+		{header:'${text("完成个数")}', name:'finishNum', index:'a.finish_num', width:150, align:"center"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},

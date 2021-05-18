@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.sys.service.SysChannelService;
 /**
  * 通道配置Controller
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-18
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/sysChannel")

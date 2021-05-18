@@ -6,6 +6,7 @@ package com.nabobsite.modules.nabob.cms.user.dao;
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 
 /**
  * 用户账户DAO接口

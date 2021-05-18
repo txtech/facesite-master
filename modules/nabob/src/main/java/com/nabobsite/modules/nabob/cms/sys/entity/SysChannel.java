@@ -10,6 +10,7 @@ import java.util.Date;
 import com.jeesite.common.mybatis.annotation.JoinTable;
 import com.jeesite.common.mybatis.annotation.JoinTable.Type;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.math.BigDecimal;
 
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
@@ -19,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 通道配置Entity
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-18
  */
 @Table(name="t1_sys_channel", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -28,7 +29,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="merch_no", attrName="merchNo", label="配置no"),
 		@Column(name="merch_key", attrName="merchKey", label="配置key"),
 		@Column(name="created", attrName="created", label="创建时间"),
+		@Column(name="pay_rate", attrName="payRate", label="支付费率"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
+		@Column(name="cash_rate", attrName="cashRate", label="出款费率"),
 		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
@@ -43,7 +46,9 @@ public class SysChannel extends DataEntity<SysChannel> {
 	private String merchNo;		// 配置no
 	private String merchKey;		// 配置key
 	private Date created;		// 创建时间
+	private BigDecimal payRate;		// 支付费率
 	private Date updated;		// 更新时间
+	private Long cashRate;		// 出款费率
 	private String delFlag;		// 删除标志
 	
 	public SysChannel() {
@@ -102,6 +107,15 @@ public class SysChannel extends DataEntity<SysChannel> {
 		this.created = created;
 	}
 	
+	@NotNull(message="支付费率不能为空")
+	public BigDecimal getPayRate() {
+		return payRate;
+	}
+
+	public void setPayRate(BigDecimal payRate) {
+		this.payRate = payRate;
+	}
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -109,6 +123,15 @@ public class SysChannel extends DataEntity<SysChannel> {
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+	
+	@NotNull(message="出款费率不能为空")
+	public Long getCashRate() {
+		return cashRate;
+	}
+
+	public void setCashRate(Long cashRate) {
+		this.cashRate = cashRate;
 	}
 	
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
