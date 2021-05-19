@@ -47,6 +47,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('每日次数')}：</label>
+					<div class="control-inline">
+						<#form:input path="dailyNum" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('额外佣金比例')}：</label>
 					<div class="control-inline">
 						<#form:input path="commissionRateOther" class="form-control width-120"/>
@@ -113,6 +119,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text("限制等级")}', name:'level', index:'a.level', width:150, align:"center"},
 		{header:'${text("价格")}', name:'price', index:'a.price', width:150, align:"left"},
 		{header:'${text("佣金比例")}', name:'commissionRate', index:'a.commission_rate', width:150, align:"left"},
+		{header:'${text("每日次数")}', name:'dailyNum', index:'a.daily_num', width:150, align:"center"},
 		{header:'${text("额外佣金比例")}', name:'commissionRateOther', index:'a.commission_rate_other', width:150, align:"left"},
 		{header:'${text("产品图片")}', name:'productUrl', index:'a.product_url', width:150, align:"left"},
 		{header:'${text("产品描述")}', name:'desc', index:'a.desc', width:150, align:"left"},

@@ -1,6 +1,8 @@
 package com.nabobsite.modules.nabob.api.entity;
 
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductBotLog;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
@@ -56,7 +58,7 @@ public class InstanceContact {
     }
 
     /**
-     * @desc 初始化用户账户信息
+     * @desc 初始化用户账户
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
@@ -84,7 +86,7 @@ public class InstanceContact {
     }
 
     /**
-     * @desc 初始化用户账户记录信息
+     * @desc 初始化用户账户明细
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
@@ -140,7 +142,7 @@ public class InstanceContact {
     }
 
     /**
-     * @desc 初始化用户任务信息
+     * @desc 初始化用户任务
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
@@ -156,7 +158,7 @@ public class InstanceContact {
     }
 
     /**
-     * @desc 初始化用户任务信息
+     * @desc 初始化用户奖励
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
@@ -172,4 +174,21 @@ public class InstanceContact {
         return userTaskReward;
     }
 
+    /**
+     * @desc 初始化用户奖励
+     * @author nada
+     * @create 2021/5/12 2:59 下午
+     */
+    public static UserProductBot initUserProductBot(UserProductBotLog userProductBotLog){
+        UserProductBot userProductBot = new UserProductBot();
+        userProductBot.setIsNewRecord(true);
+        userProductBot.setUserId(userProductBotLog.getUserId());
+        userProductBot.setBotId(userProductBotLog.getBotId());
+        userProductBot.setTodayOrders(1);
+        userProductBot.setTodayIncomeMoney(userProductBotLog.getIncomeMoney());
+        userProductBot.setTodayTeamIncome(new BigDecimal("0"));
+        userProductBot.setYesterdayIncomeMoney(new BigDecimal("0"));
+        userProductBot.setYesterdayTeamIncomeMoney(new BigDecimal("0"));
+        return userProductBot;
+    }
 }

@@ -5,11 +5,12 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.lang.StringUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
+import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.product.dao.*;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -184,7 +185,17 @@ public class ProductApiService extends BaseUserService {
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
-			String botId = userProductBotLog.getId();
+			String botId = userProductBotLog.getBotId();
+			String orderNo = userProductBotLog.getOrderNo();
+			BigDecimal incomeRate = userProductBotLog.getIncomeRate();
+			BigDecimal incomeMoney = userProductBotLog.getIncomeMoney();
+			BigDecimal orderAmount = userProductBotLog.getOrderAmount();
+			if(StringUtils.isAnyEmpty(botId,orderNo)){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			if(CommonContact.isLesserOrEqualZero(incomeRate) || CommonContact.isLesserOrEqualZero(incomeMoney)  || CommonContact.isLesserOrEqualZero(orderAmount) ){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
 			ProductBot productBot = this.getProductBotInfoById(botId);
 			if(productBot == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
@@ -192,25 +203,60 @@ public class ProductApiService extends BaseUserService {
 			synchronized (userId) {
 				int userLevel = userInfo.getLevel();
 				int mustLevel = productBot.getLevel();
+				int dailyNum = productBot.getDailyNum();
+				BigDecimal mustPrice = productBot.getPrice();
 				BigDecimal productBotPrice = productBot.getPrice();
+				BigDecimal commissionRate = productBot.getCommissionRate();
 				if(userLevel < mustLevel){
 					return ResultUtil.failed(I18nCode.CODE_10101);
 				}
+				//佣金
+				String title = CommonContact.USER_ACCOUNT_DETAIL_TITLE_4;
+				BigDecimal commissionMoney = CommonContact.multiply(productBotPrice,commissionRate);
+				if(!CommonContact.isEqual(commissionRate,incomeRate)){
+					return ResultUtil.failed(I18nCode.CODE_10100);
+				}
+				if(!CommonContact.isEqual(commissionMoney,incomeMoney)){
+					return ResultUtil.failed(I18nCode.CODE_10100);
+				}
+				if(!CommonContact.isEqual(mustPrice,orderAmount)){
+					return ResultUtil.failed(I18nCode.CODE_10100);
+				}
+				UserProductBotLog checkUserProductBotLog =	this.getUserProductBotLogByOrderNo(orderNo);
+				if(checkUserProductBotLog!=null){
+					return ResultUtil.failed(I18nCode.CODE_10008);
+				}
 				userProductBotLog.setUserId(userId);
 				long dbResult = userProductBotLogDao.insert(userProductBotLog);
-				if(CommonContact.dbResult(dbResult)){
+				if(!CommonContact.dbResult(dbResult)){
+					logger.error("无人机刷单记录失败:{},{},{},{}",userId,orderNo,userId,botId);
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				String title = CommonContact.USER_ACCOUNT_DETAIL_TITLE_4;
-				//增值比例
-				BigDecimal commissionOtherRate = LogicStaticContact.PRODUCT_COMMISSION_OTHER_RATE;
-				//产品佣金比例
-				BigDecimal commissionRate = LogicStaticContact.LEVEL_BALANCE_COMMISSION_RATE.get(mustLevel);
-				//佣金
-				BigDecimal commissionMoney = CommonContact.multiply(productBotPrice,commissionRate);
-				//增值佣金
-				BigDecimal incrementMoney = CommonContact.multiply(commissionMoney,commissionOtherRate);
-				Boolean isOk = userAccountApiService.updateAccountCommissionMoney(userId,commissionMoney,incrementMoney,botId,title);
+				UserProductBot oldUserProductBot =	getUserProductBotByUserIdAndId(userId,botId);
+				if(oldUserProductBot == null){
+					UserProductBot userProductBot = InstanceContact.initUserProductBot(userProductBotLog);
+					dbResult = userProductBotDao.insert(userProductBot);
+					if(!CommonContact.dbResult(dbResult)){
+						logger.error("用户无人机刷单汇总初始化失败:{},{},{},{}",userId,orderNo,userId,botId);
+						return ResultUtil.failed(I18nCode.CODE_10004);
+					}
+				}else{
+					int doTaskNum = oldUserProductBot.getTodayOrders();
+					if(doTaskNum > dailyNum){
+						return ResultUtil.failed(I18nCode.CODE_10102);
+					}
+					BigDecimal todayIncomeMoney = CommonContact.add(oldUserProductBot.getTodayIncomeMoney(),commissionMoney);
+					UserProductBot userProductBot = new UserProductBot();
+					userProductBot.setId(oldUserProductBot.getId());
+					userProductBot.setTodayOrders(oldUserProductBot.getTodayOrders()+1);
+					userProductBot.setTodayIncomeMoney(todayIncomeMoney);
+					dbResult = userProductBotDao.update(userProductBot);
+					if(!CommonContact.dbResult(dbResult)){
+						logger.error("用户无人机刷单汇总更新失败:{},{},{},{}",userId,orderNo,userId,botId);
+						return ResultUtil.failed(I18nCode.CODE_10004);
+					}
+				}
+				Boolean isOk = userAccountApiService.updateAccountCommissionMoney(userId,commissionMoney,botId,title);
 				if(isOk){
 					return ResultUtil.successToBoolean(true);
 				}
@@ -289,14 +335,29 @@ public class ProductApiService extends BaseUserService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserProductBot userProductBot = new UserProductBot();
-			userProductBot.setUserId(userInfo.getId());
-			userProductBot.setId(botId);
-			UserProductBot result = userProductBotDao.getByEntity(userProductBot);
+			UserProductBot result = getUserProductBotByUserIdAndId(userInfo.getId(),botId);
 			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
 			logger.error("用户无人机产品详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 用户无人机产品详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public UserProductBot getUserProductBotByUserIdAndId(String userId,String botId) {
+		try {
+			UserProductBot userProductBot = new UserProductBot();
+			userProductBot.setUserId(userId);
+			userProductBot.setBotId(botId);
+			return userProductBotDao.getByEntity(userProductBot);
+		} catch (Exception e) {
+			logger.error("获取无人机产品详情异常,{},{}",userId,botId,e);
+			return null;
 		}
 	}
 
@@ -454,6 +515,22 @@ public class ProductApiService extends BaseUserService {
 			return productBotDao.getByEntity(productBotInfo);
 		} catch (Exception e) {
 			logger.error("获取无人机产品详情异常,{}",id,e);
+			return null;
+		}
+	}
+	/**
+	 * @desc 获取无人机产品刷单记录
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public UserProductBotLog getUserProductBotLogByOrderNo(String orderNo) {
+		try {
+			UserProductBotLog userProductBotLog = new UserProductBotLog();
+			userProductBotLog.setOrderNo(orderNo);
+			return userProductBotLogDao.getByEntity(userProductBotLog);
+		} catch (Exception e) {
+			logger.error("获取无人机产品刷单记录异常,{}",orderNo,e);
 			return null;
 		}
 	}

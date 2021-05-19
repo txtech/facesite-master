@@ -144,7 +144,7 @@ public class UserAccountApiService extends BaseUserService {
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean updateAccountCommissionMoney(String userId,BigDecimal commissionMoney,BigDecimal incrementMoney,String uniqueId, String title) {
+	public boolean updateAccountCommissionMoney(String userId,BigDecimal commissionMoney,String uniqueId, String title) {
 		try {
 			if(StringUtils.isEmpty(userId)){
 				return false;
@@ -153,7 +153,6 @@ public class UserAccountApiService extends BaseUserService {
 				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_20;
 				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
 				userAccountDetail.setCommissionMoney(commissionMoney);
-				userAccountDetail.setIncrementMoney(incrementMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,commissionMoney,userAccountDetail);
 				if(!isPrepareOk){
 					logger.error("修改佣金账户失败,记录明细失败:{},{}",userId,commissionMoney);
@@ -161,8 +160,8 @@ public class UserAccountApiService extends BaseUserService {
 				}
 				UserAccount userAccount = new UserAccount();
 				userAccount.setUserId(userId);
+				userAccount.setTotalMoney(commissionMoney);
 				userAccount.setCommissionMoney(commissionMoney);
-				userAccount.setIncrementMoney(incrementMoney);
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!CommonContact.dbResult(dbResult)){
 					logger.error("修改佣金账户失败,修改账户失败:{},{}",userId,commissionMoney);

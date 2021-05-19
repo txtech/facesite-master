@@ -196,6 +196,15 @@ public class CommonContact {
         }
         return isEqual(num1,ZERO);
     }
+    public static Boolean isLesserOrEqualZero(BigDecimal num1){
+        if(num1 == null){
+            return false;
+        }
+        if(num1.compareTo(ZERO) < 1){
+            return true;
+        }
+        return false;
+    }
 
     /**
      * @desc userId是否合法

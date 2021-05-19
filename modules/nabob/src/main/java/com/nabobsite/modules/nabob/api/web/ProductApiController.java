@@ -53,6 +53,12 @@ public class ProductApiController extends BaseController {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.doWarehouseToBalance(token,userProductWarehouseRecord);
 	}
+	@PostMapping(value = {"doBotTask"})
+	@ApiOperation(value = "无人机产品刷单接口")
+	public CommonResult<Boolean> doBotTask(@RequestBody UserProductBotLog userProductBotLog, HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return productApiService.doBotTask(token,userProductBotLog);
+	}
 
 
 	@RequestMapping(value = {"getProductBotInfo/{botId}"})
@@ -68,12 +74,6 @@ public class ProductApiController extends BaseController {
 	public CommonResult<JSONObject> getUserBotInfo(@PathVariable String botId, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.getUserBotInfo(token,botId);
-	}
-	@PostMapping(value = {"doBotTask"})
-	@ApiOperation(value = "无人机产品刷单接口")
-	public CommonResult<Boolean> doBotTask(@RequestBody UserProductBotLog userProductBotLog, HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return productApiService.doBotTask(token,userProductBotLog);
 	}
 
 
