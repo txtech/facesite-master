@@ -403,7 +403,7 @@ public class UserInfoApiService extends BaseUserService {
 			MemberShip result = memberShipDao.getByEntity(memberShip);
 			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
-			logger.error("获取系统配置异常",e);
+			logger.error("获取会员资格异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}

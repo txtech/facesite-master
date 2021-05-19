@@ -42,7 +42,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="login_ip", attrName="loginIp", label="登陆IP"),
 		@Column(name="team_num", attrName="teamNum", label="团队总人数"),
 		@Column(name="team1_num", attrName="team1Num", label="一级团队人数"),
-		@Column(name="lang", attrName="lang", label="语言"),
 		@Column(name="app_version", attrName="appVersion", label="使用版本"),
 		@Column(name="team2_num", attrName="team2Num", label="二级团队人数"),
 		@Column(name="team3_num", attrName="team3Num", label="三级团队人数"),
@@ -76,7 +75,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private String loginIp;		// 登陆IP
 	private Integer teamNum;		// 团队总人数
 	private Integer team1Num;		// 一级团队人数
-	private String lang;		// 语言
 	private String appVersion;		// 使用版本
 	private Integer team2Num;		// 二级团队人数
 	private Integer team3Num;		// 三级团队人数
@@ -272,16 +270,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setTeam1Num(Integer team1Num) {
 		this.team1Num = team1Num;
-	}
-
-	@NotBlank(message="语言不能为空")
-	@Length(min=0, max=10, message="语言长度不能超过 10 个字符")
-	public String getLang() {
-		return lang;
-	}
-
-	public void setLang(String lang) {
-		this.lang = lang;
 	}
 
 	@Length(min=0, max=128, message="使用版本长度不能超过 128 个字符")

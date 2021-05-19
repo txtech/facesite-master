@@ -24,10 +24,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -98,7 +95,7 @@ public class OpenApiController extends BaseController {
 
 	@ApiOperation(value = "获取会员资格详情")
 	@PostMapping(value = {"getMemberShipInfo/{id}"})
-	public CommonResult<JSONObject> getMemberShipInfo(String id,HttpServletRequest request){
+	public CommonResult<JSONObject> getMemberShipInfo(@PathVariable  String id, HttpServletRequest request){
 		return userInfoApiService.getMemberShipInfo(id);
 	}
 

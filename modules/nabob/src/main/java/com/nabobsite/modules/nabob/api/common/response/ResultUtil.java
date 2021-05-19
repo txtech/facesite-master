@@ -77,7 +77,7 @@ public class ResultUtil<T> {
 
     public static JSONObject filterResult(JSONObject object){
         if(object == null || object.isEmpty()){
-            return object;
+            return new JSONObject();
         }
         if(object.containsKey("isNewRecord")){
             object.remove("isNewRecord");
