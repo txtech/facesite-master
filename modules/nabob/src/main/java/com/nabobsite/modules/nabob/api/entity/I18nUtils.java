@@ -18,8 +18,6 @@ public class I18nUtils {
     //简体中文(中国)
     public static final String LANG_ZH = "zh_CN";
 
-    public static final String LANG_MODULE = "common";
-
     public static final Map<String,String> USER_LANG_CACHE = new ConcurrentHashMap<>(256);
     public static final Map<String, Map<String, String>> LOCAL_CACHE = new ConcurrentHashMap<>(256);
     private static Cache<String, List> cache = CacheBuilder.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).build();
@@ -33,18 +31,6 @@ public class I18nUtils {
             }
         }
         return code;
-    }
-
-    public static Locale getLocale(String lang) {
-        if(I18nUtils.LANG_EN.equalsIgnoreCase(lang)){
-            return Locale.US;
-        }else if(I18nUtils.LANG_IN.equalsIgnoreCase(lang)){
-            return new Locale("en","IN");
-        }else if(I18nUtils.LANG_ZH.equalsIgnoreCase(lang)){
-            return Locale.SIMPLIFIED_CHINESE;
-        }else{
-            return Locale.US;
-        }
     }
 
     public static String getUserLang(String userId) {

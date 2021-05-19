@@ -84,9 +84,9 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	private String appVersion;		// 使用版本
-	private String smsCode;
-	private String codeKey;
-	private String imgCode;
+	private String smsCode; //短信验证码
+	private String codeKey; //图片验证码key
+	private String imgCode; //图片验证码code
 
 	public UserInfo() {
 		this(null);
