@@ -120,7 +120,7 @@ public class TaskApiService extends BaseUserService {
 			UserTaskReward userTaskReward = InstanceContact.initUserTaskReward(userId,taskId,type,title,finishNumber,rewardMoney);
 			userTaskReward.setUserId(userId);
 			long dbResult = userTaskRewardDao.insert(userTaskReward);
-			if(CommonContact.dbResult(dbResult)){
+			if(!CommonContact.dbResult(dbResult)){
 				return false;
 			}
 			return userAccountApiService.updateAccountRewardMoney(userId,rewardMoney,taskId,title);

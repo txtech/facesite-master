@@ -118,6 +118,7 @@ public class InstanceContact {
         UserAccountLog userAccountLog = new UserAccountLog();
         BeanUtils.copyProperties(olduUerAccount, userAccountLog);
         userAccountLog.setIsNewRecord(true);
+        userAccountLog.setId(null);
         userAccountLog.setTitle(title);
         userAccountLog.setDetailId(detailId);
         return userAccountLog;
