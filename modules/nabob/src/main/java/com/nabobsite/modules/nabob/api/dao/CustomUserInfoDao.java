@@ -18,4 +18,9 @@ public interface CustomUserInfoDao  {
      * @create 2021/5/14 2:44 下午
      */
     Integer getOkLevelTeam1Num(UserInfo userInfo);
+
+    //    private String smsCode; //短信验证码
+//    private String codeKey; //图片验证码key
+//    private String imgCode; //图片验证码code
+//      private String OldPassword;
 }

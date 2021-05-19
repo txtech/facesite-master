@@ -45,25 +45,30 @@ public class I18nInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
         try {
+            String userId = "";
             String reqUrl = request.getRequestURI();
+            String lang = request.getHeader("lang");
             String ip = HttpBrowserTools.getIpAddr(request);
             String token = request.getHeader("Authorization");
-            if(StringUtils.isEmpty(token)){
-                if(StringUtils.isNotEmpty(reqUrl) && reqUrl.contains("/api/open/")){
-                    return true;
-                }
+            Boolean isOpenApi = Boolean.FALSE;
+            if(StringUtils.isNotEmpty(reqUrl) && reqUrl.contains("/api/open/")){
+                isOpenApi = Boolean.TRUE;
+            }
+            if(StringUtils.isEmpty(token) && !isOpenApi){
                 logger.error("请求被拦截，获取授权信息为空:{},{},{}",token,ip,reqUrl);
                 this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_10003,"User not authorized"));
                 return false;
             }
-            String newTokenKey = RedisPrefixContant.getTokenUserKey(token);
-            String userId = (String) redisOpsUtil.get(newTokenKey);
-            if(StringUtils.isEmpty(userId)){
-                logger.error("请求被拦截，获取授权用户为空:{},{}",token,ip);
-                this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_10003,"User not authorized！"));
-                return false;
+            if(StringUtils.isNotEmpty(token)){
+                String newTokenKey = RedisPrefixContant.getTokenUserKey(token);
+                userId = (String) redisOpsUtil.get(newTokenKey);
+                if(StringUtils.isEmpty(userId)){
+                    logger.error("请求被拦截，获取授权用户为空:{},{}",token,ip);
+                    this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_10003,"User not authorized！"));
+                    return false;
+                }
             }
-            String lang = I18nUtils.getUserLang(userId);
+            lang = I18nUtils.getLangStandard(lang);
             Map<String,String> userLocal = new HashMap<>();
             userLocal.put(CommonContact.TOKEN,token);
             userLocal.put(CommonContact.USERID,userId);

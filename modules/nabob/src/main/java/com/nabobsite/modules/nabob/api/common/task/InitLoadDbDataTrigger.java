@@ -47,13 +47,6 @@ public class InitLoadDbDataTrigger extends TriggerOperation {
 		I18nUtils.LOCAL_CACHE.put(I18nUtils.LANG_EN,enUSMap);
 		I18nUtils.LOCAL_CACHE.put(I18nUtils.LANG_IN,enINMap);
 		I18nUtils.LOCAL_CACHE.put(I18nUtils.LANG_ZH,zhCNMap);
-
-		List<UserInfo> userInfoList = userInfoDao.findList(new UserInfo());
-		for (UserInfo userInfo : userInfoList) {
-			String userId = userInfo.getId();
-			String lang = I18nUtils.getUserLang(userInfo.getLang());
-			I18nUtils.USER_LANG_CACHE.put(userId,lang);
-		}
 	}
 
 	public SysI18nDao getSysI18nDao() {

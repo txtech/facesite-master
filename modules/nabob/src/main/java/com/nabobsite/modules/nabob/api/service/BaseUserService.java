@@ -60,30 +60,6 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 	}
 
 	/**
-	 * @desc 修改用户语言
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean updateUserLang(String userId,String lang) {
-		try {
-			if(!CommonContact.isOkUserId(userId)){
-				return false;
-			}
-			lang = I18nUtils.getLangStandard(lang);
-			UserInfo userInfo = new UserInfo();
-			userInfo.setId(userId);
-			userInfo.setLang(lang);
-			long dbResult = userInfoDao.update(userInfo);
-			I18nUtils.setUserLang(userId,lang);
-			return CommonContact.dbResult(dbResult);
-		} catch (Exception e) {
-			logger.error("修改用户语言异常,{}",userId,e);
-			return true;
-		}
-	}
-
-	/**
 	 * @desc 修改用户邀请秘文
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午

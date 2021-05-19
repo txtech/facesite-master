@@ -35,6 +35,6 @@ public class I18nCode {
     //业务处理部分
     public static final String CODE_10100 = "10100"; //请求失败,金额不符合要求！
     public static final String CODE_10101 = "10101"; //请求失败,会员等级不符合要求！
-    public static final String CODE_10102 = "10102"; //请求失败,今日已经结束！
+    public static final String CODE_10102 = "10102"; //请求失败,已经结束！
 
 }

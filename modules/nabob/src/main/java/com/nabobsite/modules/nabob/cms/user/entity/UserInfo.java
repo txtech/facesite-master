@@ -19,7 +19,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 会员用户Entity
  * @author face
- * @version 2021-05-18
+ * @version 2021-05-19
  */
 @Table(name="t1_user_info", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -43,6 +43,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="team_num", attrName="teamNum", label="团队总人数"),
 		@Column(name="team1_num", attrName="team1Num", label="一级团队人数"),
 		@Column(name="lang", attrName="lang", label="语言"),
+		@Column(name="app_version", attrName="appVersion", label="使用版本"),
 		@Column(name="team2_num", attrName="team2Num", label="二级团队人数"),
 		@Column(name="team3_num", attrName="team3Num", label="三级团队人数"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
@@ -51,7 +52,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
-		@Column(name="app_version", attrName="appVersion", label="使用版本"),
 	}, orderBy="a.id DESC"
 )
 public class UserInfo extends DataEntity<UserInfo> {
@@ -67,7 +67,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private Integer lock;		// 解锁状态：1:解锁 2:锁定
 	private String accountNo;		// 账号
 	private String password;		// 密码
-	private String oldPassword;
 	private String phoneNumber;		// 电话号码
 	private String inviteCode;		// 邀请码
 	private String token;		// 会话令牌
@@ -78,15 +77,16 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private Integer teamNum;		// 团队总人数
 	private Integer team1Num;		// 一级团队人数
 	private String lang;		// 语言
+	private String appVersion;		// 使用版本
 	private Integer team2Num;		// 二级团队人数
 	private Integer team3Num;		// 三级团队人数
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	private String appVersion;		// 使用版本
 	private String smsCode; //短信验证码
-	private String codeKey; //图片验证码key
-	private String imgCode; //图片验证码code
+    private String codeKey; //图片验证码key
+    private String imgCode; //图片验证码code
+	private String OldPassword;
 
 	public UserInfo() {
 		this(null);
@@ -284,6 +284,15 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.lang = lang;
 	}
 
+	@Length(min=0, max=128, message="使用版本长度不能超过 128 个字符")
+	public String getAppVersion() {
+		return appVersion;
+	}
+
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
+	}
+
 	@NotNull(message="二级团队人数不能为空")
 	public Integer getTeam2Num() {
 		return team2Num;
@@ -329,23 +338,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.delFlag = delFlag;
 	}
 
-	@Length(min=0, max=128, message="使用版本长度不能超过 128 个字符")
-	public String getAppVersion() {
-		return appVersion;
-	}
-
-	public void setAppVersion(String appVersion) {
-		this.appVersion = appVersion;
-	}
-
-	public String getOldPassword() {
-		return oldPassword;
-	}
-
-	public void setOldPassword(String oldPassword) {
-		this.oldPassword = oldPassword;
-	}
-
 	public String getSmsCode() {
 		return smsCode;
 	}
@@ -368,5 +360,13 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setImgCode(String imgCode) {
 		this.imgCode = imgCode;
+	}
+
+	public String getOldPassword() {
+		return OldPassword;
+	}
+
+	public void setOldPassword(String oldPassword) {
+		OldPassword = oldPassword;
 	}
 }

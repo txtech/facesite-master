@@ -69,11 +69,4 @@ public class UserApiController extends BaseController {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return userInfoApiService.shareFriends(token);
 	}
-
-	@ApiOperation(value = "用户切换语言")
-	@RequestMapping(value = "switchLang/{lang}")
-	public CommonResult<Boolean> switchLang(@PathVariable String lang,HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return userInfoApiService.switchLang(token,lang);
-	}
 }

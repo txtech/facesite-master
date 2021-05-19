@@ -15,4 +15,5 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 public interface CustomUserAccountDao  {
 
     long updateAccountMoney(UserAccount userAccount);
+
 }

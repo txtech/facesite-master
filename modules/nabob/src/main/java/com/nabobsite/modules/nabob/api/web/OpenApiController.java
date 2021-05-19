@@ -90,6 +90,18 @@ public class OpenApiController extends BaseController {
 		return userInfoApiService.getSysConfig();
 	}
 
+	@ApiOperation(value = "获取会员资格")
+	@PostMapping(value = {"getMemberShip"})
+	public CommonResult<JSONArray> getMemberShip(HttpServletRequest request){
+		return userInfoApiService.getMemberShip();
+	}
+
+	@ApiOperation(value = "获取会员资格详情")
+	@PostMapping(value = {"getMemberShipInfo/{id}"})
+	public CommonResult<JSONObject> getMemberShipInfo(String id,HttpServletRequest request){
+		return userInfoApiService.getMemberShipInfo(id);
+	}
+
 	@RequestMapping(value = {"getTaskList"})
 	@ApiOperation(value = "获取任务列表")
 	public CommonResult<JSONArray> getTaskList(HttpServletRequest request) {

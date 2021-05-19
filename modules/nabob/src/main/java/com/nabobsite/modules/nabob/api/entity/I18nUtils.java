@@ -18,7 +18,6 @@ public class I18nUtils {
     //简体中文(中国)
     public static final String LANG_ZH = "zh_CN";
 
-    public static final Map<String,String> USER_LANG_CACHE = new ConcurrentHashMap<>(256);
     public static final Map<String, Map<String, String>> LOCAL_CACHE = new ConcurrentHashMap<>(256);
     private static Cache<String, List> cache = CacheBuilder.newBuilder().expireAfterWrite(30, TimeUnit.MINUTES).build();
 
@@ -31,19 +30,6 @@ public class I18nUtils {
             }
         }
         return code;
-    }
-
-    public static String getUserLang(String userId) {
-        String lang = USER_LANG_CACHE.get(userId);
-        if(StringUtils.isNotEmpty(lang)){
-            return lang;
-        }
-        return LANG_IN;
-    }
-
-    public static Boolean setUserLang(String userId,String lang) {
-        USER_LANG_CACHE.put(userId,lang);
-        return true;
     }
 
     /**

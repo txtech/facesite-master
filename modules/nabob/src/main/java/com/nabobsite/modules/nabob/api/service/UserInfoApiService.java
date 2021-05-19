@@ -17,6 +17,8 @@ import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
+import com.nabobsite.modules.nabob.cms.user.dao.MemberShipDao;
+import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +50,8 @@ public class UserInfoApiService extends BaseUserService {
 	private TriggerApiService triggerApiService;
 	@Autowired
 	private SysApiService sysApiService;
+	@Autowired
+	private MemberShipDao memberShipDao;
 
 	/**
 	 * @desc 用户忘记密码
@@ -228,7 +232,6 @@ public class UserInfoApiService extends BaseUserService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			String lang = userInfo.getLang();
 			String loginIp = userInfo.getLoginIp();
 			String accountNo = userInfo.getAccountNo();
 			String password = userInfo.getPassword();
@@ -259,9 +262,6 @@ public class UserInfoApiService extends BaseUserService {
 			String oldToken = (String) redisOpsUtil.get(userTokenKey);
 			if(StringUtils.isNotEmpty(oldToken)){
 				redisOpsUtil.remove(RedisPrefixContant.getTokenUserKey(oldToken));
-			}
-			if(StringUtils.isNotEmpty(lang)){
-				this.updateUserLang(userId,lang);
 			}
 			//设置新的token
 			redisOpsUtil.set(newTokenKey,userId,RedisPrefixContant.CACHE_HALF_HOUR);
@@ -391,6 +391,44 @@ public class UserInfoApiService extends BaseUserService {
 	}
 
 	/**
+	 * @desc 获取会员资格
+	 * @author nada
+	 * @create 2021/5/19 9:25 下午
+	*/
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONObject> getMemberShipInfo(String id) {
+		try {
+			MemberShip memberShip = new MemberShip();
+			memberShip.setId(id);
+			MemberShip result = memberShipDao.getByEntity(memberShip);
+			return ResultUtil.successToJson(result);
+		} catch (Exception e) {
+			logger.error("获取系统配置异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 获取会员资格
+	 * @author nada
+	 * @create 2021/5/19 9:25 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONArray> getMemberShip() {
+		try {
+			List<MemberShip> shipList = memberShipDao.findList(new MemberShip());
+			JSONArray result = new JSONArray();
+			for (MemberShip entity : shipList) {
+				result.add(CommonContact.toJSONObject(entity));
+			}
+			return ResultUtil.successToJsonArray(result);
+		} catch (Exception e) {
+			logger.error("获取系统配置异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
 	 * @desc 获取系统配置
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
@@ -426,30 +464,6 @@ public class UserInfoApiService extends BaseUserService {
 			return ResultUtil.successJson(configJson);
 		} catch (Exception e) {
 			logger.error("获取系统配置异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 用户设置语言
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> switchLang(String token, String lang) {
-		try {
-			UserInfo oldUserInfo = this.getUserInfoByToken(token);
-			if(oldUserInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			String userId = oldUserInfo.getId();
-			Boolean isOk = this.updateUserLang(userId,lang);
-			if(isOk){
-				return ResultUtil.successToBoolean(true);
-			}
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		} catch (Exception e) {
-			logger.error("用户设置语言异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}

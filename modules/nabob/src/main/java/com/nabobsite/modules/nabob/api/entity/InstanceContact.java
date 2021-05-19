@@ -54,7 +54,6 @@ public class InstanceContact {
             if(StringUtils.isEmpty(userInfo.getParent3UserId())){
                 userInfo.setParent3UserId("0");
             }
-            userInfo.setLang(I18nUtils.getLangStandard(userInfo.getLang()));
             return userInfo;
         }
     }

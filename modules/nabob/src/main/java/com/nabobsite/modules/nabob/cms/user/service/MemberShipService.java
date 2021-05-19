@@ -10,67 +10,67 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
+import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
+import com.nabobsite.modules.nabob.cms.user.dao.MemberShipDao;
 
 /**
- * 会员用户Service
+ * 任务管理Service
  * @author face
  * @version 2021-05-19
  */
 @Service
 @Transactional(readOnly=true)
-public class UserInfoService extends CrudService<UserInfoDao, UserInfo> {
+public class MemberShipService extends CrudService<MemberShipDao, MemberShip> {
 	
 	/**
 	 * 获取单条数据
-	 * @param userInfo
+	 * @param memberShip
 	 * @return
 	 */
 	@Override
-	public UserInfo get(UserInfo userInfo) {
-		return super.get(userInfo);
+	public MemberShip get(MemberShip memberShip) {
+		return super.get(memberShip);
 	}
 	
 	/**
 	 * 查询分页数据
-	 * @param userInfo 查询条件
-	 * @param userInfo.page 分页对象
+	 * @param memberShip 查询条件
+	 * @param memberShip.page 分页对象
 	 * @return
 	 */
 	@Override
-	public Page<UserInfo> findPage(UserInfo userInfo) {
-		return super.findPage(userInfo);
+	public Page<MemberShip> findPage(MemberShip memberShip) {
+		return super.findPage(memberShip);
 	}
 	
 	/**
 	 * 保存数据（插入或更新）
-	 * @param userInfo
+	 * @param memberShip
 	 */
 	@Override
 	@Transactional(readOnly=false)
-	public void save(UserInfo userInfo) {
-		super.save(userInfo);
+	public void save(MemberShip memberShip) {
+		super.save(memberShip);
 	}
 	
 	/**
 	 * 更新状态
-	 * @param userInfo
+	 * @param memberShip
 	 */
 	@Override
 	@Transactional(readOnly=false)
-	public void updateStatus(UserInfo userInfo) {
-		super.updateStatus(userInfo);
+	public void updateStatus(MemberShip memberShip) {
+		super.updateStatus(memberShip);
 	}
 	
 	/**
 	 * 删除数据
-	 * @param userInfo
+	 * @param memberShip
 	 */
 	@Override
 	@Transactional(readOnly=false)
-	public void delete(UserInfo userInfo) {
-		super.delete(userInfo);
+	public void delete(MemberShip memberShip) {
+		super.delete(memberShip);
 	}
 	
 }
