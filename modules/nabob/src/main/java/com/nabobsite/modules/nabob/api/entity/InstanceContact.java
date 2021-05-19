@@ -2,12 +2,14 @@ package com.nabobsite.modules.nabob.api.entity;
 
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @ClassName nada
@@ -141,14 +143,32 @@ public class InstanceContact {
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
-    public static UserTask initUserTask(String userId,String taskId,int finishNumber){
+    public static UserTask initUserTask(String userId,String taskId,int type,int finishNumber){
         UserTask userTask = new UserTask();
         userTask.setIsNewRecord(true);
         userTask.setUserId(userId);
         userTask.setTaskId(taskId);
+        userTask.setType(type);
         userTask.setFinishNumber(finishNumber);
         userTask.setTaskStatus(CommonContact.USER_TASK_STATUS_2);
         return userTask;
+    }
+
+    /**
+     * @desc 初始化用户任务信息
+     * @author nada
+     * @create 2021/5/12 2:59 下午
+     */
+    public static UserTaskReward initUserTaskReward(String userId,String taskId,int type,String title,int finishNumber,BigDecimal rewardMoney){
+        UserTaskReward userTaskReward = new UserTaskReward();
+        userTaskReward.setIsNewRecord(true);
+        userTaskReward.setUserId(userId);
+        userTaskReward.setTaskId(taskId);
+        userTaskReward.setTitle(title);
+        userTaskReward.setType(type);
+        userTaskReward.setFinishNum(finishNumber);
+        userTaskReward.setRewardMoney(rewardMoney);
+        return userTaskReward;
     }
 
 }

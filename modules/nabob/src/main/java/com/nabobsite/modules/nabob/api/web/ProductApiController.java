@@ -81,9 +81,7 @@ public class ProductApiController extends BaseController {
 	@ApiOperation(value = "云仓库产品详情")
 	public CommonResult<JSONObject> getProductWarehouseInfo(@PathVariable String warehouseId,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		ProductWarehouse productWarehouse = new ProductWarehouse();
-		productWarehouse.setId(warehouseId);
-		return productApiService.getProductWarehouseInfo(token,productWarehouse);
+		return productApiService.getProductWarehouseInfo(token,warehouseId);
 	}
 	@RequestMapping(value = {"getUserWarehouseInfo/{warehouseId}"})
 	@ApiOperation(value = "用户云仓库产品详情")

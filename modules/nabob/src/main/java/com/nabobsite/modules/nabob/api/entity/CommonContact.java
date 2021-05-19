@@ -75,6 +75,11 @@ public class CommonContact {
     public final static int USER_ACCOUNT_REWARD_TYPE_3 = 3;//邀请好友奖励
     public final static int USER_ACCOUNT_REWARD_TYPE_4 = 4;//定期投资奖励
 
+    public final static String USER_ACCOUNT_REWARD_TITLE_1 = "分享好友奖励";
+    public final static String USER_ACCOUNT_REWARD_TITLE_2 = "观看视频奖励";
+    public final static String USER_ACCOUNT_REWARD_TITLE_3 = "邀请好友奖励";
+    public final static String USER_ACCOUNT_REWARD_TITLE_4 = "定期投资奖励";
+
     //用户账户状态
     public final static int USER_ACCOUNT_STATUS_1 = 1;//正常
     public final static int USER_ACCOUNT_STATUS_2 = 2;//冻结

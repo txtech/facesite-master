@@ -10,11 +10,9 @@ import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
-import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.product.dao.*;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -245,7 +243,6 @@ public class ProductApiService extends BaseUserService {
 		}
 	}
 
-
 	/**
 	 * @desc 获取无人机产品列表
 	 * @author nada
@@ -311,8 +308,10 @@ public class ProductApiService extends BaseUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getProductWarehouseInfo(String token,ProductWarehouse productWarehouse) {
+	public CommonResult<JSONObject> getProductWarehouseInfo(String token,String warehouseId) {
 		try {
+			ProductWarehouse productWarehouse = new ProductWarehouse();
+			productWarehouse.setId(warehouseId);
 			ProductWarehouse productWarehouseInfo = productWarehouseDao.getByEntity(productWarehouse);
 			return ResultUtil.successToJson(productWarehouseInfo);
 		} catch (Exception e) {

@@ -20,12 +20,11 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户任务奖励Entity
  * @author face
- * @version 2021-05-18
+ * @version 2021-05-19
  */
 @Table(name="t1_user_task_reward", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="user_id", attrName="userId", label="用户id"),
-		@Column(name="account_id", attrName="accountId", label="账户ID"),
 		@Column(name="title", attrName="title", label="标题", queryType=QueryType.LIKE),
 		@Column(name="task_id", attrName="taskId", label="任务ID"),
 		@Column(name="reward_money", attrName="rewardMoney", label="奖励金额"),
@@ -36,13 +35,13 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
+		@Column(name="type", attrName="type", label="奖励类型"),
 	}, orderBy="a.id DESC"
 )
 public class UserTaskReward extends DataEntity<UserTaskReward> {
 	
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户id
-	private String accountId;		// 账户ID
 	private String title;		// 标题
 	private String taskId;		// 任务ID
 	private BigDecimal rewardMoney;		// 奖励金额
@@ -50,6 +49,7 @@ public class UserTaskReward extends DataEntity<UserTaskReward> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private Integer type;		// 奖励类型
 	
 	public UserTaskReward() {
 		this(null);
@@ -67,16 +67,6 @@ public class UserTaskReward extends DataEntity<UserTaskReward> {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-	
-	@NotBlank(message="账户ID不能为空")
-	@Length(min=0, max=50, message="账户ID长度不能超过 50 个字符")
-	public String getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
 	}
 	
 	@NotBlank(message="标题不能为空")
@@ -142,6 +132,14 @@ public class UserTaskReward extends DataEntity<UserTaskReward> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	
 }

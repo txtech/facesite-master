@@ -31,18 +31,18 @@ public class AccountApiController extends BaseController {
 	@Autowired
 	private UserAccountApiService userAccountApiService;
 
-	@PostMapping(value = {"getUserAccountInfo"})
-	@ApiOperation(value = "获取账户详情")
-	public CommonResult<JSONObject> getUserAccountInfo(HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return userAccountApiService.getUserAccountInfo(token);
-	}
-
 	@PostMapping(value = {"claim"})
 	@ApiOperation(value = "认领增值账户")
 	public CommonResult<Boolean> claim(HttpServletRequest request){
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return userAccountApiService.claim(token);
+	}
+
+	@PostMapping(value = {"getUserAccountInfo"})
+	@ApiOperation(value = "获取账户详情")
+	public CommonResult<JSONObject> getUserAccountInfo(HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return userAccountApiService.getUserAccountInfo(token);
 	}
 
 	@PostMapping(value = {"getLedgerRecordList"})

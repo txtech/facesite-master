@@ -39,6 +39,25 @@ public class UserAccountApiService extends BaseUserService {
 	private TriggerApiService triggerApiService;
 
 	/**
+	 * @desc 用户认领增值账户
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> claim(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			return ResultUtil.successToBoolean(true);
+		} catch (Exception e) {
+			logger.error("用户认领增值账户异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
 	 * @desc 获取收支总账记录
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
@@ -61,25 +80,6 @@ public class UserAccountApiService extends BaseUserService {
 			return ResultUtil.successToJsonArray(result);
 		} catch (Exception e) {
 			logger.error("获取收支总账记录异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 用户认领增值账户
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> claim(String token) {
-		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			return ResultUtil.successToBoolean(true);
-		} catch (Exception e) {
-			logger.error("用户认领增值账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
@@ -177,7 +177,7 @@ public class UserAccountApiService extends BaseUserService {
 	}
 
 	/**
-	 * @desc 修改任务奖励账户
+	 * @desc 修改奖励账户
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
@@ -190,7 +190,7 @@ public class UserAccountApiService extends BaseUserService {
 				userAccountDetail.setRewardMoney(updateMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
-					logger.error("修改任务奖励账户失败,记录明细失败:{},{}",userId,updateMoney);
+					logger.error("修改奖励账户失败,记录明细失败:{},{}",userId,updateMoney);
 					return false;
 				}
 				UserAccount userAccount = new UserAccount();
@@ -198,13 +198,13 @@ public class UserAccountApiService extends BaseUserService {
 				userAccount.setRewardMoney(updateMoney);
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!CommonContact.dbResult(dbResult)){
-					logger.error("修改任务奖励账户失败,修改账户失败:{},{}",userId,updateMoney);
+					logger.error("修改奖励账户失败,修改账户失败:{},{}",userId,updateMoney);
 					return false;
 				}
 				return true;
 			}
 		} catch (Exception e) {
-			logger.error("增加任务账户余额异常:{}",userId,e);
+			logger.error("修改奖励账户异常:{}",userId,e);
 			return false;
 		}
 	}
