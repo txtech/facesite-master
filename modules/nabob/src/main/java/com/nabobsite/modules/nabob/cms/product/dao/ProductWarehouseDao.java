@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 /**
  * 产品仓库DAO接口
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-19
  */
 @MyBatisDao
 public interface ProductWarehouseDao extends CrudDao<ProductWarehouse> {

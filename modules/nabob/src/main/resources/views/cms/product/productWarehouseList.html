@@ -41,6 +41,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('最低限额')}：</label>
+					<div class="control-inline">
+						<#form:input path="limitPrice" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('图片地址')}：</label>
 					<div class="control-inline">
 						<#form:input path="productUrl" maxlength="1024" class="form-control width-120"/>
@@ -79,9 +85,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('最低限额')}：</label>
+					<label class="control-label">${text('in_name')}：</label>
 					<div class="control-inline">
-						<#form:input path="limitPrice" class="form-control width-120"/>
+						<#form:input path="inName" maxlength="3200" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -106,13 +112,14 @@ $('#dataGrid').dataGrid({
 		{header:'${text("名称")}', name:'name', index:'a.name', width:150, align:"left"},
 		{header:'${text("日收益比例")}', name:'dailyInterestRate', index:'a.daily_interest_rate', width:150, align:"left"},
 		{header:'${text("限制日")}', name:'days', index:'a.days', width:150, align:"center"},
+		{header:'${text("最低限额")}', name:'limitPrice', index:'a.limit_price', width:150, align:"left"},
 		{header:'${text("图片地址")}', name:'productUrl', index:'a.product_url', width:150, align:"left"},
 		{header:'${text("描述")}', name:'desc', index:'a.desc', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
-		{header:'${text("最低限额")}', name:'limitPrice', index:'a.limit_price', width:150, align:"left"},
+		{header:'${text("in_name")}', name:'inName', index:'a.in_name', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('product:productWarehouse:edit')){ %>

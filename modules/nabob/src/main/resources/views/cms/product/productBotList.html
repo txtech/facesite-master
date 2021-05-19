@@ -97,6 +97,24 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('标题')}：</label>
+					<div class="control-inline">
+						<#form:input path="title" maxlength="1024" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('印度标题')}：</label>
+					<div class="control-inline">
+						<#form:input path="inTitle" maxlength="520" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('印度描述')}：</label>
+					<div class="control-inline">
+						<#form:input path="inDesc" maxlength="1024" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -127,6 +145,9 @@ $('#dataGrid').dataGrid({
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
+		{header:'${text("标题")}', name:'title', index:'a.title', width:150, align:"left"},
+		{header:'${text("印度标题")}', name:'inTitle', index:'a.in_title', width:150, align:"left"},
+		{header:'${text("印度描述")}', name:'inDesc', index:'a.in_desc', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('product:productBot:edit')){ %>

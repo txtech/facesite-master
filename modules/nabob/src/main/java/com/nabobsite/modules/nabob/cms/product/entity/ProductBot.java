@@ -39,6 +39,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="title", attrName="title", label="标题", queryType=QueryType.LIKE),
+		@Column(name="in_title", attrName="inTitle", label="印度标题", queryType=QueryType.LIKE),
+		@Column(name="in_desc", attrName="inDesc", label="印度描述"),
 	}, orderBy="a.id DESC"
 )
 public class ProductBot extends DataEntity<ProductBot> {
@@ -56,6 +59,9 @@ public class ProductBot extends DataEntity<ProductBot> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private String title;		// 标题
+	private String inTitle;		// 印度标题
+	private String inDesc;		// 印度描述
 	
 	public ProductBot() {
 		this(null);
@@ -172,6 +178,33 @@ public class ProductBot extends DataEntity<ProductBot> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	
+	@Length(min=0, max=1024, message="标题长度不能超过 1024 个字符")
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	@Length(min=0, max=520, message="印度标题长度不能超过 520 个字符")
+	public String getInTitle() {
+		return inTitle;
+	}
+
+	public void setInTitle(String inTitle) {
+		this.inTitle = inTitle;
+	}
+	
+	@Length(min=0, max=1024, message="印度描述长度不能超过 1024 个字符")
+	public String getInDesc() {
+		return inDesc;
+	}
+
+	public void setInDesc(String inDesc) {
+		this.inDesc = inDesc;
 	}
 	
 }

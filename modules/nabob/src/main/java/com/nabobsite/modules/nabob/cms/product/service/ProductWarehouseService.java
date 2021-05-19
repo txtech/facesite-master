@@ -16,7 +16,7 @@ import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseDao;
 /**
  * 产品仓库Service
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-19
  */
 @Service
 @Transactional(readOnly=true)
