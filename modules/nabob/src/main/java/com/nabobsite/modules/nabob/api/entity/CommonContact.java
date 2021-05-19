@@ -56,6 +56,10 @@ public class CommonContact {
     public final static int WAREHOUSE_TYPE_1 = 1;//个人
     public final static int WAREHOUSE_TYPE_2 = 2;//团队
 
+    public final static int WAREHOUSE_RECORD_TYPE_1 = 1;//定投
+    public final static int WAREHOUSE_RECORD_TYPE_2 = 2;//撤资
+    public final static int WAREHOUSE_RECORD_TYPE_3 = 3;//提现
+
     //账户明细类型
     public final static int USER_ACCOUNT_DETAIL_TYPE_1 = 1;//余额账户
     public final static int USER_ACCOUNT_DETAIL_TYPE_2 = 2;//新用户注册送奖励

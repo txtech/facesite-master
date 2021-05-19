@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.product.service.UserProductWarehouseLogSe
 /**
  * 用户产品仓库日志Controller
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-19
  */
 @Controller
 @RequestMapping(value = "${adminPath}/product/userProductWarehouseLog")

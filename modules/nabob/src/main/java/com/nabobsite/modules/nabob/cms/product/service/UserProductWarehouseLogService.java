@@ -16,7 +16,7 @@ import com.nabobsite.modules.nabob.cms.product.dao.UserProductWarehouseLogDao;
 /**
  * 用户产品仓库日志Service
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-19
  */
 @Service
 @Transactional(readOnly=true)

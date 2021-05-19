@@ -176,6 +176,61 @@ public class UserAccountApiService extends BaseUserService {
 	}
 
 	/**
+	 * @desc 修改云仓库账户
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public boolean updateAccountWarehouseMoney(String userId,int type,BigDecimal updateMoney,String uniqueId, String title) {
+		try {
+			if(StringUtils.isEmpty(userId)){
+				return false;
+			}
+			synchronized (userId){
+				int detailType = CommonContact.USER_ACCOUNT_DETAIL_TYPE_30;
+				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,detailType,uniqueId,title);
+				if(type == CommonContact.WAREHOUSE_RECORD_TYPE_1){
+					userAccountDetail.setWarehouseMoney(updateMoney);
+					userAccountDetail.setAvailableMoney(updateMoney.negate());
+				}else if(type == CommonContact.WAREHOUSE_RECORD_TYPE_2){
+					userAccountDetail.setWarehouseMoney(updateMoney.negate());
+					userAccountDetail.setAvailableMoney(updateMoney);
+				}else if(type == CommonContact.WAREHOUSE_RECORD_TYPE_3){
+					userAccountDetail.setAiAssetsMoney(updateMoney.negate());
+					userAccountDetail.setAvailableMoney(updateMoney);
+				}
+
+				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
+				if(!isPrepareOk){
+					logger.error("修改佣金账户失败,记录明细失败:{},{}",userId,updateMoney);
+					return false;
+				}
+				UserAccount userAccount = new UserAccount();
+				userAccount.setUserId(userId);
+				if(type == CommonContact.WAREHOUSE_RECORD_TYPE_1){
+					userAccount.setWarehouseMoney(updateMoney);
+					userAccount.setAvailableMoney(updateMoney.negate());
+				}else if(type == CommonContact.WAREHOUSE_RECORD_TYPE_2){
+					userAccount.setWarehouseMoney(updateMoney.negate());
+					userAccount.setAvailableMoney(updateMoney);
+				}else if(type == CommonContact.WAREHOUSE_RECORD_TYPE_3){
+					userAccount.setAiAssetsMoney(updateMoney.negate());
+					userAccount.setAvailableMoney(updateMoney);
+				}
+				long dbResult = userAccountDao.updateAccountMoney(userAccount);
+				if(!CommonContact.dbResult(dbResult)){
+					logger.error("修改佣金账户失败,修改账户失败:{},{}",userId,updateMoney);
+					return false;
+				}
+				return true;
+			}
+		} catch (Exception e) {
+			logger.error("增加佣金账户余额异常:{},{}",userId,e);
+			return false;
+		}
+	}
+
+	/**
 	 * @desc 修改奖励账户
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
@@ -207,6 +262,7 @@ public class UserAccountApiService extends BaseUserService {
 			return false;
 		}
 	}
+
 
 	/**
 	 * @desc 修改账户余额验证

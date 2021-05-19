@@ -3,6 +3,8 @@ package com.nabobsite.modules.nabob.api.entity;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.UserProductBotLog;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouse;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouseLog;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
@@ -175,7 +177,7 @@ public class InstanceContact {
     }
 
     /**
-     * @desc 初始化用户奖励
+     * @desc 初始化用户无人机产品
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
@@ -191,4 +193,42 @@ public class InstanceContact {
         userProductBot.setYesterdayTeamIncomeMoney(new BigDecimal("0"));
         return userProductBot;
     }
+
+    /**
+     * @desc 初始化云仓库定投初始化
+     * @author nada
+     * @create 2021/5/12 2:59 下午
+     */
+    public static UserProductWarehouse initUserProductWarehouse(String userId,String warehouseId,BigDecimal asstesHeldMoney){
+        UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
+        userProductWarehouse.setIsNewRecord(true);
+        userProductWarehouse.setUserId(userId);
+        userProductWarehouse.setWarehouseId(warehouseId);
+        userProductWarehouse.setAsstesHeldMoney(asstesHeldMoney);
+        userProductWarehouse.setTeamIncomeMoney(new BigDecimal("0"));
+        userProductWarehouse.setPersonalIncomeMoney(new BigDecimal("0"));
+        userProductWarehouse.setAccumulativeIncomeMoney(new BigDecimal("0"));
+        userProductWarehouse.setTeamAccumulativeIncomeMoney(new BigDecimal("0"));
+        userProductWarehouse.setPersonalAccumulativeIncomeMoney(new BigDecimal("0"));
+        userProductWarehouse.setTeamUpdateTime(new Date());
+        userProductWarehouse.setPsersonUpdateTime(new Date());
+        return userProductWarehouse;
+    }
+
+    /**
+     * @desc 初始化云仓库操作记录初始化
+     * @author nada
+     * @create 2021/5/12 2:59 下午
+     */
+    public static UserProductWarehouseLog initUserProductWarehouseLog(String userId,String warehouseId,int type,String title,BigDecimal money){
+        UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
+        userProductWarehouseLog.setIsNewRecord(true);
+        userProductWarehouseLog.setUserId(userId);
+        userProductWarehouseLog.setWarehouseId(warehouseId);
+        userProductWarehouseLog.setType(type);
+        userProductWarehouseLog.setTitle(title);
+        userProductWarehouseLog.setIncomeMoney(money);
+        return userProductWarehouseLog;
+    }
+
 }

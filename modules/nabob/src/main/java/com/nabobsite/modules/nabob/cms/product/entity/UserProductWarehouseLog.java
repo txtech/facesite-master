@@ -6,9 +6,10 @@ package com.nabobsite.modules.nabob.cms.product.entity;
 import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.math.BigDecimal;
 import com.jeesite.common.mybatis.annotation.JoinTable;
 import com.jeesite.common.mybatis.annotation.JoinTable.Type;
+import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.jeesite.common.entity.DataEntity;
@@ -19,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户产品仓库日志Entity
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-19
  */
 @Table(name="t1_user_product_warehouse_log", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -40,10 +41,10 @@ public class UserProductWarehouseLog extends DataEntity<UserProductWarehouseLog>
 	
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户ID
-	private Integer warehouseId;		// 产品仓库ID
+	private String warehouseId;		// 产品仓库ID
 	private Integer type;		// 类似 1:个人 2:团队
 	private String title;		// 标题
-	private Double incomeMoney;		// 累计收益
+	private BigDecimal incomeMoney;		// 累计收益
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
@@ -66,12 +67,12 @@ public class UserProductWarehouseLog extends DataEntity<UserProductWarehouseLog>
 		this.userId = userId;
 	}
 	
-	@NotNull(message="产品仓库ID不能为空")
-	public Integer getWarehouseId() {
+	@NotBlank(message="产品仓库ID不能为空")
+	public String getWarehouseId() {
 		return warehouseId;
 	}
 
-	public void setWarehouseId(Integer warehouseId) {
+	public void setWarehouseId(String warehouseId) {
 		this.warehouseId = warehouseId;
 	}
 	
@@ -95,11 +96,11 @@ public class UserProductWarehouseLog extends DataEntity<UserProductWarehouseLog>
 	}
 	
 	@NotNull(message="累计收益不能为空")
-	public Double getIncomeMoney() {
+	public BigDecimal getIncomeMoney() {
 		return incomeMoney;
 	}
 
-	public void setIncomeMoney(Double incomeMoney) {
+	public void setIncomeMoney(BigDecimal incomeMoney) {
 		this.incomeMoney = incomeMoney;
 	}
 	
