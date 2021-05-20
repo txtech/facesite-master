@@ -387,7 +387,7 @@ shiro:
   accessControlAllowOrigin: '*'
   #允许跨域访问时 CORS，可以使用的方法和标头
   accessControlAllowMethods: GET, POST, OPTIONS
-  accessControlAllowHeaders: Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With
+  accessControlAllowHeaders: Authorization,lang,Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With
   #是否允许接收跨域的Cookie凭证数据 CORS
   accessControlAllowCredentials: true
   #允许的网站来源地址，不设置为全部地址（避免一些跨站点请求伪造 CSRF）
