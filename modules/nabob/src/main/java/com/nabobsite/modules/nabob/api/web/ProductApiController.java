@@ -93,7 +93,7 @@ public class ProductApiController extends BaseController {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.getUserWarehouseInfo(token,warehouseId);
 	}
-	@RequestMapping(value = {"getUserAccountWarehouseInfo/{warehouseId}"})
+	@RequestMapping(value = {"getUserAccountWarehouseInfo"})
 	@ApiOperation(value = "用户云仓库账户")
 	public CommonResult<JSONObject> getUserAccountWarehouseInfo(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);

@@ -25,7 +25,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 @Table(name="t1_user_account_warehouse", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="user_id", attrName="userId", label="用户id"),
-		@Column(name="level", attrName="level", label="级别"),
 		@Column(name="asstes_held_money", attrName="asstesHeldMoney", label="仓库持有资产"),
 		@Column(name="accumulative_income_money", attrName="accumulativeIncomeMoney", label="累计收益"),
 		@Column(name="personal_income_money", attrName="personalIncomeMoney", label="个人受益"),
@@ -41,10 +40,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户id
-	private Integer level;		// 级别
 	private BigDecimal asstesHeldMoney;		// 仓库持有资产
 	private BigDecimal accumulativeIncomeMoney;		// 累计收益
 	private BigDecimal personalIncomeMoney;		// 个人受益
@@ -54,7 +52,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+
 	public UserAccountWarehouse() {
 		this(null);
 	}
@@ -62,7 +60,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public UserAccountWarehouse(String id){
 		super(id);
 	}
-	
+
 	@NotBlank(message="用户id不能为空")
 	public String getUserId() {
 		return userId;
@@ -71,16 +69,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
-	@NotNull(message="级别不能为空")
-	public Integer getLevel() {
-		return level;
-	}
 
-	public void setLevel(Integer level) {
-		this.level = level;
-	}
-	
 	@NotNull(message="仓库持有资产不能为空")
 	public BigDecimal getAsstesHeldMoney() {
 		return asstesHeldMoney;
@@ -89,7 +78,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setAsstesHeldMoney(BigDecimal asstesHeldMoney) {
 		this.asstesHeldMoney = asstesHeldMoney;
 	}
-	
+
 	@NotNull(message="累计收益不能为空")
 	public BigDecimal getAccumulativeIncomeMoney() {
 		return accumulativeIncomeMoney;
@@ -98,7 +87,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setAccumulativeIncomeMoney(BigDecimal accumulativeIncomeMoney) {
 		this.accumulativeIncomeMoney = accumulativeIncomeMoney;
 	}
-	
+
 	@NotNull(message="个人受益不能为空")
 	public BigDecimal getPersonalIncomeMoney() {
 		return personalIncomeMoney;
@@ -107,7 +96,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setPersonalIncomeMoney(BigDecimal personalIncomeMoney) {
 		this.personalIncomeMoney = personalIncomeMoney;
 	}
-	
+
 	@NotNull(message="个人累计收益不能为空")
 	public BigDecimal getPersonalAccumulativeIncomeMoney() {
 		return personalAccumulativeIncomeMoney;
@@ -116,7 +105,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setPersonalAccumulativeIncomeMoney(BigDecimal personalAccumulativeIncomeMoney) {
 		this.personalAccumulativeIncomeMoney = personalAccumulativeIncomeMoney;
 	}
-	
+
 	@NotNull(message="团队收益不能为空")
 	public BigDecimal getTeamIncomeMoney() {
 		return teamIncomeMoney;
@@ -125,7 +114,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setTeamIncomeMoney(BigDecimal teamIncomeMoney) {
 		this.teamIncomeMoney = teamIncomeMoney;
 	}
-	
+
 	@NotNull(message="团队累计收益不能为空")
 	public BigDecimal getTeamAccumulativeIncomeMoney() {
 		return teamAccumulativeIncomeMoney;
@@ -134,7 +123,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setTeamAccumulativeIncomeMoney(BigDecimal teamAccumulativeIncomeMoney) {
 		this.teamAccumulativeIncomeMoney = teamAccumulativeIncomeMoney;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -143,7 +132,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -152,7 +141,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -161,5 +150,5 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
 }
