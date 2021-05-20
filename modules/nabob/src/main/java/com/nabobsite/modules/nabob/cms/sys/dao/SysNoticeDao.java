@@ -1,18 +1,18 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.nabobsite.modules.nabob.cms.product.dao;
+package com.nabobsite.modules.nabob.cms.sys.dao;
 
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
+import com.nabobsite.modules.nabob.cms.sys.entity.SysNotice;
 
 /**
- * 产品仓库DAO接口
+ * 系统通知DAO接口
  * @author face
  * @version 2021-05-20
  */
 @MyBatisDao
-public interface ProductWarehouseDao extends CrudDao<ProductWarehouse> {
+public interface SysNoticeDao extends CrudDao<SysNotice> {
 	
 }

@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 产品机器人Entity
  * @author face
- * @version 2021-05-19
+ * @version 2021-05-20
  */
 @Table(name="t1_product_bot", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -34,14 +34,14 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="product_url", attrName="productUrl", label="产品图片"),
 		@Column(name="desc", attrName="desc", label="产品描述"),
 		@Column(name="created", attrName="created", label="创建时间"),
+		@Column(name="title", attrName="title", label="标题", queryType=QueryType.LIKE),
 		@Column(name="updated", attrName="updated", label="更新时间"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="in_title", attrName="inTitle", label="印度标题", queryType=QueryType.LIKE),
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
+		@Column(name="in_desc", attrName="inDesc", label="印度描述"),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
-		@Column(name="title", attrName="title", label="标题", queryType=QueryType.LIKE),
-		@Column(name="in_title", attrName="inTitle", label="印度标题", queryType=QueryType.LIKE),
-		@Column(name="in_desc", attrName="inDesc", label="印度描述"),
 	}, orderBy="a.id DESC"
 )
 public class ProductBot extends DataEntity<ProductBot> {
@@ -57,11 +57,11 @@ public class ProductBot extends DataEntity<ProductBot> {
 	private String productUrl;		// 产品图片
 	private String desc;		// 产品描述
 	private Date created;		// 创建时间
-	private Date updated;		// 更新时间
-	private String delFlag;		// 删除标志
 	private String title;		// 标题
+	private Date updated;		// 更新时间
 	private String inTitle;		// 印度标题
 	private String inDesc;		// 印度描述
+	private String delFlag;		// 删除标志
 	
 	public ProductBot() {
 		this(null);
@@ -162,24 +162,6 @@ public class ProductBot extends DataEntity<ProductBot> {
 		this.created = created;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-	
-	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
-	public String getDelFlag() {
-		return delFlag;
-	}
-
-	public void setDelFlag(String delFlag) {
-		this.delFlag = delFlag;
-	}
-	
 	@Length(min=0, max=1024, message="标题长度不能超过 1024 个字符")
 	public String getTitle() {
 		return title;
@@ -187,6 +169,15 @@ public class ProductBot extends DataEntity<ProductBot> {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
 	
 	@Length(min=0, max=520, message="印度标题长度不能超过 520 个字符")
@@ -205,6 +196,15 @@ public class ProductBot extends DataEntity<ProductBot> {
 
 	public void setInDesc(String inDesc) {
 		this.inDesc = inDesc;
+	}
+	
+	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
+	public String getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(String delFlag) {
+		this.delFlag = delFlag;
 	}
 	
 }

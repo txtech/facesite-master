@@ -131,12 +131,6 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('语言')}：</label>
-					<div class="control-inline">
-						<#form:input path="lang" maxlength="10" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('使用版本')}：</label>
 					<div class="control-inline">
 						<#form:input path="appVersion" maxlength="128" class="form-control width-120"/>
@@ -217,7 +211,6 @@ $('#dataGrid').dataGrid({
 		{header:'${text("登陆IP")}', name:'loginIp', index:'a.login_ip', width:150, align:"left"},
 		{header:'${text("团队总人数")}', name:'teamNum', index:'a.team_num', width:150, align:"center"},
 		{header:'${text("一级团队人数")}', name:'team1Num', index:'a.team1_num', width:150, align:"center"},
-		{header:'${text("语言")}', name:'lang', index:'a.lang', width:150, align:"left"},
 		{header:'${text("使用版本")}', name:'appVersion', index:'a.app_version', width:150, align:"left"},
 		{header:'${text("二级团队人数")}', name:'team2Num', index:'a.team2_num', width:150, align:"center"},
 		{header:'${text("三级团队人数")}', name:'team3Num', index:'a.team3_num', width:150, align:"center"},

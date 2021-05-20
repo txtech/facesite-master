@@ -20,13 +20,14 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 产品仓库Entity
  * @author face
- * @version 2021-05-19
+ * @version 2021-05-20
  */
 @Table(name="t1_product_warehouse", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="seq", attrName="seq", label="排序"),
 		@Column(name="name", attrName="name", label="名称", queryType=QueryType.LIKE),
 		@Column(name="daily_interest_rate", attrName="dailyInterestRate", label="日收益比例"),
+		@Column(name="in_name", attrName="inName", label="in_name", queryType=QueryType.LIKE),
 		@Column(name="days", attrName="days", label="限制日"),
 		@Column(name="limit_price", attrName="limitPrice", label="最低限额"),
 		@Column(name="product_url", attrName="productUrl", label="图片地址"),
@@ -37,7 +38,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
-		@Column(name="in_name", attrName="inName", label="in_name", queryType=QueryType.LIKE),
 	}, orderBy="a.id DESC"
 )
 public class ProductWarehouse extends DataEntity<ProductWarehouse> {
@@ -46,6 +46,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	private Integer seq;		// 排序
 	private String name;		// 名称
 	private BigDecimal dailyInterestRate;		// 日收益比例
+	private String inName;		// in_name
 	private Integer days;		// 限制日
 	private BigDecimal limitPrice;		// 最低限额
 	private String productUrl;		// 图片地址
@@ -53,7 +54,6 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	private String inName;		// in_name
 	
 	public ProductWarehouse() {
 		this(null);
@@ -89,6 +89,15 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 
 	public void setDailyInterestRate(BigDecimal dailyInterestRate) {
 		this.dailyInterestRate = dailyInterestRate;
+	}
+	
+	@Length(min=0, max=3200, message="in_name长度不能超过 3200 个字符")
+	public String getInName() {
+		return inName;
+	}
+
+	public void setInName(String inName) {
+		this.inName = inName;
 	}
 	
 	@NotNull(message="限制日不能为空")
@@ -153,15 +162,6 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
-	}
-	
-	@Length(min=0, max=3200, message="in_name长度不能超过 3200 个字符")
-	public String getInName() {
-		return inName;
-	}
-
-	public void setInName(String inName) {
-		this.inName = inName;
 	}
 	
 }
