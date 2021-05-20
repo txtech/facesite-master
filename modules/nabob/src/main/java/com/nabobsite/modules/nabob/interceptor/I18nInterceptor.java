@@ -47,8 +47,8 @@ public class I18nInterceptor implements HandlerInterceptor {
         try {
             String userId = "";
             String reqUrl = request.getRequestURI();
-            String lang = request.getHeader("lang");
             String ip = HttpBrowserTools.getIpAddr(request);
+            String lang = request.getHeader("lang");
             String token = request.getHeader("Authorization");
             Boolean isOpenApi = Boolean.FALSE;
             if(StringUtils.isNotEmpty(reqUrl) && reqUrl.contains("/api/open/")){
