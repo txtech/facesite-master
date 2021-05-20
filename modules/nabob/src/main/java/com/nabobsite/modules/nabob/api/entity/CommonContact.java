@@ -261,7 +261,7 @@ public class CommonContact {
     //失败返回
     public static JSONObject failedMsg(String msg){
         JSONObject result = new JSONObject();
-        result.put("code",I18nCode.CODE_10001);
+        result.put("code",I18nCode.CODE_10003);
         result.put("message","操作失败");
         if(StringUtils.isEmpty(msg)){
             result.put("message",msg);

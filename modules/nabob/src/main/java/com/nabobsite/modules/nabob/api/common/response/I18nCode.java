@@ -9,7 +9,7 @@ package com.nabobsite.modules.nabob.api.common.response;
 public class I18nCode {
 
     public static final String CODE_10000 = "10000"; //处理成功
-    public static final String CODE_10001 = "10001"; //处理错误
+    public static final String CODE_10001 = "10001"; //token错误
     public static final String CODE_10002 = "10002"; //处理异常
     public static final String CODE_10003 = "10003"; //处理失败
     public static final String CODE_10004 = "10004"; //请求失败,请稍后重试！
