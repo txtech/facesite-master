@@ -197,8 +197,14 @@ public class TaskApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getTaskInfo(TaskInfo taskInfo,String token) {
+	public CommonResult<JSONObject> getTaskInfo(String token) {
 		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			TaskInfo taskInfo = new TaskInfo();
+			taskInfo.setId(userInfo.getId());
 			TaskInfo result = taskInfoDao.getByEntity(taskInfo);
 			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
