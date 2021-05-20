@@ -285,10 +285,11 @@ public class CommonContact {
             if(!result.containsKey ("code")){
                 return false;
             }
-            if (!result.getString ("code").equals (ResultCode.SUCCESS.getCode())){
-                return false;
+            String code = result.getString ("code");
+            if (String.valueOf(ResultCode.SUCCESS.getCode()).equals(code)){
+                return true;
             }
-            return true;
+            return false;
         } catch (Exception e) {
             logger.error("异常 ",e);
             return  false;

@@ -56,7 +56,8 @@ public class I18nInterceptor implements HandlerInterceptor {
             }
             if(StringUtils.isEmpty(token) && !isOpenApi){
                 logger.error("请求被拦截，获取授权信息为空:{},{},{}",token,ip,reqUrl);
-                this.writeResponse(response,ResultUtil.failedAuthorization(I18nCode.CODE_10001,"Failed to request,User not authorized"));
+                CommonResult<JSONObject> result = ResultUtil.failedAuthorization(I18nCode.CODE_10001,"Failed to request,User not authorized");
+                this.writeResponse(response,result);
                 return false;
             }
             if(StringUtils.isNotEmpty(token)){
@@ -64,7 +65,8 @@ public class I18nInterceptor implements HandlerInterceptor {
                 userId = (String) redisOpsUtil.get(newTokenKey);
                 if(StringUtils.isEmpty(userId)){
                     logger.error("请求被拦截，获取授权用户为空:{},{}",token,ip);
-                    this.writeResponse(response,ResultUtil.failedAuthorization(I18nCode.CODE_10001,"Failed to request,User authorization expired！"));
+                    CommonResult<JSONObject> result = ResultUtil.failedAuthorization(I18nCode.CODE_10001,"Failed to request,User authorization expired！");
+                    this.writeResponse(response,result);
                     return false;
                 }
                 //刷新延长30分钟缓存
@@ -81,7 +83,8 @@ public class I18nInterceptor implements HandlerInterceptor {
             return true;
         } catch (Exception e) {
            logger.error("拦截器准备发生异常",e);
-            this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_10002,"Failed to request,Authorization error！"));
+            CommonResult<JSONObject> result = ResultUtil.failed(I18nCode.CODE_10002,"Failed to request,Authorization error！");
+            this.writeResponse(response,result);
             return false;
         }
     }
