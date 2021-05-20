@@ -7,7 +7,7 @@ package com.nabobsite.modules.nabob.api.common.response;
 */
 public enum ResultCode {
     SUCCESS(10000, "operation success"),
-    ERROR(10001, "operation error"),
+    ERROR_AUTHOR(10001, "operation error"),
     EXCEPTION(10002, "operation exception"),
     FAILED(10003, "operation failed");
 

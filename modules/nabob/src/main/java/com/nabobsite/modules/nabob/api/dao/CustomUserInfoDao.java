@@ -22,5 +22,5 @@ public interface CustomUserInfoDao  {
     //    private String smsCode; //短信验证码
 //    private String codeKey; //图片验证码key
 //    private String imgCode; //图片验证码code
-//      private String OldPassword;
+//      private String oldPassword;
 }

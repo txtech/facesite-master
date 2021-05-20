@@ -43,7 +43,7 @@ public class I18nInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o){
         try {
             String userId = "";
             String reqUrl = request.getRequestURI();
@@ -56,7 +56,7 @@ public class I18nInterceptor implements HandlerInterceptor {
             }
             if(StringUtils.isEmpty(token) && !isOpenApi){
                 logger.error("请求被拦截，获取授权信息为空:{},{},{}",token,ip,reqUrl);
-                this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_10001,"Failed to request,User not authorized"));
+                this.writeResponse(response,ResultUtil.failedAuthorization(I18nCode.CODE_10001,"Failed to request,User not authorized"));
                 return false;
             }
             if(StringUtils.isNotEmpty(token)){
@@ -64,9 +64,13 @@ public class I18nInterceptor implements HandlerInterceptor {
                 userId = (String) redisOpsUtil.get(newTokenKey);
                 if(StringUtils.isEmpty(userId)){
                     logger.error("请求被拦截，获取授权用户为空:{},{}",token,ip);
-                    this.writeResponse(response,ResultUtil.failed(I18nCode.CODE_10001,"Failed to request,User authorization expired！"));
+                    this.writeResponse(response,ResultUtil.failedAuthorization(I18nCode.CODE_10001,"Failed to request,User authorization expired！"));
                     return false;
                 }
+                //刷新延长30分钟缓存
+                String userTokenKey = RedisPrefixContant.getUserTokenKey(userId);
+                redisOpsUtil.set(newTokenKey,userId,RedisPrefixContant.CACHE_HALF_HOUR);
+                redisOpsUtil.set(userTokenKey,token,RedisPrefixContant.CACHE_HALF_HOUR);
             }
             lang = I18nUtils.getLangStandard(lang);
             Map<String,String> userLocal = new HashMap<>();

@@ -181,10 +181,6 @@ public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
 			if(userInfo == null){
 				return null;
 			}
-			String newTokenKey = RedisPrefixContant.getTokenUserKey(token);
-			String userTokenKey = RedisPrefixContant.getUserTokenKey(userId);
-			redisOpsUtil.set(newTokenKey,userId,RedisPrefixContant.CACHE_HALF_HOUR);
-			redisOpsUtil.set(userTokenKey,token,RedisPrefixContant.CACHE_HALF_HOUR);
 			return userInfo;
 		} catch (Exception e) {
 			logger.error("获取用户信息异常,{}",token,e);

@@ -75,6 +75,14 @@ public class ResultUtil<T> {
         return new CommonResult<T>(code, i18nCode,defaultValue);
     }
 
+    /**
+     * 授权失败返回结果
+     */
+    public static <T> CommonResult<T> failedAuthorization(String i18nCode,String defaultValue) {
+        int code = ResultCode.ERROR_AUTHOR.getCode();
+        return new CommonResult<T>(code, i18nCode,defaultValue);
+    }
+
     public static JSONObject filterResult(JSONObject object){
         if(object == null || object.isEmpty()){
             return new JSONObject();
