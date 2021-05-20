@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 订单Entity
  * @author face
- * @version 2021-05-18
+ * @version 2021-05-20
  */
 @Table(name="t1_order", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),

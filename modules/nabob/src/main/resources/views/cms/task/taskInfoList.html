@@ -29,9 +29,21 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('content')}：</label>
+					<div class="control-inline">
+						<#form:input path="content" maxlength="3200" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('总任务个数')}：</label>
 					<div class="control-inline">
 						<#form:input path="taskNumber" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('button_name')}：</label>
+					<div class="control-inline">
+						<#form:input path="buttonName" maxlength="520" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -41,9 +53,21 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('in_name')}：</label>
+					<div class="control-inline">
+						<#form:input path="inName" maxlength="520" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('图标地址')}：</label>
 					<div class="control-inline">
 						<#form:input path="iconUrl" maxlength="1024" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('in_content')}：</label>
+					<div class="control-inline">
+						<#form:input path="inContent" maxlength="3200" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -51,6 +75,12 @@
 					<div class="control-inline">
 						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('in_button_name')}：</label>
+					<div class="control-inline">
+						<#form:input path="inButtonName" maxlength="520" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -73,6 +103,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('seq')}：</label>
+					<div class="control-inline">
+						<#form:input path="seq" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -92,13 +128,19 @@ $('#dataGrid').dataGrid({
 			return '<a href="${ctx}/task/taskInfo/form?id='+row.id+'" class="btnList" data-title="${text("编辑任务列表")}">'+(val||row.id)+'</a>';
 		}},
 		{header:'${text("任务类型 1")}', name:'type', index:'a.type', width:150, align:"center"},
+		{header:'${text("content")}', name:'content', index:'a.content', width:150, align:"left"},
 		{header:'${text("总任务个数")}', name:'taskNumber', index:'a.task_number', width:150, align:"center"},
+		{header:'${text("button_name")}', name:'buttonName', index:'a.button_name', width:150, align:"left"},
 		{header:'${text("奖励金额")}', name:'rewardMoney', index:'a.reward_money', width:150, align:"left"},
+		{header:'${text("in_name")}', name:'inName', index:'a.in_name', width:150, align:"left"},
 		{header:'${text("图标地址")}', name:'iconUrl', index:'a.icon_url', width:150, align:"left"},
+		{header:'${text("in_content")}', name:'inContent', index:'a.in_content', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("in_button_name")}', name:'inButtonName', index:'a.in_button_name', width:150, align:"left"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
+		{header:'${text("seq")}', name:'seq', index:'a.seq', width:150, align:"center"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('task:taskInfo:edit')){ %>

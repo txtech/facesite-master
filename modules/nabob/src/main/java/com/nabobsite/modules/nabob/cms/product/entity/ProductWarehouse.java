@@ -38,10 +38,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
-	}, orderBy="a.id DESC"
+	}, orderBy="a.seq ASC"
 )
 public class ProductWarehouse extends DataEntity<ProductWarehouse> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private Integer seq;		// 排序
 	private String name;		// 名称
@@ -54,7 +54,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+
 	public ProductWarehouse() {
 		this(null);
 	}
@@ -62,7 +62,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public ProductWarehouse(String id){
 		super(id);
 	}
-	
+
 	@NotNull(message="排序不能为空")
 	public Integer getSeq() {
 		return seq;
@@ -71,7 +71,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setSeq(Integer seq) {
 		this.seq = seq;
 	}
-	
+
 	@NotBlank(message="名称不能为空")
 	@Length(min=0, max=1024, message="名称长度不能超过 1024 个字符")
 	public String getName() {
@@ -81,7 +81,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	@NotNull(message="日收益比例不能为空")
 	public BigDecimal getDailyInterestRate() {
 		return dailyInterestRate;
@@ -90,7 +90,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setDailyInterestRate(BigDecimal dailyInterestRate) {
 		this.dailyInterestRate = dailyInterestRate;
 	}
-	
+
 	@Length(min=0, max=3200, message="in_name长度不能超过 3200 个字符")
 	public String getInName() {
 		return inName;
@@ -99,7 +99,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setInName(String inName) {
 		this.inName = inName;
 	}
-	
+
 	@NotNull(message="限制日不能为空")
 	public Integer getDays() {
 		return days;
@@ -108,7 +108,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setDays(Integer days) {
 		this.days = days;
 	}
-	
+
 	@NotNull(message="最低限额不能为空")
 	public BigDecimal getLimitPrice() {
 		return limitPrice;
@@ -117,7 +117,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setLimitPrice(BigDecimal limitPrice) {
 		this.limitPrice = limitPrice;
 	}
-	
+
 	@NotBlank(message="图片地址不能为空")
 	@Length(min=0, max=1024, message="图片地址长度不能超过 1024 个字符")
 	public String getProductUrl() {
@@ -127,7 +127,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setProductUrl(String productUrl) {
 		this.productUrl = productUrl;
 	}
-	
+
 	@Length(min=0, max=2048, message="描述长度不能超过 2048 个字符")
 	public String getDesc() {
 		return desc;
@@ -136,7 +136,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -145,7 +145,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -154,7 +154,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -163,5 +163,5 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
 }

@@ -5,6 +5,7 @@ import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.UserProductBotLog;
 import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouse;
 import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouseLog;
+import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
@@ -132,10 +133,13 @@ public class InstanceContact {
      * @author nada
      * @create 2021/5/12 2:59 下午
     */
-    public static Order initOrderInfo(Order params,String orderNo){
+    public static Order initOrderInfo(Order params, String orderNo, SysChannel sysChannel ){
         Order order = (Order)params.clone();
         order.setIsNewRecord(true);
         order.setOrderNo(orderNo);
+        order.setPayRate(sysChannel.getPayRate());
+        order.setPayType(CommonContact.ORDER_PAY_TYPE_1);
+        order.setChannelId(sysChannel.getId());
         order.setActualMoney(params.getPayMoney());
         order.setType(CommonContact.ORDER_TYPE_RECHANGE);
         order.setOrderStatus(CommonContact.ORDER_STATUS_1);

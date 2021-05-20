@@ -19,13 +19,14 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户任务Entity
  * @author face
- * @version 2021-05-19
+ * @version 2021-05-20
  */
 @Table(name="t1_user_task", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="user_id", attrName="userId", label="用户ID"),
 		@Column(name="task_id", attrName="taskId", label="任务ID"),
 		@Column(name="task_status", attrName="taskStatus", label="任务状态 1", comment="任务状态 1:未开始 2:进行中 3:完成"),
+		@Column(name="type", attrName="type", label="任务类型 1", comment="任务类型 1:分享好友 2:观看视频 3:邀请好友 4:定期投资"),
 		@Column(name="finish_number", attrName="finishNumber", label="完成个数"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
@@ -33,7 +34,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
-		@Column(name="type", attrName="type", label="任务类型 1", comment="任务类型 1:分享好友 2:观看视频 3:邀请好友 4:定期投资"),
 	}, orderBy="a.id DESC"
 )
 public class UserTask extends DataEntity<UserTask> {
@@ -42,11 +42,11 @@ public class UserTask extends DataEntity<UserTask> {
 	private String userId;		// 用户ID
 	private String taskId;		// 任务ID
 	private Integer taskStatus;		// 任务状态 1:未开始 2:进行中 3:完成
+	private Integer type;		// 任务类型 1:分享好友 2:观看视频 3:邀请好友 4:定期投资
 	private Integer finishNumber;		// 完成个数
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	private Integer type;		// 任务类型 1:分享好友 2:观看视频 3:邀请好友 4:定期投资
 	
 	public UserTask() {
 		this(null);
@@ -85,6 +85,14 @@ public class UserTask extends DataEntity<UserTask> {
 		this.taskStatus = taskStatus;
 	}
 	
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	
 	@NotNull(message="完成个数不能为空")
 	public Integer getFinishNumber() {
 		return finishNumber;
@@ -119,14 +127,6 @@ public class UserTask extends DataEntity<UserTask> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
-	}
-	
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
 	}
 	
 }

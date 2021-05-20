@@ -12,6 +12,8 @@ import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.cms.sys.dao.SysChannelDao;
+import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.apache.commons.lang3.StringUtils;
@@ -34,13 +36,16 @@ public class OrderApiService extends BaseUserService {
 	@Autowired
 	private OrderDao orderDao;
 
+	@Autowired
+	private SysChannelDao sysChannelDao;
+
 	/**
 	 * @desc 充值订单
 	 * @author nada
 	 * @create 2021/5/12 1:10 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> rechargeOrder(Order order, String token) {
+	public CommonResult<Boolean> rechargeOrder(Order order, String token) {
 		try {
 			String name = order.getName();
 			String email = order.getEmail();
@@ -56,14 +61,18 @@ public class OrderApiService extends BaseUserService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
+			SysChannel sysChannel = this.getOneChannel();
+			if(sysChannel == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
 			String userId = userInfo.getId();
 			order.setUserId(userId);
 			String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
 			synchronized (orderNo) {
-				long dbResult = orderDao.insert(InstanceContact.initOrderInfo(order,orderNo));
+				long dbResult = orderDao.insert(InstanceContact.initOrderInfo(order,orderNo,sysChannel));
 				if(CommonContact.dbResult(dbResult)){
 					order.setOrderNo(orderNo);
-					return ResultUtil.successToJson(order);
+					return ResultUtil.successToBoolean(true);
 				}
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -72,6 +81,25 @@ public class OrderApiService extends BaseUserService {
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
+
+	/**
+	 * @desc 获取一个通道
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public SysChannel getOneChannel() {
+		try {
+			List<SysChannel> channelList = sysChannelDao.findList(new SysChannel());
+			if(channelList == null || channelList.isEmpty()){
+				return null;
+			}
+			return channelList.get(0);
+		} catch (Exception e) {
+			logger.error("根据订单号获取异常",e);
+			return null;
+		}
+	}
+
 
 	/**
 	 * @desc 获取订单列表

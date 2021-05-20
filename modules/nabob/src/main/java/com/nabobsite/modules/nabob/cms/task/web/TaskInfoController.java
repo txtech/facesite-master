@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.task.service.TaskInfoService;
 /**
  * 任务列表Controller
  * @author face
- * @version 2021-05-13
+ * @version 2021-05-20
  */
 @Controller
 @RequestMapping(value = "${adminPath}/task/taskInfo")

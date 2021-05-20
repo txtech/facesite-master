@@ -35,7 +35,7 @@ public class CashApiController extends BaseController {
 
 	@PostMapping(value = {"cashOrder"})
 	@ApiOperation(value = "提款接口")
-	public CommonResult<Boolean> rechargeOrder(HttpServletRequest request) {
+	public CommonResult<Boolean> rechargeOrder(@RequestBody Cash cash,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return cashApiService.cashOrder(token,new Cash());
 	}

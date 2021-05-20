@@ -38,14 +38,7 @@ public class OrderApiController extends BaseController {
 
 	@PostMapping(value = {"rechargeOrder"})
 	@ApiOperation(value = "充值订单")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "payMoney", value = "充值金额", required = true),
-			@ApiImplicitParam(name = "name",  value = "名称", required = true),
-			@ApiImplicitParam(name = "email",value = "邮箱", required = true),
-			@ApiImplicitParam(name = "phoneNumber",value = "电话号码", required = true),
-			@ApiImplicitParam(name = "mark", value = "来者不善", required = false, type="String"),
-	})
-	public CommonResult<JSONObject> rechargeOrder(@RequestBody Order order, HttpServletRequest request) {
+	public CommonResult<Boolean> rechargeOrder(@RequestBody Order order, HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		order.setIpaddress(ip);
