@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2013-Now  All rights reserved.
  */
-package com.nabobsite.modules.nabob.api.service;
+package com.nabobsite.modules.nabob.api.common.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.service.CrudService;
+import com.nabobsite.modules.nabob.api.common.service.RedisOpsUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.I18nUtils;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
@@ -32,8 +32,7 @@ import java.util.List;
  * @version 2021-05-10
  */
 @Service
-@Transactional(readOnly=true)
-public class BaseUserService extends CrudService<UserInfoDao, UserInfo> {
+public class SimpleCrudService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
 	protected RedisOpsUtil redisOpsUtil;
 	@Autowired

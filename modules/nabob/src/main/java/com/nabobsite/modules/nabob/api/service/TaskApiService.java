@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
+import com.nabobsite.modules.nabob.api.common.service.SimpleCrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly=true)
-public class TaskApiService extends BaseUserService {
+public class TaskApiService extends SimpleCrudService {
 
 	@Autowired
 	private TaskInfoDao taskInfoDao;

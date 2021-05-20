@@ -9,6 +9,7 @@ import com.jeesite.common.lang.StringUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
+import com.nabobsite.modules.nabob.api.common.service.SimpleCrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.product.dao.*;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly=true)
-public class ProductApiService extends BaseUserService {
+public class ProductApiService extends SimpleCrudService {
 
 	@Autowired
 	private ProductBotDao productBotDao;

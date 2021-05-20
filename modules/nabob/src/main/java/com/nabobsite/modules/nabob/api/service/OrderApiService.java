@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
+import com.nabobsite.modules.nabob.api.common.service.SimpleCrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
@@ -31,7 +32,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly=true)
-public class OrderApiService extends BaseUserService {
+public class OrderApiService extends SimpleCrudService {
 
 	@Autowired
 	private OrderDao orderDao;
@@ -57,7 +58,7 @@ public class OrderApiService extends BaseUserService {
 			if(CommonContact.isLesserOrEqual(payMoney, CommonContact.ZERO)){
 				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
-			UserInfo userInfo = this.getUserInfoByToken(token);
+			UserInfo userInfo = getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}

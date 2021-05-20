@@ -1,8 +1,8 @@
 package com.nabobsite.modules.nabob.pay.hander;
 
 import com.alibaba.fastjson.JSONObject;
+import com.nabobsite.modules.nabob.api.common.service.SimpleCrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.service.BaseUserService;
 import com.nabobsite.modules.nabob.cms.order.entity.Cash;
 import com.nabobsite.modules.nabob.pay.common.ResultListener;
 import com.nabobsite.modules.nabob.pay.order.payorder.India1PayOrderServiceImpl;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @版权:公司 Copyright (c) 2017
  */
 @Service
-public class CashHander extends BaseUserService {
+public class CashHander extends SimpleCrudService {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired

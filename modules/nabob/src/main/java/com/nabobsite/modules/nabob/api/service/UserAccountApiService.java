@@ -7,9 +7,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
+import com.nabobsite.modules.nabob.api.common.service.SimpleCrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
-import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly=true)
-public class UserAccountApiService extends BaseUserService {
+public class UserAccountApiService extends SimpleCrudService {
 
 	@Autowired
 	private UserAccountLogDao userAccountLogDao;

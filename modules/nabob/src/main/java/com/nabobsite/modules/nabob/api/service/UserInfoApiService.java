@@ -11,6 +11,7 @@ import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
+import com.nabobsite.modules.nabob.api.common.service.SimpleCrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
@@ -22,8 +23,6 @@ import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,9 +38,7 @@ import java.util.UUID;
  */
 @Service
 @Transactional(readOnly=true)
-public class UserInfoApiService extends BaseUserService {
-
-	protected Logger logger = LoggerFactory.getLogger(this.getClass());
+public class UserInfoApiService extends SimpleCrudService {
 	@Autowired
 	private UserAccountApiService userAccountApiService;
 	@Autowired
@@ -184,7 +181,7 @@ public class UserInfoApiService extends BaseUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<JSONObject> getUserInfo(String token) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
+			UserInfo userInfo = getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
