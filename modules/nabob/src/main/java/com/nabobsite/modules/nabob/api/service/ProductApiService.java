@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -90,7 +91,7 @@ public class ProductApiService extends SimpleProductService {
 				}
 				Boolean isOk = userAccountApiService.updateAccountWarehouseMoney(userId,type,money,warehouseId,title);
 				if(isOk){
-					return ResultUtil.successToBoolean(true);
+					return ResultUtil.success(true);
 				}
 				return ResultUtil.failed(I18nCode.CODE_10004);
 			}
@@ -152,7 +153,7 @@ public class ProductApiService extends SimpleProductService {
 				String title = "产品撤资";
 				Boolean isOk = userAccountApiService.updateAccountWarehouseMoney(userId,type,money,warehouseId,title);
 				if(isOk){
-					return ResultUtil.successToBoolean(true);
+					return ResultUtil.success(true);
 				}
 				return ResultUtil.failed(I18nCode.CODE_10004);
 			}
@@ -218,7 +219,7 @@ public class ProductApiService extends SimpleProductService {
 				String title = "产品定投";
 				Boolean isOk = userAccountApiService.updateAccountWarehouseMoney(userId,type,money,warehouseId,title);
 				if(isOk){
-					return ResultUtil.successToBoolean(true);
+					return ResultUtil.success(true);
 				}
 				return ResultUtil.failed(I18nCode.CODE_10004);
 			}
@@ -315,7 +316,7 @@ public class ProductApiService extends SimpleProductService {
 				}
 				Boolean isOk = userAccountApiService.updateAccountCommissionMoney(userId,commissionMoney,botId,title);
 				if(isOk){
-					return ResultUtil.successToBoolean(true);
+					return ResultUtil.success(true);
 				}
 				return ResultUtil.failed(I18nCode.CODE_10004);
 			}
@@ -333,14 +334,10 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getProductBotList(ProductBot productBot) {
+	public CommonResult<List<ProductBot>> getProductBotList(ProductBot productBot) {
 		try {
-			List<ProductBot> list = productBotDao.findList(productBot);
-			JSONArray result = new JSONArray();
-			for (ProductBot entity : list) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
+			List<ProductBot> result = productBotDao.findList(productBot);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取无人机产品列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -352,10 +349,10 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getProductBotInfo(String token, ProductBot productBot) {
+	public CommonResult<ProductBot> getProductBotInfo(String token, ProductBot productBot) {
 		try {
-			ProductBot productBotInfo = productBotDao.getByEntity(productBot);
-			return ResultUtil.successToJson(productBotInfo);
+			ProductBot result = productBotDao.getByEntity(productBot);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("无人机产品详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -367,7 +364,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getUserBotInfo(String token,String botId) {
+	public CommonResult<UserProductBot> getUserBotInfo(String token,String botId) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -381,7 +378,7 @@ public class ProductApiService extends SimpleProductService {
 			if(productBot!=null){
 				result.setDailyNum(productBot.getDailyNum());
 			}
-			return ResultUtil.successToJson(result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户无人机产品详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -396,7 +393,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getProductWarehouseList(String token,ProductWarehouse productWarehouse) {
+	public CommonResult<List<ProductWarehouse>> getProductWarehouseList(String token,ProductWarehouse productWarehouse) {
 		try {
 			String userId = "";
 			if(StringUtils.isNotEmpty(token)){
@@ -405,10 +402,9 @@ public class ProductApiService extends SimpleProductService {
 					userId  = userInfo.getId();
 				}
 			}
+			List<ProductWarehouse> newList = new ArrayList<>();
 			List<ProductWarehouse> list = productWarehouseDao.findList(productWarehouse);
-			JSONArray result = new JSONArray();
 			for (ProductWarehouse entity : list) {
-				JSONObject date = CommonContact.toJSONObject(entity);
 				String warehouseId = entity.getId();
 				BigDecimal asstesHeldMoney = new BigDecimal("0");
 				if(CommonContact.isOkUserId(userId)){
@@ -417,10 +413,10 @@ public class ProductApiService extends SimpleProductService {
 						asstesHeldMoney = userProductWarehouse.getAsstesHeldMoney();
 					}
 				}
-				date.put("asstesHeldMoney",asstesHeldMoney);
-				result.add(date);
+				entity.setAsstesHeldMoney(asstesHeldMoney);
+				newList.add(entity);
 			}
-			return ResultUtil.successToJsonArray(result);
+			return ResultUtil.success(newList);
 		} catch (Exception e) {
 			logger.error("获取云仓库产品列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -432,12 +428,12 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getProductWarehouseInfo(String token,String warehouseId) {
+	public CommonResult<ProductWarehouse> getProductWarehouseInfo(String token,String warehouseId) {
 		try {
 			ProductWarehouse productWarehouse = new ProductWarehouse();
 			productWarehouse.setId(warehouseId);
 			ProductWarehouse productWarehouseInfo = productWarehouseDao.getByEntity(productWarehouse);
-			return ResultUtil.successToJson(productWarehouseInfo);
+			return ResultUtil.success(productWarehouseInfo);
 		} catch (Exception e) {
 			logger.error("云仓库产品详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -449,7 +445,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getUserWarehouseInfo(String token, String warehouseId) {
+	public CommonResult<UserProductWarehouse> getUserWarehouseInfo(String token, String warehouseId) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -459,7 +455,7 @@ public class ProductApiService extends SimpleProductService {
 			if(result == null){
 				result = new UserProductWarehouse();
 			}
-			return ResultUtil.successToJson(result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -471,7 +467,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/20 9:45 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getUserAccountWarehouseInfo(String token) {
+	public CommonResult<UserAccountWarehouse> getUserAccountWarehouseInfo(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -481,7 +477,7 @@ public class ProductApiService extends SimpleProductService {
 			if(result == null){
 				result = new UserAccountWarehouse();
 			}
-			return ResultUtil.successToJson(result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -496,7 +492,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getUserWarehousePersonalIncomeList(String token) {
+	public CommonResult<List<UserProductWarehouseLog>> getUserWarehousePersonalIncomeList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -505,12 +501,8 @@ public class ProductApiService extends SimpleProductService {
 			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
 			userProductWarehouseLog.setUserId(userInfo.getId());
 			userProductWarehouseLog.setType(CommonContact.WAREHOUSE_TYPE_1);
-			List<UserProductWarehouseLog> userProductWarehouseLogList = userProductWarehouseLogDao.findList(userProductWarehouseLog);
-			JSONArray result = new JSONArray();
-			for (UserProductWarehouseLog entity : userProductWarehouseLogList) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
+			List<UserProductWarehouseLog> result = userProductWarehouseLogDao.findList(userProductWarehouseLog);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库个人收入记录列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -522,7 +514,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getUserWarehouseTeamIncomeList(String token) {
+	public CommonResult<List<UserProductWarehouseLog>> getUserWarehouseTeamIncomeList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -531,12 +523,8 @@ public class ProductApiService extends SimpleProductService {
 			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
 			userProductWarehouseLog.setUserId(userInfo.getId());
 			userProductWarehouseLog.setType(CommonContact.WAREHOUSE_TYPE_2);
-			List<UserProductWarehouseLog> userProductWarehouseLogList = userProductWarehouseLogDao.findList(userProductWarehouseLog);
-			JSONArray result = new JSONArray();
-			for (UserProductWarehouseLog entity : userProductWarehouseLogList) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
+			List<UserProductWarehouseLog> result = userProductWarehouseLogDao.findList(userProductWarehouseLog);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库团队收入记录列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -548,7 +536,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getUserWarehouseOperationList(String token) {
+	public CommonResult<List<UserProductWarehouseRecord>> getUserWarehouseOperationList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -556,12 +544,8 @@ public class ProductApiService extends SimpleProductService {
 			}
 			UserProductWarehouseRecord userProductWarehouseRecord = new UserProductWarehouseRecord();
 			userProductWarehouseRecord.setUserId(userInfo.getId());
-			List<UserProductWarehouseRecord> userProductWarehouseRecordList = userProductWarehouseRecordDao.findList(userProductWarehouseRecord);
-			JSONArray result = new JSONArray();
-			for (UserProductWarehouseRecord entity : userProductWarehouseRecordList) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
+			List<UserProductWarehouseRecord> result = userProductWarehouseRecordDao.findList(userProductWarehouseRecord);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库操纵记录列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

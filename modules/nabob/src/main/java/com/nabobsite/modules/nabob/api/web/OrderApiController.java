@@ -47,14 +47,14 @@ public class OrderApiController extends BaseController {
 
 	@PostMapping(value = {"getOrderList"})
 	@ApiOperation(value = "获取订单列表")
-	public CommonResult<JSONArray> getOrderList(HttpServletRequest request) {
+	public CommonResult<List<Order>> getOrderList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return orderApiService.getOrderList(new Order(),token);
 	}
 
 	@PostMapping(value = {"getOrderInfo/{orderNo}"})
 	@ApiOperation(value = "获取订单详情")
-	public CommonResult<JSONObject> getOrderInfo(@PathVariable String orderNo, HttpServletRequest request) {
+	public CommonResult<Order> getOrderInfo(@PathVariable String orderNo, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		Order order = new Order();
 		order.setOrderNo(orderNo);

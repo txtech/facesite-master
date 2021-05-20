@@ -60,6 +60,7 @@ public class TaskInfo extends DataEntity<TaskInfo> {
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	private Integer seq;		// seq
+	private Integer finishNum;
 
 	public TaskInfo() {
 		this(null);
@@ -197,4 +198,11 @@ public class TaskInfo extends DataEntity<TaskInfo> {
 		this.seq = seq;
 	}
 
+	public Integer getFinishNum() {
+		return finishNum;
+	}
+
+	public void setFinishNum(Integer finishNum) {
+		this.finishNum = finishNum;
+	}
 }

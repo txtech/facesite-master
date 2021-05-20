@@ -78,7 +78,7 @@ public class UserInfoApiService extends SimpleUserService {
 			updateUserInfo.setPassword(md5NewPwd);
 			long dbResult = userInfoDao.update(updateUserInfo);
 			if(CommonContact.dbResult(dbResult)){
-				return ResultUtil.successToBoolean(true);
+				return ResultUtil.success(true);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
@@ -123,7 +123,7 @@ public class UserInfoApiService extends SimpleUserService {
 			long dbResult = userInfoDao.update(updateUserInfo);
 			if(CommonContact.dbResult(dbResult)){
 				this.logout(token);
-				return ResultUtil.successToBoolean(true);
+				return ResultUtil.success(true);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
@@ -141,7 +141,7 @@ public class UserInfoApiService extends SimpleUserService {
 	public CommonResult<Boolean> logout(String token) {
 		try {
 			redisOpsUtil.remove(RedisPrefixContant.getTokenUserKey(token));
-			return ResultUtil.successToBoolean(true);
+			return ResultUtil.success(true);
 		} catch (Exception e) {
 			logger.error("用户退出异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -166,7 +166,7 @@ public class UserInfoApiService extends SimpleUserService {
 			String registerUrl = "param_parent="+ HiDesUtils.desEnCode(jsonObject.toString());
 			JSONObject result = new JSONObject();
 			result.put("shareUrl",registerUrl);
-			return ResultUtil.successJson(result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取邀请好友链接异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -179,13 +179,13 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getUserInfo(String token) {
+	public CommonResult<UserInfo> getUserInfo(String token) {
 		try {
-			UserInfo userInfo = getUserInfoByToken(token);
+			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			return ResultUtil.successToJson(userInfo);
+			return ResultUtil.success(userInfo);
 		} catch (Exception e) {
 			logger.error("获取用户详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -198,7 +198,7 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getUserDirectTeamList(String token) {
+	public CommonResult<List<UserInfo>> getUserDirectTeamList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -207,11 +207,7 @@ public class UserInfoApiService extends SimpleUserService {
 			UserInfo parms = new UserInfo();
 			parms.setParent1UserId(userInfo.getId());
 			List<UserInfo> userInfoList = userInfoDao.findList(parms);
-			JSONArray result = new JSONArray();
-			for (UserInfo entity : userInfoList) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
+			return ResultUtil.success(userInfoList);
 		} catch (Exception e) {
 			logger.error("获取用户详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -267,7 +263,7 @@ public class UserInfoApiService extends SimpleUserService {
 				this.updateLoginIp(userId,loginIp);
 				JSONObject result = new JSONObject();
 				result.put("token",newToken);
-				return ResultUtil.successJson(result);
+				return ResultUtil.success(result);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
@@ -380,7 +376,7 @@ public class UserInfoApiService extends SimpleUserService {
 					logger.error("注册用户成功,用户送奖励失败,{}",userId);
 				}
 				triggerApiService.registerTrigger(userId);
-				return ResultUtil.successToBoolean(true);
+				return ResultUtil.success(true);
 			}
 		} catch (Exception e) {
 			logger.error("用户注册异常",e);
@@ -394,12 +390,12 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @create 2021/5/19 9:25 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getMemberShipInfo(String id) {
+	public CommonResult<MemberShip> getMemberShipInfo(String id) {
 		try {
 			MemberShip memberShip = new MemberShip();
 			memberShip.setId(id);
 			MemberShip result = memberShipDao.getByEntity(memberShip);
-			return ResultUtil.successToJson(result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取会员资格异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -412,14 +408,10 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @create 2021/5/19 9:25 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getMemberShip() {
+	public CommonResult<List<MemberShip>> getMemberShip() {
 		try {
 			List<MemberShip> shipList = memberShipDao.findList(new MemberShip());
-			JSONArray result = new JSONArray();
-			for (MemberShip entity : shipList) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
+			return ResultUtil.success(shipList);
 		} catch (Exception e) {
 			logger.error("获取系统配置异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -459,7 +451,7 @@ public class UserInfoApiService extends SimpleUserService {
 					continue;
 				}
 			}
-			return ResultUtil.successJson(configJson);
+			return ResultUtil.success(configJson);
 		} catch (Exception e) {
 			logger.error("获取系统配置异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

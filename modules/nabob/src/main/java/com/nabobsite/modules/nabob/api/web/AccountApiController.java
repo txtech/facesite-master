@@ -10,6 +10,7 @@ import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountDetail;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 账户中心
@@ -40,14 +42,14 @@ public class AccountApiController extends BaseController {
 
 	@PostMapping(value = {"getUserAccountInfo"})
 	@ApiOperation(value = "获取账户详情")
-	public CommonResult<JSONObject> getUserAccountInfo(HttpServletRequest request) {
+	public CommonResult<UserAccount> getUserAccountInfo(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return userAccountApiService.getUserAccountInfo(token);
 	}
 
 	@PostMapping(value = {"getLedgerRecordList"})
 	@ApiOperation(value = "获取收支总账记录列表")
-	public CommonResult<JSONArray> getLedgerRecordList(HttpServletRequest request){
+	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(HttpServletRequest request){
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return userAccountApiService.getLedgerRecordList(token);
 	}

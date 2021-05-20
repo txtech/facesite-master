@@ -296,11 +296,6 @@ public class CommonContact {
         }
     }
 
-    public static JSONObject toJSONObject(Object object){
-        JSONObject result =  (JSONObject)JSONObject.toJSON(object);
-        return ResultUtil.filterResult(result);
-    }
-
     /**
      * @描述:初始化设置报文请求响应编码格式
      * @时间:2017年12月18日 下午5:45:02

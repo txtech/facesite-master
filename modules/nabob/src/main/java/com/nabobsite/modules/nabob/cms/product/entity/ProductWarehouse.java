@@ -54,6 +54,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private BigDecimal asstesHeldMoney;
 
 	public ProductWarehouse() {
 		this(null);
@@ -164,4 +165,11 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 		this.delFlag = delFlag;
 	}
 
+	public BigDecimal getAsstesHeldMoney() {
+		return asstesHeldMoney;
+	}
+
+	public void setAsstesHeldMoney(BigDecimal asstesHeldMoney) {
+		this.asstesHeldMoney = asstesHeldMoney;
+	}
 }

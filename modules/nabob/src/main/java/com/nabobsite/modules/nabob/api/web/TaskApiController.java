@@ -10,6 +10,7 @@ import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.service.TaskApiService;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +19,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 账户中心
@@ -42,7 +44,7 @@ public class TaskApiController extends BaseController {
 
 	@RequestMapping(value = {"getTaskInfo/{taskId}"})
 	@ApiOperation(value = "获取任务详情")
-	public CommonResult<JSONObject> getTaskInfo(@PathVariable String taskId, HttpServletRequest request) {
+	public CommonResult<TaskInfo> getTaskInfo(@PathVariable String taskId, HttpServletRequest request) {
 		TaskInfo taskInfo = new TaskInfo();
 		taskInfo.setId(taskId);
 		return taskApiService.getTaskInfo(taskInfo);
@@ -50,14 +52,14 @@ public class TaskApiController extends BaseController {
 
 	@RequestMapping(value = {"getUserTaskInfo"})
 	@ApiOperation(value = "获取用户任务信息")
-	public CommonResult<JSONObject> getTaskInfo(HttpServletRequest request) {
+	public CommonResult<UserTask> getTaskInfo(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return taskApiService.getUserTaskInfo(token);
 	}
 
 	@RequestMapping(value = {"getTaskRewardList"})
 	@ApiOperation(value = "获取任务奖励列表")
-	public CommonResult<JSONArray> getTaskRewardList(HttpServletRequest request) {
+	public CommonResult<List<UserTaskReward>> getTaskRewardList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return taskApiService.getTaskRewardList(token);
 	}

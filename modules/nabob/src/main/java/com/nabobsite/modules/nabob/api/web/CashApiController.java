@@ -42,14 +42,14 @@ public class CashApiController extends BaseController {
 
 	@PostMapping(value = {"getCashOrderList"})
 	@ApiOperation(value = "获取订单列表")
-	public CommonResult<JSONArray> getCashOrderList(HttpServletRequest request) {
+	public CommonResult<List<Cash>> getCashOrderList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return cashApiService.getCashOrderList(token,new Cash());
 	}
 
 	@PostMapping(value = {"getCashOrderInfo/{orderNo}"})
 	@ApiOperation(value = "获取订单详情")
-	public CommonResult<JSONObject> getCashOrderInfo(@PathVariable String orderNo,HttpServletRequest request) {
+	public CommonResult<Cash> getCashOrderInfo(@PathVariable String orderNo,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return cashApiService.getCashOrderInfo(token,new Cash());
 	}

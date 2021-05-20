@@ -83,7 +83,7 @@ public class OrderApiService extends SimpleUserService {
 				if(CommonContact.isOkResult(resData)){
 					JSONObject result = new JSONObject();
 					result.put("orderNo",orderNo);
-					return ResultUtil.successJson(result);
+					return ResultUtil.success(result);
 				}else{
 					JSONObject result = new JSONObject();
 					result.put("orderNo",orderNo);
@@ -121,7 +121,7 @@ public class OrderApiService extends SimpleUserService {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getOrderList(Order order, String token) {
+	public CommonResult<List<Order>> getOrderList(Order order, String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -130,11 +130,7 @@ public class OrderApiService extends SimpleUserService {
 			String userId = userInfo.getId();
 			order.setUserId(userId);
 			List<Order> orderList = orderDao.findList(order);
-			JSONArray result = new JSONArray();
-			for (Order entity : orderList) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
+			return ResultUtil.success(orderList);
 		} catch (Exception e) {
 			logger.error("获取订单列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -147,7 +143,7 @@ public class OrderApiService extends SimpleUserService {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getOrderInfo(Order order, String token) {
+	public CommonResult<Order> getOrderInfo(Order order, String token) {
 		try {
 			if(order == null){
 				return ResultUtil.failed(I18nCode.CODE_10007);
@@ -159,7 +155,7 @@ public class OrderApiService extends SimpleUserService {
 			String userId = userInfo.getId();
 			order.setUserId(userId);
 			Order result = orderDao.getByEntity(order);
-			return ResultUtil.successToJson(result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取订单详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

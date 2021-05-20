@@ -39,7 +39,7 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 	public CommonResult<Boolean> cashOrder(String token, Cash cash) {
 		try {
 			long dbResult = cashDao.insert(cash);
-			return ResultUtil.successToBoolean(true);
+			return ResultUtil.success(true);
 		} catch (Exception e) {
 			logger.error("提款订单异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -52,14 +52,10 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getCashOrderList(String token, Cash cash) {
+	public CommonResult<List<Cash>> getCashOrderList(String token, Cash cash) {
 		try {
 			List<Cash> cashDaoList = cashDao.findList(cash);
-			JSONArray result = new JSONArray();
-			for (Cash entity : cashDaoList) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
+			return ResultUtil.success(cashDaoList);
 		} catch (Exception e) {
 			logger.error("获取提款订单列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -72,10 +68,10 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getCashOrderInfo(String token,Cash cash) {
+	public CommonResult<Cash> getCashOrderInfo(String token,Cash cash) {
 		try {
 			Cash result = cashDao.getByEntity(cash);
-			return ResultUtil.successToJson(result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取提款订单详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

@@ -83,7 +83,7 @@ public class I18nInterceptor implements HandlerInterceptor {
             return true;
         } catch (Exception e) {
            logger.error("拦截器准备发生异常",e);
-            CommonResult<JSONObject> result = ResultUtil.failed(I18nCode.CODE_10002,"Failed to request,Authorization error！");
+            CommonResult<JSONObject> result = ResultUtil.failedAuthorization(I18nCode.CODE_10002,"Failed to request,Authorization error！");
             this.writeResponse(response,result);
             return false;
         }

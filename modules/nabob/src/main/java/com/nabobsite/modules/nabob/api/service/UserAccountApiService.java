@@ -50,7 +50,7 @@ public class UserAccountApiService extends SimpleUserService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			return ResultUtil.successToBoolean(true);
+			return ResultUtil.success(true);
 		} catch (Exception e) {
 			logger.error("用户认领增值账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -63,7 +63,7 @@ public class UserAccountApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getLedgerRecordList(String token) {
+	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -73,11 +73,7 @@ public class UserAccountApiService extends SimpleUserService {
 			UserAccountDetail userAccountDetail = new UserAccountDetail();
 			userAccountDetail.setUserId(userId);
 			List<UserAccountDetail> userAccountDetailList = userAccountDetailDao.findList(userAccountDetail);
-			JSONArray result = new JSONArray();
-			for (UserAccountDetail entity : userAccountDetailList) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
+			return ResultUtil.success(userAccountDetailList);
 		} catch (Exception e) {
 			logger.error("获取收支总账记录异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -90,14 +86,14 @@ public class UserAccountApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getUserAccountInfo(String token) {
+	public CommonResult<UserAccount> getUserAccountInfo(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserAccount result = this.getUserAccountByUserId(userInfo.getId());
-			return ResultUtil.successToJson(result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取用户账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

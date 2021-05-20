@@ -17,6 +17,7 @@ import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
+import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import io.swagger.annotations.Api;
@@ -28,6 +29,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户控制
@@ -90,33 +92,33 @@ public class OpenApiController extends BaseController {
 
 	@PostMapping(value = {"getMemberShip"})
 	@ApiOperation(value = "获取会员资格")
-	public CommonResult<JSONArray> getMemberShip(HttpServletRequest request){
+	public CommonResult<List<MemberShip>> getMemberShip(HttpServletRequest request){
 		return userInfoApiService.getMemberShip();
 	}
 
 	@PostMapping(value = {"getMemberShipInfo/{id}"})
 	@ApiOperation(value = "获取会员资格详情")
-	public CommonResult<JSONObject> getMemberShipInfo(@PathVariable  String id, HttpServletRequest request){
+	public CommonResult<MemberShip> getMemberShipInfo(@PathVariable  String id, HttpServletRequest request){
 		return userInfoApiService.getMemberShipInfo(id);
 	}
 
 	@RequestMapping(value = {"getTaskList"})
 	@ApiOperation(value = "获取任务列表")
-	public CommonResult<JSONArray> getTaskList(HttpServletRequest request) {
+	public CommonResult<List<TaskInfo>> getTaskList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return taskApiService.getTaskList(token);
 	}
 
 	@RequestMapping(value = {"getProductWarehouseList"})
 	@ApiOperation(value = "云仓库产品列表")
-	public CommonResult<JSONArray> getProductWarehouseList(HttpServletRequest request) {
+	public CommonResult<List<ProductWarehouse>> getProductWarehouseList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.getProductWarehouseList(token,new ProductWarehouse());
 	}
 
 	@RequestMapping(value = {"getProductBotList"})
 	@ApiOperation(value = "无人机产品列表")
-	public CommonResult<JSONArray> getProductBotList(HttpServletRequest request) {
+	public CommonResult<List<ProductBot>> getProductBotList(HttpServletRequest request) {
 		return productApiService.getProductBotList(new ProductBot());
 	}
 

@@ -18,6 +18,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户控制
@@ -51,14 +52,14 @@ public class UserApiController extends BaseController {
 
 	@ApiOperation(value = "用户获取详情")
 	@PostMapping(value = {"getUserInfo"})
-	public CommonResult<JSONObject> getUserInfo(HttpServletRequest request){
+	public CommonResult<UserInfo> getUserInfo(HttpServletRequest request){
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return userInfoApiService.getUserInfo(token);
 	}
 
 	@ApiOperation(value = "用户获取直接团队列表")
 	@PostMapping(value = {"getUserDirectTeamList"})
-	public CommonResult<JSONArray> getUserDirectTeamList(HttpServletRequest request){
+	public CommonResult<List<UserInfo>> getUserDirectTeamList(HttpServletRequest request){
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return userInfoApiService.getUserDirectTeamList(token);
 	}

@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,7 +71,7 @@ public class TaskApiService extends SimpleUserService {
 						return ResultUtil.failed(I18nCode.CODE_10004);
 					}
 					this.sendReward(userId,taskId,type,rewardMoney,1);
-					return ResultUtil.successToBoolean(true);
+					return ResultUtil.success(true);
 				}
 
 				String userTaskId = userTask.getId();
@@ -88,7 +89,7 @@ public class TaskApiService extends SimpleUserService {
 				Boolean isOk = this.updateTaskFinishNumber(userTaskId,taskFinishNumber+1);
 				if(isOk){
 					this.sendReward(userId,taskId,type,rewardMoney,taskFinishNumber+1);
-					return ResultUtil.successToBoolean(true);
+					return ResultUtil.success(true);
 				}
 				return ResultUtil.failed(I18nCode.CODE_10004);
 			}
@@ -153,7 +154,7 @@ public class TaskApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<JSONArray> getTaskRewardList(String token) {
+	public CommonResult<List<UserTaskReward>> getTaskRewardList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
@@ -163,11 +164,7 @@ public class TaskApiService extends SimpleUserService {
 			UserTaskReward userTaskReward = new UserTaskReward();
 			userTaskReward.setUserId(userId);
 			List<UserTaskReward> userTaskRewardList = userTaskRewardDao.findList(userTaskReward);
-			JSONArray result = new JSONArray();
-			for (UserTaskReward entity : userTaskRewardList) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
+			return ResultUtil.success(userTaskRewardList);
 		} catch (Exception e) {
 			logger.error("获取任务奖励列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -179,7 +176,7 @@ public class TaskApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<JSONArray> getTaskList(String token) {
+	public CommonResult<List<TaskInfo>> getTaskList(String token) {
 		try {
 			String userId = "";
 			if(StringUtils.isNotEmpty(token)){
@@ -188,22 +185,21 @@ public class TaskApiService extends SimpleUserService {
 					userId  = userInfo.getId();
 				}
 			}
+			List<TaskInfo> newList = new ArrayList<>();
 			List<TaskInfo> taskInfoList = taskInfoDao.findList(new TaskInfo());
-			JSONArray result = new JSONArray();
 			for (TaskInfo entity : taskInfoList) {
-				JSONObject date = CommonContact.toJSONObject(entity);
-				String entityId = entity.getId();
 				int finishNum = 0;
+				String entityId = entity.getId();
 				if(CommonContact.isOkUserId(userId)){
 					UserTaskReward userTaskReward = this.getUserTaskRewardByUserId(userId,entityId);
 					if(userTaskReward != null){
 						finishNum = userTaskReward.getFinishNum();
 					}
 				}
-				date.put("finishNum",finishNum);
-				result.add(date);
+				entity.setFinishNum(finishNum);
+				newList.add(entity);
 			}
-			return ResultUtil.successToJsonArray(result);
+			return ResultUtil.success(newList);
 		} catch (Exception e) {
 			logger.error("获取任务列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -216,10 +212,10 @@ public class TaskApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getTaskInfo(TaskInfo taskInfo) {
+	public CommonResult<TaskInfo> getTaskInfo(TaskInfo taskInfo) {
 		try {
 			TaskInfo result = taskInfoDao.getByEntity(taskInfo);
-			return ResultUtil.successToJson(result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取任务详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -232,14 +228,14 @@ public class TaskApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getUserTaskInfo(String token) {
+	public CommonResult<UserTask> getUserTaskInfo(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserTask result = this.getUserTaskByUserId(userInfo.getId());
-			return ResultUtil.successToJson(result);
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取用户任务详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
