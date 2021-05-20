@@ -38,7 +38,7 @@ public class OrderApiController extends BaseController {
 
 	@PostMapping(value = {"rechargeOrder"})
 	@ApiOperation(value = "充值订单")
-	public CommonResult<Boolean> rechargeOrder(@RequestBody Order order, HttpServletRequest request) {
+	public CommonResult<JSONObject> rechargeOrder(@RequestBody Order order, HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		order.setIpaddress(ip);

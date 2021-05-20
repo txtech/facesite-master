@@ -2,6 +2,7 @@ package com.nabobsite.modules.nabob.api.entity;
 
 import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
+import com.nabobsite.modules.nabob.api.common.response.ResultCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -250,9 +251,10 @@ public class CommonContact {
     //成功返回
     public static JSONObject successMsg(String msg){
         JSONObject result = new JSONObject();
-        result.put("code",I18nCode.CODE_10000);
-        result.put("message","操作成功");
+        result.put("code",ResultCode.SUCCESS.getCode());
         if(StringUtils.isEmpty(msg)){
+            result.put("message",ResultCode.SUCCESS.getMsg());
+        }else{
             result.put("message",msg);
         }
         return result;
@@ -261,12 +263,36 @@ public class CommonContact {
     //失败返回
     public static JSONObject failedMsg(String msg){
         JSONObject result = new JSONObject();
-        result.put("code",I18nCode.CODE_10003);
-        result.put("message","操作失败");
+        result.put("code",ResultCode.FAILED.getCode());
         if(StringUtils.isEmpty(msg)){
+            result.put("message",ResultCode.FAILED.getMsg());
+        }else{
             result.put("message",msg);
         }
         return result;
+    }
+
+    /**
+     * @描述: 是否响应成功
+     * @作者:nada
+     * @时间:2019/3/18
+     **/
+    public static boolean isOkResult (JSONObject result) {
+        try {
+            if(result == null){
+                return false;
+            }
+            if(!result.containsKey ("code")){
+                return false;
+            }
+            if (!result.getString ("code").equals (ResultCode.SUCCESS.getCode())){
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            logger.error("异常 ",e);
+            return  false;
+        }
     }
 
     public static JSONObject toJSONObject(Object object){

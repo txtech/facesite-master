@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 通道配置Entity
  * @author face
- * @version 2021-05-18
+ * @version 2021-05-20
  */
 @Table(name="t1_sys_channel", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -36,6 +36,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
+		@Column(name="channel_source", attrName="channelSource", label="来源"),
 	}, orderBy="a.id DESC"
 )
 public class SysChannel extends DataEntity<SysChannel> {
@@ -50,6 +51,7 @@ public class SysChannel extends DataEntity<SysChannel> {
 	private Date updated;		// 更新时间
 	private Long cashRate;		// 出款费率
 	private String delFlag;		// 删除标志
+	private Integer channelSource;		// 来源
 	
 	public SysChannel() {
 		this(null);
@@ -141,6 +143,14 @@ public class SysChannel extends DataEntity<SysChannel> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	
+	public Integer getChannelSource() {
+		return channelSource;
+	}
+
+	public void setChannelSource(Integer channelSource) {
+		this.channelSource = channelSource;
 	}
 	
 }

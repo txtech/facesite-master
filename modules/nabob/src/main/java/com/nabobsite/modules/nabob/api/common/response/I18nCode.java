@@ -36,5 +36,6 @@ public class I18nCode {
     public static final String CODE_10100 = "10100"; //请求失败,金额不符合要求！
     public static final String CODE_10101 = "10101"; //请求失败,会员等级不符合要求！
     public static final String CODE_10102 = "10102"; //请求失败,已经结束！
+    public static final String CODE_10103 = "10103"; //请求失败,订单处理失败！
 
 }

@@ -79,6 +79,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('来源')}：</label>
+					<div class="control-inline">
+						<#form:input path="channelSource" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -106,6 +112,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text("出款费率")}', name:'cashRate', index:'a.cash_rate', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
+		{header:'${text("来源")}', name:'channelSource', index:'a.channel_source', width:150, align:"center"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('sys:sysChannel:edit')){ %>

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
 import com.nabobsite.modules.nabob.pay.common.ResultListener;
 import com.nabobsite.modules.nabob.pay.order.payorder.India1PayOrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +28,20 @@ public class OrderHander extends SimpleUserService {
      * @描述:支付订单分发
      * @时间:2017年12月28日 上午11:19:37
      */
-    public JSONObject doRestPay(JSONObject reqData, Order order) {
+    public JSONObject doRestPay(Order order,SysChannel channel) {
+        String orderNo = order.getOrderNo();
         try {
-            int source = reqData.getIntValue("channelSource");
+            int source = channel.getChannelSource();
             switch (source) {
-                case 50:
-                    //return  customCardPayService.payOrder(reqData,tradeCmd.tradResultListener (reqData));
-                case 51:
-                    //return  customAlipayPayService.payOrder(reqData,tradeCmd.tradResultListener (reqData));
+                case 1:
+                    JSONObject reqData = new JSONObject();
+                    return india1OrderService.payOrder(reqData,this.ResultListener(order));
                 default:
-                    return CommonContact.failedMsg ("未知的支付通道:" + source);
+                    return CommonContact.failedMsg("未知的支付通道:" + source);
             }
         } catch (Exception e) {
-            logger.error ("支付订单分发异常{}", reqData, e);
-            return CommonContact.failedMsg ("支付订单分发异常");
+            logger.error ("支付订单分发异常{}",orderNo, e);
+            return CommonContact.failedMsg("支付订单分发异常");
         }
     }
 
@@ -48,7 +49,7 @@ public class OrderHander extends SimpleUserService {
      * @描述:获取监听
      * @时间:2017年12月19日 下午3:42:31
      */
-    public ResultListener ResultListener(JSONObject reqData) {
+    public ResultListener ResultListener(Order order) {
         return new ResultListener(){
             @Override
             public JSONObject successHandler (JSONObject resultData) {
@@ -56,8 +57,7 @@ public class OrderHander extends SimpleUserService {
                 if (resultData == null || resultData.isEmpty ()) {
                     return CommonContact.failedMsg ("下单响应为空,请稍后重试");
                 }
-                String code = reqData.getString ("code");
-                String orderNo = reqData.getString ("orderNo");
+                String orderNo = order.getOrderNo();
                 if (!resultData.containsKey ("code")) {
                     String msg = resultData.containsKey ("msg")?resultData.getString ("msg"):"下单失败";
                     return CommonContact.failedMsg (msg);

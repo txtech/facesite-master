@@ -16,6 +16,7 @@ import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysChannelDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.pay.hander.OrderHander;
 import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class OrderApiService extends SimpleUserService {
 	private OrderDao orderDao;
 
 	@Autowired
+	private OrderHander orderHander;
+
+	@Autowired
 	private SysChannelDao sysChannelDao;
 
 	/**
@@ -46,7 +50,7 @@ public class OrderApiService extends SimpleUserService {
 	 * @create 2021/5/12 1:10 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> rechargeOrder(Order order, String token) {
+	public CommonResult<JSONObject> rechargeOrder(Order order, String token) {
 		try {
 			String name = order.getName();
 			String email = order.getEmail();
@@ -62,21 +66,30 @@ public class OrderApiService extends SimpleUserService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			SysChannel sysChannel = this.getOneChannel();
-			if(sysChannel == null){
+			SysChannel channel = this.getOneChannel();
+			if(channel == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
-			order.setUserId(userId);
-			String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
-			synchronized (orderNo) {
-				long dbResult = orderDao.insert(InstanceContact.initOrderInfo(order,orderNo,sysChannel));
-				if(CommonContact.dbResult(dbResult)){
-					order.setOrderNo(orderNo);
-					return ResultUtil.successToBoolean(true);
+			synchronized (userId) {
+				order.setUserId(userId);
+				String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
+				long dbResult = orderDao.insert(InstanceContact.initOrderInfo(order,orderNo,channel));
+				if(!CommonContact.dbResult(dbResult)){
+					return ResultUtil.failed(I18nCode.CODE_10004);
+				}
+				order.setOrderNo(orderNo);
+				JSONObject resData = orderHander.doRestPay(order,channel);
+				if(CommonContact.isOkResult(resData)){
+					JSONObject result = new JSONObject();
+					result.put("orderNo",orderNo);
+					return ResultUtil.successJson(result);
+				}else{
+					JSONObject result = new JSONObject();
+					result.put("orderNo",orderNo);
+					return ResultUtil.failed(I18nCode.CODE_10103);
 				}
 			}
-			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
 			logger.error("充值订单异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
