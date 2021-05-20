@@ -267,9 +267,10 @@ public class UserInfoApiService extends BaseUserService {
 			redisOpsUtil.set(newTokenKey,userId,RedisPrefixContant.CACHE_HALF_HOUR);
 			redisOpsUtil.set(userTokenKey,newToken,RedisPrefixContant.CACHE_HALF_HOUR);
 			if(redisOpsUtil.get(newTokenKey)!=null){
-				loginUserInfo.setToken(newToken);
 				this.updateLoginIp(userId,loginIp);
-				return ResultUtil.successToJson(loginUserInfo);
+				JSONObject result = new JSONObject();
+				result.put("token",newToken);
+				return ResultUtil.successJson(result);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {

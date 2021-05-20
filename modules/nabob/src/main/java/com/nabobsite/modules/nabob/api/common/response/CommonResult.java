@@ -1,8 +1,6 @@
 package com.nabobsite.modules.nabob.api.common.response;
 
 
-import com.alibaba.fastjson.JSONObject;
-
 import java.io.Serializable;
 
 /**

@@ -35,9 +35,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="password", attrName="password", label="密码"),
 		@Column(name="phone_number", attrName="phoneNumber", label="电话号码"),
 		@Column(name="invite_code", attrName="inviteCode", label="邀请码"),
-		@Column(name="token", attrName="token", label="会话令牌"),
 		@Column(name="invite_secret", attrName="inviteSecret", label="邀请秘文"),
-		@Column(name="favorite", attrName="favorite", label="最喜欢的人"),
 		@Column(name="regist_ip", attrName="registIp", label="注册IP"),
 		@Column(name="login_ip", attrName="loginIp", label="登陆IP"),
 		@Column(name="team_num", attrName="teamNum", label="团队总人数"),
@@ -68,9 +66,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private String password;		// 密码
 	private String phoneNumber;		// 电话号码
 	private String inviteCode;		// 邀请码
-	private String token;		// 会话令牌
 	private String inviteSecret;		// 邀请秘文
-	private String favorite;		// 最喜欢的人
 	private String registIp;		// 注册IP
 	private String loginIp;		// 登陆IP
 	private Integer teamNum;		// 团队总人数
@@ -84,7 +80,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private String smsCode; //短信验证码
     private String codeKey; //图片验证码key
     private String imgCode; //图片验证码code
-	private String OldPassword;
+	private String oldPassword;
 
 	public UserInfo() {
 		this(null);
@@ -208,15 +204,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.inviteCode = inviteCode;
 	}
 
-	@Length(min=0, max=520, message="会话令牌长度不能超过 520 个字符")
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
 	@NotBlank(message="邀请秘文不能为空")
 	@Length(min=0, max=250, message="邀请秘文长度不能超过 250 个字符")
 	public String getInviteSecret() {
@@ -225,15 +212,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setInviteSecret(String inviteSecret) {
 		this.inviteSecret = inviteSecret;
-	}
-
-	@Length(min=0, max=520, message="最喜欢的人长度不能超过 520 个字符")
-	public String getFavorite() {
-		return favorite;
-	}
-
-	public void setFavorite(String favorite) {
-		this.favorite = favorite;
 	}
 
 	@Length(min=0, max=520, message="注册IP长度不能超过 520 个字符")
@@ -351,10 +329,10 @@ public class UserInfo extends DataEntity<UserInfo> {
 	}
 
 	public String getOldPassword() {
-		return OldPassword;
+		return oldPassword;
 	}
 
 	public void setOldPassword(String oldPassword) {
-		OldPassword = oldPassword;
+		this.oldPassword = oldPassword;
 	}
 }
