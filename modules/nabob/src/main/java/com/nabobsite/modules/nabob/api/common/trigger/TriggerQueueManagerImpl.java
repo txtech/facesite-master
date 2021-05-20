@@ -71,7 +71,7 @@ public class TriggerQueueManagerImpl implements TriggerManager {
     private class Monitor extends Thread {
         @Override
         public void run() {
-            while (true) {
+            /*while (true) {
                 try {
                     DelayItem item  = queue.take();
                     if (item != null && item.getRunnable() != null) {
@@ -81,7 +81,7 @@ public class TriggerQueueManagerImpl implements TriggerManager {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
         }
     }
 
