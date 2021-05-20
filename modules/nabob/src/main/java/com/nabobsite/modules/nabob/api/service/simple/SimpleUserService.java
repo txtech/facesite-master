@@ -55,26 +55,6 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public UserTaskRewardDao userTaskRewardDao;
 
 	/**
-	 * @desc 获取账户信息
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	@Transactional (readOnly = true, rollbackFor = Exception.class)
-	public UserAccount getUserAccountByUserId(String userId) {
-		try {
-			if(!CommonContact.isOkUserId(userId)){
-				return null;
-			}
-			UserAccount userAccount = new UserAccount();
-			userAccount.setUserId(userId);
-			return userAccountDao.getByEntity(userAccount);
-		} catch (Exception e) {
-			logger.error("获取账户信息异常,{}",userId,e);
-			return null;
-		}
-	}
-
-	/**
 	 * @desc 修改用户邀请秘文
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
@@ -100,7 +80,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	}
 
 	/**
-	 * @desc 修改登陆IP
+	 * @desc 修改用户登陆IP
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
@@ -116,16 +96,35 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			long dbResult = userInfoDao.update(userInfo);
 			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
-			logger.error("修改登陆IP异常,{}",userId,e);
+			logger.error("修改用户登陆IP异常,{}",userId,e);
 			return true;
 		}
 	}
 
+
+	/**
+	 * @desc 获取用户账户信息
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public UserAccount getUserAccountByUserId(String userId) {
+		try {
+			if(!CommonContact.isOkUserId(userId)){
+				return null;
+			}
+			UserAccount userAccount = new UserAccount();
+			userAccount.setUserId(userId);
+			return userAccountDao.getByEntity(userAccount);
+		} catch (Exception e) {
+			logger.error("获取用户账户信息异常,{}",userId,e);
+			return null;
+		}
+	}
 	/**
 	 * @desc 获取用户信息
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
-	*/
+	 */
 	public UserInfo getUserInfoByAccountNo(String accountNo) {
 		try {
 			if(StringUtils.isEmpty(accountNo)){
@@ -139,7 +138,6 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return null;
 		}
 	}
-
 	/**
 	 * @desc 获取用户信息
 	 * @author nada
@@ -158,7 +156,6 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return null;
 		}
 	}
-
 	/**
 	 * @desc 获取用户信息
 	 * @author nada
@@ -177,7 +174,6 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return null;
 		}
 	}
-
 	/**
 	 * @desc 获取用户信息
 	 * @author nada
@@ -203,6 +199,24 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 		}
 	}
 
+
+
+	/**
+	 * @desc 获取配置列表
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public List<SysConfig> getSysConfigList() {
+		try {
+			SysConfig sysConfig = new SysConfig();
+			sysConfig.setStatus("1");
+			List<SysConfig> list = sysConfigDao.findList(sysConfig);
+			return list;
+		} catch (Exception e) {
+			logger.error("获取配置列表异常",e);
+			return null;
+		}
+	}
 	/**
 	 * @desc 获取配置
 	 * @author nada
@@ -222,23 +236,22 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 		}
 	}
 
+
 	/**
-	 * @desc 获取配置列表
+	 * @desc 获取任务详情
 	 * @author nada
-	 * @create 2021/5/11 2:55 下午
+	 * @create 2021/5/11 10:33 下午
 	 */
-	public List<SysConfig> getSysConfigList() {
+	public TaskInfo getTaskInfoById(String id) {
 		try {
-			SysConfig sysConfig = new SysConfig();
-			sysConfig.setStatus("1");
-			List<SysConfig> list = sysConfigDao.findList(sysConfig);
-			return list;
+			TaskInfo taskInfo = new TaskInfo();
+			taskInfo.setId(id);
+			return taskInfoDao.getByEntity(taskInfo);
 		} catch (Exception e) {
-			logger.error("获取配置列表异常",e);
+			logger.error("获取任务详情异常",e);
 			return null;
 		}
 	}
-
 	/**
 	 * @desc 获取用户任务
 	 * @author nada
@@ -255,7 +268,6 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return null;
 		}
 	}
-
 	/**
 	 * @desc 获取用户任务奖励
 	 * @author nada
@@ -273,21 +285,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 		}
 	}
 
-	/**
-	 * @desc 获取任务详情
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	public TaskInfo getTaskInfoById(String id) {
-		try {
-			TaskInfo taskInfo = new TaskInfo();
-			taskInfo.setId(id);
-			return taskInfoDao.getByEntity(taskInfo);
-		} catch (Exception e) {
-			logger.error("获取任务详情异常",e);
-			return null;
-		}
-	}
+
 
 	/**
 	 * @desc 加密铭感信息

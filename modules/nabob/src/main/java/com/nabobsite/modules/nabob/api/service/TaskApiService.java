@@ -134,6 +134,7 @@ public class TaskApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/13 8:03 下午
 	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean updateTaskFinishNumber(String id,int finishNumber){
 		try {
 			UserTask userTaskPrams = new UserTask();
@@ -152,7 +153,6 @@ public class TaskApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<JSONArray> getTaskRewardList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
@@ -179,7 +179,6 @@ public class TaskApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<JSONArray> getTaskList(String token) {
 		try {
 			String userId = "";
@@ -210,6 +209,7 @@ public class TaskApiService extends SimpleUserService {
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
+
 	/**
 	 * @desc 获取任务详情
 	 * @author nada
