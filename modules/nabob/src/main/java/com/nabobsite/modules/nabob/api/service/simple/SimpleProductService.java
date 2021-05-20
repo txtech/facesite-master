@@ -56,7 +56,7 @@ public class SimpleProductService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public UserProductBot getUserProductBotByUserIdAndId(String userId, String botId) {
+	public UserProductBot getUserProductBotByUserAndId(String userId, String botId) {
 		try {
 			UserProductBot userProductBot = new UserProductBot();
 			userProductBot.setUserId(userId);

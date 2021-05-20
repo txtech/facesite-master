@@ -288,7 +288,7 @@ public class ProductApiService extends SimpleProductService {
 					logger.error("无人机刷单记录失败:{},{},{},{}",userId,orderNo,userId,botId);
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				UserProductBot oldUserProductBot =	getUserProductBotByUserIdAndId(userId,botId);
+				UserProductBot oldUserProductBot =	this.getUserProductBotByUserAndId(userId,botId);
 				if(oldUserProductBot == null){
 					UserProductBot userProductBot = InstanceContact.initUserProductBot(userProductBotLog);
 					dbResult = userProductBotDao.insert(userProductBot);
@@ -390,9 +390,13 @@ public class ProductApiService extends SimpleProductService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserProductBot result = this.getUserProductBotByUserIdAndId(userInfo.getId(),botId);
+			UserProductBot result = this.getUserProductBotByUserAndId(userInfo.getId(),botId);
 			if(result ==  null){
 				result = new UserProductBot();
+			}
+			ProductBot productBot = this.getProductBotInfoById(botId) ;
+			if(productBot!=null){
+				result.setDailyNum(productBot.getDailyNum());
 			}
 			return ResultUtil.successToJson(result);
 		} catch (Exception e) {

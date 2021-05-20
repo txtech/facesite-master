@@ -37,10 +37,11 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
-	}, orderBy="a.id DESC"
+	},
+	orderBy="a.id DESC"
 )
 public class UserProductBot extends DataEntity<UserProductBot> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户ID
 	private String botId;		// 产品ID
@@ -52,7 +53,8 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+	private Integer dailyNum;		// 每日次数
+
 	public UserProductBot() {
 		this(null);
 	}
@@ -60,7 +62,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public UserProductBot(String id){
 		super(id);
 	}
-	
+
 	@NotBlank(message="用户ID不能为空")
 	@Length(min=0, max=50, message="用户ID长度不能超过 50 个字符")
 	public String getUserId() {
@@ -70,7 +72,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
+
 	@NotBlank(message="产品ID不能为空")
 	@Length(min=0, max=50, message="产品ID长度不能超过 50 个字符")
 	public String getBotId() {
@@ -80,7 +82,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setBotId(String botId) {
 		this.botId = botId;
 	}
-	
+
 	@NotNull(message="今日订单数不能为空")
 	public Integer getTodayOrders() {
 		return todayOrders;
@@ -89,7 +91,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setTodayOrders(Integer todayOrders) {
 		this.todayOrders = todayOrders;
 	}
-	
+
 	@NotNull(message="今天收入不能为空")
 	public BigDecimal getTodayIncomeMoney() {
 		return todayIncomeMoney;
@@ -98,7 +100,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setTodayIncomeMoney(BigDecimal todayIncomeMoney) {
 		this.todayIncomeMoney = todayIncomeMoney;
 	}
-	
+
 	@NotNull(message="今天团队收入不能为空")
 	public BigDecimal getTodayTeamIncome() {
 		return todayTeamIncome;
@@ -107,7 +109,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setTodayTeamIncome(BigDecimal todayTeamIncome) {
 		this.todayTeamIncome = todayTeamIncome;
 	}
-	
+
 	@NotNull(message="昨日收入不能为空")
 	public BigDecimal getYesterdayIncomeMoney() {
 		return yesterdayIncomeMoney;
@@ -116,7 +118,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setYesterdayIncomeMoney(BigDecimal yesterdayIncomeMoney) {
 		this.yesterdayIncomeMoney = yesterdayIncomeMoney;
 	}
-	
+
 	@NotNull(message="昨日团队收入不能为空")
 	public BigDecimal getYesterdayTeamIncomeMoney() {
 		return yesterdayTeamIncomeMoney;
@@ -125,7 +127,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setYesterdayTeamIncomeMoney(BigDecimal yesterdayTeamIncomeMoney) {
 		this.yesterdayTeamIncomeMoney = yesterdayTeamIncomeMoney;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -134,7 +136,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -143,7 +145,7 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -152,5 +154,12 @@ public class UserProductBot extends DataEntity<UserProductBot> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
+	public Integer getDailyNum() {
+		return dailyNum;
+	}
+
+	public void setDailyNum(Integer dailyNum) {
+		this.dailyNum = dailyNum;
+	}
 }

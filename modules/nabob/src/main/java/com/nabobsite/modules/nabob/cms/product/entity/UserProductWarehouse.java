@@ -40,10 +40,11 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="pserson_update_time", attrName="psersonUpdateTime", label="个人动态收益更新时间"),
 		@Column(name="team_update_time", attrName="teamUpdateTime", label="团队动态收益更新时间"),
-	}, orderBy="a.id DESC"
+	},
+	orderBy="a.id DESC"
 )
 public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户ID
 	private String warehouseId;		// 产品仓库ID
@@ -58,7 +59,8 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	private String delFlag;		// 删除标志
 	private Date psersonUpdateTime;		// 个人动态收益更新时间
 	private Date teamUpdateTime;		// 团队动态收益更新时间
-	
+	private ProductWarehouse productWarehouse;;
+
 	public UserProductWarehouse() {
 		this(null);
 	}
@@ -66,7 +68,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public UserProductWarehouse(String id){
 		super(id);
 	}
-	
+
 	@NotBlank(message="用户ID不能为空")
 	@Length(min=0, max=50, message="用户ID长度不能超过 50 个字符")
 	public String getUserId() {
@@ -76,7 +78,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
+
 	@NotBlank(message="产品仓库ID不能为空")
 	public String getWarehouseId() {
 		return warehouseId;
@@ -85,7 +87,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setWarehouseId(String warehouseId) {
 		this.warehouseId = warehouseId;
 	}
-	
+
 	@NotNull(message="持有资产不能为空")
 	public BigDecimal getAsstesHeldMoney() {
 		return asstesHeldMoney;
@@ -94,7 +96,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setAsstesHeldMoney(BigDecimal asstesHeldMoney) {
 		this.asstesHeldMoney = asstesHeldMoney;
 	}
-	
+
 	@NotNull(message="累计收益不能为空")
 	public BigDecimal getAccumulativeIncomeMoney() {
 		return accumulativeIncomeMoney;
@@ -103,7 +105,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setAccumulativeIncomeMoney(BigDecimal accumulativeIncomeMoney) {
 		this.accumulativeIncomeMoney = accumulativeIncomeMoney;
 	}
-	
+
 	@NotNull(message="个人受益不能为空")
 	public BigDecimal getPersonalIncomeMoney() {
 		return personalIncomeMoney;
@@ -112,7 +114,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setPersonalIncomeMoney(BigDecimal personalIncomeMoney) {
 		this.personalIncomeMoney = personalIncomeMoney;
 	}
-	
+
 	@NotNull(message="累计个人收入不能为空")
 	public BigDecimal getPersonalAccumulativeIncomeMoney() {
 		return personalAccumulativeIncomeMoney;
@@ -121,7 +123,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setPersonalAccumulativeIncomeMoney(BigDecimal personalAccumulativeIncomeMoney) {
 		this.personalAccumulativeIncomeMoney = personalAccumulativeIncomeMoney;
 	}
-	
+
 	@NotNull(message="团队收益不能为空")
 	public BigDecimal getTeamIncomeMoney() {
 		return teamIncomeMoney;
@@ -130,7 +132,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setTeamIncomeMoney(BigDecimal teamIncomeMoney) {
 		this.teamIncomeMoney = teamIncomeMoney;
 	}
-	
+
 	@NotNull(message="团队累计收益不能为空")
 	public BigDecimal getTeamAccumulativeIncomeMoney() {
 		return teamAccumulativeIncomeMoney;
@@ -139,7 +141,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setTeamAccumulativeIncomeMoney(BigDecimal teamAccumulativeIncomeMoney) {
 		this.teamAccumulativeIncomeMoney = teamAccumulativeIncomeMoney;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -148,7 +150,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -157,7 +159,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -166,7 +168,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@NotNull(message="个人动态收益更新时间不能为空")
 	public Date getPsersonUpdateTime() {
@@ -176,7 +178,7 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setPsersonUpdateTime(Date psersonUpdateTime) {
 		this.psersonUpdateTime = psersonUpdateTime;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@NotNull(message="团队动态收益更新时间不能为空")
 	public Date getTeamUpdateTime() {
@@ -186,5 +188,12 @@ public class UserProductWarehouse extends DataEntity<UserProductWarehouse> {
 	public void setTeamUpdateTime(Date teamUpdateTime) {
 		this.teamUpdateTime = teamUpdateTime;
 	}
-	
+
+	public ProductWarehouse getProductWarehouse() {
+		return productWarehouse;
+	}
+
+	public void setProductWarehouse(ProductWarehouse productWarehouse) {
+		this.productWarehouse = productWarehouse;
+	}
 }

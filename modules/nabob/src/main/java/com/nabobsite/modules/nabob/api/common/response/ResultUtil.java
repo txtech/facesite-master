@@ -1,6 +1,11 @@
 package com.nabobsite.modules.nabob.api.common.response;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
+
+import java.util.List;
 
 /**
  * @author nada
@@ -17,7 +22,7 @@ public class ResultUtil<T> {
     /**
      * 成功返回结果
      */
-    public static <T> CommonResult<T> successJson(T data) {
+    public static <T> CommonResult<T> successToBoolean(T data) {
         int code = ResultCode.SUCCESS.getCode();
         return new CommonResult<T>(code,data);
     }
@@ -25,7 +30,7 @@ public class ResultUtil<T> {
     /**
      * 成功返回结果
      */
-    public static <T> CommonResult<T> successToBoolean(T data) {
+    public static <T> CommonResult<T> successJson(T data) {
         int code = ResultCode.SUCCESS.getCode();
         return new CommonResult<T>(code,data);
     }
@@ -35,10 +40,6 @@ public class ResultUtil<T> {
      */
     public static <T> CommonResult<T> successToJsonArray(T data) {
         int code = ResultCode.SUCCESS.getCode();
-        if (data instanceof JSONObject) {
-            JSONObject result = filterResult((JSONObject)data);
-            return new CommonResult<T>(code,(T)result);
-        }
         return new CommonResult<T>(code,data);
     }
 
