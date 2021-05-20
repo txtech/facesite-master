@@ -5,12 +5,14 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.lang.StringUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
+import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouse;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
@@ -178,12 +180,29 @@ public class TaskApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getTaskList(TaskInfo taskInfo) {
+	public CommonResult<JSONArray> getTaskList(String token) {
 		try {
-			List<TaskInfo> taskInfoList = taskInfoDao.findList(taskInfo);
+			String userId = "";
+			if(StringUtils.isNotEmpty(token)){
+				UserInfo userInfo = this.getUserInfoByToken(token);
+				if(userInfo !=null){
+					userId  = userInfo.getId();
+				}
+			}
+			List<TaskInfo> taskInfoList = taskInfoDao.findList(new TaskInfo());
 			JSONArray result = new JSONArray();
 			for (TaskInfo entity : taskInfoList) {
-				result.add(CommonContact.toJSONObject(entity));
+				JSONObject date = CommonContact.toJSONObject(entity);
+				String entityId = entity.getId();
+				int finishNum = 0;
+				if(CommonContact.isOkUserId(userId)){
+					UserTaskReward userTaskReward = this.getUserTaskRewardByUserId(userId,entityId);
+					if(userTaskReward != null){
+						finishNum = userTaskReward.getFinishNum();
+					}
+				}
+				date.put("finishNum",finishNum);
+				result.add(date);
 			}
 			return ResultUtil.successToJsonArray(result);
 		} catch (Exception e) {
@@ -197,18 +216,32 @@ public class TaskApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> getTaskInfo(String token) {
+	public CommonResult<JSONObject> getTaskInfo(TaskInfo taskInfo) {
+		try {
+			TaskInfo result = taskInfoDao.getByEntity(taskInfo);
+			return ResultUtil.successToJson(result);
+		} catch (Exception e) {
+			logger.error("获取任务详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 获取用户任务详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONObject> getUserTaskInfo(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			TaskInfo taskInfo = new TaskInfo();
-			taskInfo.setId(userInfo.getId());
-			TaskInfo result = taskInfoDao.getByEntity(taskInfo);
+			UserTask result = this.getUserTaskByUserId(userInfo.getId());
 			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
-			logger.error("获取任务详情异常",e);
+			logger.error("获取用户任务详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}

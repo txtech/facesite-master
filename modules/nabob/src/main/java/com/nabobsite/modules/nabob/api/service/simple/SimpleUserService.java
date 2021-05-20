@@ -9,8 +9,10 @@ import com.jeesite.common.config.Global;
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
+import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
@@ -49,6 +51,8 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public TaskInfoDao taskInfoDao;
 	@Autowired
 	public UserTaskDao userTaskDao;
+	@Autowired
+	public UserTaskRewardDao userTaskRewardDao;
 
 	/**
 	 * @desc 获取账户信息
@@ -246,6 +250,23 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			userTaskPrams.setUserId(userId);
 			UserTask userTask = userTaskDao.getByEntity(userTaskPrams);
 			return userTask;
+		} catch (Exception e) {
+			logger.error("获取用户任务异常",e);
+			return null;
+		}
+	}
+
+	/**
+	 * @desc 获取用户任务奖励
+	 * @author nada
+	 * @create 2021/5/13 7:32 下午
+	 */
+	public UserTaskReward getUserTaskRewardByUserId(String userId,String taskId){
+		try {
+			UserTaskReward userTaskPrams = new UserTaskReward();
+			userTaskPrams.setUserId(userId);
+			userTaskPrams.setTaskId(taskId);
+			return userTaskRewardDao.getByEntity(userTaskPrams);
 		} catch (Exception e) {
 			logger.error("获取用户任务异常",e);
 			return null;

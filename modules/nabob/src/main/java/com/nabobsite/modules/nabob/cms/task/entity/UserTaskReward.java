@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户任务奖励Entity
  * @author face
- * @version 2021-05-19
+ * @version 2021-05-20
  */
 @Table(name="t1_user_task_reward", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -30,12 +30,13 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="reward_money", attrName="rewardMoney", label="奖励金额"),
 		@Column(name="finish_num", attrName="finishNum", label="完成个数"),
 		@Column(name="created", attrName="created", label="创建时间"),
+		@Column(name="type", attrName="type", label="奖励类型"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
 		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
-		@Column(name="type", attrName="type", label="奖励类型"),
+		@Column(name="task_number", attrName="taskNumber", label="任务个数"),
 	}, orderBy="a.id DESC"
 )
 public class UserTaskReward extends DataEntity<UserTaskReward> {
@@ -47,9 +48,10 @@ public class UserTaskReward extends DataEntity<UserTaskReward> {
 	private BigDecimal rewardMoney;		// 奖励金额
 	private Integer finishNum;		// 完成个数
 	private Date created;		// 创建时间
+	private Integer type;		// 奖励类型
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	private Integer type;		// 奖励类型
+	private Integer taskNumber;		// 任务个数
 	
 	public UserTaskReward() {
 		this(null);
@@ -116,6 +118,14 @@ public class UserTaskReward extends DataEntity<UserTaskReward> {
 		this.created = created;
 	}
 	
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -134,12 +144,12 @@ public class UserTaskReward extends DataEntity<UserTaskReward> {
 		this.delFlag = delFlag;
 	}
 	
-	public Integer getType() {
-		return type;
+	public Integer getTaskNumber() {
+		return taskNumber;
 	}
 
-	public void setType(Integer type) {
-		this.type = type;
+	public void setTaskNumber(Integer taskNumber) {
+		this.taskNumber = taskNumber;
 	}
 	
 }

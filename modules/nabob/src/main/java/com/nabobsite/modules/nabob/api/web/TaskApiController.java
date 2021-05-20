@@ -40,11 +40,19 @@ public class TaskApiController extends BaseController {
 		return taskApiService.doUserTask(taskId,token);
 	}
 
-	@RequestMapping(value = {"getTaskInfo"})
+	@RequestMapping(value = {"getTaskInfo/{taskId}"})
 	@ApiOperation(value = "获取任务详情")
+	public CommonResult<JSONObject> getTaskInfo(@PathVariable String taskId, HttpServletRequest request) {
+		TaskInfo taskInfo = new TaskInfo();
+		taskInfo.setId(taskId);
+		return taskApiService.getTaskInfo(taskInfo);
+	}
+
+	@RequestMapping(value = {"getUserTaskInfo"})
+	@ApiOperation(value = "获取用户任务信息")
 	public CommonResult<JSONObject> getTaskInfo(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return taskApiService.getTaskInfo(token);
+		return taskApiService.getUserTaskInfo(token);
 	}
 
 	@RequestMapping(value = {"getTaskRewardList"})

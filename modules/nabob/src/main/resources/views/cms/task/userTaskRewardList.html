@@ -54,6 +54,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('奖励类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="type" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('更新时间')}：</label>
 					<div class="control-inline">
 						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
@@ -73,9 +79,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('奖励类型')}：</label>
+					<label class="control-label">${text('任务个数')}：</label>
 					<div class="control-inline">
-						<#form:input path="type" class="form-control width-120"/>
+						<#form:input path="taskNumber" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -102,10 +108,11 @@ $('#dataGrid').dataGrid({
 		{header:'${text("奖励金额")}', name:'rewardMoney', index:'a.reward_money', width:150, align:"left"},
 		{header:'${text("完成个数")}', name:'finishNum', index:'a.finish_num', width:150, align:"center"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("奖励类型")}', name:'type', index:'a.type', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
-		{header:'${text("奖励类型")}', name:'type', index:'a.type', width:150, align:"center"},
+		{header:'${text("任务个数")}', name:'taskNumber', index:'a.task_number', width:150, align:"center"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('task:userTaskReward:edit')){ %>

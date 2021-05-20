@@ -103,7 +103,8 @@ public class OpenApiController extends BaseController {
 	@RequestMapping(value = {"getTaskList"})
 	@ApiOperation(value = "获取任务列表")
 	public CommonResult<JSONArray> getTaskList(HttpServletRequest request) {
-		return taskApiService.getTaskList(new TaskInfo());
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return taskApiService.getTaskList(token);
 	}
 
 	@RequestMapping(value = {"getProductWarehouseList"})
