@@ -1,6 +1,5 @@
-package com.nabobsite.modules.nabob.api.common.service;
+package com.nabobsite.modules.nabob.config;
 
-import com.nabobsite.modules.nabob.config.FastJsonRedisSerializer;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

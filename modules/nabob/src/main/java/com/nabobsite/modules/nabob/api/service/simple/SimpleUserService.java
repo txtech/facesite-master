@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2013-Now  All rights reserved.
  */
-package com.nabobsite.modules.nabob.api.common.service;
+package com.nabobsite.modules.nabob.api.service.simple;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.service.CrudService;
-import com.nabobsite.modules.nabob.api.common.service.RedisOpsUtil;
+import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
@@ -32,29 +32,33 @@ import java.util.List;
  * @version 2021-05-10
  */
 @Service
-public class SimpleCrudService extends CrudService<UserInfoDao, UserInfo> {
+public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
-	protected RedisOpsUtil redisOpsUtil;
+	public RedisOpsUtil redisOpsUtil;
 	@Autowired
-	protected UserInfoDao userInfoDao;
+	public UserInfoDao userInfoDao;
 	@Autowired
-	protected SysConfigDao sysConfigDao;
+	public SysConfigDao sysConfigDao;
 	@Autowired
-	protected UserAccountDao userAccountDao;
+	public UserAccountDao userAccountDao;
 
 	/**
-	 * @desc 初始化用户账户
+	 * @desc 获取账户信息
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean saveInitUserAccount(String userId) {
+	@Transactional (readOnly = true, rollbackFor = Exception.class)
+	public UserAccount getUserAccountByUserId(String userId) {
 		try {
-			long dbResult = userAccountDao.insert(InstanceContact.initUserAccount(userId));
-			return CommonContact.dbResult(dbResult);
+			if(!CommonContact.isOkUserId(userId)){
+				return null;
+			}
+			UserAccount userAccount = new UserAccount();
+			userAccount.setUserId(userId);
+			return userAccountDao.getByEntity(userAccount);
 		} catch (Exception e) {
-			logger.error("初始化用户账户异常,{}",userId,e);
-			return true;
+			logger.error("获取账户信息异常,{}",userId,e);
+			return null;
 		}
 	}
 
@@ -219,26 +223,6 @@ public class SimpleCrudService extends CrudService<UserInfoDao, UserInfo> {
 			return list;
 		} catch (Exception e) {
 			logger.error("获取配置列表异常",e);
-			return null;
-		}
-	}
-
-	/**
-	 * @desc 获取账户信息
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	@Transactional (readOnly = true, rollbackFor = Exception.class)
-	public UserAccount getUserAccountByUserId(String userId) {
-		try {
-			if(!CommonContact.isOkUserId(userId)){
-				return null;
-			}
-			UserAccount userAccount = new UserAccount();
-			userAccount.setUserId(userId);
-			return userAccountDao.getByEntity(userAccount);
-		} catch (Exception e) {
-			logger.error("获取账户信息异常,{}",userId,e);
 			return null;
 		}
 	}

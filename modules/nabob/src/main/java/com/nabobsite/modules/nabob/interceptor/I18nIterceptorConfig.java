@@ -5,7 +5,7 @@ package com.nabobsite.modules.nabob.interceptor;
 
 import com.jeesite.common.config.Global;
 import com.jeesite.common.lang.StringUtils;
-import com.nabobsite.modules.nabob.api.common.service.RedisOpsUtil;
+import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;

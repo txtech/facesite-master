@@ -9,7 +9,7 @@ import com.jeesite.common.image.CaptchaUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
-import com.nabobsite.modules.nabob.api.common.service.SimpleCrudService;
+import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
 import com.nabobsite.modules.nabob.api.model.SmsModel;
 import com.nabobsite.modules.nabob.api.model.VerificationCodeModel;
@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 @Service
 @Transactional(readOnly=true)
-public class SysApiService extends SimpleCrudService {
+public class SysApiService extends SimpleUserService {
 
 	private static final String smsUrl = "http://api.wftqm.com/api/sms/mtsend";
 

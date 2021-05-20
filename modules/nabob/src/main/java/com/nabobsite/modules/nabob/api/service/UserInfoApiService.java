@@ -11,7 +11,7 @@ import com.nabobsite.modules.nabob.api.common.TriggerApiService;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
-import com.nabobsite.modules.nabob.api.common.service.SimpleCrudService;
+import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
@@ -38,7 +38,7 @@ import java.util.UUID;
  */
 @Service
 @Transactional(readOnly=true)
-public class UserInfoApiService extends SimpleCrudService {
+public class UserInfoApiService extends SimpleUserService {
 	@Autowired
 	private UserAccountApiService userAccountApiService;
 	@Autowired
@@ -369,13 +369,13 @@ public class UserInfoApiService extends SimpleCrudService {
 				String userId = initUser.getId();
 				this.updateUserSecret(userId,parent1UserId);
 				//初始化账户
-				Boolean isOk = this.saveInitUserAccount(userId);
-				if(!isOk){
+				dbResult = userAccountDao.insert(InstanceContact.initUserAccount(userId));
+				if(!CommonContact.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
 				//注册新用户送奖励
 				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_2;
-				isOk = userAccountApiService.updateAccountBalance(userId,type,LogicStaticContact.USER_REGISTER_REWARD,userId,CommonContact.USER_ACCOUNT_DETAIL_TITLE_2);
+				Boolean isOk = userAccountApiService.updateAccountBalance(userId,type,LogicStaticContact.USER_REGISTER_REWARD,userId,CommonContact.USER_ACCOUNT_DETAIL_TITLE_2);
 				if(!isOk){
 					logger.error("注册用户成功,用户送奖励失败,{}",userId);
 				}

@@ -1,7 +1,7 @@
 package com.nabobsite.modules.nabob.pay.hander;
 
 import com.alibaba.fastjson.JSONObject;
-import com.nabobsite.modules.nabob.api.common.service.SimpleCrudService;
+import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.pay.common.ResultListener;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly=true)
-public class OrderHander extends SimpleCrudService {
+public class OrderHander extends SimpleUserService {
 
     @Autowired
     private India1PayOrderServiceImpl india1OrderService;

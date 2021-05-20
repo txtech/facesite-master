@@ -9,10 +9,9 @@ import com.jeesite.common.lang.StringUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
-import com.nabobsite.modules.nabob.api.common.service.SimpleCrudService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
-import com.nabobsite.modules.nabob.cms.product.dao.*;
+import com.nabobsite.modules.nabob.api.service.simple.SimpleProductService;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,24 +28,10 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly=true)
-public class ProductApiService extends SimpleCrudService {
+public class ProductApiService extends SimpleProductService {
 
 	@Autowired
-	private ProductBotDao productBotDao;
-	@Autowired
-	private ProductWarehouseDao productWarehouseDao;
-	@Autowired
-	private UserAccountApiService userAccountApiService;
-	@Autowired
-	private UserProductBotDao userProductBotDao;
-	@Autowired
-	private UserProductBotLogDao userProductBotLogDao;
-	@Autowired
-	private UserProductWarehouseDao userProductWarehouseDao;
-	@Autowired
-	private UserProductWarehouseLogDao userProductWarehouseLogDao;
-	@Autowired
-	private UserProductWarehouseRecordDao userProductWarehouseRecordDao;
+	protected UserAccountApiService userAccountApiService;
 
 	/**
 	 * @desc 云仓库收益提取到余额
@@ -359,7 +344,6 @@ public class ProductApiService extends SimpleCrudService {
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
-
 	/**
 	 * @desc 获取无人机产品列表
 	 * @author nada
@@ -406,49 +390,16 @@ public class ProductApiService extends SimpleCrudService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserProductBot result = getUserProductBotByUserIdAndId(userInfo.getId(),botId);
+			UserProductBot result = this.getUserProductBotByUserIdAndId(userInfo.getId(),botId);
+			if(result ==  null){
+				result = new UserProductBot();
+			}
 			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
 			logger.error("用户无人机产品详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
-
-	/**
-	 * @desc 用户无人机产品
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public UserProductBot getUserProductBotByUserIdAndId(String userId,String botId) {
-		try {
-			UserProductBot userProductBot = new UserProductBot();
-			userProductBot.setUserId(userId);
-			userProductBot.setBotId(botId);
-			return userProductBotDao.getByEntity(userProductBot);
-		} catch (Exception e) {
-			logger.error("用户无人机产品异常,{},{}",userId,botId,e);
-			return null;
-		}
-	}
-	/**
-	 * @desc 用户云仓库产品
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public UserProductWarehouse getUserProductWarehouseByUserIdAndId(String userId,String warehouseId) {
-		try {
-			UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
-			userProductWarehouse.setUserId(userId);
-			userProductWarehouse.setWarehouseId(warehouseId);
-			return userProductWarehouseDao.getByEntity(userProductWarehouse);
-		} catch (Exception e) {
-			logger.error("用户云仓库产品异常,{},{}",userId,warehouseId,e);
-			return null;
-		}
-	}
-
 
 
 
@@ -481,10 +432,10 @@ public class ProductApiService extends SimpleCrudService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
-			userProductWarehouse.setUserId(userInfo.getId());
-			userProductWarehouse.setWarehouseId(warehouseId);
-			UserProductWarehouse result = userProductWarehouseDao.getByEntity(userProductWarehouse);
+			UserProductWarehouse result = this.getUserProductWarehouseByUserIdAndId(userInfo.getId(),warehouseId);
+			if(result == null){
+				result = new UserProductWarehouse();
+			}
 			return ResultUtil.successToJson(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品详情异常",e);
@@ -570,57 +521,6 @@ public class ProductApiService extends SimpleCrudService {
 		} catch (Exception e) {
 			logger.error("用户云仓库操纵记录列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-
-	/**
-	 * @desc 获取云仓库产品详情
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public ProductWarehouse getProductWarehouseById(String id) {
-		try {
-			ProductWarehouse productWarehouse = new ProductWarehouse();
-			productWarehouse.setId(id);
-			return productWarehouseDao.getByEntity(productWarehouse);
-		} catch (Exception e) {
-			logger.error("获取云仓库产品详情异常,{}",id,e);
-			return null;
-		}
-	}
-
-	/**
-	 * @desc 获取无人机产品详情
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public ProductBot getProductBotInfoById(String id) {
-		try {
-			ProductBot productBotInfo = new ProductBot();
-			productBotInfo.setId(id);
-			return productBotDao.getByEntity(productBotInfo);
-		} catch (Exception e) {
-			logger.error("获取无人机产品详情异常,{}",id,e);
-			return null;
-		}
-	}
-	/**
-	 * @desc 获取无人机产品刷单记录
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public UserProductBotLog getUserProductBotLogByOrderNo(String orderNo) {
-		try {
-			UserProductBotLog userProductBotLog = new UserProductBotLog();
-			userProductBotLog.setOrderNo(orderNo);
-			return userProductBotLogDao.getByEntity(userProductBotLog);
-		} catch (Exception e) {
-			logger.error("获取无人机产品刷单记录异常,{}",orderNo,e);
-			return null;
 		}
 	}
 }

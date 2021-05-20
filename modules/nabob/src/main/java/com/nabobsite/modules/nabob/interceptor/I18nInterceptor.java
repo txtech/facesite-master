@@ -8,7 +8,7 @@ import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.I18nUtils;
 import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
-import com.nabobsite.modules.nabob.api.common.service.RedisOpsUtil;
+import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
