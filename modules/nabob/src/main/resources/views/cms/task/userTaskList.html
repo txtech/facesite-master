@@ -23,27 +23,15 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('任务ID')}：</label>
-					<div class="control-inline">
-						<#form:input path="taskId" maxlength="30" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('任务状态 1')}：</label>
 					<div class="control-inline">
 						<#form:input path="taskStatus" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('任务类型 1')}：</label>
+					<label class="control-label">${text('奖励金额')}：</label>
 					<div class="control-inline">
-						<#form:input path="type" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('完成个数')}：</label>
-					<div class="control-inline">
-						<#form:input path="finishNumber" class="form-control width-120"/>
+						<#form:input path="taskInitialNum" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -54,6 +42,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('完成个数')}：</label>
+					<div class="control-inline">
+						<#form:input path="taskOrderNum" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('更新时间')}：</label>
 					<div class="control-inline">
 						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
@@ -61,9 +55,23 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('任务日前')}：</label>
+					<div class="control-inline">
+						<#form:input path="taskStartDay" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('备注信息')}：</label>
 					<div class="control-inline">
 						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('任务结束日期')}：</label>
+					<div class="control-inline">
+						<#form:input path="taskEndDay" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -91,13 +99,14 @@ $('#dataGrid').dataGrid({
 		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/task/userTask/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户任务")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("任务ID")}', name:'taskId', index:'a.task_id', width:150, align:"left"},
 		{header:'${text("任务状态 1")}', name:'taskStatus', index:'a.task_status', width:150, align:"center"},
-		{header:'${text("任务类型 1")}', name:'type', index:'a.type', width:150, align:"center"},
-		{header:'${text("完成个数")}', name:'finishNumber', index:'a.finish_number', width:150, align:"center"},
+		{header:'${text("奖励金额")}', name:'taskInitialNum', index:'a.task_initial_num', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("完成个数")}', name:'taskOrderNum', index:'a.task_order_num', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
+		{header:'${text("任务日前")}', name:'taskStartDay', index:'a.task_start_day', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
+		{header:'${text("任务结束日期")}', name:'taskEndDay', index:'a.task_end_day', width:150, align:"center"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];

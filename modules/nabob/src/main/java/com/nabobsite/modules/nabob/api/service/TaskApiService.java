@@ -35,10 +35,6 @@ import java.util.List;
 public class TaskApiService extends SimpleUserService {
 
 	@Autowired
-	private TaskInfoDao taskInfoDao;
-	@Autowired
-	private UserTaskDao userTaskDao;
-	@Autowired
 	private UserTaskRewardDao userTaskRewardDao;
 	@Autowired
 	private UserAccountApiService userAccountApiService;
@@ -63,7 +59,7 @@ public class TaskApiService extends SimpleUserService {
 			synchronized (userId) {
 				int type = taskInfo.getType();
 				BigDecimal rewardMoney = taskInfo.getRewardMoney();
-				UserTask userTask = this.getUserTaskByUserIdAndTaskId(userId,taskId);
+				UserTask userTask = this.getUserTaskByUserId(userId);
 				if(userTask == null){
 					UserTask initUserTask = InstanceContact.initUserTask(userId,taskId,type,1);
 					long dbResult = userTaskDao.insert(initUserTask);
@@ -82,11 +78,11 @@ public class TaskApiService extends SimpleUserService {
 					return ResultUtil.failed(I18nCode.CODE_10008);
 				}
 				int taskNum = taskInfo.getTaskNumber();
-				int taskFinishNumber = userTask.getFinishNumber();
-				if(taskFinishNumber >= taskNum){
+				int taskFinishNumber = userTask.getTaskOrderNum();
+				/*if(taskFinishNumber >= taskNum){
 					logger.error("任务已经完成:{},{}",userId,taskId);
 					return ResultUtil.failed(I18nCode.CODE_10008);
-				}
+				}*/
 				Boolean isOk = this.updateTaskFinishNumber(userTaskId,taskFinishNumber+1);
 				if(isOk){
 					this.sendReward(userId,taskId,type,rewardMoney,taskFinishNumber+1);
@@ -140,7 +136,7 @@ public class TaskApiService extends SimpleUserService {
 		try {
 			UserTask userTaskPrams = new UserTask();
 			userTaskPrams.setId(id);
-			userTaskPrams.setFinishNumber(finishNumber);
+			userTaskPrams.setTaskOrderNum(finishNumber);
 			long dbResult = userTaskDao.update(userTaskPrams);
 			return CommonContact.dbResult(dbResult);
 		} catch (Exception e) {
@@ -208,41 +204,6 @@ public class TaskApiService extends SimpleUserService {
 		} catch (Exception e) {
 			logger.error("获取任务详情异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 获取用户任务
-	 * @author nada
-	 * @create 2021/5/13 7:32 下午
-	 */
-	public UserTask getUserTaskByUserIdAndTaskId(String userId,String taskId){
-		try {
-			UserTask userTaskPrams = new UserTask();
-			userTaskPrams.setTaskId(taskId);
-			userTaskPrams.setUserId(userId);
-			UserTask userTask = userTaskDao.getByEntity(userTaskPrams);
-			return userTask;
-		} catch (Exception e) {
-			logger.error("获取用户任务异常",e);
-			return null;
-		}
-	}
-
-	/**
-	 * @desc 获取任务详情
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public TaskInfo getTaskInfoById(String id) {
-		try {
-			TaskInfo taskInfo = new TaskInfo();
-			taskInfo.setId(id);
-			return taskInfoDao.getByEntity(taskInfo);
-		} catch (Exception e) {
-			logger.error("获取任务详情异常",e);
-			return null;
 		}
 	}
 }

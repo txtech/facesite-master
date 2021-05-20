@@ -155,10 +155,11 @@ public class InstanceContact {
         UserTask userTask = new UserTask();
         userTask.setIsNewRecord(true);
         userTask.setUserId(userId);
-        userTask.setTaskId(taskId);
-        userTask.setType(type);
-        userTask.setFinishNumber(finishNumber);
+        userTask.setTaskInitialNum(new BigDecimal("0"));
+        userTask.setTaskOrderNum(finishNumber);
         userTask.setTaskStatus(CommonContact.USER_TASK_STATUS_2);
+        userTask.setTaskStartDay(new Date());
+        userTask.setTaskEndDay(CommonContact.addDateHour(24));
         return userTask;
     }
 

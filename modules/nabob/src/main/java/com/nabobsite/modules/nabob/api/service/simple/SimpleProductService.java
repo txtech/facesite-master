@@ -5,6 +5,8 @@ package com.nabobsite.modules.nabob.api.service.simple;
 
 import com.nabobsite.modules.nabob.cms.product.dao.*;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
+import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ public class SimpleProductService extends SimpleUserService {
 	@Autowired
 	public UserProductWarehouseDao userProductWarehouseDao;
 	@Autowired
+	public UserAccountWarehouseDao userAccountWarehouseDao;
+	@Autowired
 	public UserProductWarehouseLogDao userProductWarehouseLogDao;
 	@Autowired
 	public UserProductWarehouseRecordDao userProductWarehouseRecordDao;
@@ -46,6 +50,22 @@ public class SimpleProductService extends SimpleUserService {
 			return userProductWarehouseDao.getByEntity(userProductWarehouse);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品异常,{},{}",userId,warehouseId,e);
+			return null;
+		}
+	}
+	/**
+	 * @desc 用户云仓库产品账户
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public UserAccountWarehouse getUserAccountWarehouseByUserId(String userId) {
+		try {
+			UserAccountWarehouse userAccountWarehouse = new UserAccountWarehouse();
+			userAccountWarehouse.setUserId(userId);
+			return userAccountWarehouseDao.getByEntity(userAccountWarehouse);
+		} catch (Exception e) {
+			logger.error("用户云仓库产品账户异常,{}",userId,e);
 			return null;
 		}
 	}

@@ -66,7 +66,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private String password;		// 密码
 	private String phoneNumber;		// 电话号码
 	private String inviteCode;		// 邀请码
-	private String token;		// 会话令牌
 	private String inviteSecret;		// 邀请秘文
 	private String registIp;		// 注册IP
 	private String loginIp;		// 登陆IP
@@ -336,4 +335,5 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setOldPassword(String oldPassword) {
 		this.oldPassword = oldPassword;
 	}
+
 }

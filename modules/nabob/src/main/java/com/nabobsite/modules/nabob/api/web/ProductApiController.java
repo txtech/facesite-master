@@ -79,6 +79,7 @@ public class ProductApiController extends BaseController {
 	}
 
 
+
 	//云仓库接口
 	@RequestMapping(value = {"getProductWarehouseInfo/{warehouseId}"})
 	@ApiOperation(value = "云仓库产品详情")
@@ -92,6 +93,13 @@ public class ProductApiController extends BaseController {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return productApiService.getUserWarehouseInfo(token,warehouseId);
 	}
+	@RequestMapping(value = {"getUserAccountWarehouseInfo/{warehouseId}"})
+	@ApiOperation(value = "用户云仓库账户")
+	public CommonResult<JSONObject> getUserAccountWarehouseInfo(HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return productApiService.getUserAccountWarehouseInfo(token);
+	}
+
 
 	//云仓库明细接口
 	@RequestMapping(value = {"getUserWarehousePersonalIncomeList"})

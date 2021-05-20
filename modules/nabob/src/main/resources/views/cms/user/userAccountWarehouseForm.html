@@ -1,15 +1,15 @@
-<% layout('/layouts/default.html', {title: '用户任务管理', libs: ['validate']}){ %>
+<% layout('/layouts/default.html', {title: '用户账户仓库信息管理', libs: ['validate']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header with-border">
 			<div class="box-title">
-				<i class="fa icon-note"></i> ${text(userTask.isNewRecord ? '新增用户任务' : '编辑用户任务')}
+				<i class="fa icon-note"></i> ${text(userAccountWarehouse.isNewRecord ? '新增用户账户仓库信息' : '编辑用户账户仓库信息')}
 			</div>
 			<div class="box-tools pull-right">
 				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 			</div>
 		</div>
-		<#form:form id="inputForm" model="${userTask}" action="${ctx}/task/userTask/save" method="post" class="form-horizontal">
+		<#form:form id="inputForm" model="${userAccountWarehouse}" action="${ctx}/user/userAccountWarehouse/save" method="post" class="form-horizontal">
 			<div class="box-body">
 				<div class="form-unit">${text('基本信息')}</div>
 				<#form:hidden path="id"/>
@@ -17,27 +17,72 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('用户ID')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('用户id')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="userId" maxlength="30" class="form-control required"/>
+								<#form:input path="userId" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('任务状态 1')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('级别')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="taskStatus" class="form-control required digits"/>
+								<#form:input path="level" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('奖励金额')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('仓库持有资产')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="taskInitialNum" class="form-control number"/>
+								<#form:input path="asstesHeldMoney" class="form-control required number"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('累计收益')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="accumulativeIncomeMoney" class="form-control required number"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('个人受益')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="personalIncomeMoney" class="form-control required number"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('个人累计收益')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="personalAccumulativeIncomeMoney" class="form-control required number"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('团队收益')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="teamIncomeMoney" class="form-control required number"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('团队累计收益')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="teamAccumulativeIncomeMoney" class="form-control required number"/>
 							</div>
 						</div>
 					</div>
@@ -54,28 +99,9 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('完成个数')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="taskOrderNum" class="form-control required digits"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> ${text('更新时间')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('任务日前')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="taskStartDay" readonly="true" maxlength="20" class="form-control laydate"
 									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 							</div>
 						</div>
@@ -96,16 +122,6 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('任务结束日期')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="taskEndDay" readonly="true" maxlength="20" class="form-control laydate"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> ${text('删除标志')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="delFlag" maxlength="1" class="form-control"/>
@@ -117,7 +133,7 @@
 			<div class="box-footer">
 				<div class="row">
 					<div class="col-sm-offset-2 col-sm-10">
-						<% if (hasPermi('task:userTask:edit')){ %>
+						<% if (hasPermi('user:userAccountWarehouse:edit')){ %>
 							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
 						<% } %>
 						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>

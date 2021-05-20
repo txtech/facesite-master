@@ -13,6 +13,7 @@ import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleProductService;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -325,25 +326,7 @@ public class ProductApiService extends SimpleProductService {
 	}
 
 
-	/**
-	 * @desc 获取云仓库产品列表
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONArray> getProductWarehouseList(ProductWarehouse productWarehouse) {
-		try {
-			List<ProductWarehouse> list = productWarehouseDao.findList(productWarehouse);
-			JSONArray result = new JSONArray();
-			for (ProductWarehouse entity : list) {
-				result.add(CommonContact.toJSONObject(entity));
-			}
-			return ResultUtil.successToJsonArray(result);
-		} catch (Exception e) {
-			logger.error("获取云仓库产品列表异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
+
 	/**
 	 * @desc 获取无人机产品列表
 	 * @author nada
@@ -408,6 +391,42 @@ public class ProductApiService extends SimpleProductService {
 
 
 	/**
+	 * @desc 获取云仓库产品列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONArray> getProductWarehouseList(String token,ProductWarehouse productWarehouse) {
+		try {
+			String userId = "";
+			if(StringUtils.isNotEmpty(token)){
+				UserInfo userInfo = this.getUserInfoByToken(token);
+				if(userInfo !=null){
+					userId  = userInfo.getId();
+				}
+			}
+			List<ProductWarehouse> list = productWarehouseDao.findList(productWarehouse);
+			JSONArray result = new JSONArray();
+			for (ProductWarehouse entity : list) {
+				JSONObject date = CommonContact.toJSONObject(entity);
+				String warehouseId = entity.getId();
+				BigDecimal asstesHeldMoney = new BigDecimal("0");
+				if(CommonContact.isOkUserId(userId)){
+					UserProductWarehouse userProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
+					if(userProductWarehouse != null && !CommonContact.isLesserOrEqualZero(userProductWarehouse.getAsstesHeldMoney())){
+						asstesHeldMoney = userProductWarehouse.getAsstesHeldMoney();
+					}
+				}
+				date.put("asstesHeldMoney",asstesHeldMoney);
+				result.add(date);
+			}
+			return ResultUtil.successToJsonArray(result);
+		} catch (Exception e) {
+			logger.error("获取云仓库产品列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+	/**
 	 * @desc 云仓库产品详情
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
@@ -446,7 +465,28 @@ public class ProductApiService extends SimpleProductService {
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
-
+	/**
+	 * @desc 用户云仓库产品账户
+	 * @author nada
+	 * @create 2021/5/20 9:45 下午
+	*/
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<JSONObject> getUserAccountWarehouseInfo(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			UserAccountWarehouse result = this.getUserAccountWarehouseByUserId(userInfo.getId());
+			if(result == null){
+				result = new UserAccountWarehouse();
+			}
+			return ResultUtil.successToJson(result);
+		} catch (Exception e) {
+			logger.error("用户云仓库产品账户异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
 
 
 

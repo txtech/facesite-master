@@ -7,6 +7,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.service.CrudService;
+import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
+import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
+import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
@@ -41,6 +45,10 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public SysConfigDao sysConfigDao;
 	@Autowired
 	public UserAccountDao userAccountDao;
+	@Autowired
+	public TaskInfoDao taskInfoDao;
+	@Autowired
+	public UserTaskDao userTaskDao;
 
 	/**
 	 * @desc 获取账户信息
@@ -223,6 +231,39 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return list;
 		} catch (Exception e) {
 			logger.error("获取配置列表异常",e);
+			return null;
+		}
+	}
+
+	/**
+	 * @desc 获取用户任务
+	 * @author nada
+	 * @create 2021/5/13 7:32 下午
+	 */
+	public UserTask getUserTaskByUserId(String userId){
+		try {
+			UserTask userTaskPrams = new UserTask();
+			userTaskPrams.setUserId(userId);
+			UserTask userTask = userTaskDao.getByEntity(userTaskPrams);
+			return userTask;
+		} catch (Exception e) {
+			logger.error("获取用户任务异常",e);
+			return null;
+		}
+	}
+
+	/**
+	 * @desc 获取任务详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	public TaskInfo getTaskInfoById(String id) {
+		try {
+			TaskInfo taskInfo = new TaskInfo();
+			taskInfo.setId(id);
+			return taskInfoDao.getByEntity(taskInfo);
+		} catch (Exception e) {
+			logger.error("获取任务详情异常",e);
 			return null;
 		}
 	}
