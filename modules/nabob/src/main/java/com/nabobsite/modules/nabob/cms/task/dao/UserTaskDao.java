@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 /**
  * 用户任务DAO接口
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-21
  */
 @MyBatisDao
 public interface UserTaskDao extends CrudDao<UserTask> {

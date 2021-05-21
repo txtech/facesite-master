@@ -330,4 +330,21 @@ public class CommonContact {
         }
         return null;
     }
+
+    /**
+     * @desc 获取json
+     * @author nada
+     * @create 2021/5/21 1:57 下午
+    */
+    public static JSONObject str2JSONObject(String str) {
+        try {
+            if(StringUtils.isEmpty(str)){
+                return null;
+            }
+            JSONObject obj = JSONObject.parseObject(str);
+            return obj;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

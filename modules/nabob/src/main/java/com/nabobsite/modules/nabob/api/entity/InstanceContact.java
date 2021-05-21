@@ -1,5 +1,6 @@
 package com.nabobsite.modules.nabob.api.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.UserProductBotLog;
@@ -148,34 +149,18 @@ public class InstanceContact {
     }
 
     /**
-     * @desc 初始化用户任务
-     * @author nada
-     * @create 2021/5/12 2:59 下午
-     */
-    public static UserTask initUserTask(String userId,String taskId,int type,int finishNumber){
-        UserTask userTask = new UserTask();
-        userTask.setIsNewRecord(true);
-        userTask.setUserId(userId);
-        userTask.setTaskInitialNum(new BigDecimal("0"));
-        userTask.setTaskOrderNum(finishNumber);
-        userTask.setTaskStatus(CommonContact.USER_TASK_STATUS_2);
-        userTask.setTaskStartDay(new Date());
-        userTask.setTaskEndDay(CommonContact.addDateHour(24));
-        return userTask;
-    }
-
-    /**
      * @desc 初始化用户奖励
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
-    public static UserTaskReward initUserTaskReward(String userId,String taskId,int type,String title,int finishNumber,BigDecimal rewardMoney){
+    public static UserTaskReward initUserTaskReward(String userId,String taskId,int type,String title,int finishNumber,int taskNum,BigDecimal rewardMoney){
         UserTaskReward userTaskReward = new UserTaskReward();
         userTaskReward.setIsNewRecord(true);
         userTaskReward.setUserId(userId);
         userTaskReward.setTaskId(taskId);
         userTaskReward.setTitle(title);
         userTaskReward.setType(type);
+        userTaskReward.setTaskNumber(taskNum);
         userTaskReward.setFinishNum(finishNumber);
         userTaskReward.setRewardMoney(rewardMoney);
         return userTaskReward;
@@ -271,6 +256,7 @@ public class InstanceContact {
             userTask.setTaskOrderNum(0);
             userTask.setTaskStartDay(new Date());
             userTask.setTaskEndDay(CommonContact.addDateHour(24));
+            userTask.setTaskFinishData(new JSONObject().toJSONString());
             return userTask;
         }
     }

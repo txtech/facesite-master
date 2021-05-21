@@ -338,23 +338,25 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 		}
 	}
 	/**
-	 * @desc 获取用户任务奖励
+	 * @desc 获取用户任务完成情况
 	 * @author nada
 	 * @create 2021/5/13 7:32 下午
 	 */
-	public UserTaskReward getUserTaskRewardByUserId(String userId,String taskId){
+	public JSONObject getUserTaskNumJsonByUserId(String userId) {
 		try {
-			UserTaskReward userTaskPrams = new UserTaskReward();
+			UserTask userTaskPrams = new UserTask();
 			userTaskPrams.setUserId(userId);
-			userTaskPrams.setTaskId(taskId);
-			return userTaskRewardDao.getByEntity(userTaskPrams);
+			UserTask userTask = userTaskDao.getByEntity(userTaskPrams);
+			if (userTask != null) {
+				String finishData = userTask.getTaskFinishData();
+				return CommonContact.str2JSONObject(finishData);
+			}
+			return null;
 		} catch (Exception e) {
-			logger.error("获取用户任务异常",e);
+			e.printStackTrace();
 			return null;
 		}
 	}
-
-
 
 	/**
 	 * @desc 加密铭感信息

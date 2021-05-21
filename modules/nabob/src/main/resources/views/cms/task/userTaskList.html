@@ -75,9 +75,21 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('每个任务完成情况')}：</label>
+					<div class="control-inline">
+						<#form:input path="taskFinishArray" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('删除标志')}：</label>
 					<div class="control-inline">
 						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('每个任务完成情况')}：</label>
+					<div class="control-inline">
+						<#form:input path="taskFinishData" maxlength="3200" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -107,7 +119,9 @@ $('#dataGrid').dataGrid({
 		{header:'${text("任务日前")}', name:'taskStartDay', index:'a.task_start_day', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("任务结束日期")}', name:'taskEndDay', index:'a.task_end_day', width:150, align:"center"},
+		{header:'${text("每个任务完成情况")}', name:'taskFinishArray', index:'a.task_finish_array', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
+		{header:'${text("每个任务完成情况")}', name:'taskFinishData', index:'a.task_finish_data', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('task:userTask:edit')){ %>

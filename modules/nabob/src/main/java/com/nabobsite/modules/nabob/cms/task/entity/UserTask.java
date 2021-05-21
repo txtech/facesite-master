@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户任务Entity
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-21
  */
 @Table(name="t1_user_task", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -36,10 +36,11 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="task_finish_data", attrName="taskFinishData", label="每个任务完成情况"),
 	}, orderBy="a.id DESC"
 )
 public class UserTask extends DataEntity<UserTask> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户ID
 	private Integer taskStatus;		// 任务状态 1:未开始 2:进行中 3:完成
@@ -50,7 +51,8 @@ public class UserTask extends DataEntity<UserTask> {
 	private Date taskStartDay;		// 任务日前
 	private Date taskEndDay;		// 任务结束日期
 	private String delFlag;		// 删除标志
-	
+	private String taskFinishData;		// 每个任务完成情况
+
 	public UserTask() {
 		this(null);
 	}
@@ -58,7 +60,7 @@ public class UserTask extends DataEntity<UserTask> {
 	public UserTask(String id){
 		super(id);
 	}
-	
+
 	@NotBlank(message="用户ID不能为空")
 	@Length(min=0, max=30, message="用户ID长度不能超过 30 个字符")
 	public String getUserId() {
@@ -68,7 +70,7 @@ public class UserTask extends DataEntity<UserTask> {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
+
 	@NotNull(message="任务状态 1不能为空")
 	public Integer getTaskStatus() {
 		return taskStatus;
@@ -77,7 +79,7 @@ public class UserTask extends DataEntity<UserTask> {
 	public void setTaskStatus(Integer taskStatus) {
 		this.taskStatus = taskStatus;
 	}
-	
+
 	public BigDecimal getTaskInitialNum() {
 		return taskInitialNum;
 	}
@@ -85,7 +87,7 @@ public class UserTask extends DataEntity<UserTask> {
 	public void setTaskInitialNum(BigDecimal taskInitialNum) {
 		this.taskInitialNum = taskInitialNum;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -94,7 +96,7 @@ public class UserTask extends DataEntity<UserTask> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@NotNull(message="完成个数不能为空")
 	public Integer getTaskOrderNum() {
 		return taskOrderNum;
@@ -103,7 +105,7 @@ public class UserTask extends DataEntity<UserTask> {
 	public void setTaskOrderNum(Integer taskOrderNum) {
 		this.taskOrderNum = taskOrderNum;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -112,7 +114,7 @@ public class UserTask extends DataEntity<UserTask> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getTaskStartDay() {
 		return taskStartDay;
@@ -121,7 +123,7 @@ public class UserTask extends DataEntity<UserTask> {
 	public void setTaskStartDay(Date taskStartDay) {
 		this.taskStartDay = taskStartDay;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getTaskEndDay() {
 		return taskEndDay;
@@ -130,7 +132,7 @@ public class UserTask extends DataEntity<UserTask> {
 	public void setTaskEndDay(Date taskEndDay) {
 		this.taskEndDay = taskEndDay;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -139,5 +141,15 @@ public class UserTask extends DataEntity<UserTask> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
+	@NotBlank(message="每个任务完成情况不能为空")
+	@Length(min=0, max=3200, message="每个任务完成情况长度不能超过 3200 个字符")
+	public String getTaskFinishData() {
+		return taskFinishData;
+	}
+
+	public void setTaskFinishData(String taskFinishData) {
+		this.taskFinishData = taskFinishData;
+	}
+
 }

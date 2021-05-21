@@ -39,7 +39,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
 		@Column(name="type", attrName="type", label="类型 1", comment="类型 1:实时存取 2:定投"),
-	}, orderBy="a.id DESC"
+	}, orderBy="a.seq Asc"
 )
 public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 

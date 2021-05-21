@@ -18,26 +18,29 @@ public class ResultUtil<T> {
      */
     public static <T> CommonResult<T> success(T data) {
         int code = ResultCode.SUCCESS.getCode();
-        SimplePropertyPreFilter filter = new SimplePropertyPreFilter();
         if(data instanceof DataEntity){
-            filter.getExcludes().add("isNewRecord");
-            filter.getExcludes().add("delFlag");
-            filter.getExcludes().add("createBy");
-            filter.getExcludes().add("updateBy");
-            filter.getExcludes().add("updated");
-            filter.getExcludes().add("created");
-            filter.getExcludes().add("password");
-            String filterData = JSON.toJSONString(data,filter);
+            String filterData = JSON.toJSONString(data,getFilter());
             data = (T)JSON.parseObject(filterData);
             return new CommonResult<T>(code,data);
         }
         if(data instanceof List){
-            JSONArray array = JSONArray.parseArray(JSON.toJSONString(data));
-            String filterData = JSON.toJSONString(array,filter);
+            String filterData = JSONArray.toJSONString(data,getFilter());
             data = (T)JSON.parseArray(filterData);
             return new CommonResult<T>(code,data);
         }
         return new CommonResult<T>(code,data);
+    }
+
+    public static SimplePropertyPreFilter getFilter() {
+        SimplePropertyPreFilter filter = new SimplePropertyPreFilter();
+        filter.getExcludes().add("isNewRecord");
+        filter.getExcludes().add("delFlag");
+        filter.getExcludes().add("createBy");
+        filter.getExcludes().add("updateBy");
+        filter.getExcludes().add("updated");
+        filter.getExcludes().add("created");
+        filter.getExcludes().add("password");
+        return filter;
     }
 
     /**
