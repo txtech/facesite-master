@@ -235,4 +235,23 @@ public class InstanceContact {
         return userProductWarehouseLog;
     }
 
+    /**
+     * @desc 初始化用户账户
+     * @author nada
+     * @create 2021/5/12 2:58 下午
+     */
+    public static UserAccountWarehouse initUserAccountWarehouse(String userId){
+        synchronized (userId) {
+            UserAccountWarehouse userAccountWarehouse = new UserAccountWarehouse();
+            userAccountWarehouse.setIsNewRecord(true);
+            userAccountWarehouse.setUserId(userId);
+            userAccountWarehouse.setAsstesHeldMoney(new BigDecimal("0"));
+            userAccountWarehouse.setAccumulativeIncomeMoney(new BigDecimal("0"));
+            userAccountWarehouse.setPersonalIncomeMoney(new BigDecimal("0"));
+            userAccountWarehouse.setPersonalAccumulativeIncomeMoney(new BigDecimal("0"));
+            userAccountWarehouse.setTeamIncomeMoney(new BigDecimal("0"));
+            userAccountWarehouse.setTeamAccumulativeIncomeMoney(new BigDecimal("0"));
+            return userAccountWarehouse;
+        }
+    }
 }

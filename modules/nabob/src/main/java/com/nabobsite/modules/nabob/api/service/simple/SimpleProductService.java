@@ -30,8 +30,6 @@ public class SimpleProductService extends SimpleUserService {
 	@Autowired
 	public UserProductWarehouseDao userProductWarehouseDao;
 	@Autowired
-	public UserAccountWarehouseDao userAccountWarehouseDao;
-	@Autowired
 	public UserProductWarehouseLogDao userProductWarehouseLogDao;
 	@Autowired
 	public UserProductWarehouseRecordDao userProductWarehouseRecordDao;

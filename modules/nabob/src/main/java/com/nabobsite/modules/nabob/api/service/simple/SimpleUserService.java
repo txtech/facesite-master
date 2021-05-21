@@ -13,6 +13,7 @@ import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
+import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
@@ -53,6 +54,8 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public UserTaskDao userTaskDao;
 	@Autowired
 	public UserTaskRewardDao userTaskRewardDao;
+	@Autowired
+	public UserAccountWarehouseDao userAccountWarehouseDao;
 
 	/**
 	 * @desc 修改用户邀请秘文

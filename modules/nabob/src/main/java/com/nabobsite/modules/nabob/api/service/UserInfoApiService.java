@@ -369,6 +369,11 @@ public class UserInfoApiService extends SimpleUserService {
 				if(!CommonContact.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
+				//初始化云仓库账户
+				dbResult = userAccountWarehouseDao.insert(InstanceContact.initUserAccountWarehouse(userId));
+				if(!CommonContact.dbResult(dbResult)){
+					return ResultUtil.failed(I18nCode.CODE_10004);
+				}
 				//注册新用户送奖励
 				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_2;
 				Boolean isOk = userAccountApiService.updateAccountBalance(userId,type,LogicStaticContact.USER_REGISTER_REWARD,userId,CommonContact.USER_ACCOUNT_DETAIL_TITLE_2);
