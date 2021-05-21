@@ -74,7 +74,7 @@ public class UserAccountApiService extends SimpleUserService {
 			}
 			userAccountDetail.setUserId(userId);
 			List<UserAccountDetail> userAccountDetailList = userAccountDetailDao.findList(userAccountDetail);
-			return ResultUtil.success(userAccountDetailList);
+			return ResultUtil.success(userAccountDetailList,true);
 		} catch (Exception e) {
 			logger.error("获取收支总账记录异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

@@ -17,9 +17,9 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('标题')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('任务内容')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="title" maxlength="520" class="form-control required"/>
+								<#form:input path="inContent" maxlength="250" class="form-control required"/>
 							</div>
 						</div>
 					</div>
@@ -60,6 +60,16 @@
 								<span class="required hide">*</span> ${text('创建时间')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate"
+									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('日期')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="date" readonly="true" maxlength="20" class="form-control laydate required"
 									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 							</div>
 						</div>

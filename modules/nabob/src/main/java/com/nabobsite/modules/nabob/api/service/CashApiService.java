@@ -54,8 +54,8 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<Cash>> getCashOrderList(String token, Cash cash) {
 		try {
-			List<Cash> cashDaoList = cashDao.findList(cash);
-			return ResultUtil.success(cashDaoList);
+			List<Cash> retsult = cashDao.findList(cash);
+			return ResultUtil.success(retsult,true);
 		} catch (Exception e) {
 			logger.error("获取提款订单列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

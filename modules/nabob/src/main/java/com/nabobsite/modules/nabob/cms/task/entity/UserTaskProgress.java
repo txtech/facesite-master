@@ -23,7 +23,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  */
 @Table(name="t1_user_task_progress", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
-		@Column(name="title", attrName="title", label="标题", queryType=QueryType.LIKE),
+		@Column(name="in_content", attrName="inContent", label="任务内容"),
 		@Column(name="content", attrName="content", label="任务内容"),
 		@Column(name="phone", attrName="phone", label="手机号码"),
 		@Column(name="num", attrName="num", label="奖励金额"),
@@ -36,16 +36,16 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class UserTaskProgress extends DataEntity<UserTaskProgress> {
-	
+
 	private static final long serialVersionUID = 1L;
-	private String title;		// 标题
+	private String inContent;		// 任务内容
 	private String content;		// 任务内容
 	private String phone;		// 手机号码
 	private Integer num;		// 奖励金额
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+
 	public UserTaskProgress() {
 		this(null);
 	}
@@ -53,17 +53,17 @@ public class UserTaskProgress extends DataEntity<UserTaskProgress> {
 	public UserTaskProgress(String id){
 		super(id);
 	}
-	
-	@NotBlank(message="标题不能为空")
-	@Length(min=0, max=520, message="标题长度不能超过 520 个字符")
-	public String getTitle() {
-		return title;
+
+	@NotBlank(message="任务内容不能为空")
+	@Length(min=0, max=250, message="任务内容长度不能超过 250 个字符")
+	public String getInContent() {
+		return inContent;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setInContent(String inContent) {
+		this.inContent = inContent;
 	}
-	
+
 	@NotBlank(message="任务内容不能为空")
 	@Length(min=0, max=250, message="任务内容长度不能超过 250 个字符")
 	public String getContent() {
@@ -73,7 +73,7 @@ public class UserTaskProgress extends DataEntity<UserTaskProgress> {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
+
 	@NotBlank(message="手机号码不能为空")
 	@Length(min=0, max=30, message="手机号码长度不能超过 30 个字符")
 	public String getPhone() {
@@ -83,7 +83,7 @@ public class UserTaskProgress extends DataEntity<UserTaskProgress> {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
+
 	@NotNull(message="奖励金额不能为空")
 	public Integer getNum() {
 		return num;
@@ -92,7 +92,7 @@ public class UserTaskProgress extends DataEntity<UserTaskProgress> {
 	public void setNum(Integer num) {
 		this.num = num;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -101,7 +101,7 @@ public class UserTaskProgress extends DataEntity<UserTaskProgress> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -110,7 +110,7 @@ public class UserTaskProgress extends DataEntity<UserTaskProgress> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -119,5 +119,5 @@ public class UserTaskProgress extends DataEntity<UserTaskProgress> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
 }

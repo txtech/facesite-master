@@ -125,8 +125,8 @@ public class OrderApiService extends SimpleOrderService {
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			order.setUserId(userId);
-			List<Order> orderList = orderDao.findList(order);
-			return ResultUtil.success(orderList);
+			List<Order> result = orderDao.findList(order);
+			return ResultUtil.success(result,true);
 		} catch (Exception e) {
 			logger.error("获取订单列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

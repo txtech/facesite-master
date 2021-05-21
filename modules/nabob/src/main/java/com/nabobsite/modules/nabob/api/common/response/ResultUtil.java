@@ -13,25 +13,29 @@ import java.util.List;
  */
 public class ResultUtil<T> {
 
+    public static <T> CommonResult<T> success(T data) {
+        return success(data,false);
+    }
+
     /**
      * 成功返回结果
      */
-    public static <T> CommonResult<T> success(T data) {
+    public static <T> CommonResult<T> success(T data,Boolean isCreated) {
         int code = ResultCode.SUCCESS.getCode();
         if(data instanceof DataEntity){
-            String filterData = JSON.toJSONString(data,getFilter());
+            String filterData = JSON.toJSONString(data,getFilter(isCreated));
             data = (T)JSON.parseObject(filterData);
             return new CommonResult<T>(code,data);
         }
         if(data instanceof List){
-            String filterData = JSONArray.toJSONString(data,getFilter());
+            String filterData = JSONArray.toJSONString(data,getFilter(isCreated));
             data = (T)JSON.parseArray(filterData);
             return new CommonResult<T>(code,data);
         }
         return new CommonResult<T>(code,data);
     }
 
-    public static SimplePropertyPreFilter getFilter() {
+    public static SimplePropertyPreFilter getFilter(Boolean isCreated) {
         SimplePropertyPreFilter filter = new SimplePropertyPreFilter();
         filter.getExcludes().add("isNewRecord");
         filter.getExcludes().add("delFlag");
@@ -39,6 +43,9 @@ public class ResultUtil<T> {
         filter.getExcludes().add("updateBy");
         filter.getExcludes().add("updated");
         filter.getExcludes().add("password");
+        if(!isCreated){
+            filter.getExcludes().add("created");
+        }
         return filter;
     }
 

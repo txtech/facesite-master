@@ -22,13 +22,16 @@ import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskProgress;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 任务列表Service
@@ -167,7 +170,7 @@ public class TaskApiService extends SimpleUserService {
 			UserTaskReward userTaskReward = new UserTaskReward();
 			userTaskReward.setUserId(userId);
 			List<UserTaskReward> userTaskRewardList = userTaskRewardDao.findList(userTaskReward);
-			return ResultUtil.success(userTaskRewardList);
+			return ResultUtil.success(userTaskRewardList,true);
 		} catch (Exception e) {
 			logger.error("获取任务奖励列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -179,17 +182,49 @@ public class TaskApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<UserTaskProgress>> getCompletings(String token) {
 		try {
-			//99 91 74 96
-			List<UserTaskProgress> userTaskRewardList = userTaskProgressDao.findList(new UserTaskProgress());
-			return ResultUtil.success(userTaskRewardList);
+			List<UserTaskProgress> result = userTaskProgressDao.findList(new UserTaskProgress());
+			if(result == null || result.size()<100){
+				this.autoInitUserTaskProgress(5);
+			}else{
+				this.autoInitUserTaskProgress(1);
+			}
+			return ResultUtil.success(result,true);
 		} catch (Exception e) {
 			logger.error("获取任务奖励列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
-
+	/**
+	 * @desc 保存任务奖励列表
+	 * @author nada
+	 * @create 2021/5/21 3:39 下午
+	*/
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean autoInitUserTaskProgress(int num) {
+		try {
+			for (int i = 0; i < num ; i++) {
+				ArrayList<String> list = new ArrayList(CommonContact.PHONE_NUM_AREA_CODE);
+				int randomIndex = new Random().nextInt(list.size());
+				String areaCode = list.get(randomIndex);
+				int code = SnowFlakeIDGenerator.getRandom4();
+				String phone = areaCode+"****"+code;
+				UserTaskProgress userTaskProgress = new UserTaskProgress();
+				userTaskProgress.setIsNewRecord(true);
+				userTaskProgress.setInContent("टास्क पूरा हुआ，रूपया RS निकाले1000");
+				userTaskProgress.setContent("mission completed, RS has been withdrawn1000");
+				userTaskProgress.setPhone(phone);
+				userTaskProgress.setNum(1000);
+				userTaskProgressDao.insert(userTaskProgress);
+			}
+			return true;
+		} catch (Exception e) {
+			logger.error("获取任务奖励列表异常",e);
+			return false;
+		}
+	}
 
 	/**
 	 * @desc 获取任务列表

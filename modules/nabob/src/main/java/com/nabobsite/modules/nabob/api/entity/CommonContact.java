@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @ClassName nada
@@ -113,6 +115,14 @@ public class CommonContact {
     public final static int CASH_STATUS_3 = 3;
     public final static int CASH_STATUS_4 = 4;
     public final static int CASH_STATUS_9 = 9;
+
+    public final static Set<String> PHONE_NUM_AREA_CODE  =  new HashSet<>();
+    static {
+        PHONE_NUM_AREA_CODE.add("74");
+        PHONE_NUM_AREA_CODE.add("91");
+        PHONE_NUM_AREA_CODE.add("96");
+        PHONE_NUM_AREA_CODE.add("99");
+    }
 
     /**
      * @desc 解析数据库返回接口
