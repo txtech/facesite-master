@@ -38,7 +38,6 @@ public class ResultUtil<T> {
         filter.getExcludes().add("createBy");
         filter.getExcludes().add("updateBy");
         filter.getExcludes().add("updated");
-        filter.getExcludes().add("created");
         filter.getExcludes().add("password");
         return filter;
     }

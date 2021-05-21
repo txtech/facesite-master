@@ -15,9 +15,11 @@ import com.nabobsite.modules.nabob.api.entity.InstanceContact;
 import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouse;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
+import com.nabobsite.modules.nabob.cms.task.dao.UserTaskProgressDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTaskProgress;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,8 @@ public class TaskApiService extends SimpleUserService {
 
 	@Autowired
 	private UserTaskRewardDao userTaskRewardDao;
+	@Autowired
+	private UserTaskProgressDao userTaskProgressDao;
 	@Autowired
 	private UserAccountApiService userAccountApiService;
 
@@ -169,6 +173,23 @@ public class TaskApiService extends SimpleUserService {
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
+
+	/**
+	 * @desc 获取任务奖励列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	public CommonResult<List<UserTaskProgress>> getCompletings(String token) {
+		try {
+			//99 91 74 96
+			List<UserTaskProgress> userTaskRewardList = userTaskProgressDao.findList(new UserTaskProgress());
+			return ResultUtil.success(userTaskRewardList);
+		} catch (Exception e) {
+			logger.error("获取任务奖励列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
 
 	/**
 	 * @desc 获取任务列表

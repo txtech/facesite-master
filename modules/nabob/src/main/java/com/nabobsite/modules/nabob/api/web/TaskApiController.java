@@ -11,6 +11,7 @@ import com.nabobsite.modules.nabob.api.service.TaskApiService;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
+import com.nabobsite.modules.nabob.cms.task.entity.UserTaskProgress;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -62,5 +63,12 @@ public class TaskApiController extends BaseController {
 	public CommonResult<List<UserTaskReward>> getTaskRewardList(HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
 		return taskApiService.getTaskRewardList(token);
+	}
+
+	@RequestMapping(value = {"getCompletings"})
+	@ApiOperation(value = "获取任务进行中列表")
+	public CommonResult<List<UserTaskProgress>> getCompletings(HttpServletRequest request) {
+		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		return taskApiService.getCompletings(token);
 	}
 }
