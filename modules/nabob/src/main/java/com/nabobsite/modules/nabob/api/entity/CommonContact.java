@@ -1,9 +1,7 @@
 package com.nabobsite.modules.nabob.api.entity;
 
 import com.alibaba.fastjson.JSONObject;
-import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultCode;
-import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -364,13 +364,18 @@ public class UserInfoApiService extends SimpleUserService {
 				//修改邀请秘文
 				String userId = initUser.getId();
 				this.updateUserSecret(userId,parent1UserId);
-				//初始化账户
+				//初始化总账户
 				dbResult = userAccountDao.insert(InstanceContact.initUserAccount(userId));
 				if(!CommonContact.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
 				//初始化云仓库账户
 				dbResult = userAccountWarehouseDao.insert(InstanceContact.initUserAccountWarehouse(userId));
+				if(!CommonContact.dbResult(dbResult)){
+					return ResultUtil.failed(I18nCode.CODE_10004);
+				}
+				//初始化奖励账户
+				dbResult = userTaskDao.insert(InstanceContact.initUserTask(userId));
 				if(!CommonContact.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}

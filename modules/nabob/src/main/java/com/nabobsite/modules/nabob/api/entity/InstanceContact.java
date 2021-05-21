@@ -236,7 +236,7 @@ public class InstanceContact {
     }
 
     /**
-     * @desc 初始化用户账户
+     * @desc 初始化云仓库账户
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
@@ -252,6 +252,25 @@ public class InstanceContact {
             userAccountWarehouse.setTeamIncomeMoney(new BigDecimal("0"));
             userAccountWarehouse.setTeamAccumulativeIncomeMoney(new BigDecimal("0"));
             return userAccountWarehouse;
+        }
+    }
+
+    /**
+     * @desc 初始化用户奖励账户
+     * @author nada
+     * @create 2021/5/12 2:58 下午
+     */
+    public static UserTask initUserTask(String userId){
+        synchronized (userId){
+            UserTask userTask = new UserTask();
+            userTask.setIsNewRecord(true);
+            userTask.setUserId(userId);
+            userTask.setTaskStatus(CommonContact.USER_TASK_STATUS_1);
+            userTask.setTaskInitialNum(LogicStaticContact.USER_TACK_BASE_MONEY);
+            userTask.setTaskOrderNum(0);
+            userTask.setTaskStartDay(new Date());
+            userTask.setTaskEndDay(CommonContact.addDateHour(24));
+            return userTask;
         }
     }
 }
