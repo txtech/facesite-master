@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 出款管理Entity
  * @author face
- * @version 2021-05-18
+ * @version 2021-05-21
  */
 @Table(name="t1_cash", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -31,11 +31,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="cash_money", attrName="cashMoney", label="提现金额"),
 		@Column(name="service_charge", attrName="serviceCharge", label="提现手续费"),
 		@Column(name="ipaddress", attrName="ipaddress", label="提现地址"),
-		@Column(name="name", attrName="name", label="名称", queryType=QueryType.LIKE),
 		@Column(name="email", attrName="email", label="邮箱"),
 		@Column(name="phone_number", attrName="phoneNumber", label="手机号码"),
 		@Column(name="cash_rate", attrName="cashRate", label="出款费率"),
-		@Column(name="account_no", attrName="accountNo", label="提款账户"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="account_name", attrName="accountName", label="账户名称", queryType=QueryType.LIKE),
 		@Column(name="updated", attrName="updated", label="更新时间"),
@@ -56,11 +54,9 @@ public class Cash extends DataEntity<Cash> {
 	private BigDecimal cashMoney;		// 提现金额
 	private BigDecimal serviceCharge;		// 提现手续费
 	private String ipaddress;		// 提现地址
-	private String name;		// 名称
 	private String email;		// 邮箱
 	private String phoneNumber;		// 手机号码
 	private BigDecimal cashRate;		// 出款费率
-	private String accountNo;		// 提款账户
 	private Date created;		// 创建时间
 	private String accountName;		// 账户名称
 	private Date updated;		// 更新时间
@@ -140,15 +136,6 @@ public class Cash extends DataEntity<Cash> {
 		this.ipaddress = ipaddress;
 	}
 	
-	@Length(min=0, max=255, message="名称长度不能超过 255 个字符")
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	@Length(min=0, max=255, message="邮箱长度不能超过 255 个字符")
 	public String getEmail() {
 		return email;
@@ -174,15 +161,6 @@ public class Cash extends DataEntity<Cash> {
 
 	public void setCashRate(BigDecimal cashRate) {
 		this.cashRate = cashRate;
-	}
-	
-	@Length(min=0, max=30, message="提款账户长度不能超过 30 个字符")
-	public String getAccountNo() {
-		return accountNo;
-	}
-
-	public void setAccountNo(String accountNo) {
-		this.accountNo = accountNo;
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

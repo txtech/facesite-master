@@ -7,6 +7,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.service.CrudService;
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
+import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
@@ -56,6 +59,44 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public UserTaskRewardDao userTaskRewardDao;
 	@Autowired
 	public UserAccountWarehouseDao userAccountWarehouseDao;
+
+	/**
+	 * @desc 保存用户
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public boolean saveUserAndAccount(UserInfo initUser) {
+		try {
+			long dbResult = userInfoDao.insert(initUser);
+			if(!CommonContact.dbResult(dbResult)){
+				return false;
+			}
+			//修改邀请秘文
+			String userId = initUser.getId();
+			String parent1UserId = initUser.getParentSysId();
+			this.updateUserSecret(userId,parent1UserId);
+			//初始化总账户
+			dbResult = userAccountDao.insert(InstanceContact.initUserAccount(userId));
+			if(!CommonContact.dbResult(dbResult)){
+				return false;
+			}
+			//初始化云仓库账户
+			dbResult = userAccountWarehouseDao.insert(InstanceContact.initUserAccountWarehouse(userId));
+			if(!CommonContact.dbResult(dbResult)){
+				return false;
+			}
+			//初始化奖励账户
+			dbResult = userTaskDao.insert(InstanceContact.initUserTask(userId));
+			if(!CommonContact.dbResult(dbResult)){
+				return false;
+			}
+			return true;
+		} catch (Exception e) {
+			logger.error("保存用户异常,{}",e);
+			return true;
+		}
+	}
 
 	/**
 	 * @desc 修改用户邀请秘文

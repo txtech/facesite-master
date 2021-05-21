@@ -40,7 +40,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			return;
 		}
 		UserAccount userAccount = this.getUserAccountByUserId(userId);
-		if(userInfo == null){
+		if(userAccount == null){
 			return;
 		}
 		int currentLock = userInfo.getLock();
@@ -184,7 +184,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 				return null;
 			}
 			UserAccount userAccount = new UserAccount();
-			userAccount.setId(userId);
+			userAccount.setUserId(userId);
 			return userAccountDao.getByEntity(userAccount);
 		} catch (Exception e) {
 			logger.error("获取账户信息异常",e);

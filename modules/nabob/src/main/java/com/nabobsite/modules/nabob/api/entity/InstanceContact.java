@@ -109,6 +109,7 @@ public class InstanceContact {
             userAccountDetail.setCommissionMoney(new BigDecimal("0"));
             userAccountDetail.setClaimableMoney(new BigDecimal("0"));
             userAccountDetail.setRewardMoney(new BigDecimal("0"));
+            userAccountDetail.setLedgerType(1);
             return userAccountDetail;
         }
     }

@@ -290,32 +290,15 @@ public class UserInfoApiService extends SimpleUserService {
 				Long seqId = sequenceService.getSequence();
 				userInfo.setInviteCode(String.valueOf(seqId));
 				UserInfo initUser = InstanceContact.initUserInfo(userInfo);
-				long dbResult = userInfoDao.insert(initUser);
-				if(!CommonContact.dbResult(dbResult)){
+				Boolean isOkSaveUser = this.saveUserAndAccount(initUser);
+				if(!isOkSaveUser){
 					logger.error("注册用户失败,保存用户失败");
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				//修改邀请秘文
-				String userId = initUser.getId();
-				this.updateUserSecret(userId,parent1UserId);
-				//初始化总账户
-				dbResult = userAccountDao.insert(InstanceContact.initUserAccount(userId));
-				if(!CommonContact.dbResult(dbResult)){
-					return ResultUtil.failed(I18nCode.CODE_10004);
-				}
-				//初始化云仓库账户
-				dbResult = userAccountWarehouseDao.insert(InstanceContact.initUserAccountWarehouse(userId));
-				if(!CommonContact.dbResult(dbResult)){
-					return ResultUtil.failed(I18nCode.CODE_10004);
-				}
-				//初始化奖励账户
-				dbResult = userTaskDao.insert(InstanceContact.initUserTask(userId));
-				if(!CommonContact.dbResult(dbResult)){
-					return ResultUtil.failed(I18nCode.CODE_10004);
-				}
 				//注册新用户送奖励
+				String userId = initUser.getId();
 				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_2;
-				Boolean isOk = userAccountApiService.updateAccountBalance(userId,type,LogicStaticContact.USER_REGISTER_REWARD,userId,CommonContact.USER_ACCOUNT_DETAIL_TITLE_2);
+				Boolean isOk = userAccountApiService.updateAccountBalance(userId,type, LogicStaticContact.USER_REGISTER_REWARD,userId,CommonContact.USER_ACCOUNT_DETAIL_TITLE_2);
 				if(!isOk){
 					logger.error("注册用户成功,用户送奖励失败,{}",userId);
 				}
