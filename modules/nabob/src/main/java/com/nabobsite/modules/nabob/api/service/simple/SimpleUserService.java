@@ -344,6 +344,9 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	public JSONObject getUserTaskNumJsonByUserId(String userId) {
 		try {
+			if(!CommonContact.isOkUserId(userId)){
+				return null;
+			}
 			UserTask userTaskPrams = new UserTask();
 			userTaskPrams.setUserId(userId);
 			UserTask userTask = userTaskDao.getByEntity(userTaskPrams);
