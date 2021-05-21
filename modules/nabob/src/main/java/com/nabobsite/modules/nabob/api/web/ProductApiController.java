@@ -101,17 +101,19 @@ public class ProductApiController extends BaseController {
 
 
 	//云仓库明细接口
-	@RequestMapping(value = {"getUserWarehousePersonalIncomeList"})
+	@RequestMapping(value = {"getUserWarehousePersonalIncomeList/{productType}"})
 	@ApiOperation(value = "用户云仓库个人收入记录列表")
-	public CommonResult<List<UserProductWarehouseLog>> getUserWarehousePersonalIncomeList(HttpServletRequest request) {
+	public CommonResult<List<UserProductWarehouseLog>> getUserWarehousePersonalIncomeList(@PathVariable int productType, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return productApiService.getUserWarehousePersonalIncomeList(token);
+		int type = CommonContact.WAREHOUSE_TYPE_1;
+		return productApiService.getUserWarehouseIncomeList(token,type,productType);
 	}
-	@RequestMapping(value = {"getUserWarehouseTeamIncomeList"})
+	@RequestMapping(value = {"getUserWarehouseTeamIncomeList/{productType}"})
 	@ApiOperation(value = "用户云仓库团队收入记录列表")
-	public CommonResult<List<UserProductWarehouseLog>> getUserWarehouseTeamIncomeList(HttpServletRequest request) {
+	public CommonResult<List<UserProductWarehouseLog>> getUserWarehouseTeamIncomeList(@PathVariable int productType,HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		return productApiService.getUserWarehouseTeamIncomeList(token);
+		int type = CommonContact.WAREHOUSE_TYPE_2;
+		return productApiService.getUserWarehouseIncomeList(token,type,productType);
 	}
 	@RequestMapping(value = {"getUserWarehouseOperationList"})
 	@ApiOperation(value = "用户云仓库操纵记录列表")

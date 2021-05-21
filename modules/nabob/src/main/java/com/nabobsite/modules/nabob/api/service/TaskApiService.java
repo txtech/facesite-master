@@ -50,11 +50,10 @@ public class TaskApiService extends SimpleUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> doUserTask(String taskId,String token) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			String userId = userInfo.getId();
 			TaskInfo taskInfo = this.getTaskInfoById(taskId);
 			if(taskInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10019);
@@ -156,11 +155,10 @@ public class TaskApiService extends SimpleUserService {
 	 */
 	public CommonResult<List<UserTaskReward>> getTaskRewardList(String token) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			String userId = userInfo.getId();
 			UserTaskReward userTaskReward = new UserTaskReward();
 			userTaskReward.setUserId(userId);
 			List<UserTaskReward> userTaskRewardList = userTaskRewardDao.findList(userTaskReward);
@@ -180,10 +178,7 @@ public class TaskApiService extends SimpleUserService {
 		try {
 			String userId = "";
 			if(StringUtils.isNotEmpty(token)){
-				UserInfo userInfo = this.getUserInfoByToken(token);
-				if(userInfo !=null){
-					userId  = userInfo.getId();
-				}
+				userId  = this.getUserIdByToken(token);
 			}
 			List<TaskInfo> newList = new ArrayList<>();
 			List<TaskInfo> taskInfoList = taskInfoDao.findList(new TaskInfo());
@@ -211,7 +206,6 @@ public class TaskApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<TaskInfo> getTaskInfo(TaskInfo taskInfo) {
 		try {
 			TaskInfo result = taskInfoDao.getByEntity(taskInfo);
@@ -227,14 +221,13 @@ public class TaskApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<UserTask> getUserTaskInfo(String token) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserTask result = this.getUserTaskByUserId(userInfo.getId());
+			UserTask result = this.getUserTaskByUserId(userId);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取用户任务详情异常",e);

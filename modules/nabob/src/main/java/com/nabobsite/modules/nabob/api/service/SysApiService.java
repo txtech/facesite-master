@@ -38,7 +38,6 @@ public class SysApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<JSONObject> getImgRandomCode() {
 		try {
 			Map<String,String> codeMap = CaptchaUtils.generateSimpleBase64Captcha();
@@ -68,7 +67,6 @@ public class SysApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> checkImgRandomCode(VerificationCodeModel verificationCodeModel) {
 		try {
 			String code = verificationCodeModel.getCode();
@@ -89,7 +87,6 @@ public class SysApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> getRandomCode(SmsModel smsModel) {
 		try {
 			String phone = smsModel.getPhoneNumber();
@@ -109,7 +106,6 @@ public class SysApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> checkRandomCode(SmsModel smsModel) {
 		try {
 			String phoneNumber = smsModel.getPhoneNumber();
@@ -130,7 +126,6 @@ public class SysApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> sendSms( SmsModel smsModel) {
 		try {
 			String phone = smsModel.getPhoneNumber();
@@ -151,7 +146,6 @@ public class SysApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> checkSmsCode(SmsModel smsModel) {
 		try {
 			String phoneNumber = smsModel.getPhoneNumber();
@@ -172,7 +166,6 @@ public class SysApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/17 1:26 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean verifImgRandomCode(String codeKey, String randomCode) {
 		try {
 			if(StringUtils.isAnyEmpty(codeKey,randomCode)){
@@ -195,7 +188,6 @@ public class SysApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/17 1:26 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean verifRandomCode(String phone, String randomCode) {
 		try {
 			if(StringUtils.isAnyEmpty(phone,randomCode)){
@@ -218,7 +210,6 @@ public class SysApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/17 1:26 下午
 	*/
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean verifSmsCode(String phone, String smsCode) {
 		try {
 			if(StringUtils.isAnyEmpty(phone,smsCode)){

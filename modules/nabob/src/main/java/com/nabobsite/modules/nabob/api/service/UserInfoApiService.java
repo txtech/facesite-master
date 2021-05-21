@@ -149,72 +149,6 @@ public class UserInfoApiService extends SimpleUserService {
 	}
 
 	/**
-	 * @desc 获取邀请好友链接
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> shareFriends(String token) {
-		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("pid",userInfo.getId());
-			jsonObject.put("sid",userInfo.getParentSysId());
-			String registerUrl = "param_parent="+ HiDesUtils.desEnCode(jsonObject.toString());
-			JSONObject result = new JSONObject();
-			result.put("shareUrl",registerUrl);
-			return ResultUtil.success(result);
-		} catch (Exception e) {
-			logger.error("获取邀请好友链接异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 获取用户详情
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	*/
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<UserInfo> getUserInfo(String token) {
-		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			return ResultUtil.success(userInfo);
-		} catch (Exception e) {
-			logger.error("获取用户详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 获取用户详情
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<UserInfo>> getUserDirectTeamList(String token) {
-		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			UserInfo parms = new UserInfo();
-			parms.setParent1UserId(userInfo.getId());
-			List<UserInfo> userInfoList = userInfoDao.findList(parms);
-			return ResultUtil.success(userInfoList);
-		} catch (Exception e) {
-			logger.error("获取用户详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
 	 * @desc 用户登陆
 	 * @author nada
 	 * @create 2021/5/11 10:13 下午
@@ -394,12 +328,75 @@ public class UserInfoApiService extends SimpleUserService {
 		}
 	}
 
+
+	/**
+	 * @desc 获取邀请好友链接
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	public CommonResult<JSONObject> shareFriends(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("pid",userInfo.getId());
+			jsonObject.put("sid",userInfo.getParentSysId());
+			String registerUrl = "param_parent="+ HiDesUtils.desEnCode(jsonObject.toString());
+			JSONObject result = new JSONObject();
+			result.put("shareUrl",registerUrl);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("获取邀请好友链接异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 获取用户详情
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	public CommonResult<UserInfo> getUserInfo(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			return ResultUtil.success(userInfo);
+		} catch (Exception e) {
+			logger.error("获取用户详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 获取直推用户列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	public CommonResult<List<UserInfo>> getUserDirectTeamList(String token) {
+		try {
+			UserInfo userInfo = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			UserInfo parms = new UserInfo();
+			parms.setParent1UserId(userInfo.getId());
+			List<UserInfo> userInfoList = userInfoDao.findList(parms);
+			return ResultUtil.success(userInfoList);
+		} catch (Exception e) {
+			logger.error("获取直推用户列表异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
 	/**
 	 * @desc 获取会员资格
 	 * @author nada
 	 * @create 2021/5/19 9:25 下午
 	*/
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<MemberShip> getMemberShipInfo(String id) {
 		try {
 			MemberShip memberShip = new MemberShip();
@@ -413,17 +410,16 @@ public class UserInfoApiService extends SimpleUserService {
 	}
 
 	/**
-	 * @desc 获取会员资格
+	 * @desc 获取会员资格列表
 	 * @author nada
 	 * @create 2021/5/19 9:25 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<MemberShip>> getMemberShip() {
 		try {
 			List<MemberShip> shipList = memberShipDao.findList(new MemberShip());
 			return ResultUtil.success(shipList);
 		} catch (Exception e) {
-			logger.error("获取系统配置异常",e);
+			logger.error("获取会员资格列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
@@ -433,7 +429,6 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<JSONObject> getSysConfig() {
 		try {
 			JSONObject configJson = new JSONObject();
@@ -442,10 +437,6 @@ public class UserInfoApiService extends SimpleUserService {
 				String key = sysConfig.getKey();
 				String value = sysConfig.getValue();
 				if(StringUtils.isAnyBlank(key,value)){
-					continue;
-				}
-				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_COUNTDOWN_TIME)){
-					configJson.put("countDownTime",value);
 					continue;
 				}
 				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_CURRENT_VERSION)){

@@ -41,13 +41,13 @@ public class UserAccountApiService extends SimpleUserService {
 	/**
 	 * @desc 用户认领增值账户
 	 * @author nada
-	 * @create 2021/5/11 10:33 下午
+	 * @create 2021/5/11 10:33 下午ø
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> claim(String token) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			return ResultUtil.success(true);
@@ -62,15 +62,14 @@ public class UserAccountApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(String token) {
+	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(String token,int type) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			String userId = userInfo.getId();
 			UserAccountDetail userAccountDetail = new UserAccountDetail();
+			userAccountDetail.setType(type);
 			userAccountDetail.setUserId(userId);
 			List<UserAccountDetail> userAccountDetailList = userAccountDetailDao.findList(userAccountDetail);
 			return ResultUtil.success(userAccountDetailList);
@@ -85,14 +84,13 @@ public class UserAccountApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<UserAccount> getUserAccountInfo(String token) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserAccount result = this.getUserAccountByUserId(userInfo.getId());
+			UserAccount result = this.getUserAccountByUserId(userId);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取用户账户异常",e);

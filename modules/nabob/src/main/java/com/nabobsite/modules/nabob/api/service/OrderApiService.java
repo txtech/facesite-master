@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
+import com.nabobsite.modules.nabob.api.service.simple.SimpleOrderService;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.entity.CommonContact;
 import com.nabobsite.modules.nabob.api.entity.InstanceContact;
@@ -33,10 +34,7 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly=true)
-public class OrderApiService extends SimpleUserService {
-
-	@Autowired
-	private OrderDao orderDao;
+public class OrderApiService extends SimpleOrderService {
 
 	@Autowired
 	private OrderHander orderHander;
@@ -62,15 +60,14 @@ public class OrderApiService extends SimpleUserService {
 			if(CommonContact.isLesserOrEqual(payMoney, CommonContact.ZERO)){
 				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
-			UserInfo userInfo = getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			SysChannel channel = this.getOneChannel();
 			if(channel == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			String userId = userInfo.getId();
 			synchronized (userId) {
 				order.setUserId(userId);
 				String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
@@ -123,61 +120,16 @@ public class OrderApiService extends SimpleUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<Order>> getOrderList(Order order, String token) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			String userId = userInfo.getId();
 			order.setUserId(userId);
 			List<Order> orderList = orderDao.findList(order);
 			return ResultUtil.success(orderList);
 		} catch (Exception e) {
 			logger.error("获取订单列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 获取订单详情
-	 * @author nada
-	 * @create 2021/5/12 1:10 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Order> getOrderInfo(Order order, String token) {
-		try {
-			if(order == null){
-				return ResultUtil.failed(I18nCode.CODE_10007);
-			}
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			String userId = userInfo.getId();
-			order.setUserId(userId);
-			Order result = orderDao.getByEntity(order);
-			return ResultUtil.success(result);
-		} catch (Exception e) {
-			logger.error("获取订单详情异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 根据订单号获取
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	public Order getOrderByOrderNo(String orderNo) {
-		try {
-			if(StringUtils.isEmpty(orderNo)){
-				return null;
-			}
-			Order order = new Order();
-			order.setOrderNo(orderNo);
-			return orderDao.getByEntity(order);
-		} catch (Exception e) {
-			logger.error("根据订单号获取异常",e);
-			return null;
 		}
 	}
 
@@ -200,4 +152,27 @@ public class OrderApiService extends SimpleUserService {
 			return null;
 		}
 	}
+
+	/**
+	 * @desc 获取订单详情
+	 * @author nada
+	 * @create 2021/5/12 1:10 下午
+	 */
+	public CommonResult<Order> getOrderInfo(String token,String orderNo) {
+		try {
+			if(StringUtils.isEmpty(orderNo)){
+				return ResultUtil.failed(I18nCode.CODE_10007);
+			}
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			Order result = this.getOrderByOrderNo(orderNo);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("获取订单详情异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
 }

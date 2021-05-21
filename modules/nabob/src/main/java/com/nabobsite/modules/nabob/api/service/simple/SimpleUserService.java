@@ -201,6 +201,31 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return null;
 		}
 	}
+	/**
+	 * @desc 获取用户信息
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public String getUserIdByToken(String token) {
+		try {
+			if(StringUtils.isEmpty(token)){
+				return null;
+			}
+			String userId = (String) redisOpsUtil.get(RedisPrefixContant.getTokenUserKey(token));
+			if(StringUtils.isEmpty(userId)){
+				return null;
+			}
+			UserInfo userInfo = this.getUserInfoByUserId(userId);
+			if(userInfo == null){
+				return null;
+			}
+			return userInfo.getId();
+		} catch (Exception e) {
+			logger.error("获取用户信息异常,{}",token,e);
+			return "";
+		}
+	}
+
 
 
 

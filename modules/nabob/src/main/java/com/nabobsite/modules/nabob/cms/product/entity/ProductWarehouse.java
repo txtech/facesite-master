@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 产品仓库Entity
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-21
  */
 @Table(name="t1_product_warehouse", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -38,7 +38,8 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
-	}, orderBy="a.seq ASC"
+		@Column(name="type", attrName="type", label="类型 1", comment="类型 1:实时存取 2:定投"),
+	}, orderBy="a.id DESC"
 )
 public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 
@@ -54,6 +55,7 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private Integer type;		// 类型 1:实时存取 2:定投
 	private BigDecimal asstesHeldMoney;
 
 	public ProductWarehouse() {
@@ -163,6 +165,15 @@ public class ProductWarehouse extends DataEntity<ProductWarehouse> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+
+	@NotNull(message="类型 1不能为空")
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	public BigDecimal getAsstesHeldMoney() {

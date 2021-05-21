@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户产品仓库日志Entity
  * @author face
- * @version 2021-05-19
+ * @version 2021-05-21
  */
 @Table(name="t1_user_product_warehouse_log", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -35,6 +35,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
+		@Column(name="product_type", attrName="productType", label="产品类型：1 随存随取 2", comment="产品类型：1 随存随取 2:定投"),
 	}, orderBy="a.id DESC"
 )
 public class UserProductWarehouseLog extends DataEntity<UserProductWarehouseLog> {
@@ -48,6 +49,7 @@ public class UserProductWarehouseLog extends DataEntity<UserProductWarehouseLog>
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private Integer productType;		// 产品类型：1 随存随取 2:定投
 	
 	public UserProductWarehouseLog() {
 		this(null);
@@ -129,6 +131,14 @@ public class UserProductWarehouseLog extends DataEntity<UserProductWarehouseLog>
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	
+	public Integer getProductType() {
+		return productType;
+	}
+
+	public void setProductType(Integer productType) {
+		this.productType = productType;
 	}
 	
 }

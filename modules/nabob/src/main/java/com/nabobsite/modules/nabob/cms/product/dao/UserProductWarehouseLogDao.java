@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouseLog;
 /**
  * 用户产品仓库日志DAO接口
  * @author face
- * @version 2021-05-19
+ * @version 2021-05-21
  */
 @MyBatisDao
 public interface UserProductWarehouseLogDao extends CrudDao<UserProductWarehouseLog> {

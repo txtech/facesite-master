@@ -3,8 +3,6 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.lang.StringUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
@@ -51,11 +49,10 @@ public class ProductApiService extends SimpleProductService {
 			if(CommonContact.isLesserOrEqualZero(money)){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo== null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			String userId = userInfo.getId();
 			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
 			if(productWarehouse == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
@@ -117,11 +114,10 @@ public class ProductApiService extends SimpleProductService {
 			if(CommonContact.isLesserOrEqualZero(money)){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo== null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			String userId = userInfo.getId();
 			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
 			if(productWarehouse == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
@@ -179,11 +175,10 @@ public class ProductApiService extends SimpleProductService {
 			if(CommonContact.isLesserOrEqualZero(money)){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo== null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			String userId = userInfo.getId();
 			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
 			if(productWarehouse == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
@@ -333,7 +328,6 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<ProductBot>> getProductBotList(ProductBot productBot) {
 		try {
 			List<ProductBot> result = productBotDao.findList(productBot);
@@ -348,7 +342,6 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<ProductBot> getProductBotInfo(String token, ProductBot productBot) {
 		try {
 			ProductBot result = productBotDao.getByEntity(productBot);
@@ -363,14 +356,13 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<UserProductBot> getUserBotInfo(String token,String botId) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserProductBot result = this.getUserProductBotByUserAndId(userInfo.getId(),botId);
+			UserProductBot result = this.getUserProductBotByUserAndId(userId,botId);
 			if(result ==  null){
 				result = new UserProductBot();
 			}
@@ -392,15 +384,11 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<ProductWarehouse>> getProductWarehouseList(String token,ProductWarehouse productWarehouse) {
 		try {
 			String userId = "";
 			if(StringUtils.isNotEmpty(token)){
-				UserInfo userInfo = this.getUserInfoByToken(token);
-				if(userInfo !=null){
-					userId  = userInfo.getId();
-				}
+				userId  = this.getUserIdByToken(token);
 			}
 			List<ProductWarehouse> newList = new ArrayList<>();
 			List<ProductWarehouse> list = productWarehouseDao.findList(productWarehouse);
@@ -427,7 +415,6 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<ProductWarehouse> getProductWarehouseInfo(String token,String warehouseId) {
 		try {
 			ProductWarehouse productWarehouse = new ProductWarehouse();
@@ -444,17 +431,13 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<UserProductWarehouse> getUserWarehouseInfo(String token, String warehouseId) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserProductWarehouse result = this.getUserProductWarehouseByUserIdAndId(userInfo.getId(),warehouseId);
-			if(result == null){
-				result = new UserProductWarehouse();
-			}
+			UserProductWarehouse result = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品详情异常",e);
@@ -466,17 +449,13 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/20 9:45 下午
 	*/
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<UserAccountWarehouse> getUserAccountWarehouseInfo(String token) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserAccountWarehouse result = this.getUserAccountWarehouseByUserId(userInfo.getId());
-			if(result == null){
-				result = new UserAccountWarehouse();
-			}
+			UserAccountWarehouse result = this.getUserAccountWarehouseByUserId(userId);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品账户异常",e);
@@ -491,42 +470,20 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<UserProductWarehouseLog>> getUserWarehousePersonalIncomeList(String token) {
+	public CommonResult<List<UserProductWarehouseLog>> getUserWarehouseIncomeList(String token,int type,int productType) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
-			userProductWarehouseLog.setUserId(userInfo.getId());
-			userProductWarehouseLog.setType(CommonContact.WAREHOUSE_TYPE_1);
+			userProductWarehouseLog.setUserId(userId);
+			userProductWarehouseLog.setType(type);
+			userProductWarehouseLog.setProductType(productType);
 			List<UserProductWarehouseLog> result = userProductWarehouseLogDao.findList(userProductWarehouseLog);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
-			logger.error("用户云仓库个人收入记录列表异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-	/**
-	 * @desc 用户云仓库团队收入记录列表
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<UserProductWarehouseLog>> getUserWarehouseTeamIncomeList(String token) {
-		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
-			userProductWarehouseLog.setUserId(userInfo.getId());
-			userProductWarehouseLog.setType(CommonContact.WAREHOUSE_TYPE_2);
-			List<UserProductWarehouseLog> result = userProductWarehouseLogDao.findList(userProductWarehouseLog);
-			return ResultUtil.success(result);
-		} catch (Exception e) {
-			logger.error("用户云仓库团队收入记录列表异常",e);
+			logger.error("用户云仓库收入记录列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
@@ -535,15 +492,14 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<List<UserProductWarehouseRecord>> getUserWarehouseOperationList(String token) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId  = this.getUserIdByToken(token);
+			if(!CommonContact.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserProductWarehouseRecord userProductWarehouseRecord = new UserProductWarehouseRecord();
-			userProductWarehouseRecord.setUserId(userInfo.getId());
+			userProductWarehouseRecord.setUserId(userId);
 			List<UserProductWarehouseRecord> result = userProductWarehouseRecordDao.findList(userProductWarehouseRecord);
 			return ResultUtil.success(result);
 		} catch (Exception e) {

@@ -56,8 +56,6 @@ public class OrderApiController extends BaseController {
 	@ApiOperation(value = "获取订单详情")
 	public CommonResult<Order> getOrderInfo(@PathVariable String orderNo, HttpServletRequest request) {
 		String token = request.getHeader(CommonContact.AUTHORIZATION);
-		Order order = new Order();
-		order.setOrderNo(orderNo);
-		return orderApiService.getOrderInfo(order,token);
+		return orderApiService.getOrderInfo(token,orderNo);
 	}
 }
