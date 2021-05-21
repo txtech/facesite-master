@@ -237,9 +237,6 @@ public class CommonContact {
             cal.add(Calendar.HOUR,hour);
             date = cal.getTime();
             return date;
-            //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            //System.out.println("after:" + format.format(date));
-            //return format.format(date);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
