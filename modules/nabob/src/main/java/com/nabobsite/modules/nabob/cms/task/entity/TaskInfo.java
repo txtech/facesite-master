@@ -47,7 +47,7 @@ public class TaskInfo extends DataEntity<TaskInfo> {
 
 	private static final long serialVersionUID = 1L;
 	private String name;		// 任务名称
-	private Integer type;		// 任务类型 1:个数 2:金额
+	private Integer type;		// 任务类型 1:分享好友 2:观看视频 3:邀请好友 4:定期投资
 	private String content;		// content
 	private Integer taskNumber;		// 总任务个数
 	private String buttonName;		// button_name
