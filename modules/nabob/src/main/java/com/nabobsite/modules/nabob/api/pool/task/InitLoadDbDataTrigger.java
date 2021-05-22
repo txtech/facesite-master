@@ -1,11 +1,10 @@
-package com.nabobsite.modules.nabob.api.common.task;
+package com.nabobsite.modules.nabob.api.pool.task;
 
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerOperation;
-import com.nabobsite.modules.nabob.api.entity.I18nUtils;
+import com.nabobsite.modules.nabob.api.pool.trigger.TriggerOperation;
+import com.nabobsite.modules.nabob.api.common.I18nUtils;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysI18nDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysI18n;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.nabobsite.modules.nabob.api.entity;
+package com.nabobsite.modules.nabob.api.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
@@ -23,7 +23,7 @@ import java.util.Date;
  * @Date 2021/5/11 11:23 上午
  * @Version 1.0
  */
-public class InstanceContact {
+public class InstanceUtils {
 
     /**
      * @desc 初始化用户信息
@@ -42,8 +42,8 @@ public class InstanceContact {
             userInfo.setTeam2Num(0);
             userInfo.setTeam3Num(0);
             userInfo.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().getBytes()));
-            userInfo.setLock(CommonContact.USER_LOCK_1);
-            userInfo.setUserStatus(CommonContact.USER_STATUS_1);
+            userInfo.setLock(ContactUtils.USER_LOCK_1);
+            userInfo.setUserStatus(ContactUtils.USER_STATUS_1);
             if(StringUtils.isEmpty(userInfo.getParentSysId())){
                 userInfo.setParentSysId("0");
             }
@@ -83,7 +83,7 @@ public class InstanceContact {
             userAccount.setTeam2Money(new BigDecimal("0"));
             userAccount.setTeam3Money(new BigDecimal("0"));
             userAccount.setRewardMoney(LogicStaticContact.USER_TACK_BASE_MONEY);
-            userAccount.setAccountStatus(CommonContact.USER_ACCOUNT_STATUS_1);
+            userAccount.setAccountStatus(ContactUtils.USER_ACCOUNT_STATUS_1);
             return userAccount;
         }
     }
@@ -140,11 +140,11 @@ public class InstanceContact {
         order.setIsNewRecord(true);
         order.setOrderNo(orderNo);
         order.setPayRate(sysChannel.getPayRate());
-        order.setPayType(CommonContact.ORDER_PAY_TYPE_1);
+        order.setPayType(ContactUtils.ORDER_PAY_TYPE_1);
         order.setChannelId(sysChannel.getId());
         order.setActualMoney(params.getPayMoney());
-        order.setType(CommonContact.ORDER_TYPE_RECHANGE);
-        order.setOrderStatus(CommonContact.ORDER_STATUS_1);
+        order.setType(ContactUtils.ORDER_TYPE_RECHANGE);
+        order.setOrderStatus(ContactUtils.ORDER_STATUS_1);
         return order;
     }
 
@@ -251,11 +251,11 @@ public class InstanceContact {
             UserTask userTask = new UserTask();
             userTask.setIsNewRecord(true);
             userTask.setUserId(userId);
-            userTask.setTaskStatus(CommonContact.USER_TASK_STATUS_1);
+            userTask.setTaskStatus(ContactUtils.USER_TASK_STATUS_1);
             userTask.setTaskInitialNum(LogicStaticContact.USER_TACK_BASE_MONEY);
             userTask.setTaskOrderNum(0);
             userTask.setTaskStartDay(new Date());
-            userTask.setTaskEndDay(CommonContact.addDateHour(24));
+            userTask.setTaskEndDay(ContactUtils.addDateHour(24));
             userTask.setTaskFinishData(new JSONObject().toJSONString());
             return userTask;
         }

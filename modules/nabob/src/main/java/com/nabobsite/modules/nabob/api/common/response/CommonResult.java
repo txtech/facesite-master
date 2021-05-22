@@ -1,6 +1,8 @@
 package com.nabobsite.modules.nabob.api.common.response;
 
 
+import com.nabobsite.modules.nabob.api.common.response.ResultCode;
+
 import java.io.Serializable;
 
 /**

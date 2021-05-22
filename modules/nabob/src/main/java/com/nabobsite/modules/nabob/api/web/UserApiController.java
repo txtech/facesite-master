@@ -3,11 +3,10 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
@@ -37,7 +36,7 @@ public class UserApiController extends BaseController {
 	@PostMapping(value = {"logout"})
 	@ApiOperation(value = "用户退出")
 	public CommonResult<Boolean> logout(HttpServletRequest request){
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return userInfoApiService.logout(token);
 	}
 
@@ -46,28 +45,28 @@ public class UserApiController extends BaseController {
 	public CommonResult<Boolean> updatePwd(@RequestBody UserInfo userInfo, HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		logger.info("用户修改密码,来者何人:{}",ip);
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return userInfoApiService.updatePwd(token,userInfo);
 	}
 
 	@ApiOperation(value = "用户获取详情")
 	@PostMapping(value = {"getUserInfo"})
 	public CommonResult<UserInfo> getUserInfo(HttpServletRequest request){
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return userInfoApiService.getUserInfo(token);
 	}
 
 	@ApiOperation(value = "用户获取直接团队列表")
 	@PostMapping(value = {"getUserDirectTeamList"})
 	public CommonResult<List<UserInfo>> getUserDirectTeamList(HttpServletRequest request){
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return userInfoApiService.getUserDirectTeamList(token);
 	}
 
 	@ApiOperation(value = "用户邀请好友链接")
 	@RequestMapping(value = {"shareFriends"})
 	public CommonResult<JSONObject> shareFriends(HttpServletRequest request){
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return userInfoApiService.shareFriends(token);
 	}
 }

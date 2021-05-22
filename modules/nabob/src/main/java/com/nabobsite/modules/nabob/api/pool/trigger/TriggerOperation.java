@@ -1,6 +1,6 @@
-package com.nabobsite.modules.nabob.api.common.trigger;
+package com.nabobsite.modules.nabob.api.pool.trigger;
 
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public abstract class TriggerOperation implements TriggerThread {
 	 */
 	public UserInfo getUserInfoByUserId(String userId) {
 		try {
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return null;
 			}
 			UserInfo userInfo = new UserInfo();

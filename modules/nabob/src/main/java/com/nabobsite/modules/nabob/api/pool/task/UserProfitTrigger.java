@@ -1,12 +1,9 @@
-package com.nabobsite.modules.nabob.api.common.task;
+package com.nabobsite.modules.nabob.api.pool.task;
 
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerOperation;
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerPoolManagerImpl;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.pool.trigger.TriggerOperation;
+import com.nabobsite.modules.nabob.api.pool.trigger.TriggerPoolManagerImpl;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @desc 用户注册触发器

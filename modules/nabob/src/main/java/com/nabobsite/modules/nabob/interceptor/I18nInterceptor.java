@@ -5,9 +5,9 @@ import com.jeesite.common.lang.StringUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.I18nUtils;
-import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.I18nUtils;
+import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import org.slf4j.Logger;
@@ -76,9 +76,9 @@ public class I18nInterceptor implements HandlerInterceptor {
             }
             lang = I18nUtils.getLangStandard(lang);
             Map<String,String> userLocal = new HashMap<>();
-            userLocal.put(CommonContact.TOKEN,token);
-            userLocal.put(CommonContact.USERID,userId);
-            userLocal.put(CommonContact.LANG,lang);
+            userLocal.put(ContactUtils.TOKEN,token);
+            userLocal.put(ContactUtils.USERID,userId);
+            userLocal.put(ContactUtils.LANG,lang);
             userThreadLocal.set(userLocal);
             return true;
         } catch (Exception e) {

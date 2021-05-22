@@ -2,7 +2,7 @@ package com.nabobsite.modules.nabob.pay.hander;
 
 import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
 import com.nabobsite.modules.nabob.pay.common.ResultListener;
@@ -37,11 +37,11 @@ public class OrderHander extends SimpleUserService {
                     JSONObject reqData = new JSONObject();
                     return india1OrderService.payOrder(reqData,this.ResultListener(order));
                 default:
-                    return CommonContact.failedMsg("未知的支付通道:" + source);
+                    return ContactUtils.failedMsg("未知的支付通道:" + source);
             }
         } catch (Exception e) {
             logger.error ("支付订单分发异常{}",orderNo, e);
-            return CommonContact.failedMsg("支付订单分发异常");
+            return ContactUtils.failedMsg("支付订单分发异常");
         }
     }
 
@@ -55,12 +55,12 @@ public class OrderHander extends SimpleUserService {
             public JSONObject successHandler (JSONObject resultData) {
                 logger.info ("获取监听successHandler结果:{}", resultData);
                 if (resultData == null || resultData.isEmpty ()) {
-                    return CommonContact.failedMsg ("下单响应为空,请稍后重试");
+                    return ContactUtils.failedMsg ("下单响应为空,请稍后重试");
                 }
                 String orderNo = order.getOrderNo();
                 if (!resultData.containsKey ("code")) {
                     String msg = resultData.containsKey ("msg")?resultData.getString ("msg"):"下单失败";
-                    return CommonContact.failedMsg (msg);
+                    return ContactUtils.failedMsg (msg);
                 }
                 //updateBaseOrderStatus (vcOrderNo, 1, "下单成功",pOrder,"","");
                 return resultData;
@@ -75,11 +75,11 @@ public class OrderHander extends SimpleUserService {
             public JSONObject failedHandler (JSONObject resultData) {
                 logger.info ("监听failedHandler结果:{}", resultData);
                 if (resultData == null || resultData.isEmpty ()) {
-                    return CommonContact.failedMsg ("下单响应为空,请稍后重试");
+                    return ContactUtils.failedMsg ("下单响应为空,请稍后重试");
                 }
                 String message = resultData.containsKey ("msg") ? resultData.getString ("msg") : "下单失败,请稍后重试";
                 //updateBaseOrderStatus(reqData.getString ("vcOrderNo"), 2, message,"","","");
-                return CommonContact.failedMsg ( message);
+                return ContactUtils.failedMsg ( message);
             }
         };
     }

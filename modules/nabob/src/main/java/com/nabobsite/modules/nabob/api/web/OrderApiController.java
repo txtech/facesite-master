@@ -3,17 +3,14 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.OrderApiService;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -40,7 +37,7 @@ public class OrderApiController extends BaseController {
 	@ApiOperation(value = "充值订单")
 	public CommonResult<JSONObject> rechargeOrder(@RequestBody Order order, HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		order.setIpaddress(ip);
 		return orderApiService.rechargeOrder(order,token);
 	}
@@ -48,14 +45,14 @@ public class OrderApiController extends BaseController {
 	@PostMapping(value = {"getOrderList"})
 	@ApiOperation(value = "获取订单列表")
 	public CommonResult<List<Order>> getOrderList(HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return orderApiService.getOrderList(new Order(),token);
 	}
 
 	@PostMapping(value = {"getOrderInfo/{orderNo}"})
 	@ApiOperation(value = "获取订单详情")
 	public CommonResult<Order> getOrderInfo(@PathVariable String orderNo, HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return orderApiService.getOrderInfo(token,orderNo);
 	}
 }

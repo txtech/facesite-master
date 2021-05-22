@@ -1,4 +1,4 @@
-package com.nabobsite.modules.nabob.api.common.trigger;
+package com.nabobsite.modules.nabob.api.pool.trigger;
 
 public interface TriggerThread extends Runnable{
 

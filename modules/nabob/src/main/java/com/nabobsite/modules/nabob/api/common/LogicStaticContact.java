@@ -1,4 +1,4 @@
-package com.nabobsite.modules.nabob.api.entity;
+package com.nabobsite.modules.nabob.api.common;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -20,7 +20,6 @@ public class LogicStaticContact {
     public final static BigDecimal USER_TACK_BASE_MONEY = new BigDecimal("990");
     //用户增值比例
     public final static BigDecimal PRODUCT_COMMISSION_OTHER_RATE = new BigDecimal("0.5");
-
 
     //用户等级
     public final static int USER_LEVEL_0 = 0;
@@ -125,7 +124,7 @@ public class LogicStaticContact {
         for(Map.Entry<Integer, BigDecimal> entry : LEVEL_BALANCE_MIN_BALANCE.entrySet()){
             int key = entry.getKey();
             BigDecimal value = entry.getValue();
-            if(CommonContact.isBigger(money,value) && tempMaxLevel < key){
+            if(ContactUtils.isBigger(money,value) && tempMaxLevel < key){
                 tempMaxLevel = key;
             }
         }

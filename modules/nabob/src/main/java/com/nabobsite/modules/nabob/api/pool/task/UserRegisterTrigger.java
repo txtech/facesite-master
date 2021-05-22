@@ -1,10 +1,7 @@
-package com.nabobsite.modules.nabob.api.common.task;
+package com.nabobsite.modules.nabob.api.pool.task;
 
-import com.nabobsite.modules.nabob.api.common.TriggerApiService;
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerOperation;
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerPoolManagerImpl;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
+import com.nabobsite.modules.nabob.api.pool.trigger.TriggerOperation;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.slf4j.Logger;
@@ -49,30 +46,30 @@ public class UserRegisterTrigger extends TriggerOperation {
 		try {
 			//增加1人
 			int num = 1;
-			if(CommonContact.isOkUserId(parent1UserId)){
+			if(ContactUtils.isOkUserId(parent1UserId)){
 				UserInfo userInfo = new UserInfo();
 				userInfo.setId(parent1UserId);
 				userInfo.setTeam1Num(num);
 				long dbResult = userInfoDao.updateTeamNum(userInfo);
-				if(CommonContact.dbResult(dbResult)){
+				if(ContactUtils.dbResult(dbResult)){
 					logger.info("修改1级团队人数:{}",parent1UserId);
 				}
 			}
-			if(CommonContact.isOkUserId(parent2UserId)){
+			if(ContactUtils.isOkUserId(parent2UserId)){
 				UserInfo userInfo = new UserInfo();
 				userInfo.setId(parent2UserId);
 				userInfo.setTeam2Num(num);
 				long dbResult = userInfoDao.updateTeamNum(userInfo);
-				if(CommonContact.dbResult(dbResult)){
+				if(ContactUtils.dbResult(dbResult)){
 					logger.info("修改2级团队人数:{}",parent2UserId);
 				}
 			}
-			if(CommonContact.isOkUserId(parent3UserId)){
+			if(ContactUtils.isOkUserId(parent3UserId)){
 				UserInfo userInfo = new UserInfo();
 				userInfo.setId(parent3UserId);
 				userInfo.setTeam3Num(num);
 				long dbResult = userInfoDao.updateTeamNum(userInfo);
-				if(CommonContact.dbResult(dbResult)){
+				if(ContactUtils.dbResult(dbResult)){
 					logger.info("修改3级团队人数:{}",parent3UserId);
 				}
 			}

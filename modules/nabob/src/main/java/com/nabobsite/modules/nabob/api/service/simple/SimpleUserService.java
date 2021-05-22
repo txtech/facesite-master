@@ -7,20 +7,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.service.CrudService;
-import com.nabobsite.modules.nabob.api.common.response.I18nCode;
-import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
-import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
-import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.InstanceContact;
-import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.InstanceUtils;
+import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
@@ -69,7 +65,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public boolean saveUserAndAccount(UserInfo initUser) {
 		try {
 			long dbResult = userInfoDao.insert(initUser);
-			if(!CommonContact.dbResult(dbResult)){
+			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}
 			//修改邀请秘文
@@ -77,18 +73,18 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			String parent1UserId = initUser.getParentSysId();
 			this.updateUserSecret(userId,parent1UserId);
 			//初始化总账户
-			dbResult = userAccountDao.insert(InstanceContact.initUserAccount(userId));
-			if(!CommonContact.dbResult(dbResult)){
+			dbResult = userAccountDao.insert(InstanceUtils.initUserAccount(userId));
+			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}
 			//初始化云仓库账户
-			dbResult = userAccountWarehouseDao.insert(InstanceContact.initUserAccountWarehouse(userId));
-			if(!CommonContact.dbResult(dbResult)){
+			dbResult = userAccountWarehouseDao.insert(InstanceUtils.initUserAccountWarehouse(userId));
+			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}
 			//初始化奖励账户
-			dbResult = userTaskDao.insert(InstanceContact.initUserTask(userId));
-			if(!CommonContact.dbResult(dbResult)){
+			dbResult = userTaskDao.insert(InstanceUtils.initUserTask(userId));
+			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}
 			return true;
@@ -106,7 +102,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public boolean updateUserSecret(String userId,String parentSysId) {
 		try {
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return false;
 			}
 			UserInfo userInfo = new UserInfo();
@@ -116,7 +112,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			userInfo.setId(userId);
 			userInfo.setInviteSecret( HiDesUtils.desEnCode(secretJson.toString()));
 			long dbResult = userInfoDao.update(userInfo);
-			return CommonContact.dbResult(dbResult);
+			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("修改用户邀请秘文异常,{}",userId,e);
 			return true;
@@ -131,14 +127,14 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public boolean updateLoginIp(String userId,String ip) {
 		try {
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return false;
 			}
 			UserInfo userInfo = new UserInfo();
 			userInfo.setId(userId);
 			userInfo.setLoginIp(ip);
 			long dbResult = userInfoDao.update(userInfo);
-			return CommonContact.dbResult(dbResult);
+			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("修改用户登陆IP异常,{}",userId,e);
 			return true;
@@ -153,7 +149,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	public UserAccount getUserAccountByUserId(String userId) {
 		try {
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return null;
 			}
 			UserAccount userAccount = new UserAccount();
@@ -207,7 +203,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	public UserInfo getUserInfoByUserId(String userId) {
 		try {
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return null;
 			}
 			UserInfo userInfo = new UserInfo();
@@ -344,7 +340,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	public JSONObject getUserTaskNumJsonByUserId(String userId) {
 		try {
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return null;
 			}
 			UserTask userTaskPrams = new UserTask();
@@ -352,7 +348,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			UserTask userTask = userTaskDao.getByEntity(userTaskPrams);
 			if (userTask != null) {
 				String finishData = userTask.getTaskFinishData();
-				return CommonContact.str2JSONObject(finishData);
+				return ContactUtils.str2JSONObject(finishData);
 			}
 			return null;
 		} catch (Exception e) {

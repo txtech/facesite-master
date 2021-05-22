@@ -1,4 +1,4 @@
-package com.nabobsite.modules.nabob.api.common.trigger;
+package com.nabobsite.modules.nabob.api.pool.trigger;
 
 import cn.hutool.core.thread.NamedThreadFactory;
 import org.slf4j.Logger;

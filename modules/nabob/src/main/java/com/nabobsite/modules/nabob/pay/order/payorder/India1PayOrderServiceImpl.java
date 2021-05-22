@@ -3,7 +3,7 @@ package com.nabobsite.modules.nabob.pay.order.payorder;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.lang.DateUtils;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.pay.common.ResultListener;
 import com.nabobsite.modules.nabob.utils.Md5CoreUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -39,7 +39,7 @@ public class India1PayOrderServiceImpl {
     public JSONObject payOrder(JSONObject reqData, ResultListener listener){
         try {
             if(true){
-                JSONObject result = CommonContact.successMsg("下单成功");
+                JSONObject result = ContactUtils.successMsg("下单成功");
                 result.put("pOrderNo","123456");
                 return listener.successHandler(result);
             }
@@ -62,32 +62,32 @@ public class India1PayOrderServiceImpl {
             String response = HttpRequest.post(payUrl).body(param.toString()).execute().body();
             logger.info("印度1支付接口响应:{}",response);
             if(StringUtils.isEmpty(response)){
-                JSONObject result = CommonContact.failedMsg("下单响应为空");
+                JSONObject result = ContactUtils.failedMsg("下单响应为空");
                 return listener.paddingHandler(result);
             }
             JSONObject resData = JSONObject.parseObject(response);
             if(resData == null || resData.isEmpty()){
-                JSONObject result = CommonContact.failedMsg("下单解析为空");
+                JSONObject result = ContactUtils.failedMsg("下单解析为空");
                 return listener.paddingHandler(result);
             }
             String msg = resData.containsKey("msg")?resData.getString("msg"):"";
             String status = resData.containsKey("status")?resData.getString("status"):"";
             if(!"success".equalsIgnoreCase(status)){
-                JSONObject result = CommonContact.failedMsg("下单失败:"+msg);
+                JSONObject result = ContactUtils.failedMsg("下单失败:"+msg);
                 return listener.failedHandler(result);
             }
             JSONObject dataJson = resData.containsKey("data")?resData.getJSONObject("data"):null;
             if(dataJson == null){
-                JSONObject result = CommonContact.failedMsg("dataJson解析为空");
+                JSONObject result = ContactUtils.failedMsg("dataJson解析为空");
                 return listener.paddingHandler(result);
             }
             String pOrderNo = dataJson.containsKey("out_order_no")?dataJson.getString("out_order_no"):"";
-            JSONObject result = CommonContact.successMsg("下单成功");
+            JSONObject result = ContactUtils.successMsg("下单成功");
             result.put("pOrderNo",pOrderNo);
             return listener.successHandler(result);
         } catch (Exception e) {
             logger.error("印度1支付接口异常",e);
-            return listener.paddingHandler(CommonContact.failedMsg("下单接口超时"));
+            return listener.paddingHandler(ContactUtils.failedMsg("下单接口超时"));
         }
     }
 
@@ -109,12 +109,12 @@ public class India1PayOrderServiceImpl {
             String response = HttpRequest.post(payUrl).body(param.toString()).execute().body();
             logger.info("印度1支付接口响应:{}",response);
             if(StringUtils.isEmpty(response)){
-                JSONObject result = CommonContact.failedMsg("下单响应为空");
+                JSONObject result = ContactUtils.failedMsg("下单响应为空");
                 return listener.paddingHandler(result);
             }
             JSONObject resData = JSONObject.parseObject(response);
             if(resData == null || resData.isEmpty()){
-                JSONObject result = CommonContact.failedMsg("下单解析为空");
+                JSONObject result = ContactUtils.failedMsg("下单解析为空");
                 return listener.paddingHandler(result);
             }
             String msg = resData.containsKey("msg")?resData.getString("msg"):"";
@@ -123,16 +123,16 @@ public class India1PayOrderServiceImpl {
             String pOrderNo = resData.containsKey("transaction_id")?resData.getString("transaction_id"):"";
             String status = resData.containsKey("trade_state")?resData.getString("trade_state"):"";
             if("success".equalsIgnoreCase(status) && "00".equalsIgnoreCase(returncode)){
-                JSONObject result = CommonContact.successMsg("下单成功");
+                JSONObject result = ContactUtils.successMsg("下单成功");
                 result.put("pOrderNo",pOrderNo);
                 return listener.successHandler(result);
             }
-            JSONObject result = CommonContact.successMsg("未支付");
+            JSONObject result = ContactUtils.successMsg("未支付");
             result.put("pOrderNo",pOrderNo);
             return listener.paddingHandler(result);
         } catch (Exception e) {
             logger.error("印度1支付接口异常",e);
-            return listener.paddingHandler(CommonContact.failedMsg("下单接口超时"));
+            return listener.paddingHandler(ContactUtils.failedMsg("下单接口超时"));
         }
     }
 }

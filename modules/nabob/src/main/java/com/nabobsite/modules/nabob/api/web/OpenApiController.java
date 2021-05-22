@@ -3,11 +3,10 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.model.SmsModel;
 import com.nabobsite.modules.nabob.api.model.VerificationCodeModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
@@ -105,14 +104,14 @@ public class OpenApiController extends BaseController {
 	@RequestMapping(value = {"getTaskList"})
 	@ApiOperation(value = "获取任务列表")
 	public CommonResult<List<TaskInfo>> getTaskList(HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return taskApiService.getTaskList(token);
 	}
 
 	@RequestMapping(value = {"getProductWarehouseList"})
 	@ApiOperation(value = "云仓库产品列表")
 	public CommonResult<List<ProductWarehouse>> getProductWarehouseList(HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return productApiService.getProductWarehouseList(token,new ProductWarehouse());
 	}
 

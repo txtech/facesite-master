@@ -3,25 +3,20 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.lang.StringUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.InstanceContact;
-import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouse;
-import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
-import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskProgressDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskProgress;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -58,7 +52,7 @@ public class TaskApiService extends SimpleUserService {
 	public CommonResult<Boolean> doUserTask(String taskId,String token) {
 		try {
 			String userId  = this.getUserIdByToken(token);
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			TaskInfo taskInfo = this.getTaskInfoById(taskId);
@@ -75,12 +69,12 @@ public class TaskApiService extends SimpleUserService {
 				}
 
 				int taskStatus = userTask.getTaskStatus();
-				if(taskStatus == CommonContact.USER_TASK_STATUS_3){
+				if(taskStatus == ContactUtils.USER_TASK_STATUS_3){
 					logger.error("任务已经完成:{},{}",userId,taskId);
 					return ResultUtil.failed(I18nCode.CODE_10102);
 				}
 				int taskFinishNumber = 0;
-				JSONObject taskJson = CommonContact.str2JSONObject(userTask.getTaskFinishData());
+				JSONObject taskJson = ContactUtils.str2JSONObject(userTask.getTaskFinishData());
 				if(taskJson !=null){
 					taskFinishNumber = taskJson.containsKey(taskId)?taskJson.getInteger(taskId):0;
 					if(taskFinishNumber >= taskNum){
@@ -113,20 +107,20 @@ public class TaskApiService extends SimpleUserService {
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
 	public Boolean sendReward(String userId,String taskId,int type,BigDecimal rewardMoney,int finishNumber,int taskNum) {
 		try {
-			String title = CommonContact.USER_ACCOUNT_DETAIL_TITLE_3;
-			if(type == CommonContact.USER_ACCOUNT_REWARD_TYPE_1){
-				title = CommonContact.USER_ACCOUNT_REWARD_TITLE_1;
-			}else if(type == CommonContact.USER_ACCOUNT_REWARD_TYPE_2){
-				title = CommonContact.USER_ACCOUNT_REWARD_TITLE_2;
-			}else if(type == CommonContact.USER_ACCOUNT_REWARD_TYPE_3){
-				title = CommonContact.USER_ACCOUNT_REWARD_TITLE_3;
-			}else if(type == CommonContact.USER_ACCOUNT_REWARD_TYPE_4){
-				title = CommonContact.USER_ACCOUNT_REWARD_TITLE_4;
+			String title = ContactUtils.USER_ACCOUNT_DETAIL_TITLE_3;
+			if(type == ContactUtils.USER_ACCOUNT_REWARD_TYPE_1){
+				title = ContactUtils.USER_ACCOUNT_REWARD_TITLE_1;
+			}else if(type == ContactUtils.USER_ACCOUNT_REWARD_TYPE_2){
+				title = ContactUtils.USER_ACCOUNT_REWARD_TITLE_2;
+			}else if(type == ContactUtils.USER_ACCOUNT_REWARD_TYPE_3){
+				title = ContactUtils.USER_ACCOUNT_REWARD_TITLE_3;
+			}else if(type == ContactUtils.USER_ACCOUNT_REWARD_TYPE_4){
+				title = ContactUtils.USER_ACCOUNT_REWARD_TITLE_4;
 			}
-			UserTaskReward userTaskReward = InstanceContact.initUserTaskReward(userId,taskId,type,title,finishNumber,taskNum,rewardMoney);
+			UserTaskReward userTaskReward = InstanceUtils.initUserTaskReward(userId,taskId,type,title,finishNumber,taskNum,rewardMoney);
 			userTaskReward.setUserId(userId);
 			long dbResult = userTaskRewardDao.insert(userTaskReward);
-			if(!CommonContact.dbResult(dbResult)){
+			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}
 			return userAccountApiService.updateAccountRewardMoney(userId,rewardMoney,taskId,title);
@@ -149,7 +143,7 @@ public class TaskApiService extends SimpleUserService {
 			userTaskPrams.setTaskOrderNum(finishNumber);
 			userTaskPrams.setTaskFinishData(taskJson.toJSONString());
 			long dbResult = userTaskDao.update(userTaskPrams);
-			return CommonContact.dbResult(dbResult);
+			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("修改任务完成数量异常",e);
 			return false;
@@ -164,7 +158,7 @@ public class TaskApiService extends SimpleUserService {
 	public CommonResult<List<UserTaskReward>> getTaskRewardList(String token) {
 		try {
 			String userId  = this.getUserIdByToken(token);
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserTaskReward userTaskReward = new UserTaskReward();
@@ -206,7 +200,7 @@ public class TaskApiService extends SimpleUserService {
 	public Boolean autoInitUserTaskProgress(int num) {
 		try {
 			for (int i = 0; i < num ; i++) {
-				ArrayList<String> list = new ArrayList(CommonContact.PHONE_NUM_AREA_CODE);
+				ArrayList<String> list = new ArrayList(ContactUtils.PHONE_NUM_AREA_CODE);
 				int randomIndex = new Random().nextInt(list.size());
 				String areaCode = list.get(randomIndex);
 				int code = SnowFlakeIDGenerator.getRandom4();
@@ -279,7 +273,7 @@ public class TaskApiService extends SimpleUserService {
 	public CommonResult<UserTask> getUserTaskInfo(String token) {
 		try {
 			String userId  = this.getUserIdByToken(token);
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserTask result = this.getUserTaskByUserId(userId);

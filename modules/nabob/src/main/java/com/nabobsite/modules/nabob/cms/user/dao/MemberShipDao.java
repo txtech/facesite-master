@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
 /**
  * 任务管理DAO接口
  * @author face
- * @version 2021-05-21
+ * @version 2021-05-22
  */
 @MyBatisDao
 public interface MemberShipDao extends CrudDao<MemberShip> {

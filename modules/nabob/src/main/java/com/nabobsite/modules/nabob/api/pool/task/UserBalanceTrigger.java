@@ -1,14 +1,12 @@
-package com.nabobsite.modules.nabob.api.common.task;
+package com.nabobsite.modules.nabob.api.pool.task;
 
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerOperation;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
+import com.nabobsite.modules.nabob.api.pool.trigger.TriggerOperation;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.LogicStaticContact;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -59,7 +57,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			}
 		}else{
 			int userLock = this.getUserLock(userId,currentLevel,updateMoney);
-			if(currentLock != CommonContact.USER_LOCK_1 && userLock == CommonContact.USER_LOCK_1){
+			if(currentLock != ContactUtils.USER_LOCK_1 && userLock == ContactUtils.USER_LOCK_1){
 				Boolean isUpLevelOk = this.updateLock(userId,userLock);
 				logger.info("用户余额触发,用户不升级只解锁:{},{}",userId,isUpLevelOk);
 			}
@@ -74,12 +72,12 @@ public class UserBalanceTrigger extends TriggerOperation {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean updateParentUpLock(String parent1Id) {
 		try {
-			if(!CommonContact.isOkUserId(parent1Id)){
+			if(!ContactUtils.isOkUserId(parent1Id)){
 				return false;
 			}
 			int teamNum = this.getLevelUpTeamNum(parent1Id);
 			if(teamNum >= LogicStaticContact.USER_LEVEL_UP_TEAM_NUM){
-				Boolean isUpLevelOk = this.updateLock(parent1Id, CommonContact.USER_LOCK_1);
+				Boolean isUpLevelOk = this.updateLock(parent1Id, ContactUtils.USER_LOCK_1);
 				logger.info("用户余额触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
 			}
 			return true;
@@ -96,7 +94,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean updateUpLevel(String userId,int upLevel,int userLock) {
 		try {
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return null;
 			}
 			UserInfo userInfo = new UserInfo();
@@ -104,7 +102,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			userInfo.setLock(userLock);
 			userInfo.setLevel(upLevel);
 			long dbResult = userInfoDao.update(userInfo);
-			return CommonContact.dbResult(dbResult);
+			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("根据账号ID升级异常",e);
 			return null;
@@ -118,14 +116,14 @@ public class UserBalanceTrigger extends TriggerOperation {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean updateLock(String userId,int userLock) {
 		try {
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return null;
 			}
 			UserInfo userInfo = new UserInfo();
 			userInfo.setId(userId);
 			userInfo.setLock(userLock);
 			long dbResult = userInfoDao.update(userInfo);
-			return CommonContact.dbResult(dbResult);
+			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("根据账号ID升级异常",e);
 			return null;
@@ -143,7 +141,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 			return 1;
 		}
 		BigDecimal mustBalance = LogicStaticContact.LEVEL_BALANCE_MIN_BALANCE.get(currentLevel);
-		if(CommonContact.isBiggerOrEqual(payMoney,mustBalance)){
+		if(ContactUtils.isBiggerOrEqual(payMoney,mustBalance)){
 			return 1;
 		}else{
 			int teamNum = this.getLevelUpTeamNum(userId);
@@ -161,7 +159,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 	 */
 	public int getLevelUpTeamNum(String userId){
 		try {
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return 0;
 			}
 			UserInfo userInfo = new UserInfo();
@@ -180,7 +178,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 	*/
 	public UserAccount getUserAccountByUserId(String userId) {
 		try {
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return null;
 			}
 			UserAccount userAccount = new UserAccount();

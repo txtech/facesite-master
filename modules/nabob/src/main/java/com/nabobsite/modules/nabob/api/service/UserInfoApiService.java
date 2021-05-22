@@ -3,19 +3,18 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
-import com.nabobsite.modules.nabob.api.common.TriggerApiService;
+import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.InstanceContact;
-import com.nabobsite.modules.nabob.api.entity.LogicStaticContact;
-import com.nabobsite.modules.nabob.api.entity.RedisPrefixContant;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.InstanceUtils;
+import com.nabobsite.modules.nabob.api.common.LogicStaticContact;
+import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.user.dao.MemberShipDao;
@@ -77,7 +76,7 @@ public class UserInfoApiService extends SimpleUserService {
 			updateUserInfo.setId(oldUserInfo.getId());
 			updateUserInfo.setPassword(md5NewPwd);
 			long dbResult = userInfoDao.update(updateUserInfo);
-			if(CommonContact.dbResult(dbResult)){
+			if(ContactUtils.dbResult(dbResult)){
 				return ResultUtil.success(true);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -121,7 +120,7 @@ public class UserInfoApiService extends SimpleUserService {
 			updateUserInfo.setId(oldUserInfo.getId());
 			updateUserInfo.setPassword(md5NewPwd);
 			long dbResult = userInfoDao.update(updateUserInfo);
-			if(CommonContact.dbResult(dbResult)){
+			if(ContactUtils.dbResult(dbResult)){
 				this.logout(token);
 				return ResultUtil.success(true);
 			}
@@ -241,10 +240,10 @@ public class UserInfoApiService extends SimpleUserService {
 					}
 					String parent1UserId = inviteCodeUserInfo.getId();
 					String parentSysId = inviteCodeUserInfo.getParentSysId();
-					if(CommonContact.isOkUserId(parentSysId)){
+					if(ContactUtils.isOkUserId(parentSysId)){
 						userInfo.setParentSysId(parentSysId);
 					}
-					if(CommonContact.isOkUserId(parent1UserId)){
+					if(ContactUtils.isOkUserId(parent1UserId)){
 						userInfo.setParent1UserId(parent1UserId);
 					}
 				}
@@ -266,14 +265,14 @@ public class UserInfoApiService extends SimpleUserService {
 				}
 				//当前用户信息作为上级业务员
 				String parentSysId = userInfo.getParentSysId();
-				if(!CommonContact.isOkUserId(parentSysId)){
+				if(!ContactUtils.isOkUserId(parentSysId)){
 					User user = UserUtils.getUser();
 					if(user!=null){
 						userInfo.setParentSysId(user.getId());
 					}
 				}
 				//根据父一级ID，写入父二级ID，父三级ID
-				if(CommonContact.isOkUserId(parent1UserId)){
+				if(ContactUtils.isOkUserId(parent1UserId)){
 					UserInfo parent1UserInfo = this.getUserInfoByUserId(parent1UserId);
 					if(parent1UserInfo !=null){
 						String parent2UserId = parent1UserInfo.getParent1UserId();
@@ -289,7 +288,7 @@ public class UserInfoApiService extends SimpleUserService {
 				//生产唯一邀请码
 				Long seqId = sequenceService.getSequence();
 				userInfo.setInviteCode(String.valueOf(seqId));
-				UserInfo initUser = InstanceContact.initUserInfo(userInfo);
+				UserInfo initUser = InstanceUtils.initUserInfo(userInfo);
 				Boolean isOkSaveUser = this.saveUserAndAccount(initUser);
 				if(!isOkSaveUser){
 					logger.error("注册用户失败,保存用户失败");
@@ -297,8 +296,8 @@ public class UserInfoApiService extends SimpleUserService {
 				}
 				//注册新用户送奖励
 				String userId = initUser.getId();
-				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_2;
-				Boolean isOk = userAccountApiService.updateAccountBalance(userId,type, LogicStaticContact.USER_REGISTER_REWARD,userId,CommonContact.USER_ACCOUNT_DETAIL_TITLE_2);
+				int type = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_2;
+				Boolean isOk = userAccountApiService.updateAccountBalance(userId,type, LogicStaticContact.USER_REGISTER_REWARD,userId, ContactUtils.USER_ACCOUNT_DETAIL_TITLE_2);
 				if(!isOk){
 					logger.error("注册用户成功,用户送奖励失败,{}",userId);
 				}
@@ -422,15 +421,15 @@ public class UserInfoApiService extends SimpleUserService {
 				if(StringUtils.isAnyBlank(key,value)){
 					continue;
 				}
-				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_CURRENT_VERSION)){
+				if(key.equalsIgnoreCase(ContactUtils.SYS_KEY_CURRENT_VERSION)){
 					configJson.put("appCurrentVersion",value);
 					continue;
 				}
-				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_UPDATE_VERSION)){
+				if(key.equalsIgnoreCase(ContactUtils.SYS_KEY_UPDATE_VERSION)){
 					configJson.put("appUpdateVersion",value);
 					continue;
 				}
-				if(key.equalsIgnoreCase(CommonContact.SYS_KEY_APP_DOWNLOAD_URL)){
+				if(key.equalsIgnoreCase(ContactUtils.SYS_KEY_APP_DOWNLOAD_URL)){
 					configJson.put("appDownloadUrl",value);
 					continue;
 				}

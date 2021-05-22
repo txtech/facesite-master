@@ -1,11 +1,10 @@
-package com.nabobsite.modules.nabob.api.entity;
+package com.nabobsite.modules.nabob.api.common;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.jeesite.common.lang.StringUtils;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;

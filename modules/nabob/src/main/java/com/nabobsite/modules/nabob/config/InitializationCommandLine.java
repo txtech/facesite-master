@@ -1,6 +1,6 @@
 package com.nabobsite.modules.nabob.config;
 
-import com.nabobsite.modules.nabob.api.common.TriggerApiService;
+import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;

@@ -1,10 +1,10 @@
-package com.nabobsite.modules.nabob.api.common;
+package com.nabobsite.modules.nabob.api.pool;
 
-import com.nabobsite.modules.nabob.api.common.task.InitLoadDbDataTrigger;
-import com.nabobsite.modules.nabob.api.common.task.UserBalanceTrigger;
-import com.nabobsite.modules.nabob.api.common.task.UserRegisterTrigger;
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerPoolManagerImpl;
-import com.nabobsite.modules.nabob.api.common.trigger.TriggerThread;
+import com.nabobsite.modules.nabob.api.pool.task.InitLoadDbDataTrigger;
+import com.nabobsite.modules.nabob.api.pool.task.UserBalanceTrigger;
+import com.nabobsite.modules.nabob.api.pool.task.UserRegisterTrigger;
+import com.nabobsite.modules.nabob.api.pool.trigger.TriggerPoolManagerImpl;
+import com.nabobsite.modules.nabob.api.pool.trigger.TriggerThread;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysI18nDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
@@ -63,7 +63,7 @@ public class TriggerApiService {
      * @create 2021/5/11 10:33 下午
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
-    public void balanceTrigger(String userId,int type,BigDecimal updateMoney) {
+    public void balanceTrigger(String userId, int type, BigDecimal updateMoney) {
         TriggerThread callback = new UserBalanceTrigger(userId,type,updateMoney, userInfoDao, userAccountDao);
         triggerPoolManager.submit(callback);
     }

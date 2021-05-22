@@ -1,4 +1,4 @@
-package com.nabobsite.modules.nabob.api.entity;
+package com.nabobsite.modules.nabob.api.common;
 
 /**
  * @author ：杨过

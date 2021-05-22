@@ -3,13 +3,11 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.nabobsite.modules.nabob.api.common.TriggerApiService;
+import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.InstanceContact;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
@@ -47,7 +45,7 @@ public class UserAccountApiService extends SimpleUserService {
 	public CommonResult<Boolean> claim(String token) {
 		try {
 			String userId  = this.getUserIdByToken(token);
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			return ResultUtil.success(true);
@@ -65,7 +63,7 @@ public class UserAccountApiService extends SimpleUserService {
 	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(String token,int ledgerType) {
 		try {
 			String userId  = this.getUserIdByToken(token);
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserAccountDetail userAccountDetail = new UserAccountDetail();
@@ -89,7 +87,7 @@ public class UserAccountApiService extends SimpleUserService {
 	public CommonResult<UserAccount> getUserAccountInfo(String token) {
 		try {
 			String userId  = this.getUserIdByToken(token);
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			UserAccount result = this.getUserAccountByUserId(userId);
@@ -109,7 +107,7 @@ public class UserAccountApiService extends SimpleUserService {
 	public boolean updateAccountBalance(String userId,int type,BigDecimal updateMoney,String uniqueId,String title) {
 		try {
 			synchronized (userId){
-				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,type,uniqueId,title);
 				userAccountDetail.setTotalMoney(updateMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
@@ -121,7 +119,7 @@ public class UserAccountApiService extends SimpleUserService {
 				userAccount.setTotalMoney(updateMoney);
 				userAccount.setAvailableMoney(updateMoney);
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
-				if(!CommonContact.dbResult(dbResult)){
+				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改账户总余额失败,修改账户失败:{},{}",userId,updateMoney);
 					return false;
 				}
@@ -146,8 +144,8 @@ public class UserAccountApiService extends SimpleUserService {
 				return false;
 			}
 			synchronized (userId){
-				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_20;
-				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
+				int type = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_20;
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,type,uniqueId,title);
 				userAccountDetail.setCommissionMoney(commissionMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,commissionMoney,userAccountDetail);
 				if(!isPrepareOk){
@@ -159,7 +157,7 @@ public class UserAccountApiService extends SimpleUserService {
 				userAccount.setTotalMoney(commissionMoney);
 				userAccount.setCommissionMoney(commissionMoney);
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
-				if(!CommonContact.dbResult(dbResult)){
+				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改佣金账户失败,修改账户失败:{},{}",userId,commissionMoney);
 					return false;
 				}
@@ -183,15 +181,15 @@ public class UserAccountApiService extends SimpleUserService {
 				return false;
 			}
 			synchronized (userId){
-				int detailType = CommonContact.USER_ACCOUNT_DETAIL_TYPE_30;
-				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,detailType,uniqueId,title);
-				if(type == CommonContact.WAREHOUSE_RECORD_TYPE_1){
+				int detailType = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_30;
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,detailType,uniqueId,title);
+				if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
 					userAccountDetail.setWarehouseMoney(updateMoney);
 					userAccountDetail.setAvailableMoney(updateMoney.negate());
-				}else if(type == CommonContact.WAREHOUSE_RECORD_TYPE_2){
+				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
 					userAccountDetail.setWarehouseMoney(updateMoney.negate());
 					userAccountDetail.setAvailableMoney(updateMoney);
-				}else if(type == CommonContact.WAREHOUSE_RECORD_TYPE_3){
+				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
 					userAccountDetail.setAiAssetsMoney(updateMoney.negate());
 					userAccountDetail.setAvailableMoney(updateMoney);
 				}
@@ -203,18 +201,18 @@ public class UserAccountApiService extends SimpleUserService {
 				}
 				UserAccount userAccount = new UserAccount();
 				userAccount.setUserId(userId);
-				if(type == CommonContact.WAREHOUSE_RECORD_TYPE_1){
+				if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
 					userAccount.setWarehouseMoney(updateMoney);
 					userAccount.setAvailableMoney(updateMoney.negate());
-				}else if(type == CommonContact.WAREHOUSE_RECORD_TYPE_2){
+				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
 					userAccount.setWarehouseMoney(updateMoney.negate());
 					userAccount.setAvailableMoney(updateMoney);
-				}else if(type == CommonContact.WAREHOUSE_RECORD_TYPE_3){
+				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
 					userAccount.setAiAssetsMoney(updateMoney.negate());
 					userAccount.setAvailableMoney(updateMoney);
 				}
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
-				if(!CommonContact.dbResult(dbResult)){
+				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改佣金账户失败,修改账户失败:{},{}",userId,updateMoney);
 					return false;
 				}
@@ -235,8 +233,8 @@ public class UserAccountApiService extends SimpleUserService {
 	public boolean updateAccountRewardMoney(String userId,BigDecimal updateMoney,String uniqueId, String title) {
 		try {
 			synchronized (userId){
-				int type = CommonContact.USER_ACCOUNT_DETAIL_TYPE_40;
-				UserAccountDetail userAccountDetail = InstanceContact.initUserAccountDetail(userId,type,uniqueId,title);
+				int type = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_40;
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,type,uniqueId,title);
 				userAccountDetail.setRewardMoney(updateMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
@@ -247,7 +245,7 @@ public class UserAccountApiService extends SimpleUserService {
 				userAccount.setUserId(userId);
 				userAccount.setRewardMoney(updateMoney);
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
-				if(!CommonContact.dbResult(dbResult)){
+				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改奖励账户失败,修改账户失败:{},{}",userId,updateMoney);
 					return false;
 				}
@@ -271,7 +269,7 @@ public class UserAccountApiService extends SimpleUserService {
 			if(StringUtils.isEmpty(userId)){
 				return false;
 			}
-			if(CommonContact.isEqualZero(updateMoney)){
+			if(ContactUtils.isEqualZero(updateMoney)){
 				return false;
 			}
 			synchronized (userId){
@@ -282,14 +280,14 @@ public class UserAccountApiService extends SimpleUserService {
 				String accountId = oldUserAccount.getId();
 				userAccountDetail.setAccountId(accountId);
 				long dbResult = userAccountDetailDao.insert(userAccountDetail);
-				if(!CommonContact.dbResult(dbResult)){
+				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改账户失败,记录明细失败:{},{},{}",userId,accountId,updateMoney);
 					return false;
 				}
 				String detailId = userAccountDetail.getId();
-				UserAccountLog userAccountLog = InstanceContact.initUserAccountLog(detailId,title,oldUserAccount);
+				UserAccountLog userAccountLog = InstanceUtils.initUserAccountLog(detailId,title,oldUserAccount);
 				dbResult = userAccountLogDao.insert(userAccountLog);
-				if(!CommonContact.dbResult(dbResult)){
+				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改账失败,记录日志失败:{},{},{}",userId,accountId,updateMoney);
 					return false;
 				}

@@ -3,20 +3,16 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleOrderService;
-import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.InstanceContact;
-import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysChannelDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.pay.hander.OrderHander;
 import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.apache.commons.lang3.StringUtils;
@@ -57,11 +53,11 @@ public class OrderApiService extends SimpleOrderService {
 			if(StringUtils.isAnyEmpty(token,name,email,phoneNumber)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			if(CommonContact.isLesserOrEqual(payMoney, CommonContact.ZERO)){
+			if(ContactUtils.isLesserOrEqual(payMoney, ContactUtils.ZERO)){
 				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
 			String userId  = this.getUserIdByToken(token);
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			SysChannel channel = this.getOneChannel();
@@ -71,13 +67,13 @@ public class OrderApiService extends SimpleOrderService {
 			synchronized (userId) {
 				order.setUserId(userId);
 				String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
-				long dbResult = orderDao.insert(InstanceContact.initOrderInfo(order,orderNo,channel));
-				if(!CommonContact.dbResult(dbResult)){
+				long dbResult = orderDao.insert(InstanceUtils.initOrderInfo(order,orderNo,channel));
+				if(!ContactUtils.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
 				order.setOrderNo(orderNo);
 				JSONObject resData = orderHander.doRestPay(order,channel);
-				if(CommonContact.isOkResult(resData)){
+				if(ContactUtils.isOkResult(resData)){
 					JSONObject result = new JSONObject();
 					result.put("orderNo",orderNo);
 					return ResultUtil.success(result);
@@ -121,7 +117,7 @@ public class OrderApiService extends SimpleOrderService {
 	public CommonResult<List<Order>> getOrderList(Order order, String token) {
 		try {
 			String userId  = this.getUserIdByToken(token);
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			order.setUserId(userId);
@@ -146,7 +142,7 @@ public class OrderApiService extends SimpleOrderService {
 			}
 			order.setId(id);
 			long dbResult = orderDao.update(order);
-			return CommonContact.dbResult(dbResult);
+			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("根据ID修改异常",e);
 			return null;
@@ -164,7 +160,7 @@ public class OrderApiService extends SimpleOrderService {
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			String userId  = this.getUserIdByToken(token);
-			if(!CommonContact.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			Order result = this.getOrderByOrderNo(orderNo);

@@ -3,10 +3,8 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.CashApiService;
 import com.nabobsite.modules.nabob.cms.order.entity.Cash;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
@@ -36,21 +34,21 @@ public class CashApiController extends BaseController {
 	@PostMapping(value = {"cashOrder"})
 	@ApiOperation(value = "提款接口")
 	public CommonResult<Boolean> rechargeOrder(@RequestBody Cash cash,HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return cashApiService.cashOrder(token,new Cash());
 	}
 
 	@PostMapping(value = {"getCashOrderList"})
 	@ApiOperation(value = "获取订单列表")
 	public CommonResult<List<Cash>> getCashOrderList(HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return cashApiService.getCashOrderList(token,new Cash());
 	}
 
 	@PostMapping(value = {"getCashOrderInfo/{orderNo}"})
 	@ApiOperation(value = "获取订单详情")
 	public CommonResult<Cash> getCashOrderInfo(@PathVariable String orderNo,HttpServletRequest request) {
-		String token = request.getHeader(CommonContact.AUTHORIZATION);
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return cashApiService.getCashOrderInfo(token,new Cash());
 	}
 }

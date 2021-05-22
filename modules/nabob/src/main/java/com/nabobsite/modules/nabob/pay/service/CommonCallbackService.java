@@ -4,8 +4,7 @@
 package com.nabobsite.modules.nabob.pay.service;
 
 import com.jeesite.common.service.CrudService;
-import com.nabobsite.modules.nabob.api.common.TriggerApiService;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.OrderApiService;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
@@ -46,16 +45,16 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 				}
 				int oldStatus = oldOrder.getOrderStatus();
 				switch (oldStatus) {
-					case CommonContact.ORDER_STATUS_1:
-					case CommonContact.ORDER_STATUS_2:
+					case ContactUtils.ORDER_STATUS_1:
+					case ContactUtils.ORDER_STATUS_2:
 						return this.doExecute(orderNo,pOrderNo,oldOrder,backStatus,message);
-					case CommonContact.ORDER_STATUS_3:
+					case ContactUtils.ORDER_STATUS_3:
 						logger.error("充值订单回调失败,订单已经失败:{},{}",orderNo,pOrderNo);
 						return true;
-					case CommonContact.ORDER_STATUS_4:
+					case ContactUtils.ORDER_STATUS_4:
 						logger.error("充值订单回调失败,订单已经成功:{},{}",orderNo,pOrderNo);
 						return true;
-					case CommonContact.ORDER_STATUS_9:
+					case ContactUtils.ORDER_STATUS_9:
 						logger.error("充值订单回调失败,订单已经退款:{},{}",orderNo,pOrderNo);
 						return false;
 					default:
@@ -87,26 +86,26 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 			newOrder.setId(id);
 			newOrder.setPorderNo(pOrderNo);
 			newOrder.setRemarks(message);
-			if(backStatus == CommonContact.ORDER_STATUS_3){
-				newOrder.setOrderStatus(CommonContact.ORDER_STATUS_3);
-			}else if(backStatus == CommonContact.ORDER_STATUS_4){
-				newOrder.setOrderStatus(CommonContact.ORDER_STATUS_4);
+			if(backStatus == ContactUtils.ORDER_STATUS_3){
+				newOrder.setOrderStatus(ContactUtils.ORDER_STATUS_3);
+			}else if(backStatus == ContactUtils.ORDER_STATUS_4){
+				newOrder.setOrderStatus(ContactUtils.ORDER_STATUS_4);
 			}
 			Boolean isOk = orderApiService.updateOrderById(id,newOrder);
 			if(!isOk){
 				logger.error("充值订单回调失败,更新订单失败:{},{}",orderNo,pOrderNo);
 				return false;
 			}
-			if(backStatus == CommonContact.ORDER_STATUS_3){
+			if(backStatus == ContactUtils.ORDER_STATUS_3){
 				logger.error("充值订单回调失败,更新订单成功:{},{}",orderNo,pOrderNo);
 				return true;
 			}
-			if(backStatus != CommonContact.ORDER_STATUS_4){
+			if(backStatus != ContactUtils.ORDER_STATUS_4){
 				logger.error("充值订单回调失败,更新订单失败:{},{}",orderNo,pOrderNo);
 				return false;
 			}
-			int updateType = CommonContact.USER_ACCOUNT_DETAIL_TYPE_2;
-			isOk = userAccountApiService.updateAccountBalance(userId,updateType,payMoney,orderNo,CommonContact.USER_ACCOUNT_DETAIL_TITLE_1);
+			int updateType = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_2;
+			isOk = userAccountApiService.updateAccountBalance(userId,updateType,payMoney,orderNo, ContactUtils.USER_ACCOUNT_DETAIL_TITLE_1);
 			if(!isOk){
 				logger.error("充值订单回调失败,更新账户失败:{},{}",orderNo,pOrderNo);
 				return false;

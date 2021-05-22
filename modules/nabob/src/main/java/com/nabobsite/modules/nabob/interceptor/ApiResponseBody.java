@@ -2,8 +2,8 @@ package com.nabobsite.modules.nabob.interceptor;
 
 import com.jeesite.common.lang.StringUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
-import com.nabobsite.modules.nabob.api.entity.CommonContact;
-import com.nabobsite.modules.nabob.api.entity.I18nUtils;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.I18nUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -51,7 +51,7 @@ public class ApiResponseBody  implements ResponseBodyAdvice<CommonResult> {
         String lang = I18nUtils.LANG_EN;
         if (I18nInterceptor.userThreadLocal != null && I18nInterceptor.userThreadLocal.get() !=null){
             Map<String,String> userLocal = I18nInterceptor.userThreadLocal.get();
-            lang = I18nUtils.getLangStandard(userLocal.get(CommonContact.LANG));
+            lang = I18nUtils.getLangStandard(userLocal.get(ContactUtils.LANG));
         }
         commonResult.setLang(lang);
         String i8nCode = commonResult.getI18n();

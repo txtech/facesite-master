@@ -3,7 +3,7 @@ package com.nabobsite.test;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
-import com.nabobsite.modules.nabob.api.entity.I18nUtils;
+import com.nabobsite.modules.nabob.api.common.I18nUtils;
 import org.junit.Test;
 
 /**

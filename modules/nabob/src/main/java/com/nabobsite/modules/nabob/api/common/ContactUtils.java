@@ -1,4 +1,4 @@
-package com.nabobsite.modules.nabob.api.entity;
+package com.nabobsite.modules.nabob.api.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.response.ResultCode;
@@ -21,9 +21,9 @@ import java.util.Set;
  * @Date 2021/5/11 11:25 上午
  * @Version 1.0
  */
-public class CommonContact {
+public class ContactUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(CommonContact.class);
+    private static final Logger logger = LoggerFactory.getLogger(ContactUtils.class);
 
     public static String CHART_UTF ="UTF-8";
     public final static String LANG = "lang";
@@ -308,10 +308,10 @@ public class CommonContact {
     public static void initHttpServletRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
             if (request != null) {
-                request.setCharacterEncoding(CommonContact.CHART_UTF);
+                request.setCharacterEncoding(ContactUtils.CHART_UTF);
             }
             if (response != null) {
-                response.setCharacterEncoding(CommonContact.CHART_UTF);
+                response.setCharacterEncoding(ContactUtils.CHART_UTF);
             }
         } catch (Exception e) {
             logger.error("初始化设置报文请求响应编码格式异常", e);

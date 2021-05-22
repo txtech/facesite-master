@@ -23,6 +23,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('排序')}：</label>
+					<div class="control-inline">
+						<#form:input path="seq" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('刷单数量')}：</label>
 					<div class="control-inline">
 						<#form:input path="orderNum" class="form-control width-120"/>
@@ -91,9 +97,21 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('排序')}：</label>
+					<label class="control-label">${text('等级要求')}：</label>
 					<div class="control-inline">
-						<#form:input path="seq" class="form-control width-120"/>
+						<#form:input path="gradeMoney" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('订单佣金比例')}：</label>
+					<div class="control-inline">
+						<#form:input path="commissionRate" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('最小出款金额')}：</label>
+					<div class="control-inline">
+						<#form:input path="withdrawMin" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -115,6 +133,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text("等级名称")}', name:'gradeName', index:'a.grade_name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/user/memberShip/form?id='+row.id+'" class="btnList" data-title="${text("编辑任务管理")}">'+(val||row.id)+'</a>';
 		}},
+		{header:'${text("排序")}', name:'seq', index:'a.seq', width:150, align:"center"},
 		{header:'${text("刷单数量")}', name:'orderNum', index:'a.order_num', width:150, align:"center"},
 		{header:'${text("一级佣金比例")}', name:'commissionRate1', index:'a.commission_rate1', width:150, align:"left"},
 		{header:'${text("二级佣金比例")}', name:'commissionRate2', index:'a.commission_rate2', width:150, align:"left"},
@@ -126,7 +145,9 @@ $('#dataGrid').dataGrid({
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
-		{header:'${text("排序")}', name:'seq', index:'a.seq', width:150, align:"center"},
+		{header:'${text("等级要求")}', name:'gradeMoney', index:'a.grade_money', width:150, align:"left"},
+		{header:'${text("订单佣金比例")}', name:'commissionRate', index:'a.commission_rate', width:150, align:"left"},
+		{header:'${text("最小出款金额")}', name:'withdrawMin', index:'a.withdraw_min', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:memberShip:edit')){ %>
