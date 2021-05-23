@@ -10,67 +10,67 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
-import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
-import com.nabobsite.modules.nabob.cms.user.dao.MemberShipDao;
+import com.nabobsite.modules.nabob.cms.user.entity.UserTeam;
+import com.nabobsite.modules.nabob.cms.user.dao.UserTeamDao;
 
 /**
- * 任务管理Service
+ * 会员用户Service
  * @author face
  * @version 2021-05-23
  */
 @Service
 @Transactional(readOnly=true)
-public class MemberShipService extends CrudService<MemberShipDao, MemberShip> {
+public class UserTeamService extends CrudService<UserTeamDao, UserTeam> {
 	
 	/**
 	 * 获取单条数据
-	 * @param memberShip
+	 * @param userTeam
 	 * @return
 	 */
 	@Override
-	public MemberShip get(MemberShip memberShip) {
-		return super.get(memberShip);
+	public UserTeam get(UserTeam userTeam) {
+		return super.get(userTeam);
 	}
 	
 	/**
 	 * 查询分页数据
-	 * @param memberShip 查询条件
-	 * @param memberShip.page 分页对象
+	 * @param userTeam 查询条件
+	 * @param userTeam.page 分页对象
 	 * @return
 	 */
 	@Override
-	public Page<MemberShip> findPage(MemberShip memberShip) {
-		return super.findPage(memberShip);
+	public Page<UserTeam> findPage(UserTeam userTeam) {
+		return super.findPage(userTeam);
 	}
 	
 	/**
 	 * 保存数据（插入或更新）
-	 * @param memberShip
+	 * @param userTeam
 	 */
 	@Override
 	@Transactional(readOnly=false)
-	public void save(MemberShip memberShip) {
-		super.save(memberShip);
+	public void save(UserTeam userTeam) {
+		super.save(userTeam);
 	}
 	
 	/**
 	 * 更新状态
-	 * @param memberShip
+	 * @param userTeam
 	 */
 	@Override
 	@Transactional(readOnly=false)
-	public void updateStatus(MemberShip memberShip) {
-		super.updateStatus(memberShip);
+	public void updateStatus(UserTeam userTeam) {
+		super.updateStatus(userTeam);
 	}
 	
 	/**
 	 * 删除数据
-	 * @param memberShip
+	 * @param userTeam
 	 */
 	@Override
 	@Transactional(readOnly=false)
-	public void delete(MemberShip memberShip) {
-		super.delete(memberShip);
+	public void delete(UserTeam userTeam) {
+		super.delete(userTeam);
 	}
 	
 }

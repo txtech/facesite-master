@@ -41,6 +41,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('等级要求')}：</label>
+					<div class="control-inline">
+						<#form:input path="gradeMoney" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('二级佣金比例')}：</label>
 					<div class="control-inline">
 						<#form:input path="commissionRate2" maxlength="50" class="form-control width-120"/>
@@ -50,6 +56,12 @@
 					<label class="control-label">${text('三级佣金比例')}：</label>
 					<div class="control-inline">
 						<#form:input path="commissionRate3" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('订单佣金比例')}：</label>
+					<div class="control-inline">
+						<#form:input path="commissionRate" maxlength="50" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -85,6 +97,12 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('最小出款金额')}：</label>
+					<div class="control-inline">
+						<#form:input path="withdrawMin" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('备注信息')}：</label>
 					<div class="control-inline">
 						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
@@ -97,21 +115,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('等级要求')}：</label>
+					<label class="control-label">${text('等级')}：</label>
 					<div class="control-inline">
-						<#form:input path="gradeMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('订单佣金比例')}：</label>
-					<div class="control-inline">
-						<#form:input path="commissionRate" maxlength="50" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('最小出款金额')}：</label>
-					<div class="control-inline">
-						<#form:input path="withdrawMin" class="form-control width-120"/>
+						<#form:input path="level" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -136,18 +142,19 @@ $('#dataGrid').dataGrid({
 		{header:'${text("排序")}', name:'seq', index:'a.seq', width:150, align:"center"},
 		{header:'${text("刷单数量")}', name:'orderNum', index:'a.order_num', width:150, align:"center"},
 		{header:'${text("一级佣金比例")}', name:'commissionRate1', index:'a.commission_rate1', width:150, align:"left"},
+		{header:'${text("等级要求")}', name:'gradeMoney', index:'a.grade_money', width:150, align:"left"},
 		{header:'${text("二级佣金比例")}', name:'commissionRate2', index:'a.commission_rate2', width:150, align:"left"},
 		{header:'${text("三级佣金比例")}', name:'commissionRate3', index:'a.commission_rate3', width:150, align:"left"},
+		{header:'${text("订单佣金比例")}', name:'commissionRate', index:'a.commission_rate', width:150, align:"left"},
 		{header:'${text("出款金额")}', name:'withdrawMax', index:'a.withdraw_max', width:150, align:"left"},
 		{header:'${text("出款次数")}', name:'withdrawNum', index:'a.withdraw_num', width:150, align:"center"},
 		{header:'${text("图标地址")}', name:'logo', index:'a.logo', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
+		{header:'${text("最小出款金额")}', name:'withdrawMin', index:'a.withdraw_min', width:150, align:"left"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
-		{header:'${text("等级要求")}', name:'gradeMoney', index:'a.grade_money', width:150, align:"left"},
-		{header:'${text("订单佣金比例")}', name:'commissionRate', index:'a.commission_rate', width:150, align:"left"},
-		{header:'${text("最小出款金额")}', name:'withdrawMin', index:'a.withdraw_min', width:150, align:"left"},
+		{header:'${text("等级")}', name:'level', index:'a.level', width:150, align:"center"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:memberShip:edit')){ %>

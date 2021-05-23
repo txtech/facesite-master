@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.web.BaseController;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.cms.user.service.UserInfoService;
+import com.nabobsite.modules.nabob.cms.user.entity.UserTeam;
+import com.nabobsite.modules.nabob.cms.user.service.UserTeamService;
 
 /**
  * 会员用户Controller
@@ -28,71 +28,71 @@ import com.nabobsite.modules.nabob.cms.user.service.UserInfoService;
  * @version 2021-05-23
  */
 @Controller
-@RequestMapping(value = "${adminPath}/user/userInfo")
-public class UserInfoController extends BaseController {
+@RequestMapping(value = "${adminPath}/user/userTeam")
+public class UserTeamController extends BaseController {
 
 	@Autowired
-	private UserInfoService userInfoService;
+	private UserTeamService userTeamService;
 	
 	/**
 	 * 获取数据
 	 */
 	@ModelAttribute
-	public UserInfo get(String id, boolean isNewRecord) {
-		return userInfoService.get(id, isNewRecord);
+	public UserTeam get(String id, boolean isNewRecord) {
+		return userTeamService.get(id, isNewRecord);
 	}
 	
 	/**
 	 * 查询列表
 	 */
-	@RequiresPermissions("user:userInfo:view")
+	@RequiresPermissions("user:userTeam:view")
 	@RequestMapping(value = {"list", ""})
-	public String list(UserInfo userInfo, Model model) {
-		model.addAttribute("userInfo", userInfo);
-		return "cms/user/userInfoList";
+	public String list(UserTeam userTeam, Model model) {
+		model.addAttribute("userTeam", userTeam);
+		return "cms/user/userTeamList";
 	}
 	
 	/**
 	 * 查询列表数据
 	 */
-	@RequiresPermissions("user:userInfo:view")
+	@RequiresPermissions("user:userTeam:view")
 	@RequestMapping(value = "listData")
 	@ResponseBody
-	public Page<UserInfo> listData(UserInfo userInfo, HttpServletRequest request, HttpServletResponse response) {
-		userInfo.setPage(new Page<>(request, response));
-		Page<UserInfo> page = userInfoService.findPage(userInfo);
+	public Page<UserTeam> listData(UserTeam userTeam, HttpServletRequest request, HttpServletResponse response) {
+		userTeam.setPage(new Page<>(request, response));
+		Page<UserTeam> page = userTeamService.findPage(userTeam);
 		return page;
 	}
 
 	/**
 	 * 查看编辑表单
 	 */
-	@RequiresPermissions("user:userInfo:view")
+	@RequiresPermissions("user:userTeam:view")
 	@RequestMapping(value = "form")
-	public String form(UserInfo userInfo, Model model) {
-		model.addAttribute("userInfo", userInfo);
-		return "cms/user/userInfoForm";
+	public String form(UserTeam userTeam, Model model) {
+		model.addAttribute("userTeam", userTeam);
+		return "cms/user/userTeamForm";
 	}
 
 	/**
 	 * 保存数据
 	 */
-	@RequiresPermissions("user:userInfo:edit")
+	@RequiresPermissions("user:userTeam:edit")
 	@PostMapping(value = "save")
 	@ResponseBody
-	public String save(@Validated UserInfo userInfo) {
-		userInfoService.save(userInfo);
+	public String save(@Validated UserTeam userTeam) {
+		userTeamService.save(userTeam);
 		return renderResult(Global.TRUE, text("保存会员用户成功！"));
 	}
 	
 	/**
 	 * 删除数据
 	 */
-	@RequiresPermissions("user:userInfo:edit")
+	@RequiresPermissions("user:userTeam:edit")
 	@RequestMapping(value = "delete")
 	@ResponseBody
-	public String delete(UserInfo userInfo) {
-		userInfoService.delete(userInfo);
+	public String delete(UserTeam userTeam) {
+		userTeamService.delete(userTeam);
 		return renderResult(Global.TRUE, text("删除会员用户成功！"));
 	}
 	

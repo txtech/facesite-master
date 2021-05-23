@@ -7,6 +7,7 @@ import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.cms.user.entity.UserTeam;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,5 +101,49 @@ public class LogicService extends SimpleUserService {
 		}
 	}
 
+
+	/**
+	 * @desc 修改三级团队人数
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional(readOnly = false, rollbackFor = Exception.class)
+	public Boolean updateTeam(String parent1UserId,String parent2UserId,String parent3UserId) {
+		try {
+			//增加1人
+			int num = 1;
+			if(ContactUtils.isOkUserId(parent1UserId)){
+				UserTeam userTeam = new UserTeam();
+				userTeam.setId(parent1UserId);
+				userTeam.setTeam1Num(num);
+				long dbResult = userTeamDao.updateTeamNum(userTeam);
+				if(ContactUtils.dbResult(dbResult)){
+					logger.info("修改1级团队人数:{}",parent1UserId);
+				}
+			}
+			if(ContactUtils.isOkUserId(parent2UserId)){
+				UserTeam userTeam = new UserTeam();
+				userTeam.setId(parent2UserId);
+				userTeam.setTeam2Num(num);
+				long dbResult = userTeamDao.updateTeamNum(userTeam);
+				if(ContactUtils.dbResult(dbResult)){
+					logger.info("修改2级团队人数:{}",parent2UserId);
+				}
+			}
+			if(ContactUtils.isOkUserId(parent3UserId)){
+				UserTeam userTeam = new UserTeam();
+				userTeam.setId(parent3UserId);
+				userTeam.setTeam3Num(num);
+				long dbResult = userTeamDao.updateTeamNum(userTeam);
+				if(ContactUtils.dbResult(dbResult)){
+					logger.info("修改3级团队人数:{}",parent3UserId);
+				}
+			}
+			return true;
+		} catch (Exception e) {
+			logger.error("修改团队人数异常",e);
+			return false;
+		}
+	}
 
 }

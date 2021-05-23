@@ -21,28 +21,4 @@
 		where
 			parent_user_id = #{id} and  level &lt;= (select IFNULL(level-1,0) from t1_user_info where id = #{id} and lock =2 and level>1)
 	</update>
-
-	<!--增加团队-->
-	<update id="updateTeamNum" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
-		update
-			t1_user_info
-		<set>
-			<if test="team1Num != null and team1Num >0">
-				team_num = team_num + #{team1Num},
-				team1_num = team1_num + #{team1Num},
-			</if>
-			<if test="team2Num != null and team2Num >0">
-				team_num = team_num + #{team2Num},
-				team2_num = team2_num + #{team2Num},
-			</if>
-			<if test="team3Num != null and team3Num >0">
-				team_num = team_num + #{team3Num},
-				team3_num = team3_num + #{team3Num},
-			</if>
-			updated = sysdate()
-		</set>
-		<where>
-			id = #{id}
-		</where>
-	</update>
 </mapper>

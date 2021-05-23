@@ -3,23 +3,21 @@
  */
 package com.nabobsite.modules.nabob.cms.user.entity;
 
-import javax.validation.constraints.NotBlank;
-import org.hibernate.validator.constraints.Length;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
-import com.jeesite.common.mybatis.annotation.JoinTable;
-import com.jeesite.common.mybatis.annotation.JoinTable.Type;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * 会员用户Entity
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-23
  */
 @Table(name="t1_user_info", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -38,11 +36,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="invite_secret", attrName="inviteSecret", label="邀请秘文"),
 		@Column(name="regist_ip", attrName="registIp", label="注册IP"),
 		@Column(name="login_ip", attrName="loginIp", label="登陆IP"),
-		@Column(name="team_num", attrName="teamNum", label="团队总人数"),
-		@Column(name="team1_num", attrName="team1Num", label="一级团队人数"),
 		@Column(name="app_version", attrName="appVersion", label="使用版本"),
-		@Column(name="team2_num", attrName="team2Num", label="二级团队人数"),
-		@Column(name="team3_num", attrName="team3Num", label="三级团队人数"),
 		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
@@ -52,7 +46,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	}, orderBy="a.id DESC"
 )
 public class UserInfo extends DataEntity<UserInfo> {
-
+	
 	private static final long serialVersionUID = 1L;
 	private String parentSysId;		// 操作员上级
 	private String parent1UserId;		// 一级ID
@@ -69,11 +63,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private String inviteSecret;		// 邀请秘文
 	private String registIp;		// 注册IP
 	private String loginIp;		// 登陆IP
-	private Integer teamNum;		// 团队总人数
-	private Integer team1Num;		// 一级团队人数
 	private String appVersion;		// 使用版本
-	private Integer team2Num;		// 二级团队人数
-	private Integer team3Num;		// 三级团队人数
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
@@ -81,7 +71,7 @@ public class UserInfo extends DataEntity<UserInfo> {
     private String codeKey; //图片验证码key
     private String imgCode; //图片验证码code
 	private String oldPassword;
-
+	
 	public UserInfo() {
 		this(null);
 	}
@@ -89,7 +79,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public UserInfo(String id){
 		super(id);
 	}
-
+	
 	@NotBlank(message="操作员上级不能为空")
 	@Length(min=0, max=30, message="操作员上级长度不能超过 30 个字符")
 	public String getParentSysId() {
@@ -99,7 +89,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setParentSysId(String parentSysId) {
 		this.parentSysId = parentSysId;
 	}
-
+	
 	@NotBlank(message="一级ID不能为空")
 	@Length(min=0, max=30, message="一级ID长度不能超过 30 个字符")
 	public String getParent1UserId() {
@@ -109,7 +99,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setParent1UserId(String parent1UserId) {
 		this.parent1UserId = parent1UserId;
 	}
-
+	
 	@Length(min=0, max=50, message="二级ID长度不能超过 50 个字符")
 	public String getParent2UserId() {
 		return parent2UserId;
@@ -118,7 +108,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setParent2UserId(String parent2UserId) {
 		this.parent2UserId = parent2UserId;
 	}
-
+	
 	@Length(min=0, max=50, message="三级ID长度不能超过 50 个字符")
 	public String getParent3UserId() {
 		return parent3UserId;
@@ -127,7 +117,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setParent3UserId(String parent3UserId) {
 		this.parent3UserId = parent3UserId;
 	}
-
+	
 	@NotNull(message="状态 1不能为空")
 	public Integer getUserStatus() {
 		return userStatus;
@@ -136,7 +126,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setUserStatus(Integer userStatus) {
 		this.userStatus = userStatus;
 	}
-
+	
 	@NotNull(message="级别不能为空")
 	public Integer getLevel() {
 		return level;
@@ -145,7 +135,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setLevel(Integer level) {
 		this.level = level;
 	}
-
+	
 	@NotBlank(message="名称不能为空")
 	@Length(min=0, max=520, message="名称长度不能超过 520 个字符")
 	public String getName() {
@@ -155,7 +145,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
 	public Integer getLock() {
 		return lock;
 	}
@@ -163,7 +153,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setLock(Integer lock) {
 		this.lock = lock;
 	}
-
+	
 	@NotBlank(message="账号不能为空")
 	@Length(min=0, max=250, message="账号长度不能超过 250 个字符")
 	public String getAccountNo() {
@@ -173,7 +163,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setAccountNo(String accountNo) {
 		this.accountNo = accountNo;
 	}
-
+	
 	@NotBlank(message="密码不能为空")
 	@Length(min=0, max=250, message="密码长度不能超过 250 个字符")
 	public String getPassword() {
@@ -183,7 +173,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	
 	@NotBlank(message="电话号码不能为空")
 	@Length(min=0, max=20, message="电话号码长度不能超过 20 个字符")
 	public String getPhoneNumber() {
@@ -193,7 +183,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
+	
 	@NotBlank(message="邀请码不能为空")
 	@Length(min=0, max=20, message="邀请码长度不能超过 20 个字符")
 	public String getInviteCode() {
@@ -203,7 +193,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setInviteCode(String inviteCode) {
 		this.inviteCode = inviteCode;
 	}
-
+	
 	@NotBlank(message="邀请秘文不能为空")
 	@Length(min=0, max=250, message="邀请秘文长度不能超过 250 个字符")
 	public String getInviteSecret() {
@@ -213,7 +203,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setInviteSecret(String inviteSecret) {
 		this.inviteSecret = inviteSecret;
 	}
-
+	
 	@Length(min=0, max=520, message="注册IP长度不能超过 520 个字符")
 	public String getRegistIp() {
 		return registIp;
@@ -222,7 +212,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setRegistIp(String registIp) {
 		this.registIp = registIp;
 	}
-
+	
 	@Length(min=0, max=50, message="登陆IP长度不能超过 50 个字符")
 	public String getLoginIp() {
 		return loginIp;
@@ -231,25 +221,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setLoginIp(String loginIp) {
 		this.loginIp = loginIp;
 	}
-
-	@NotNull(message="团队总人数不能为空")
-	public Integer getTeamNum() {
-		return teamNum;
-	}
-
-	public void setTeamNum(Integer teamNum) {
-		this.teamNum = teamNum;
-	}
-
-	@NotNull(message="一级团队人数不能为空")
-	public Integer getTeam1Num() {
-		return team1Num;
-	}
-
-	public void setTeam1Num(Integer team1Num) {
-		this.team1Num = team1Num;
-	}
-
+	
 	@Length(min=0, max=128, message="使用版本长度不能超过 128 个字符")
 	public String getAppVersion() {
 		return appVersion;
@@ -258,25 +230,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setAppVersion(String appVersion) {
 		this.appVersion = appVersion;
 	}
-
-	@NotNull(message="二级团队人数不能为空")
-	public Integer getTeam2Num() {
-		return team2Num;
-	}
-
-	public void setTeam2Num(Integer team2Num) {
-		this.team2Num = team2Num;
-	}
-
-	@NotNull(message="三级团队人数不能为空")
-	public Integer getTeam3Num() {
-		return team3Num;
-	}
-
-	public void setTeam3Num(Integer team3Num) {
-		this.team3Num = team3Num;
-	}
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -285,7 +239,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -294,7 +248,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-
+	
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -302,6 +256,10 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
 	}
 
 	public String getSmsCode() {
@@ -335,5 +293,4 @@ public class UserInfo extends DataEntity<UserInfo> {
 	public void setOldPassword(String oldPassword) {
 		this.oldPassword = oldPassword;
 	}
-
 }

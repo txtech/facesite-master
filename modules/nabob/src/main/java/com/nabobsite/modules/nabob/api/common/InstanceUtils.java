@@ -1,6 +1,8 @@
 package com.nabobsite.modules.nabob.api.common;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.shiro.realms.J;
 import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.UserProductBotLog;
@@ -37,10 +39,6 @@ public class InstanceUtils {
             userInfo.setName(accountNo);
             userInfo.setPhoneNumber(accountNo);
             userInfo.setLevel(0);
-            userInfo.setTeamNum(0);
-            userInfo.setTeam1Num(0);
-            userInfo.setTeam2Num(0);
-            userInfo.setTeam3Num(0);
             userInfo.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().getBytes()));
             userInfo.setLock(ContactUtils.USER_LOCK_1);
             userInfo.setUserStatus(ContactUtils.USER_STATUS_1);
@@ -59,6 +57,7 @@ public class InstanceUtils {
             return userInfo;
         }
     }
+
 
     /**
      * @desc 初始化用户账户
@@ -258,6 +257,30 @@ public class InstanceUtils {
             userTask.setTaskEndDay(ContactUtils.addDateHour(24));
             userTask.setTaskFinishData(new JSONObject().toJSONString());
             return userTask;
+        }
+    }
+
+    /**
+     * @desc 初始化用户团队
+     * @author nada
+     * @create 2021/5/12 2:58 下午
+     */
+    public static UserTeam initUserTeam(String userId){
+        synchronized (userId){
+            JSONObject linkData = new JSONObject();
+            linkData.put("1",new JSONArray());
+            linkData.put("2",new JSONArray());
+            linkData.put("3",new JSONArray());
+            UserTeam userTeam = new UserTeam();
+            userTeam.setIsNewRecord(true);
+            userTeam.setUserId(userId);
+            userTeam.setValidNum(0);
+            userTeam.setTeamNum(0);
+            userTeam.setTeam1Num(0);
+            userTeam.setTeam2Num(0);
+            userTeam.setTeam3Num(0);
+            userTeam.setLinkData(linkData.toJSONString());
+            return userTeam;
         }
     }
 }

@@ -13,8 +13,7 @@ import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
-import com.nabobsite.modules.nabob.cms.user.dao.MemberShipDao;
-import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
+import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
@@ -22,8 +21,6 @@ import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
-import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
-import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
@@ -47,6 +44,8 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public RedisOpsUtil redisOpsUtil;
 	@Autowired
 	public UserInfoDao userInfoDao;
+	@Autowired
+	public UserTeamDao userTeamDao;
 	@Autowired
 	public SysConfigDao sysConfigDao;
 	@Autowired
@@ -90,6 +89,11 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			}
 			//初始化奖励账户
 			dbResult = userTaskDao.insert(InstanceUtils.initUserTask(userId));
+			if(!ContactUtils.dbResult(dbResult)){
+				return false;
+			}
+			//初始化团队信息
+			dbResult = userTeamDao.insert(InstanceUtils.initUserTeam(userId));
 			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}
