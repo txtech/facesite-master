@@ -14,9 +14,9 @@ import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 
 /**
- * 任务列表Service
+ * 任务管理Service
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-23
  */
 @Service
 @Transactional(readOnly=true)

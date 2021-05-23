@@ -3,16 +3,18 @@
  */
 package com.nabobsite.modules.nabob.cms.user.entity;
 
+import javax.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+import com.jeesite.common.mybatis.annotation.JoinTable;
+import com.jeesite.common.mybatis.annotation.JoinTable.Type;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
 import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * 会员用户Entity
@@ -33,16 +35,16 @@ import java.util.Date;
 		@Column(name="password", attrName="password", label="密码"),
 		@Column(name="phone_number", attrName="phoneNumber", label="电话号码"),
 		@Column(name="invite_code", attrName="inviteCode", label="邀请码"),
-		@Column(name="invite_secret", attrName="inviteSecret", label="邀请秘文"),
-		@Column(name="regist_ip", attrName="registIp", label="注册IP"),
-		@Column(name="login_ip", attrName="loginIp", label="登陆IP"),
 		@Column(name="app_version", attrName="appVersion", label="使用版本"),
-		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="invite_secret", attrName="inviteSecret", label="邀请秘文"),
+		@Column(name="login_ip", attrName="loginIp", label="登陆IP"),
+		@Column(name="regist_ip", attrName="registIp", label="注册IP"),
+		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
-		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
-		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
-		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
+		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
+		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 	}, orderBy="a.id DESC"
 )
 public class UserInfo extends DataEntity<UserInfo> {
@@ -60,17 +62,17 @@ public class UserInfo extends DataEntity<UserInfo> {
 	private String password;		// 密码
 	private String phoneNumber;		// 电话号码
 	private String inviteCode;		// 邀请码
-	private String inviteSecret;		// 邀请秘文
-	private String registIp;		// 注册IP
-	private String loginIp;		// 登陆IP
 	private String appVersion;		// 使用版本
+	private String inviteSecret;		// 邀请秘文
+	private String loginIp;		// 登陆IP
+	private String registIp;		// 注册IP
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	private String smsCode; //短信验证码
     private String codeKey; //图片验证码key
     private String imgCode; //图片验证码code
-	private String oldPassword;
+    private String oldPassword;
 	
 	public UserInfo() {
 		this(null);
@@ -100,6 +102,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.parent1UserId = parent1UserId;
 	}
 	
+	@NotBlank(message="二级ID不能为空")
 	@Length(min=0, max=50, message="二级ID长度不能超过 50 个字符")
 	public String getParent2UserId() {
 		return parent2UserId;
@@ -109,6 +112,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.parent2UserId = parent2UserId;
 	}
 	
+	@NotBlank(message="三级ID不能为空")
 	@Length(min=0, max=50, message="三级ID长度不能超过 50 个字符")
 	public String getParent3UserId() {
 		return parent3UserId;
@@ -146,6 +150,7 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.name = name;
 	}
 	
+	@NotNull(message="解锁状态：1不能为空")
 	public Integer getLock() {
 		return lock;
 	}
@@ -194,7 +199,15 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.inviteCode = inviteCode;
 	}
 	
-	@NotBlank(message="邀请秘文不能为空")
+	@Length(min=0, max=128, message="使用版本长度不能超过 128 个字符")
+	public String getAppVersion() {
+		return appVersion;
+	}
+
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
+	}
+	
 	@Length(min=0, max=250, message="邀请秘文长度不能超过 250 个字符")
 	public String getInviteSecret() {
 		return inviteSecret;
@@ -202,15 +215,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setInviteSecret(String inviteSecret) {
 		this.inviteSecret = inviteSecret;
-	}
-	
-	@Length(min=0, max=520, message="注册IP长度不能超过 520 个字符")
-	public String getRegistIp() {
-		return registIp;
-	}
-
-	public void setRegistIp(String registIp) {
-		this.registIp = registIp;
 	}
 	
 	@Length(min=0, max=50, message="登陆IP长度不能超过 50 个字符")
@@ -222,13 +226,13 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.loginIp = loginIp;
 	}
 	
-	@Length(min=0, max=128, message="使用版本长度不能超过 128 个字符")
-	public String getAppVersion() {
-		return appVersion;
+	@Length(min=0, max=520, message="注册IP长度不能超过 520 个字符")
+	public String getRegistIp() {
+		return registIp;
 	}
 
-	public void setAppVersion(String appVersion) {
-		this.appVersion = appVersion;
+	public void setRegistIp(String registIp) {
+		this.registIp = registIp;
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -258,9 +262,6 @@ public class UserInfo extends DataEntity<UserInfo> {
 		this.delFlag = delFlag;
 	}
 
-	public static long getSerialVersionUID() {
-		return serialVersionUID;
-	}
 
 	public String getSmsCode() {
 		return smsCode;

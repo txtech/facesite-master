@@ -6,9 +6,9 @@ package com.nabobsite.modules.nabob.api.web;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
-import com.nabobsite.modules.nabob.api.service.OrderApiService;
-import com.nabobsite.modules.nabob.cms.order.entity.Order;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.api.service.OrderApiService;
+import com.nabobsite.modules.nabob.cms.order.entity.OrderPay;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +35,7 @@ public class OrderApiController extends BaseController {
 
 	@PostMapping(value = {"rechargeOrder"})
 	@ApiOperation(value = "充值订单")
-	public CommonResult<JSONObject> rechargeOrder(@RequestBody Order order, HttpServletRequest request) {
+	public CommonResult<JSONObject> rechargeOrder(@RequestBody OrderPay order, HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		order.setIpaddress(ip);
@@ -44,14 +44,14 @@ public class OrderApiController extends BaseController {
 
 	@PostMapping(value = {"getOrderList"})
 	@ApiOperation(value = "获取订单列表")
-	public CommonResult<List<Order>> getOrderList(HttpServletRequest request) {
+	public CommonResult<List<OrderPay>> getOrderList(HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return orderApiService.getOrderList(new Order(),token);
+		return orderApiService.getOrderList(new OrderPay(),token);
 	}
 
 	@PostMapping(value = {"getOrderInfo/{orderNo}"})
 	@ApiOperation(value = "获取订单详情")
-	public CommonResult<Order> getOrderInfo(@PathVariable String orderNo, HttpServletRequest request) {
+	public CommonResult<OrderPay> getOrderInfo(@PathVariable String orderNo, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return orderApiService.getOrderInfo(token,orderNo);
 	}

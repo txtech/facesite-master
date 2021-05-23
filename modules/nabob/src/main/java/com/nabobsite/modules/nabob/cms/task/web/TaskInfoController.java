@@ -23,9 +23,9 @@ import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.service.TaskInfoService;
 
 /**
- * 任务列表Controller
+ * 任务管理Controller
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-23
  */
 @Controller
 @RequestMapping(value = "${adminPath}/task/taskInfo")
@@ -82,7 +82,7 @@ public class TaskInfoController extends BaseController {
 	@ResponseBody
 	public String save(@Validated TaskInfo taskInfo) {
 		taskInfoService.save(taskInfo);
-		return renderResult(Global.TRUE, text("保存任务列表成功！"));
+		return renderResult(Global.TRUE, text("保存任务管理成功！"));
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class TaskInfoController extends BaseController {
 	@ResponseBody
 	public String delete(TaskInfo taskInfo) {
 		taskInfoService.delete(taskInfo);
-		return renderResult(Global.TRUE, text("删除任务列表成功！"));
+		return renderResult(Global.TRUE, text("删除任务管理成功！"));
 	}
 	
 }

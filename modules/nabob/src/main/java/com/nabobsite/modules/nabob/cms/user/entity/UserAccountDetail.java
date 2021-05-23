@@ -4,6 +4,8 @@
 package com.nabobsite.modules.nabob.cms.user.entity;
 
 import javax.validation.constraints.NotBlank;
+
+import io.swagger.models.auth.In;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -18,9 +20,9 @@ import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 
 /**
- * 用户账户Entity
+ * 用户账户明细Entity
  * @author face
- * @version 2021-05-21
+ * @version 2021-05-23
  */
 @Table(name="t1_user_account_detail", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -40,10 +42,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="reward_money", attrName="rewardMoney", label="奖励账户"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
-		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
-		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
-		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
-		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
+		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
+		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="ledger_type", attrName="ledgerType", label="收入支出"),
 	}, orderBy="a.id DESC"
 )
@@ -234,6 +236,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 		this.delFlag = delFlag;
 	}
 	
+	@NotNull(message="收入支出不能为空")
 	public Integer getLedgerType() {
 		return ledgerType;
 	}

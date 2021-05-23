@@ -39,7 +39,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doWarehouseToBalance(String token,UserProductWarehouseRecord userProductWarehouseRecord) {
+	public CommonResult<Boolean> doWarehouseToBalance(String token,ProductUserWarehouseRecord userProductWarehouseRecord) {
 		try {
 			String warehouseId = userProductWarehouseRecord.getWarehouseId();
 			BigDecimal money = userProductWarehouseRecord.getMoney();
@@ -63,7 +63,7 @@ public class ProductApiService extends SimpleProductService {
 			}
 			synchronized (userId) {
 				String title = "收益提取";
-				UserProductWarehouseLog userProductWarehouseLog = InstanceUtils.initUserProductWarehouseLog(userId,warehouseId,1,title,money);
+				ProductUserWarehouseLog userProductWarehouseLog = InstanceUtils.initUserProductWarehouseLog(userId,warehouseId,1,title,money);
 				long dbResult = userProductWarehouseLogDao.insert(userProductWarehouseLog);
 				if(!ContactUtils.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
@@ -75,11 +75,11 @@ public class ProductApiService extends SimpleProductService {
 				if(!ContactUtils.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				UserProductWarehouse oldUserProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
+				ProductUserWarehouse oldUserProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
 				if(oldUserProductWarehouse == null){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
+				ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
 				userProductWarehouse.setId(oldUserProductWarehouse.getId());
 				userProductWarehouse.setAsstesHeldMoney(money);
 				dbResult = userProductWarehouseDao.update(userProductWarehouse);
@@ -104,7 +104,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doWarehouseWithdraw(String token,UserProductWarehouseRecord userProductWarehouseRecord) {
+	public CommonResult<Boolean> doWarehouseWithdraw(String token,ProductUserWarehouseRecord userProductWarehouseRecord) {
 		try {
 			String warehouseId = userProductWarehouseRecord.getWarehouseId();
 			BigDecimal money = userProductWarehouseRecord.getMoney();
@@ -135,11 +135,11 @@ public class ProductApiService extends SimpleProductService {
 				if(!ContactUtils.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				UserProductWarehouse oldUserProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
+				ProductUserWarehouse oldUserProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
 				if(oldUserProductWarehouse == null){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
+				ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
 				userProductWarehouse.setId(oldUserProductWarehouse.getId());
 				userProductWarehouse.setAsstesHeldMoney(money.negate());
 				dbResult = userProductWarehouseDao.update(userProductWarehouse);
@@ -165,7 +165,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doWarehouseDeposit(String token,UserProductWarehouseRecord userProductWarehouseRecord) {
+	public CommonResult<Boolean> doWarehouseDeposit(String token,ProductUserWarehouseRecord userProductWarehouseRecord) {
 		try {
 			String warehouseId = userProductWarehouseRecord.getWarehouseId();
 			BigDecimal money = userProductWarehouseRecord.getMoney();
@@ -195,15 +195,15 @@ public class ProductApiService extends SimpleProductService {
 				if(!ContactUtils.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				UserProductWarehouse oldUserProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
+				ProductUserWarehouse oldUserProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
 				if(oldUserProductWarehouse == null){
-					UserProductWarehouse userProductWarehouse = InstanceUtils.initUserProductWarehouse(userId,warehouseId,money);
+					ProductUserWarehouse userProductWarehouse = InstanceUtils.initUserProductWarehouse(userId,warehouseId,money);
 					dbResult = userProductWarehouseDao.insert(userProductWarehouse);
 					if(!ContactUtils.dbResult(dbResult)){
 						return ResultUtil.failed(I18nCode.CODE_10004);
 					}
 				}else{
-					UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
+					ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
 					userProductWarehouse.setId(oldUserProductWarehouse.getId());
 					userProductWarehouse.setAsstesHeldMoney(money);
 					dbResult = userProductWarehouseDao.update(userProductWarehouse);
@@ -230,7 +230,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doBotTask(String token,UserProductBotLog userProductBotLog) {
+	public CommonResult<Boolean> doBotTask(String token,ProductUserBotLog userProductBotLog) {
 		try {
 			String botId = userProductBotLog.getBotId();
 			String orderNo = userProductBotLog.getOrderNo();
@@ -275,7 +275,7 @@ public class ProductApiService extends SimpleProductService {
 				if(!ContactUtils.isEqual(mustPrice,orderAmount)){
 					return ResultUtil.failed(I18nCode.CODE_10100);
 				}
-				UserProductBotLog checkUserProductBotLog =	this.getUserProductBotLogByOrderNo(orderNo);
+				ProductUserBotLog checkUserProductBotLog =	this.getUserProductBotLogByOrderNo(orderNo);
 				if(checkUserProductBotLog!=null){
 					return ResultUtil.failed(I18nCode.CODE_10008);
 				}
@@ -285,9 +285,9 @@ public class ProductApiService extends SimpleProductService {
 					logger.error("无人机刷单记录失败:{},{},{},{}",userId,orderNo,userId,botId);
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				UserProductBot oldUserProductBot =	this.getUserProductBotByUserAndId(userId,botId);
+				ProductUserBot oldUserProductBot =	this.getUserProductBotByUserAndId(userId,botId);
 				if(oldUserProductBot == null){
-					UserProductBot userProductBot = InstanceUtils.initUserProductBot(userProductBotLog);
+					ProductUserBot userProductBot = InstanceUtils.initUserProductBot(userProductBotLog);
 					dbResult = userProductBotDao.insert(userProductBot);
 					if(!ContactUtils.dbResult(dbResult)){
 						logger.error("用户无人机刷单汇总初始化失败:{},{},{},{}",userId,orderNo,userId,botId);
@@ -299,7 +299,7 @@ public class ProductApiService extends SimpleProductService {
 						return ResultUtil.failed(I18nCode.CODE_10102);
 					}
 					BigDecimal todayIncomeMoney = ContactUtils.add(oldUserProductBot.getTodayIncomeMoney(),commissionMoney);
-					UserProductBot userProductBot = new UserProductBot();
+					ProductUserBot userProductBot = new ProductUserBot();
 					userProductBot.setId(oldUserProductBot.getId());
 					userProductBot.setTodayOrders(oldUserProductBot.getTodayOrders()+1);
 					userProductBot.setTodayIncomeMoney(todayIncomeMoney);
@@ -356,15 +356,15 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<UserProductBot> getUserBotInfo(String token,String botId) {
+	public CommonResult<ProductUserBot> getUserBotInfo(String token,String botId) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserProductBot result = this.getUserProductBotByUserAndId(userId,botId);
+			ProductUserBot result = this.getUserProductBotByUserAndId(userId,botId);
 			if(result ==  null){
-				result = new UserProductBot();
+				result = new ProductUserBot();
 			}
 			ProductBot productBot = this.getProductBotInfoById(botId) ;
 			if(productBot!=null){
@@ -396,7 +396,7 @@ public class ProductApiService extends SimpleProductService {
 				String warehouseId = entity.getId();
 				BigDecimal asstesHeldMoney = new BigDecimal("0");
 				if(ContactUtils.isOkUserId(userId)){
-					UserProductWarehouse userProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
+					ProductUserWarehouse userProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
 					if(userProductWarehouse != null && !ContactUtils.isLesserOrEqualZero(userProductWarehouse.getAsstesHeldMoney())){
 						asstesHeldMoney = userProductWarehouse.getAsstesHeldMoney();
 					}
@@ -431,13 +431,13 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<UserProductWarehouse> getUserWarehouseInfo(String token, String warehouseId) {
+	public CommonResult<ProductUserWarehouse> getUserWarehouseInfo(String token, String warehouseId) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserProductWarehouse result = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
+			ProductUserWarehouse result = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品详情异常",e);
@@ -470,17 +470,17 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<UserProductWarehouseLog>> getUserWarehouseIncomeList(String token,int type,int productType) {
+	public CommonResult<List<ProductUserWarehouseLog>> getUserWarehouseIncomeList(String token,int type,int productType) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
+			ProductUserWarehouseLog userProductWarehouseLog = new ProductUserWarehouseLog();
 			userProductWarehouseLog.setUserId(userId);
 			userProductWarehouseLog.setType(type);
 			userProductWarehouseLog.setProductType(productType);
-			List<UserProductWarehouseLog> result = userProductWarehouseLogDao.findList(userProductWarehouseLog);
+			List<ProductUserWarehouseLog> result = userProductWarehouseLogDao.findList(userProductWarehouseLog);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库收入记录列表异常",e);
@@ -492,15 +492,15 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<UserProductWarehouseRecord>> getUserWarehouseOperationList(String token) {
+	public CommonResult<List<ProductUserWarehouseRecord>> getUserWarehouseOperationList(String token) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserProductWarehouseRecord userProductWarehouseRecord = new UserProductWarehouseRecord();
+			ProductUserWarehouseRecord userProductWarehouseRecord = new ProductUserWarehouseRecord();
 			userProductWarehouseRecord.setUserId(userId);
-			List<UserProductWarehouseRecord> result = userProductWarehouseRecordDao.findList(userProductWarehouseRecord);
+			List<ProductUserWarehouseRecord> result = userProductWarehouseRecordDao.findList(userProductWarehouseRecord);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库操纵记录列表异常",e);

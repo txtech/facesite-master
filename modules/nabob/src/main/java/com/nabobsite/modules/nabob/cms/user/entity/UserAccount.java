@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户账户Entity
  * @author face
- * @version 2021-05-17
+ * @version 2021-05-23
  */
 @Table(name="t1_user_account", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -35,16 +35,16 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="increment_money", attrName="incrementMoney", label="增值账户"),
 		@Column(name="claimable_money", attrName="claimableMoney", label="可提取账户"),
 		@Column(name="reward_money", attrName="rewardMoney", label="奖励账户"),
-		@Column(name="created", attrName="created", label="创建时间"),
-		@Column(name="updated", attrName="updated", label="更新时间"),
-		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
-		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
-		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
-		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
 		@Column(name="team_money", attrName="teamMoney", label="团队收益"),
 		@Column(name="team1_money", attrName="team1Money", label="一级团队收益"),
 		@Column(name="team2_money", attrName="team2Money", label="二级团队收益"),
 		@Column(name="team3_money", attrName="team3Money", label="三级团队收益"),
+		@Column(name="created", attrName="created", label="创建时间"),
+		@Column(name="updated", attrName="updated", label="更新时间"),
+		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
+		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
+		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 	}, orderBy="a.id DESC"
 )
 public class UserAccount extends DataEntity<UserAccount> {
@@ -61,13 +61,13 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private BigDecimal incrementMoney;		// 增值账户
 	private BigDecimal claimableMoney;		// 可提取账户
 	private BigDecimal rewardMoney;		// 奖励账户
-	private Date created;		// 创建时间
-	private Date updated;		// 更新时间
-	private String delFlag;		// 删除标志
 	private BigDecimal teamMoney;		// 团队收益
 	private BigDecimal team1Money;		// 一级团队收益
 	private BigDecimal team2Money;		// 二级团队收益
 	private BigDecimal team3Money;		// 三级团队收益
+	private Date created;		// 创建时间
+	private Date updated;		// 更新时间
+	private String delFlag;		// 删除标志
 	
 	public UserAccount() {
 		this(null);
@@ -177,33 +177,6 @@ public class UserAccount extends DataEntity<UserAccount> {
 		this.rewardMoney = rewardMoney;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-	
-	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
-	public String getDelFlag() {
-		return delFlag;
-	}
-
-	public void setDelFlag(String delFlag) {
-		this.delFlag = delFlag;
-	}
-	
 	@NotNull(message="团队收益不能为空")
 	public BigDecimal getTeamMoney() {
 		return teamMoney;
@@ -238,6 +211,33 @@ public class UserAccount extends DataEntity<UserAccount> {
 
 	public void setTeam3Money(BigDecimal team3Money) {
 		this.team3Money = team3Money;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+	
+	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
+	public String getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(String delFlag) {
+		this.delFlag = delFlag;
 	}
 	
 }

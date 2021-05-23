@@ -5,7 +5,6 @@ package com.nabobsite.modules.nabob.api.service.simple;
 
 import com.nabobsite.modules.nabob.cms.product.dao.*;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
-import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,15 +23,15 @@ public class SimpleProductService extends SimpleUserService {
 	@Autowired
 	public ProductWarehouseDao productWarehouseDao;
 	@Autowired
-	public UserProductBotDao userProductBotDao;
+	public ProductUserBotDao userProductBotDao;
 	@Autowired
-	public UserProductBotLogDao userProductBotLogDao;
+	public ProductUserBotLogDao userProductBotLogDao;
 	@Autowired
-	public UserProductWarehouseDao userProductWarehouseDao;
+	public ProductUserWarehouseDao userProductWarehouseDao;
 	@Autowired
-	public UserProductWarehouseLogDao userProductWarehouseLogDao;
+	public ProductUserWarehouseLogDao userProductWarehouseLogDao;
 	@Autowired
-	public UserProductWarehouseRecordDao userProductWarehouseRecordDao;
+	public ProductUserWarehouseRecordDao userProductWarehouseRecordDao;
 
 	/**
 	 * @desc 用户云仓库产品
@@ -40,9 +39,9 @@ public class SimpleProductService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public UserProductWarehouse getUserProductWarehouseByUserIdAndId(String userId,String warehouseId) {
+	public ProductUserWarehouse getUserProductWarehouseByUserIdAndId(String userId,String warehouseId) {
 		try {
-			UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
+			ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
 			userProductWarehouse.setUserId(userId);
 			userProductWarehouse.setWarehouseId(warehouseId);
 			return userProductWarehouseDao.getByEntity(userProductWarehouse);
@@ -74,9 +73,9 @@ public class SimpleProductService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public UserProductBot getUserProductBotByUserAndId(String userId, String botId) {
+	public ProductUserBot getUserProductBotByUserAndId(String userId, String botId) {
 		try {
-			UserProductBot userProductBot = new UserProductBot();
+			ProductUserBot userProductBot = new ProductUserBot();
 			userProductBot.setUserId(userId);
 			userProductBot.setBotId(botId);
 			return userProductBotDao.getByEntity(userProductBot);
@@ -123,9 +122,9 @@ public class SimpleProductService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public UserProductBotLog getUserProductBotLogByOrderNo(String orderNo) {
+	public ProductUserBotLog getUserProductBotLogByOrderNo(String orderNo) {
 		try {
-			UserProductBotLog userProductBotLog = new UserProductBotLog();
+			ProductUserBotLog userProductBotLog = new ProductUserBotLog();
 			userProductBotLog.setOrderNo(orderNo);
 			return userProductBotLogDao.getByEntity(userProductBotLog);
 		} catch (Exception e) {

@@ -1,9 +1,9 @@
-<% layout('/layouts/default.html', {title: '用户账户管理', libs: ['validate']}){ %>
+<% layout('/layouts/default.html', {title: '用户账户明细管理', libs: ['validate']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header with-border">
 			<div class="box-title">
-				<i class="fa icon-note"></i> ${text(userAccountDetail.isNewRecord ? '新增用户账户' : '编辑用户账户')}
+				<i class="fa icon-note"></i> ${text(userAccountDetail.isNewRecord ? '新增用户账户明细' : '编辑用户账户明细')}
 			</div>
 			<div class="box-tools pull-right">
 				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -185,9 +185,9 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('收入支出')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('收入支出')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="ledgerType" class="form-control digits"/>
+								<#form:input path="ledgerType" class="form-control required digits"/>
 							</div>
 						</div>
 					</div>

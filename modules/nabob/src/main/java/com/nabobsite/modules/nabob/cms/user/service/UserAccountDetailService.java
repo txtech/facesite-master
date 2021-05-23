@@ -14,9 +14,9 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccountDetail;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDetailDao;
 
 /**
- * 用户账户Service
+ * 用户账户明细Service
  * @author face
- * @version 2021-05-21
+ * @version 2021-05-23
  */
 @Service
 @Transactional(readOnly=true)

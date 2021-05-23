@@ -5,18 +5,18 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.lang.StringUtils;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
-import com.nabobsite.modules.nabob.api.common.ContactUtils;
-import com.nabobsite.modules.nabob.api.common.InstanceUtils;
-import com.nabobsite.modules.nabob.cms.task.dao.UserTaskProgressDao;
-import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
+import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseProgressDao;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouseProgress;
+import com.nabobsite.modules.nabob.cms.task.dao.TaskUserRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
-import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
-import com.nabobsite.modules.nabob.cms.task.entity.UserTaskProgress;
-import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
+import com.nabobsite.modules.nabob.cms.task.entity.TaskUserReward;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountTask;
 import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,9 +37,9 @@ import java.util.Random;
 public class TaskApiService extends SimpleUserService {
 
 	@Autowired
-	private UserTaskRewardDao userTaskRewardDao;
+	private TaskUserRewardDao userTaskRewardDao;
 	@Autowired
-	private UserTaskProgressDao userTaskProgressDao;
+	private ProductWarehouseProgressDao userTaskProgressDao;
 	@Autowired
 	private UserAccountApiService userAccountApiService;
 
@@ -63,7 +63,7 @@ public class TaskApiService extends SimpleUserService {
 				int type = taskInfo.getType();
 				int taskNum = taskInfo.getTaskNumber();
 				BigDecimal rewardMoney = taskInfo.getRewardMoney();
-				UserTask userTask = this.getUserTaskByUserId(userId);
+				UserAccountTask userTask = this.getUserTaskByUserId(userId);
 				if(userTask == null){
 					return ResultUtil.failed(I18nCode.CODE_10019);
 				}
@@ -117,7 +117,7 @@ public class TaskApiService extends SimpleUserService {
 			}else if(type == ContactUtils.USER_ACCOUNT_REWARD_TYPE_4){
 				title = ContactUtils.USER_ACCOUNT_REWARD_TITLE_4;
 			}
-			UserTaskReward userTaskReward = InstanceUtils.initUserTaskReward(userId,taskId,type,title,finishNumber,taskNum,rewardMoney);
+			TaskUserReward userTaskReward = InstanceUtils.initUserTaskReward(userId,taskId,type,title,finishNumber,taskNum,rewardMoney);
 			userTaskReward.setUserId(userId);
 			long dbResult = userTaskRewardDao.insert(userTaskReward);
 			if(!ContactUtils.dbResult(dbResult)){
@@ -138,7 +138,7 @@ public class TaskApiService extends SimpleUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean updateTaskFinishNumber(String id,int finishNumber,JSONObject taskJson){
 		try {
-			UserTask userTaskPrams = new UserTask();
+			UserAccountTask userTaskPrams = new UserAccountTask();
 			userTaskPrams.setId(id);
 			userTaskPrams.setTaskOrderNum(finishNumber);
 			userTaskPrams.setTaskFinishData(taskJson.toJSONString());
@@ -155,15 +155,15 @@ public class TaskApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<UserTaskReward>> getTaskRewardList(String token) {
+	public CommonResult<List<TaskUserReward>> getTaskRewardList(String token) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserTaskReward userTaskReward = new UserTaskReward();
+			TaskUserReward userTaskReward = new TaskUserReward();
 			userTaskReward.setUserId(userId);
-			List<UserTaskReward> userTaskRewardList = userTaskRewardDao.findList(userTaskReward);
+			List<TaskUserReward> userTaskRewardList = userTaskRewardDao.findList(userTaskReward);
 			return ResultUtil.success(userTaskRewardList,true);
 		} catch (Exception e) {
 			logger.error("获取任务奖励列表异常",e);
@@ -177,9 +177,9 @@ public class TaskApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<UserTaskProgress>> getCompletings(String token) {
+	public CommonResult<List<ProductWarehouseProgress>> getCompletings(String token) {
 		try {
-			List<UserTaskProgress> result = userTaskProgressDao.findList(new UserTaskProgress());
+			List<ProductWarehouseProgress> result = userTaskProgressDao.findList(new ProductWarehouseProgress());
 			if(result == null || result.size()<100){
 				this.autoInitUserTaskProgress(5);
 			}else{
@@ -205,12 +205,12 @@ public class TaskApiService extends SimpleUserService {
 				String areaCode = list.get(randomIndex);
 				int code = SnowFlakeIDGenerator.getRandom4();
 				String phone = areaCode+"****"+code;
-				UserTaskProgress userTaskProgress = new UserTaskProgress();
+				ProductWarehouseProgress userTaskProgress = new ProductWarehouseProgress();
 				userTaskProgress.setIsNewRecord(true);
 				userTaskProgress.setInContent("टास्क पूरा हुआ，रूपया RS निकाले1000");
 				userTaskProgress.setContent("mission completed, RS has been withdrawn1000");
 				userTaskProgress.setPhone(phone);
-				userTaskProgress.setNum(1000);
+				userTaskProgress.setNum(new BigDecimal(1000));
 				userTaskProgressDao.insert(userTaskProgress);
 			}
 			return true;
@@ -270,13 +270,13 @@ public class TaskApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<UserTask> getUserTaskInfo(String token) {
+	public CommonResult<UserAccountTask> getUserTaskInfo(String token) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserTask result = this.getUserTaskByUserId(userId);
+			UserAccountTask result = this.getUserTaskByUserId(userId);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取用户任务详情异常",e);

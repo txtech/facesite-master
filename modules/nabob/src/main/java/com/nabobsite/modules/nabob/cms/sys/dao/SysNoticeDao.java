@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.sys.entity.SysNotice;
 /**
  * 系统通知DAO接口
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-23
  */
 @MyBatisDao
 public interface SysNoticeDao extends CrudDao<SysNotice> {

@@ -1,9 +1,9 @@
 package com.nabobsite.modules.nabob.pay.hander;
 
 import com.alibaba.fastjson.JSONObject;
-import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
-import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
+import com.nabobsite.modules.nabob.cms.order.entity.OrderPay;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
 import com.nabobsite.modules.nabob.pay.common.ResultListener;
 import com.nabobsite.modules.nabob.pay.order.payorder.India1PayOrderServiceImpl;
@@ -28,7 +28,7 @@ public class OrderHander extends SimpleUserService {
      * @描述:支付订单分发
      * @时间:2017年12月28日 上午11:19:37
      */
-    public JSONObject doRestPay(Order order,SysChannel channel) {
+    public JSONObject doRestPay(OrderPay order, SysChannel channel) {
         String orderNo = order.getOrderNo();
         try {
             int source = channel.getChannelSource();
@@ -49,7 +49,7 @@ public class OrderHander extends SimpleUserService {
      * @描述:获取监听
      * @时间:2017年12月19日 下午3:42:31
      */
-    public ResultListener ResultListener(Order order) {
+    public ResultListener ResultListener(OrderPay order) {
         return new ResultListener(){
             @Override
             public JSONObject successHandler (JSONObject resultData) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao">
-
+	
 	<!-- 查询数据
 	<select id="findList" resultType="UserAccount">
 		SELECT ${sqlMap.column.toSql()}
@@ -15,7 +15,7 @@
 	<!--增加-->
 	<update id="updateAccountMoney" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccount">
 		update
-		    t1_user_account
+		t1_user_account
 		<set>
 			<if test="totalMoney != null and totalMoney !=0">
 				total_money = total_money + #{totalMoney},

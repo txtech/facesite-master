@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
-import com.alibaba.fastjson.JSONValidator;
-import com.jeesite.common.codec.EncodeUtils;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysNotice;
 import com.nabobsite.modules.nabob.cms.sys.service.SysNoticeService;
@@ -27,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.sys.service.SysNoticeService;
 /**
  * 系统通知Controller
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-23
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/sysNotice")
@@ -96,20 +94,6 @@ public class SysNoticeController extends BaseController {
 	public String delete(SysNotice sysNotice) {
 		sysNoticeService.delete(sysNotice);
 		return renderResult(Global.TRUE, text("删除系统通知成功！"));
-	}
-	
-	/**
-	 * 列表选择对话框
-	 */
-	@RequiresPermissions("sys:sysNotice:view")
-	@RequestMapping(value = "sysNoticeSelect")
-	public String empUserSelect(SysNotice sysNotice, String selectData, Model model) {
-		String selectDataJson = EncodeUtils.decodeUrl(selectData);
-		if (selectDataJson != null && JSONValidator.from(selectDataJson).validate()){
-			model.addAttribute("selectData", selectDataJson);
-		}
-		model.addAttribute("SysNotice", sysNotice);
-		return "cms/sys/sysNoticeSelect";
 	}
 	
 }

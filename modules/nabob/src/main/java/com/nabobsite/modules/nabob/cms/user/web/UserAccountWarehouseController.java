@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.user.service.UserAccountWarehouseService;
 /**
  * 用户账户仓库信息Controller
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-23
  */
 @Controller
 @RequestMapping(value = "${adminPath}/user/userAccountWarehouse")

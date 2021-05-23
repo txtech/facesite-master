@@ -1,14 +1,14 @@
-<% layout('/layouts/default.html', {title: '任务列表管理', libs: ['dataGrid']}){ %>
+<% layout('/layouts/default.html', {title: '任务管理管理', libs: ['dataGrid']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header">
 			<div class="box-title">
-				<i class="fa icon-notebook"></i> ${text('任务列表管理')}
+				<i class="fa icon-notebook"></i> ${text('任务管理管理')}
 			</div>
 			<div class="box-tools pull-right">
 				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
 				<% if(hasPermi('task:taskInfo:edit')){ %>
-					<a href="${ctx}/task/taskInfo/form" class="btn btn-default btnTool" title="${text('新增任务列表')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+					<a href="${ctx}/task/taskInfo/form" class="btn btn-default btnTool" title="${text('新增任务管理')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
 				<% } %>
 				<a href="#" class="btn btn-default" id="btnSetting" title="${text('设置')}"><i class="fa fa-navicon"></i></a>
 			</div>
@@ -23,9 +23,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('任务类型 1')}：</label>
+					<label class="control-label">${text('seq')}：</label>
 					<div class="control-inline">
-						<#form:input path="type" class="form-control width-120"/>
+						<#form:input path="seq" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -35,21 +35,9 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('总任务个数')}：</label>
-					<div class="control-inline">
-						<#form:input path="taskNumber" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('button_name')}：</label>
 					<div class="control-inline">
 						<#form:input path="buttonName" maxlength="520" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('奖励金额')}：</label>
-					<div class="control-inline">
-						<#form:input path="rewardMoney" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -59,15 +47,39 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('图标地址')}：</label>
-					<div class="control-inline">
-						<#form:input path="iconUrl" maxlength="1024" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('in_content')}：</label>
 					<div class="control-inline">
 						<#form:input path="inContent" maxlength="3200" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('in_button_name')}：</label>
+					<div class="control-inline">
+						<#form:input path="inButtonName" maxlength="520" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('任务类型 1')}：</label>
+					<div class="control-inline">
+						<#form:input path="type" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('总任务个数')}：</label>
+					<div class="control-inline">
+						<#form:input path="taskNumber" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('奖励金额')}：</label>
+					<div class="control-inline">
+						<#form:input path="rewardMoney" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('图标地址')}：</label>
+					<div class="control-inline">
+						<#form:input path="iconUrl" maxlength="1024" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -75,12 +87,6 @@
 					<div class="control-inline">
 						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('in_button_name')}：</label>
-					<div class="control-inline">
-						<#form:input path="inButtonName" maxlength="520" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -103,12 +109,6 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('seq')}：</label>
-					<div class="control-inline">
-						<#form:input path="seq" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -125,27 +125,27 @@ $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
 		{header:'${text("任务名称")}', name:'name', index:'a.name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/task/taskInfo/form?id='+row.id+'" class="btnList" data-title="${text("编辑任务列表")}">'+(val||row.id)+'</a>';
+			return '<a href="${ctx}/task/taskInfo/form?id='+row.id+'" class="btnList" data-title="${text("编辑任务管理")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("任务类型 1")}', name:'type', index:'a.type', width:150, align:"center"},
-		{header:'${text("content")}', name:'content', index:'a.content', width:150, align:"left"},
-		{header:'${text("总任务个数")}', name:'taskNumber', index:'a.task_number', width:150, align:"center"},
-		{header:'${text("button_name")}', name:'buttonName', index:'a.button_name', width:150, align:"left"},
-		{header:'${text("奖励金额")}', name:'rewardMoney', index:'a.reward_money', width:150, align:"left"},
-		{header:'${text("in_name")}', name:'inName', index:'a.in_name', width:150, align:"left"},
-		{header:'${text("图标地址")}', name:'iconUrl', index:'a.icon_url', width:150, align:"left"},
-		{header:'${text("in_content")}', name:'inContent', index:'a.in_content', width:150, align:"left"},
-		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
-		{header:'${text("in_button_name")}', name:'inButtonName', index:'a.in_button_name', width:150, align:"left"},
-		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
 		{header:'${text("seq")}', name:'seq', index:'a.seq', width:150, align:"center"},
+		{header:'${text("content")}', name:'content', index:'a.content', width:150, align:"left"},
+		{header:'${text("button_name")}', name:'buttonName', index:'a.button_name', width:150, align:"left"},
+		{header:'${text("in_name")}', name:'inName', index:'a.in_name', width:150, align:"left"},
+		{header:'${text("in_content")}', name:'inContent', index:'a.in_content', width:150, align:"left"},
+		{header:'${text("in_button_name")}', name:'inButtonName', index:'a.in_button_name', width:150, align:"left"},
+		{header:'${text("任务类型 1")}', name:'type', index:'a.type', width:150, align:"center"},
+		{header:'${text("总任务个数")}', name:'taskNumber', index:'a.task_number', width:150, align:"center"},
+		{header:'${text("奖励金额")}', name:'rewardMoney', index:'a.reward_money', width:150, align:"left"},
+		{header:'${text("图标地址")}', name:'iconUrl', index:'a.icon_url', width:150, align:"left"},
+		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
+		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('task:taskInfo:edit')){ %>
-				actions.push('<a href="${ctx}/task/taskInfo/form?id='+row.id+'" class="btnList" title="${text("编辑任务列表")}"><i class="fa fa-pencil"></i></a>&nbsp;');
-				actions.push('<a href="${ctx}/task/taskInfo/delete?id='+row.id+'" class="btnList" title="${text("删除任务列表")}" data-confirm="${text("确认要删除该任务列表吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/task/taskInfo/form?id='+row.id+'" class="btnList" title="${text("编辑任务管理")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/task/taskInfo/delete?id='+row.id+'" class="btnList" title="${text("删除任务管理")}" data-confirm="${text("确认要删除该任务管理吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
 			<% } %>
 			return actions.join('');
 		}}

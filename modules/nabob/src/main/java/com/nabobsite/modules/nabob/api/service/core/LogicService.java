@@ -5,9 +5,9 @@ package com.nabobsite.modules.nabob.api.service.core;
 
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.cms.user.entity.UserTeam;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -113,28 +113,28 @@ public class LogicService extends SimpleUserService {
 			//增加1人
 			int num = 1;
 			if(ContactUtils.isOkUserId(parent1UserId)){
-				UserTeam userTeam = new UserTeam();
+				TeamUser userTeam = new TeamUser();
 				userTeam.setId(parent1UserId);
 				userTeam.setTeam1Num(num);
-				long dbResult = userTeamDao.updateTeamNum(userTeam);
+				long dbResult = teamUserDao.updateTeamNum(userTeam);
 				if(ContactUtils.dbResult(dbResult)){
 					logger.info("修改1级团队人数:{}",parent1UserId);
 				}
 			}
 			if(ContactUtils.isOkUserId(parent2UserId)){
-				UserTeam userTeam = new UserTeam();
+				TeamUser userTeam = new TeamUser();
 				userTeam.setId(parent2UserId);
 				userTeam.setTeam2Num(num);
-				long dbResult = userTeamDao.updateTeamNum(userTeam);
+				long dbResult = teamUserDao.updateTeamNum(userTeam);
 				if(ContactUtils.dbResult(dbResult)){
 					logger.info("修改2级团队人数:{}",parent2UserId);
 				}
 			}
 			if(ContactUtils.isOkUserId(parent3UserId)){
-				UserTeam userTeam = new UserTeam();
+				TeamUser userTeam = new TeamUser();
 				userTeam.setId(parent3UserId);
 				userTeam.setTeam3Num(num);
-				long dbResult = userTeamDao.updateTeamNum(userTeam);
+				long dbResult = teamUserDao.updateTeamNum(userTeam);
 				if(ContactUtils.dbResult(dbResult)){
 					logger.info("修改3级团队人数:{}",parent3UserId);
 				}

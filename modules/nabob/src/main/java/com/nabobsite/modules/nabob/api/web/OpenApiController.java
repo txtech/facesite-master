@@ -5,8 +5,8 @@ package com.nabobsite.modules.nabob.api.web;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
-import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.model.SmsModel;
 import com.nabobsite.modules.nabob.api.model.VerificationCodeModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
@@ -16,8 +16,8 @@ import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
-import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -91,13 +91,13 @@ public class OpenApiController extends BaseController {
 
 	@PostMapping(value = {"getMemberShipList"})
 	@ApiOperation(value = "获取会员资格列表")
-	public CommonResult<List<MemberShip>> getMemberShip(HttpServletRequest request){
+	public CommonResult<List<UserInfoMembership>> getMemberShip(HttpServletRequest request){
 		return userInfoApiService.getMemberShip();
 	}
 
 	@PostMapping(value = {"getMemberShipInfo/{id}"})
 	@ApiOperation(value = "获取会员资格详情")
-	public CommonResult<MemberShip> getMemberShipInfo(@PathVariable  String id, HttpServletRequest request){
+	public CommonResult<UserInfoMembership> getMemberShipInfo(@PathVariable  String id, HttpServletRequest request){
 		return userInfoApiService.getMemberShipInfo(id);
 	}
 

@@ -8,9 +8,9 @@ import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountDetail;
 
 /**
- * 用户账户DAO接口
+ * 用户账户明细DAO接口
  * @author face
- * @version 2021-05-21
+ * @version 2021-05-23
  */
 @MyBatisDao
 public interface UserAccountDetailDao extends CrudDao<UserAccountDetail> {

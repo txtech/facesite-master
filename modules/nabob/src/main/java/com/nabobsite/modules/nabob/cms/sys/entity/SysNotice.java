@@ -17,7 +17,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 系统通知Entity
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-23
  */
 @Table(name="t1_sys_notice", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),

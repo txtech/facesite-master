@@ -1,9 +1,9 @@
-<% layout('/layouts/default.html', {title: '用户任务管理', libs: ['validate']}){ %>
+<% layout('/layouts/default.html', {title: '系统配置管理', libs: ['validate']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header with-border">
 			<div class="box-title">
-				<i class="fa icon-note"></i> ${text(sysConfig.isNewRecord ? '新增用户任务' : '编辑用户任务')}
+				<i class="fa icon-note"></i> ${text(sysConfig.isNewRecord ? '新增系统配置' : '编辑系统配置')}
 			</div>
 			<div class="box-tools pull-right">
 				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -26,18 +26,18 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('配置key')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('配置key')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="key" maxlength="250" class="form-control"/>
+								<#form:input path="key" maxlength="250" class="form-control required"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('配置value')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('配置value')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="value" class="form-control"/>
+								<#form:input path="value" maxlength="2048" class="form-control required"/>
 							</div>
 						</div>
 					</div>

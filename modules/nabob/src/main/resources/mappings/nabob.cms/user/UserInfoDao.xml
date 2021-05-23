@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao">
-
+	
 	<!-- 查询数据
 	<select id="findList" resultType="UserInfo">
 		SELECT ${sqlMap.column.toSql()}
@@ -12,10 +12,11 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 
+
 	<!--获取达到等级的直推团队人数-->
 	<update id="getOkLevelTeam1Num" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
 		SELECT
-		    IFNULL(count(id),0)
+			IFNULL(count(id),0)
 		FROM
 			t1_user_info
 		where

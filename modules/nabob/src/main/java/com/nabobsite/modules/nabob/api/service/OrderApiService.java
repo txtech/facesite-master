@@ -4,13 +4,13 @@
 package com.nabobsite.modules.nabob.api.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleOrderService;
-import com.nabobsite.modules.nabob.api.common.ContactUtils;
-import com.nabobsite.modules.nabob.api.common.InstanceUtils;
-import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.cms.order.entity.OrderPay;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysChannelDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
 import com.nabobsite.modules.nabob.pay.hander.OrderHander;
@@ -44,7 +44,7 @@ public class OrderApiService extends SimpleOrderService {
 	 * @create 2021/5/12 1:10 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<JSONObject> rechargeOrder(Order order, String token) {
+	public CommonResult<JSONObject> rechargeOrder(OrderPay order, String token) {
 		try {
 			String name = order.getName();
 			String email = order.getEmail();
@@ -114,14 +114,14 @@ public class OrderApiService extends SimpleOrderService {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<Order>> getOrderList(Order order, String token) {
+	public CommonResult<List<OrderPay>> getOrderList(OrderPay order, String token) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			order.setUserId(userId);
-			List<Order> result = orderDao.findList(order);
+			List<OrderPay> result = orderDao.findList(order);
 			return ResultUtil.success(result,true);
 		} catch (Exception e) {
 			logger.error("获取订单列表异常",e);
@@ -135,7 +135,7 @@ public class OrderApiService extends SimpleOrderService {
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean updateOrderById(String id,Order order) {
+	public Boolean updateOrderById(String id,OrderPay order) {
 		try {
 			if(StringUtils.isEmpty(id)){
 				return null;
@@ -154,7 +154,7 @@ public class OrderApiService extends SimpleOrderService {
 	 * @author nada
 	 * @create 2021/5/12 1:10 下午
 	 */
-	public CommonResult<Order> getOrderInfo(String token,String orderNo) {
+	public CommonResult<OrderPay> getOrderInfo(String token,String orderNo) {
 		try {
 			if(StringUtils.isEmpty(orderNo)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
@@ -163,7 +163,7 @@ public class OrderApiService extends SimpleOrderService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			Order result = this.getOrderByOrderNo(orderNo);
+			OrderPay result = this.getOrderByOrderNo(orderNo);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取订单详情异常",e);

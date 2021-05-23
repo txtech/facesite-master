@@ -8,21 +8,18 @@ import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 import com.jeesite.common.service.CrudService;
-import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
-import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
-import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
-import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
-import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
-import com.nabobsite.modules.nabob.cms.user.dao.*;
-import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
-import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
+import com.nabobsite.modules.nabob.cms.task.dao.TaskUserRewardDao;
+import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
+import com.nabobsite.modules.nabob.cms.team.dao.TeamUserDao;
+import com.nabobsite.modules.nabob.cms.user.dao.*;
+import com.nabobsite.modules.nabob.cms.user.entity.*;
+import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +42,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
 	public UserInfoDao userInfoDao;
 	@Autowired
-	public UserTeamDao userTeamDao;
+	public TeamUserDao teamUserDao;
 	@Autowired
 	public SysConfigDao sysConfigDao;
 	@Autowired
@@ -53,11 +50,11 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
 	public TaskInfoDao taskInfoDao;
 	@Autowired
-	public UserTaskDao userTaskDao;
+	public UserAccountTaskDao userTaskDao;
 	@Autowired
-	public MemberShipDao memberShipDao;
+	public UserInfoMembershipDao memberShipDao;
 	@Autowired
-	public UserTaskRewardDao userTaskRewardDao;
+	public TaskUserRewardDao userTaskRewardDao;
 	@Autowired
 	public UserAccountWarehouseDao userAccountWarehouseDao;
 
@@ -93,7 +90,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 				return false;
 			}
 			//初始化团队信息
-			dbResult = userTeamDao.insert(InstanceUtils.initUserTeam(userId));
+			dbResult = teamUserDao.insert(InstanceUtils.initUserTeam(userId));
 			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}
@@ -377,11 +374,11 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	 * @author nada
 	 * @create 2021/5/13 7:32 下午
 	 */
-	public UserTask getUserTaskByUserId(String userId){
+	public UserAccountTask getUserTaskByUserId(String userId){
 		try {
-			UserTask userTaskPrams = new UserTask();
+			UserAccountTask userTaskPrams = new UserAccountTask();
 			userTaskPrams.setUserId(userId);
-			UserTask userTask = userTaskDao.getByEntity(userTaskPrams);
+			UserAccountTask userTask = userTaskDao.getByEntity(userTaskPrams);
 			return userTask;
 		} catch (Exception e) {
 			logger.error("获取用户任务异常",e);
@@ -398,9 +395,9 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			if(!ContactUtils.isOkUserId(userId)){
 				return null;
 			}
-			UserTask userTaskPrams = new UserTask();
+			UserAccountTask userTaskPrams = new UserAccountTask();
 			userTaskPrams.setUserId(userId);
-			UserTask userTask = userTaskDao.getByEntity(userTaskPrams);
+			UserAccountTask userTask = userTaskDao.getByEntity(userTaskPrams);
 			if (userTask != null) {
 				String finishData = userTask.getTaskFinishData();
 				return ContactUtils.str2JSONObject(finishData);
@@ -434,9 +431,9 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	/**
 	 * 获取会员权益列表
 	 */
-	public List<MemberShip> getMemberShipList(){
+	public List<UserInfoMembership> getMemberShipList(){
 		try {
-			return memberShipDao.findList(new MemberShip());
+			return memberShipDao.findList(new UserInfoMembership());
 		} catch (Exception e) {
 			logger.error("获取会员权益列表异常",e);
 			return null;
@@ -445,9 +442,9 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	/**
 	 * 获取会员权益列表
 	 */
-	public MemberShip getMemberShipByLevel(int level){
+	public UserInfoMembership getMemberShipByLevel(int level){
 		try {
-			MemberShip parms = new MemberShip();
+			UserInfoMembership parms = new UserInfoMembership();
 			parms.setLevel(level);
 			return memberShipDao.getByEntity(parms);
 		} catch (Exception e) {
@@ -465,7 +462,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 		if(currentLevel == ContactUtils.USER_LEVEL_0 || currentLevel == ContactUtils.USER_LEVEL_1){
 			return 1;
 		}
-		MemberShip memberShip = this.getMemberShipByLevel(currentLevel);
+		UserInfoMembership memberShip = this.getMemberShipByLevel(currentLevel);
 		if(memberShip == null){
 			return 2;
 		}
@@ -490,10 +487,10 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			if(ContactUtils.isLesserOrEqualZero(maxAmount)){
 				return maxLevel;
 			}
-			MemberShip parms = new MemberShip();
+			UserInfoMembership parms = new UserInfoMembership();
 			parms.getSqlMap().getWhere().and("grade_money", QueryType.GTE, maxAmount);
-			List<MemberShip> memberShipList = memberShipDao.findList(parms);
-			for (MemberShip  memberShip : memberShipList) {
+			List<UserInfoMembership> memberShipList = memberShipDao.findList(parms);
+			for (UserInfoMembership  memberShip : memberShipList) {
 				BigDecimal gradeMoney = memberShip.getGradeMoney();
 				if(ContactUtils.isBiggerOrEqual(gradeMoney,maxAmount)){
 					maxLevel = memberShip.getLevel();

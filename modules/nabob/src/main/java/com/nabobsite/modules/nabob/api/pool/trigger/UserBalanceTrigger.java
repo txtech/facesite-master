@@ -5,7 +5,6 @@ import com.nabobsite.modules.nabob.api.service.core.LogicService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-
 import java.math.BigDecimal;
 
 /**

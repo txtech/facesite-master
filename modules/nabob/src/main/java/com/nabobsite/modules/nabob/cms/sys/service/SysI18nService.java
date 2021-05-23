@@ -14,9 +14,9 @@ import com.nabobsite.modules.nabob.cms.sys.entity.SysI18n;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysI18nDao;
 
 /**
- * 用户任务Service
+ * 国际化配置Service
  * @author face
- * @version 2021-05-15
+ * @version 2021-05-23
  */
 @Service
 @Transactional(readOnly=true)

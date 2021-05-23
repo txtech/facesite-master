@@ -23,9 +23,9 @@ import com.nabobsite.modules.nabob.cms.sys.entity.SysI18n;
 import com.nabobsite.modules.nabob.cms.sys.service.SysI18nService;
 
 /**
- * 用户任务Controller
+ * 国际化配置Controller
  * @author face
- * @version 2021-05-15
+ * @version 2021-05-23
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/sysI18n")
@@ -82,7 +82,7 @@ public class SysI18nController extends BaseController {
 	@ResponseBody
 	public String save(@Validated SysI18n sysI18n) {
 		sysI18nService.save(sysI18n);
-		return renderResult(Global.TRUE, text("保存用户任务成功！"));
+		return renderResult(Global.TRUE, text("保存国际化配置成功！"));
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class SysI18nController extends BaseController {
 	@ResponseBody
 	public String delete(SysI18n sysI18n) {
 		sysI18nService.delete(sysI18n);
-		return renderResult(Global.TRUE, text("删除用户任务成功！"));
+		return renderResult(Global.TRUE, text("删除国际化配置成功！"));
 	}
 	
 }

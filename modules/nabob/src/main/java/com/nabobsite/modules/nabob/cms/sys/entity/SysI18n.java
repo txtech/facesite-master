@@ -17,9 +17,9 @@ import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 
 /**
- * 用户任务Entity
+ * 国际化配置Entity
  * @author face
- * @version 2021-05-15
+ * @version 2021-05-23
  */
 @Table(name="t1_sys_i18n", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),

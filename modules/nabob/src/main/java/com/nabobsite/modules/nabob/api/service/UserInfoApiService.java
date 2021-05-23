@@ -6,19 +6,19 @@ package com.nabobsite.modules.nabob.api.service;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.utils.UserUtils;
-import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
-import com.nabobsite.modules.nabob.api.common.response.CommonResult;
-import com.nabobsite.modules.nabob.api.common.response.I18nCode;
-import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
-import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
-import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
+import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
+import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
+import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
-import com.nabobsite.modules.nabob.cms.user.dao.MemberShipDao;
-import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
+import com.nabobsite.modules.nabob.cms.sys.service.SequenceCodeService;
+import com.nabobsite.modules.nabob.cms.user.dao.UserInfoMembershipDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +40,13 @@ public class UserInfoApiService extends SimpleUserService {
 	@Autowired
 	private UserAccountApiService userAccountApiService;
 	@Autowired
-	private SequenceService sequenceService;
+	private SequenceCodeService sequenceService;
 	@Autowired
 	private TriggerApiService triggerApiService;
 	@Autowired
 	private SysApiService sysApiService;
 	@Autowired
-	private MemberShipDao memberShipDao;
+	private UserInfoMembershipDao memberShipDao;
 
 	/**
 	 * @desc 用户忘记密码
@@ -378,11 +378,11 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/19 9:25 下午
 	*/
-	public CommonResult<MemberShip> getMemberShipInfo(String id) {
+	public CommonResult<UserInfoMembership> getMemberShipInfo(String id) {
 		try {
-			MemberShip memberShip = new MemberShip();
+			UserInfoMembership memberShip = new UserInfoMembership();
 			memberShip.setId(id);
-			MemberShip result = memberShipDao.getByEntity(memberShip);
+			UserInfoMembership result = memberShipDao.getByEntity(memberShip);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取会员资格异常",e);
@@ -395,9 +395,9 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/19 9:25 下午
 	 */
-	public CommonResult<List<MemberShip>> getMemberShip() {
+	public CommonResult<List<UserInfoMembership>> getMemberShip() {
 		try {
-			List<MemberShip> shipList = memberShipDao.findList(new MemberShip());
+			List<UserInfoMembership> shipList = memberShipDao.findList(new UserInfoMembership());
 			return ResultUtil.success(shipList);
 		} catch (Exception e) {
 			logger.error("获取会员资格列表异常",e);

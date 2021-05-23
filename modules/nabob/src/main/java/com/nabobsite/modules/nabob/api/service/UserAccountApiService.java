@@ -30,7 +30,7 @@ import java.util.List;
 public class UserAccountApiService extends SimpleUserService {
 
 	@Autowired
-	private UserAccountLogDao userAccountLogDao;
+	private UserAccountBackupDao userAccountLogDao;
 	@Autowired
 	private UserAccountDetailDao userAccountDetailDao;
 	@Autowired
@@ -285,7 +285,7 @@ public class UserAccountApiService extends SimpleUserService {
 					return false;
 				}
 				String detailId = userAccountDetail.getId();
-				UserAccountLog userAccountLog = InstanceUtils.initUserAccountLog(detailId,title,oldUserAccount);
+				UserAccountBackup userAccountLog = InstanceUtils.initUserAccountLog(detailId,title,oldUserAccount);
 				dbResult = userAccountLogDao.insert(userAccountLog);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改账失败,记录日志失败:{},{},{}",userId,accountId,updateMoney);

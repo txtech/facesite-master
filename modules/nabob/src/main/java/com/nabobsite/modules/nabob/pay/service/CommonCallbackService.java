@@ -7,8 +7,8 @@ import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.OrderApiService;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
-import com.nabobsite.modules.nabob.cms.order.dao.OrderDao;
-import com.nabobsite.modules.nabob.cms.order.entity.Order;
+import com.nabobsite.modules.nabob.cms.order.dao.OrderPayDao;
+import com.nabobsite.modules.nabob.cms.order.entity.OrderPay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ import java.math.BigDecimal;
  */
 @Service
 @Transactional(readOnly=true)
-public class CommonCallbackService extends CrudService<OrderDao, Order> {
+public class CommonCallbackService extends CrudService<OrderPayDao, OrderPay> {
 
 	@Autowired
 	private OrderApiService orderApiService;
@@ -38,7 +38,7 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 	public boolean callBack(String orderNo,String pOrderNo,int backStatus,String message) {
 		try {
 			synchronized (orderNo) {
-				Order oldOrder = orderApiService.getOrderByOrderNo(orderNo);
+				OrderPay oldOrder = orderApiService.getOrderByOrderNo(orderNo);
 				if(oldOrder == null){
 					logger.error("充值订单回调失败,订单不存在:{},{}",orderNo,pOrderNo);
 					return false;
@@ -75,14 +75,14 @@ public class CommonCallbackService extends CrudService<OrderDao, Order> {
 	 * @create 2021/5/12 7:03 下午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean doExecute(String orderNo,String pOrderNo,Order oldOrder,int backStatus,String message) {
+	public boolean doExecute(String orderNo,String pOrderNo,OrderPay oldOrder,int backStatus,String message) {
 		try {
 			String id = oldOrder.getId();
 			int type = oldOrder.getType();
 			String userId = oldOrder.getUserId();
 			BigDecimal payMoney = oldOrder.getPayMoney();
 			BigDecimal actualMoney = oldOrder.getActualMoney();
-			Order newOrder = new Order();
+			OrderPay newOrder = new OrderPay();
 			newOrder.setId(id);
 			newOrder.setPorderNo(pOrderNo);
 			newOrder.setRemarks(message);

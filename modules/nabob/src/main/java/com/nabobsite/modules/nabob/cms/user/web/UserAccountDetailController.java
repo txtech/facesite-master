@@ -23,9 +23,9 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccountDetail;
 import com.nabobsite.modules.nabob.cms.user.service.UserAccountDetailService;
 
 /**
- * 用户账户Controller
+ * 用户账户明细Controller
  * @author face
- * @version 2021-05-21
+ * @version 2021-05-23
  */
 @Controller
 @RequestMapping(value = "${adminPath}/user/userAccountDetail")
@@ -82,7 +82,7 @@ public class UserAccountDetailController extends BaseController {
 	@ResponseBody
 	public String save(@Validated UserAccountDetail userAccountDetail) {
 		userAccountDetailService.save(userAccountDetail);
-		return renderResult(Global.TRUE, text("保存用户账户成功！"));
+		return renderResult(Global.TRUE, text("保存用户账户明细成功！"));
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class UserAccountDetailController extends BaseController {
 	@ResponseBody
 	public String delete(UserAccountDetail userAccountDetail) {
 		userAccountDetailService.delete(userAccountDetail);
-		return renderResult(Global.TRUE, text("删除用户账户成功！"));
+		return renderResult(Global.TRUE, text("删除用户账户明细成功！"));
 	}
 	
 }

@@ -1,14 +1,14 @@
-<% layout('/layouts/default.html', {title: '用户任务管理', libs: ['dataGrid']}){ %>
+<% layout('/layouts/default.html', {title: '国际化配置管理', libs: ['dataGrid']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header">
 			<div class="box-title">
-				<i class="fa icon-notebook"></i> ${text('用户任务管理')}
+				<i class="fa icon-notebook"></i> ${text('国际化配置管理')}
 			</div>
 			<div class="box-tools pull-right">
 				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
 				<% if(hasPermi('sys:sysI18n:edit')){ %>
-					<a href="${ctx}/sys/sysI18n/form" class="btn btn-default btnTool" title="${text('新增用户任务')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+					<a href="${ctx}/sys/sysI18n/form" class="btn btn-default btnTool" title="${text('新增国际化配置')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
 				<% } %>
 				<a href="#" class="btn btn-default" id="btnSetting" title="${text('设置')}"><i class="fa fa-navicon"></i></a>
 			</div>
@@ -95,7 +95,7 @@ $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
 		{header:'${text("类型 1")}', name:'type', index:'a.type', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/sys/sysI18n/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户任务")}">'+(val||row.id)+'</a>';
+			return '<a href="${ctx}/sys/sysI18n/form?id='+row.id+'" class="btnList" data-title="${text("编辑国际化配置")}">'+(val||row.id)+'</a>';
 		}},
 		{header:'${text("模块")}', name:'module', index:'a.module', width:150, align:"left"},
 		{header:'${text("标志")}', name:'key', index:'a.key', width:150, align:"left"},
@@ -109,8 +109,8 @@ $('#dataGrid').dataGrid({
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('sys:sysI18n:edit')){ %>
-				actions.push('<a href="${ctx}/sys/sysI18n/form?id='+row.id+'" class="btnList" title="${text("编辑用户任务")}"><i class="fa fa-pencil"></i></a>&nbsp;');
-				actions.push('<a href="${ctx}/sys/sysI18n/delete?id='+row.id+'" class="btnList" title="${text("删除用户任务")}" data-confirm="${text("确认要删除该用户任务吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/sys/sysI18n/form?id='+row.id+'" class="btnList" title="${text("编辑国际化配置")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/sys/sysI18n/delete?id='+row.id+'" class="btnList" title="${text("删除国际化配置")}" data-confirm="${text("确认要删除该国际化配置吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
 			<% } %>
 			return actions.join('');
 		}}

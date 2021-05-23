@@ -15,8 +15,6 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 @MyBatisDao
 public interface UserInfoDao extends CrudDao<UserInfo> {
 
-
-
     /**
      * @desc 获取达到等级的直推团队人数
      * @author nada

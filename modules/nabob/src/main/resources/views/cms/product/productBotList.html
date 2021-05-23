@@ -35,21 +35,21 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('价格')}：</label>
+					<label class="control-label">${text('产品价格')}：</label>
 					<div class="control-inline">
 						<#form:input path="price" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('佣金比例')}：</label>
-					<div class="control-inline">
-						<#form:input path="commissionRate" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('每日次数')}：</label>
 					<div class="control-inline">
 						<#form:input path="dailyNum" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('佣金比例')}：</label>
+					<div class="control-inline">
+						<#form:input path="commissionRate" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -65,9 +65,27 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('产品标题')}：</label>
+					<div class="control-inline">
+						<#form:input path="title" maxlength="1024" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('产品描述')}：</label>
 					<div class="control-inline">
-						<#form:input path="desc" maxlength="2024" class="form-control width-120"/>
+						<#form:input path="desc" maxlength="3200" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('印度标题')}：</label>
+					<div class="control-inline">
+						<#form:input path="inTitle" maxlength="520" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('印度描述')}：</label>
+					<div class="control-inline">
+						<#form:input path="inDesc" maxlength="1024" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -75,12 +93,6 @@
 					<div class="control-inline">
 						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('标题')}：</label>
-					<div class="control-inline">
-						<#form:input path="title" maxlength="1024" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -94,18 +106,6 @@
 					<label class="control-label">${text('备注信息')}：</label>
 					<div class="control-inline">
 						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('印度标题')}：</label>
-					<div class="control-inline">
-						<#form:input path="inTitle" maxlength="520" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('印度描述')}：</label>
-					<div class="control-inline">
-						<#form:input path="inDesc" maxlength="1024" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -135,19 +135,21 @@ $('#dataGrid').dataGrid({
 		}},
 		{header:'${text("产品名称")}', name:'name', index:'a.name', width:150, align:"left"},
 		{header:'${text("限制等级")}', name:'level', index:'a.level', width:150, align:"center"},
-		{header:'${text("价格")}', name:'price', index:'a.price', width:150, align:"left"},
-		{header:'${text("佣金比例")}', name:'commissionRate', index:'a.commission_rate', width:150, align:"left"},
+		{header:'${text("产品价格")}', name:'price', index:'a.price', width:150, align:"right", formatter: function(val, obj, row, act){
+			return js.formatNumber(val, 2, false, ''); // 数值类型格式化 (原始数值, 小数位数, 是否千分位, 默认值，金额情况下设置0.00);
+		}},
 		{header:'${text("每日次数")}', name:'dailyNum', index:'a.daily_num', width:150, align:"center"},
+		{header:'${text("佣金比例")}', name:'commissionRate', index:'a.commission_rate', width:150, align:"left"},
 		{header:'${text("额外佣金比例")}', name:'commissionRateOther', index:'a.commission_rate_other', width:150, align:"left"},
 		{header:'${text("产品图片")}', name:'productUrl', index:'a.product_url', width:150, align:"left"},
+		{header:'${text("产品标题")}', name:'title', index:'a.title', width:150, align:"left"},
 		{header:'${text("产品描述")}', name:'desc', index:'a.desc', width:150, align:"left"},
-		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
-		{header:'${text("标题")}', name:'title', index:'a.title', width:150, align:"left"},
-		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text("印度标题")}', name:'inTitle', index:'a.in_title', width:150, align:"left"},
 		{header:'${text("印度描述")}', name:'inDesc', index:'a.in_desc', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
+		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
+		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('product:productBot:edit')){ %>

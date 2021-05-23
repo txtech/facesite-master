@@ -2,20 +2,18 @@ package com.nabobsite.modules.nabob.api.common;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.jeesite.common.shiro.realms.J;
-import com.nabobsite.modules.nabob.cms.order.entity.Order;
-import com.nabobsite.modules.nabob.cms.product.entity.UserProductBot;
-import com.nabobsite.modules.nabob.cms.product.entity.UserProductBotLog;
-import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouse;
-import com.nabobsite.modules.nabob.cms.product.entity.UserProductWarehouseLog;
+import com.nabobsite.modules.nabob.cms.order.entity.OrderPay;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductUserBot;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductUserBotLog;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductUserWarehouse;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductUserWarehouseLog;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
-import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
-import com.nabobsite.modules.nabob.cms.task.entity.UserTaskReward;
+import com.nabobsite.modules.nabob.cms.task.entity.TaskUserReward;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -119,8 +117,8 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
-    public static UserAccountLog initUserAccountLog(String detailId,String title,UserAccount olduUerAccount){
-        UserAccountLog userAccountLog = new UserAccountLog();
+    public static UserAccountBackup initUserAccountLog(String detailId,String title,UserAccount olduUerAccount){
+        UserAccountBackup userAccountLog = new UserAccountBackup();
         BeanUtils.copyProperties(olduUerAccount, userAccountLog);
         userAccountLog.setIsNewRecord(true);
         userAccountLog.setId(null);
@@ -134,8 +132,8 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:59 下午
     */
-    public static Order initOrderInfo(Order params, String orderNo, SysChannel sysChannel ){
-        Order order = (Order)params.clone();
+    public static OrderPay initOrderInfo(OrderPay params, String orderNo, SysChannel sysChannel ){
+        OrderPay order = (OrderPay)params.clone();
         order.setIsNewRecord(true);
         order.setOrderNo(orderNo);
         order.setPayRate(sysChannel.getPayRate());
@@ -152,8 +150,8 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
-    public static UserTaskReward initUserTaskReward(String userId,String taskId,int type,String title,int finishNumber,int taskNum,BigDecimal rewardMoney){
-        UserTaskReward userTaskReward = new UserTaskReward();
+    public static TaskUserReward initUserTaskReward(String userId, String taskId, int type, String title, int finishNumber, int taskNum, BigDecimal rewardMoney){
+        TaskUserReward userTaskReward = new TaskUserReward();
         userTaskReward.setIsNewRecord(true);
         userTaskReward.setUserId(userId);
         userTaskReward.setTaskId(taskId);
@@ -170,8 +168,8 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
-    public static UserProductBot initUserProductBot(UserProductBotLog userProductBotLog){
-        UserProductBot userProductBot = new UserProductBot();
+    public static ProductUserBot initUserProductBot(ProductUserBotLog userProductBotLog){
+        ProductUserBot userProductBot = new ProductUserBot();
         userProductBot.setIsNewRecord(true);
         userProductBot.setUserId(userProductBotLog.getUserId());
         userProductBot.setBotId(userProductBotLog.getBotId());
@@ -188,8 +186,8 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
-    public static UserProductWarehouse initUserProductWarehouse(String userId,String warehouseId,BigDecimal asstesHeldMoney){
-        UserProductWarehouse userProductWarehouse = new UserProductWarehouse();
+    public static ProductUserWarehouse initUserProductWarehouse(String userId, String warehouseId, BigDecimal asstesHeldMoney){
+        ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
         userProductWarehouse.setIsNewRecord(true);
         userProductWarehouse.setUserId(userId);
         userProductWarehouse.setWarehouseId(warehouseId);
@@ -209,8 +207,8 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
-    public static UserProductWarehouseLog initUserProductWarehouseLog(String userId,String warehouseId,int type,String title,BigDecimal money){
-        UserProductWarehouseLog userProductWarehouseLog = new UserProductWarehouseLog();
+    public static ProductUserWarehouseLog initUserProductWarehouseLog(String userId, String warehouseId, int type, String title, BigDecimal money){
+        ProductUserWarehouseLog userProductWarehouseLog = new ProductUserWarehouseLog();
         userProductWarehouseLog.setIsNewRecord(true);
         userProductWarehouseLog.setUserId(userId);
         userProductWarehouseLog.setWarehouseId(warehouseId);
@@ -245,9 +243,9 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
-    public static UserTask initUserTask(String userId){
+    public static UserAccountTask initUserTask(String userId){
         synchronized (userId){
-            UserTask userTask = new UserTask();
+            UserAccountTask userTask = new UserAccountTask();
             userTask.setIsNewRecord(true);
             userTask.setUserId(userId);
             userTask.setTaskStatus(ContactUtils.USER_TASK_STATUS_1);
@@ -265,13 +263,13 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
-    public static UserTeam initUserTeam(String userId){
+    public static TeamUser initUserTeam(String userId){
         synchronized (userId){
             JSONObject linkData = new JSONObject();
             linkData.put("1",new JSONArray());
             linkData.put("2",new JSONArray());
             linkData.put("3",new JSONArray());
-            UserTeam userTeam = new UserTeam();
+            TeamUser userTeam = new TeamUser();
             userTeam.setIsNewRecord(true);
             userTeam.setUserId(userId);
             userTeam.setValidNum(0);

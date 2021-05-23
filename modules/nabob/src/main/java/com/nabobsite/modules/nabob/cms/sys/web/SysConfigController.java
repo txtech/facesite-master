@@ -23,9 +23,9 @@ import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.sys.service.SysConfigService;
 
 /**
- * 用户任务Controller
+ * 系统配置Controller
  * @author face
- * @version 2021-05-15
+ * @version 2021-05-23
  */
 @Controller
 @RequestMapping(value = "${adminPath}/sys/sysConfig")
@@ -82,7 +82,7 @@ public class SysConfigController extends BaseController {
 	@ResponseBody
 	public String save(@Validated SysConfig sysConfig) {
 		sysConfigService.save(sysConfig);
-		return renderResult(Global.TRUE, text("保存用户任务成功！"));
+		return renderResult(Global.TRUE, text("保存系统配置成功！"));
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class SysConfigController extends BaseController {
 	@ResponseBody
 	public String delete(SysConfig sysConfig) {
 		sysConfigService.delete(sysConfig);
-		return renderResult(Global.TRUE, text("删除用户任务成功！"));
+		return renderResult(Global.TRUE, text("删除系统配置成功！"));
 	}
 	
 }

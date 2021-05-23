@@ -8,9 +8,9 @@ import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysI18n;
 
 /**
- * 用户任务DAO接口
+ * 国际化配置DAO接口
  * @author face
- * @version 2021-05-15
+ * @version 2021-05-23
  */
 @MyBatisDao
 public interface SysI18nDao extends CrudDao<SysI18n> {

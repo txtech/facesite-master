@@ -4,11 +4,11 @@
 package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.service.CrudService;
-import com.nabobsite.modules.nabob.api.common.response.I18nCode;
-import com.nabobsite.modules.nabob.cms.order.dao.CashDao;
-import com.nabobsite.modules.nabob.cms.order.entity.Cash;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
+import com.nabobsite.modules.nabob.cms.order.dao.OrderCashDao;
+import com.nabobsite.modules.nabob.cms.order.entity.OrderCash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +22,10 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly=true)
-public class CashApiService extends CrudService<CashDao, Cash> {
+public class CashApiService extends CrudService<OrderCashDao, OrderCash> {
 
 	@Autowired
-	private CashDao cashDao;
+	private OrderCashDao cashDao;
 
 	/**
 	 * @desc 提款订单
@@ -33,7 +33,7 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> cashOrder(String token, Cash cash) {
+	public CommonResult<Boolean> cashOrder(String token, OrderCash cash) {
 		try {
 			long dbResult = cashDao.insert(cash);
 			return ResultUtil.success(true);
@@ -49,9 +49,9 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<Cash>> getCashOrderList(String token, Cash cash) {
+	public CommonResult<List<OrderCash>> getCashOrderList(String token, OrderCash cash) {
 		try {
-			List<Cash> retsult = cashDao.findList(cash);
+			List<OrderCash> retsult = cashDao.findList(cash);
 			return ResultUtil.success(retsult,true);
 		} catch (Exception e) {
 			logger.error("获取提款订单列表异常",e);
@@ -65,9 +65,9 @@ public class CashApiService extends CrudService<CashDao, Cash> {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Cash> getCashOrderInfo(String token,Cash cash) {
+	public CommonResult<OrderCash> getCashOrderInfo(String token, OrderCash cash) {
 		try {
-			Cash result = cashDao.getByEntity(cash);
+			OrderCash result = cashDao.getByEntity(cash);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取提款订单详情异常",e);

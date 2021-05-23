@@ -4,13 +4,13 @@
 package com.nabobsite.modules.nabob.cms.user.entity;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 import java.math.BigDecimal;
 import com.jeesite.common.mybatis.annotation.JoinTable;
 import com.jeesite.common.mybatis.annotation.JoinTable.Type;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.validator.constraints.Length;
 
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.mybatis.annotation.Column;
@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户账户仓库信息Entity
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-23
  */
 @Table(name="t1_user_account_warehouse", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -33,14 +33,14 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="team_accumulative_income_money", attrName="teamAccumulativeIncomeMoney", label="团队累计收益"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
-		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
-		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
-		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
-		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
+		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
+		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 	}, orderBy="a.id DESC"
 )
 public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
-
+	
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户id
 	private BigDecimal asstesHeldMoney;		// 仓库持有资产
@@ -52,7 +52,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-
+	
 	public UserAccountWarehouse() {
 		this(null);
 	}
@@ -60,8 +60,9 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public UserAccountWarehouse(String id){
 		super(id);
 	}
-
+	
 	@NotBlank(message="用户id不能为空")
+	@Length(min=0, max=30, message="用户id长度不能超过 30 个字符")
 	public String getUserId() {
 		return userId;
 	}
@@ -69,7 +70,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-
+	
 	@NotNull(message="仓库持有资产不能为空")
 	public BigDecimal getAsstesHeldMoney() {
 		return asstesHeldMoney;
@@ -78,7 +79,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setAsstesHeldMoney(BigDecimal asstesHeldMoney) {
 		this.asstesHeldMoney = asstesHeldMoney;
 	}
-
+	
 	@NotNull(message="累计收益不能为空")
 	public BigDecimal getAccumulativeIncomeMoney() {
 		return accumulativeIncomeMoney;
@@ -87,7 +88,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setAccumulativeIncomeMoney(BigDecimal accumulativeIncomeMoney) {
 		this.accumulativeIncomeMoney = accumulativeIncomeMoney;
 	}
-
+	
 	@NotNull(message="个人受益不能为空")
 	public BigDecimal getPersonalIncomeMoney() {
 		return personalIncomeMoney;
@@ -96,7 +97,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setPersonalIncomeMoney(BigDecimal personalIncomeMoney) {
 		this.personalIncomeMoney = personalIncomeMoney;
 	}
-
+	
 	@NotNull(message="个人累计收益不能为空")
 	public BigDecimal getPersonalAccumulativeIncomeMoney() {
 		return personalAccumulativeIncomeMoney;
@@ -105,7 +106,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setPersonalAccumulativeIncomeMoney(BigDecimal personalAccumulativeIncomeMoney) {
 		this.personalAccumulativeIncomeMoney = personalAccumulativeIncomeMoney;
 	}
-
+	
 	@NotNull(message="团队收益不能为空")
 	public BigDecimal getTeamIncomeMoney() {
 		return teamIncomeMoney;
@@ -114,7 +115,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setTeamIncomeMoney(BigDecimal teamIncomeMoney) {
 		this.teamIncomeMoney = teamIncomeMoney;
 	}
-
+	
 	@NotNull(message="团队累计收益不能为空")
 	public BigDecimal getTeamAccumulativeIncomeMoney() {
 		return teamAccumulativeIncomeMoney;
@@ -123,7 +124,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setTeamAccumulativeIncomeMoney(BigDecimal teamAccumulativeIncomeMoney) {
 		this.teamAccumulativeIncomeMoney = teamAccumulativeIncomeMoney;
 	}
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -132,7 +133,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -141,7 +142,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-
+	
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
 	public String getDelFlag() {
 		return delFlag;
@@ -150,5 +151,5 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-
+	
 }

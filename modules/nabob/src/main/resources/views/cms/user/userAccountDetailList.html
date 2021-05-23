@@ -1,14 +1,14 @@
-<% layout('/layouts/default.html', {title: '用户账户管理', libs: ['dataGrid']}){ %>
+<% layout('/layouts/default.html', {title: '用户账户明细管理', libs: ['dataGrid']}){ %>
 <div class="main-content">
 	<div class="box box-main">
 		<div class="box-header">
 			<div class="box-title">
-				<i class="fa icon-notebook"></i> ${text('用户账户管理')}
+				<i class="fa icon-notebook"></i> ${text('用户账户明细管理')}
 			</div>
 			<div class="box-tools pull-right">
 				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
 				<% if(hasPermi('user:userAccountDetail:edit')){ %>
-					<a href="${ctx}/user/userAccountDetail/form" class="btn btn-default btnTool" title="${text('新增用户账户')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+					<a href="${ctx}/user/userAccountDetail/form" class="btn btn-default btnTool" title="${text('新增用户账户明细')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
 				<% } %>
 				<a href="#" class="btn btn-default" id="btnSetting" title="${text('设置')}"><i class="fa fa-navicon"></i></a>
 			</div>
@@ -149,7 +149,7 @@ $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
 		{header:'${text("用户id")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/user/userAccountDetail/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户账户")}">'+(val||row.id)+'</a>';
+			return '<a href="${ctx}/user/userAccountDetail/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户账户明细")}">'+(val||row.id)+'</a>';
 		}},
 		{header:'${text("账户ID")}', name:'accountId', index:'a.account_id', width:150, align:"left"},
 		{header:'${text("标题")}', name:'title', index:'a.title', width:150, align:"left"},
@@ -166,14 +166,14 @@ $('#dataGrid').dataGrid({
 		{header:'${text("奖励账户")}', name:'rewardMoney', index:'a.reward_money', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.remarks', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.del_flag', width:150, align:"left"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
+		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
 		{header:'${text("收入支出")}', name:'ledgerType', index:'a.ledger_type', width:150, align:"center"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:userAccountDetail:edit')){ %>
-				actions.push('<a href="${ctx}/user/userAccountDetail/form?id='+row.id+'" class="btnList" title="${text("编辑用户账户")}"><i class="fa fa-pencil"></i></a>&nbsp;');
-				actions.push('<a href="${ctx}/user/userAccountDetail/delete?id='+row.id+'" class="btnList" title="${text("删除用户账户")}" data-confirm="${text("确认要删除该用户账户吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/user/userAccountDetail/form?id='+row.id+'" class="btnList" title="${text("编辑用户账户明细")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/user/userAccountDetail/delete?id='+row.id+'" class="btnList" title="${text("删除用户账户明细")}" data-confirm="${text("确认要删除该用户账户明细吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
 			<% } %>
 			return actions.join('');
 		}}

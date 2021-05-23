@@ -16,7 +16,7 @@ import com.nabobsite.modules.nabob.cms.sys.dao.SysNoticeDao;
 /**
  * 系统通知Service
  * @author face
- * @version 2021-05-20
+ * @version 2021-05-23
  */
 @Service
 @Transactional(readOnly=true)

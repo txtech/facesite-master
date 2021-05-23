@@ -4,6 +4,7 @@
 package com.nabobsite.modules.nabob.cms.sys.entity;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import com.jeesite.common.mybatis.annotation.JoinTable;
@@ -16,9 +17,9 @@ import com.jeesite.common.mybatis.annotation.Table;
 import com.jeesite.common.mybatis.mapper.query.QueryType;
 
 /**
- * 用户任务Entity
+ * 系统配置Entity
  * @author face
- * @version 2021-05-15
+ * @version 2021-05-23
  */
 @Table(name="t1_sys_config", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -28,10 +29,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="value", attrName="value", label="配置value"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
-		@Column(name="remarks", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
-		@Column(name="create_by", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
-		@Column(name="update_by", attrName="updateBy", label="修改人", isQuery=false),
-		@Column(name="del_flag", attrName="delFlag", label="删除标志"),
+		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
+		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
+		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 	}, orderBy="a.id DESC"
 )
 public class SysConfig extends DataEntity<SysConfig> {
@@ -61,6 +62,7 @@ public class SysConfig extends DataEntity<SysConfig> {
 		this.type = type;
 	}
 	
+	@NotBlank(message="配置key不能为空")
 	@Length(min=0, max=250, message="配置key长度不能超过 250 个字符")
 	public String getKey() {
 		return key;
@@ -70,6 +72,8 @@ public class SysConfig extends DataEntity<SysConfig> {
 		this.key = key;
 	}
 	
+	@NotBlank(message="配置value不能为空")
+	@Length(min=0, max=2048, message="配置value长度不能超过 2048 个字符")
 	public String getValue() {
 		return value;
 	}

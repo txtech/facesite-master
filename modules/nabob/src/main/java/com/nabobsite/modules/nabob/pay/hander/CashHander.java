@@ -1,9 +1,9 @@
 package com.nabobsite.modules.nabob.pay.hander;
 
 import com.alibaba.fastjson.JSONObject;
-import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
-import com.nabobsite.modules.nabob.cms.order.entity.Cash;
+import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
+import com.nabobsite.modules.nabob.cms.order.entity.OrderCash;
 import com.nabobsite.modules.nabob.pay.common.ResultListener;
 import com.nabobsite.modules.nabob.pay.order.payorder.India1PayOrderServiceImpl;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class CashHander extends SimpleUserService {
      * @描述:第三方接口代付提现接口
      * @时间:2017年12月14日 下午4:29:05
      */
-    public JSONObject doRestReplace(JSONObject reqData, Cash cash){
+    public JSONObject doRestReplace(JSONObject reqData, OrderCash cash){
         try {
             logger.info("路由完成开始执行代付==> {}",reqData);
             int route = reqData.getIntValue("channelSource");
