@@ -120,6 +120,51 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	}
 
 	/**
+	 * @desc 用户解锁
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean updateLock(String userId,int userLock) {
+		try {
+			if(!ContactUtils.isOkUserId(userId)){
+				return null;
+			}
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(userId);
+			userInfo.setLock(userLock);
+			long dbResult = userInfoDao.update(userInfo);
+			return ContactUtils.dbResult(dbResult);
+		} catch (Exception e) {
+			logger.error("用户解锁异常",e);
+			return null;
+		}
+	}
+
+	/**
+	 * @desc 账号等级升级和解锁
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean updateUpLevelAdnLock(String userId,int upLevel,int userLock) {
+		try {
+			if(!ContactUtils.isOkUserId(userId)){
+				return null;
+			}
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(userId);
+			userInfo.setLock(userLock);
+			userInfo.setLevel(upLevel);
+			long dbResult = userInfoDao.update(userInfo);
+			return ContactUtils.dbResult(dbResult);
+		} catch (Exception e) {
+			logger.error("账号等级升级和解锁异常",e);
+			return null;
+		}
+	}
+
+	/**
 	 * @desc 修改用户登陆IP
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
@@ -354,6 +399,25 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	/**
+	 * @desc 获取用户一级团队个数
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public int getLevelUpTeamNum(String userId){
+		try {
+			if(!ContactUtils.isOkUserId(userId)){
+				return 0;
+			}
+			UserInfo userInfo = new UserInfo();
+			userInfo.setId(userId);
+			return userInfoDao.getOkLevelTeam1Num(userInfo);
+		} catch (Exception e) {
+			logger.error("获取用户团队个数异常",e);
+			return 0;
 		}
 	}
 

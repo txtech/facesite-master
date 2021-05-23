@@ -1,4 +1,4 @@
-package com.nabobsite.modules.nabob.api.pool.trigger;
+package com.nabobsite.modules.nabob.api.pool.manager;
 import java.util.concurrent.*;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;

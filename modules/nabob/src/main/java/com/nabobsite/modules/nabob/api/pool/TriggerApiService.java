@@ -1,10 +1,11 @@
 package com.nabobsite.modules.nabob.api.pool;
 
-import com.nabobsite.modules.nabob.api.pool.task.InitLoadDbDataTrigger;
-import com.nabobsite.modules.nabob.api.pool.task.UserBalanceTrigger;
-import com.nabobsite.modules.nabob.api.pool.task.UserRegisterTrigger;
-import com.nabobsite.modules.nabob.api.pool.trigger.TriggerPoolManagerImpl;
-import com.nabobsite.modules.nabob.api.pool.trigger.TriggerThread;
+import com.nabobsite.modules.nabob.api.pool.trigger.InitLoadDbDataTrigger;
+import com.nabobsite.modules.nabob.api.pool.trigger.UserBalanceTrigger;
+import com.nabobsite.modules.nabob.api.pool.trigger.UserRegisterTrigger;
+import com.nabobsite.modules.nabob.api.pool.manager.TriggerPoolManagerImpl;
+import com.nabobsite.modules.nabob.api.pool.manager.TriggerThread;
+import com.nabobsite.modules.nabob.api.service.core.LogicService;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysI18nDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
@@ -32,6 +33,8 @@ public class TriggerApiService {
     @Autowired
     private SysI18nDao sysI18nDao;
     @Autowired
+    private LogicService logicService;
+    @Autowired
     private TriggerPoolManagerImpl triggerPoolManager;
 
     /**
@@ -53,7 +56,7 @@ public class TriggerApiService {
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void registerTrigger(String userId) {
-        TriggerThread callback = new UserRegisterTrigger(userId,userInfoDao);
+        TriggerThread callback = new UserRegisterTrigger(userId,userInfoDao,logicService);
         triggerPoolManager.submit(callback);
     }
 
@@ -64,7 +67,7 @@ public class TriggerApiService {
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void balanceTrigger(String userId, int type, BigDecimal updateMoney) {
-        TriggerThread callback = new UserBalanceTrigger(userId,type,updateMoney, userInfoDao, userAccountDao);
+        TriggerThread callback = new UserBalanceTrigger(userId,type,updateMoney, userInfoDao, userAccountDao,logicService);
         triggerPoolManager.submit(callback);
     }
 }

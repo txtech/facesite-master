@@ -2,8 +2,8 @@ package com.nabobsite.test.timerTask;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import com.nabobsite.modules.nabob.api.pool.trigger.TriggerThread;
-import com.nabobsite.modules.nabob.api.pool.trigger.TriggerQueueManagerImpl;
+import com.nabobsite.modules.nabob.api.pool.manager.TriggerThread;
+import com.nabobsite.modules.nabob.api.pool.manager.TriggerQueueManagerImpl;
 import org.junit.Test;
 
 public class TestTimeOutManagerImpl {

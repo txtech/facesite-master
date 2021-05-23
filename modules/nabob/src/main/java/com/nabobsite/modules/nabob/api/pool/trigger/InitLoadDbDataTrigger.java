@@ -1,6 +1,6 @@
-package com.nabobsite.modules.nabob.api.pool.task;
+package com.nabobsite.modules.nabob.api.pool.trigger;
 
-import com.nabobsite.modules.nabob.api.pool.trigger.TriggerOperation;
+import com.nabobsite.modules.nabob.api.pool.manager.TriggerOperation;
 import com.nabobsite.modules.nabob.api.common.I18nUtils;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysI18nDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysI18n;

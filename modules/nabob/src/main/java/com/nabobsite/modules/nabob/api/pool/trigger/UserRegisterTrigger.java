@@ -1,7 +1,8 @@
-package com.nabobsite.modules.nabob.api.pool.task;
+package com.nabobsite.modules.nabob.api.pool.trigger;
 
-import com.nabobsite.modules.nabob.api.pool.trigger.TriggerOperation;
+import com.nabobsite.modules.nabob.api.pool.manager.TriggerOperation;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.service.core.LogicService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.slf4j.Logger;
@@ -17,16 +18,19 @@ public class UserRegisterTrigger extends TriggerOperation {
 
 	private static Logger logger = LoggerFactory.getLogger(UserRegisterTrigger.class);
 
-	public UserRegisterTrigger(String userId,UserInfoDao userInfoDao) {
+	private LogicService logicService;
+
+	public UserRegisterTrigger(String userId,UserInfoDao userInfoDao,LogicService logicServic) {
 		super(userId,userInfoDao);
 		this.userId = userId;
 		this.userInfoDao = userInfoDao;
+		this.logicService = logicServic;
 	}
 
 	@Override
 	public void execute() {
 		logger.info("用户注册触发器，userId:{}",userId);
-		UserInfo curUserInfo = this.getUserInfoByUserId(userId);
+		UserInfo curUserInfo = logicService.getUserInfoByUserId(userId);
 		if(curUserInfo == null){
 			return;
 		}
@@ -78,5 +82,13 @@ public class UserRegisterTrigger extends TriggerOperation {
 			logger.error("修改团队人数异常",e);
 			return false;
 		}
+	}
+
+	public LogicService getLogicService() {
+		return logicService;
+	}
+
+	public void setLogicService(LogicService logicService) {
+		this.logicService = logicService;
 	}
 }

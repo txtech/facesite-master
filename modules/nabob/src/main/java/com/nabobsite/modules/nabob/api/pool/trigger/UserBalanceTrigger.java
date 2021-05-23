@@ -1,8 +1,9 @@
-package com.nabobsite.modules.nabob.api.pool.task;
+package com.nabobsite.modules.nabob.api.pool.trigger;
 
-import com.nabobsite.modules.nabob.api.pool.trigger.TriggerOperation;
+import com.nabobsite.modules.nabob.api.pool.manager.TriggerOperation;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.LogicStaticContact;
+import com.nabobsite.modules.nabob.api.service.core.LogicService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
@@ -21,19 +22,21 @@ public class UserBalanceTrigger extends TriggerOperation {
 	private int type;
 	private BigDecimal updateMoney;
 	private UserAccountDao userAccountDao;
+	private LogicService logicService;
 
-	public UserBalanceTrigger(String userId,int type,BigDecimal updateMoney, UserInfoDao userInfoDao, UserAccountDao userAccountDao) {
+	public UserBalanceTrigger(String userId,int type,BigDecimal updateMoney, UserInfoDao userInfoDao, UserAccountDao userAccountDao,LogicService logicService) {
 		super(userId,userInfoDao);
 		this.type = type;
 		this.userId = userId;
 		this.updateMoney = updateMoney;
+		this.logicService = logicService;
 		this.userAccountDao = userAccountDao;
 	}
 
 	@Override
 	public void execute() {
 		logger.info("用户余额触发，userId:{},type:{},money:{}",userId,type,updateMoney);
-		UserInfo userInfo = this.getUserInfoByUserId(userId);
+		UserInfo userInfo = logicService.getUserInfoByUserId(userId);
 		if(userInfo == null){
 			return;
 		}

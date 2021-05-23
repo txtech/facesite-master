@@ -1,4 +1,4 @@
-package com.nabobsite.modules.nabob.api.pool.trigger;
+package com.nabobsite.modules.nabob.api.pool.manager;
 
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
@@ -6,7 +6,7 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class TriggerOperation implements TriggerThread {
+public abstract class TriggerOperation implements TriggerThread{
 	protected static final Logger logger = LoggerFactory .getLogger(TriggerOperation.class);
 	protected UserInfoDao userInfoDao;
 	protected String userId;
@@ -28,31 +28,6 @@ public abstract class TriggerOperation implements TriggerThread {
 	}
 
 	public abstract void execute();
-
-
-	/**
-	 * @desc 获取用户信息
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	public UserInfo getUserInfoByUserId(String userId) {
-		try {
-			if(!ContactUtils.isOkUserId(userId)){
-				return null;
-			}
-			UserInfo userInfo = new UserInfo();
-			userInfo.setId(userId);
-			userInfo = userInfoDao.getByEntity(userInfo);
-			if(userInfo == null){
-				logger.error("获取用户信息为空,{}",userId);
-				return null;
-			}
-			return userInfo;
-		} catch (Exception e) {
-			logger.error("获取用户信息异常",e);
-			return null;
-		}
-	}
 
 	@Override
 	public String getUserId() {

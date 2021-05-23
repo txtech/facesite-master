@@ -1,7 +1,7 @@
-package com.nabobsite.modules.nabob.api.pool.task;
+package com.nabobsite.modules.nabob.api.pool.trigger;
 
-import com.nabobsite.modules.nabob.api.pool.trigger.TriggerOperation;
-import com.nabobsite.modules.nabob.api.pool.trigger.TriggerPoolManagerImpl;
+import com.nabobsite.modules.nabob.api.pool.manager.TriggerOperation;
+import com.nabobsite.modules.nabob.api.pool.manager.TriggerPoolManagerImpl;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 
