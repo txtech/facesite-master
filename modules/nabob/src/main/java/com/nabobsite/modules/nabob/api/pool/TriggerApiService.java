@@ -29,8 +29,6 @@ public class TriggerApiService {
     @Autowired
     private UserInfoDao userInfoDao;
     @Autowired
-    private UserAccountDao userAccountDao;
-    @Autowired
     private SysI18nDao sysI18nDao;
     @Autowired
     private LogicService logicService;
@@ -67,7 +65,7 @@ public class TriggerApiService {
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void balanceTrigger(String userId, int type, BigDecimal updateMoney) {
-        TriggerThread callback = new UserBalanceTrigger(userId,type,updateMoney, userInfoDao, userAccountDao,logicService);
+        TriggerThread callback = new UserBalanceTrigger(userId,type,updateMoney, userInfoDao,logicService);
         triggerPoolManager.submit(callback);
     }
 }

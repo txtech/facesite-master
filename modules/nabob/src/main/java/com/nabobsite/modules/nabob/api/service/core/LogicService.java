@@ -3,23 +3,14 @@
  */
 package com.nabobsite.modules.nabob.api.service.core;
 
-import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
-import com.nabobsite.modules.nabob.api.common.LogicStaticContact;
-import com.nabobsite.modules.nabob.api.common.response.CommonResult;
-import com.nabobsite.modules.nabob.api.common.response.I18nCode;
-import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
-import com.nabobsite.modules.nabob.cms.order.dao.CashDao;
-import com.nabobsite.modules.nabob.cms.order.entity.Cash;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 逻辑Service
@@ -31,15 +22,54 @@ import java.util.List;
 public class LogicService extends SimpleUserService {
 
 	/**
+	 * @desc 会员分润
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean memberProfit(UserInfo userInfo,UserAccount userAccount,int  type,BigDecimal updateMoney) {
+		return true;
+	}
+
+	/**
+	 * @desc 团队分润
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean teamProfit(UserInfo userInfo,UserAccount userAccount,int  type,BigDecimal updateMoney) {
+		return true;
+	}
+
+	/**
 	 * @desc 会员等级升级
 	 * LV0、LV1不设锁，LV2~LV7为锁住状态，达到条件自动解锁LV0、LV1不设锁
 	 * LV2~LV7为锁住状态，达到条件自动解锁，两种方式都可以解锁；1，一次性充值满等级对应的金额 2，直推低1等级用户累计5人
-	 * @author nada
-	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean lenvelUp(String token, Cash cash) {
+	public Boolean memberLevelUp(UserInfo userInfo,UserAccount userAccount,int  type,BigDecimal updateMoney) {
 		try {
+			if(type != ContactUtils.ORDER_TYPE_RECHANGE){
+				return false;
+			}
+			String userId = userInfo.getId();
+			int currentLock = userInfo.getLock();
+			int currentLevel = userInfo.getLevel();
+			String parent1Id = userInfo.getParent1UserId();
+			BigDecimal currentTotalMoney = userAccount.getTotalMoney();
+			int maxLevel = this.getMemberShipMaxLevel(currentTotalMoney);
+			if(currentLevel < maxLevel){
+				currentLevel = maxLevel;
+				int userLock = this.getUserLock(userId,currentLevel,updateMoney);
+				Boolean isUpLevelOk = this.updateUpLevelAdnLock(userId,maxLevel,userLock);
+				if(isUpLevelOk){
+					logger.info("用户余额触发,用户升级且解锁:{},{}",userId,isUpLevelOk);
+					isUpLevelOk = this.updateParentUpLock(parent1Id);
+					logger.info("用户余额触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
+				}
+			}else{
+				int userLock = this.getUserLock(userId,currentLevel,updateMoney);
+				if(currentLock != ContactUtils.USER_LOCK_1 && userLock == ContactUtils.USER_LOCK_1){
+					Boolean isUpLevelOk = this.updateLock(userId,userLock);
+					logger.info("用户余额触发,用户不升级只解锁:{},{}",userId,isUpLevelOk);
+				}
+			}
 			return true;
 		} catch (Exception e) {
 			logger.error("会员等级升级异常",e);
@@ -59,7 +89,7 @@ public class LogicService extends SimpleUserService {
 				return false;
 			}
 			int teamNum = this.getLevelUpTeamNum(parent1Id);
-			if(teamNum >= LogicStaticContact.USER_LEVEL_UP_TEAM_NUM){
+			if(teamNum >= ContactUtils.USER_LEVEL_UP_TEAM_NUM){
 				Boolean isUpLevelOk = this.updateLock(parent1Id, ContactUtils.USER_LOCK_1);
 				logger.info("用户余额触发,上级用户解锁:{},{}",parent1Id,isUpLevelOk);
 			}
@@ -71,25 +101,4 @@ public class LogicService extends SimpleUserService {
 	}
 
 
-	/**
-	 * @desc 获取用户解锁状态：1：解锁 2：锁定
-	 * @author nada
-	 * @create 2021/5/12 11:22 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public int getUserLock(String userId, int currentLevel, BigDecimal payMoney){
-		if(currentLevel == LogicStaticContact.USER_LEVEL_0 || currentLevel == LogicStaticContact.USER_LEVEL_1){
-			return 1;
-		}
-		BigDecimal mustBalance = LogicStaticContact.LEVEL_BALANCE_MIN_BALANCE.get(currentLevel);
-		if(ContactUtils.isBiggerOrEqual(payMoney,mustBalance)){
-			return 1;
-		}else{
-			int teamNum = this.getLevelUpTeamNum(userId);
-			if(teamNum >= LogicStaticContact.USER_LEVEL_UP_TEAM_NUM){
-				return 1;
-			}
-		}
-		return 2;
-	}
 }

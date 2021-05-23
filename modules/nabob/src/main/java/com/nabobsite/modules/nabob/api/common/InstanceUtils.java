@@ -82,7 +82,7 @@ public class InstanceUtils {
             userAccount.setTeam1Money(new BigDecimal("0"));
             userAccount.setTeam2Money(new BigDecimal("0"));
             userAccount.setTeam3Money(new BigDecimal("0"));
-            userAccount.setRewardMoney(LogicStaticContact.USER_TACK_BASE_MONEY);
+            userAccount.setRewardMoney(ContactUtils.USER_TACK_BASE_MONEY);
             userAccount.setAccountStatus(ContactUtils.USER_ACCOUNT_STATUS_1);
             return userAccount;
         }
@@ -252,7 +252,7 @@ public class InstanceUtils {
             userTask.setIsNewRecord(true);
             userTask.setUserId(userId);
             userTask.setTaskStatus(ContactUtils.USER_TASK_STATUS_1);
-            userTask.setTaskInitialNum(LogicStaticContact.USER_TACK_BASE_MONEY);
+            userTask.setTaskInitialNum(ContactUtils.USER_TACK_BASE_MONEY);
             userTask.setTaskOrderNum(0);
             userTask.setTaskStartDay(new Date());
             userTask.setTaskEndDay(ContactUtils.addDateHour(24));

@@ -30,6 +30,14 @@ public class RedisPrefixContant {
      */
     public final static long CACHE_ONE_HOURS = 3600000;
 
+
+    //系统配置key
+    public final static String SYS_KEY_COUNTDOWN_TIME  = "sys.key.countdown.time";
+    public final static String SYS_KEY_CURRENT_VERSION  = "sys.key.app.current.version";
+    public final static String SYS_KEY_UPDATE_VERSION  = "sys.key.app.update.version";
+    public final static String SYS_KEY_APP_DOWNLOAD_URL  = "sys.key.app.download.url";
+
+
     //随机码缓存
     public final static String FRONT_USER_RANDOM_CODE_CACHE = "front:user:random:code:";
     //发送短信

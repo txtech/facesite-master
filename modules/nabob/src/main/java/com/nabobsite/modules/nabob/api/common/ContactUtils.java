@@ -34,11 +34,26 @@ public class ContactUtils {
 
     public final static BigDecimal ZERO = new BigDecimal("0");
 
-    //系统配置key
-    public final static String SYS_KEY_COUNTDOWN_TIME  = "sys.key.countdown.time";
-    public final static String SYS_KEY_CURRENT_VERSION  = "sys.key.app.current.version";
-    public final static String SYS_KEY_UPDATE_VERSION  = "sys.key.app.update.version";
-    public final static String SYS_KEY_APP_DOWNLOAD_URL  = "sys.key.app.download.url";
+    //用户升级人数
+    public final static int USER_LEVEL_UP_TEAM_NUM = 5;
+    //用户注册奖励
+    public final static BigDecimal USER_REGISTER_REWARD = new BigDecimal("100");
+    //用户注册奖励
+    public final static BigDecimal USER_TACK_BASE_MONEY = new BigDecimal("990");
+    //用户增值比例
+    public final static BigDecimal PRODUCT_COMMISSION_OTHER_RATE = new BigDecimal("0.5");
+
+
+    //用户等级
+    public final static int USER_LEVEL_0 = 0;
+    public final static int USER_LEVEL_1 = 1;
+    public final static int USER_LEVEL_2 = 2;
+    public final static int USER_LEVEL_3 = 3;
+    public final static int USER_LEVEL_4 = 4;
+    public final static int USER_LEVEL_5 = 5;
+    public final static int USER_LEVEL_6 = 6;
+    public final static int USER_LEVEL_7 = 7;
+    public final static int USER_LEVEL_8 = 8;
 
     //用户状态
     public final static int USER_STATUS_1 = 1;//正常
@@ -79,7 +94,7 @@ public class ContactUtils {
     public final static int USER_ACCOUNT_REWARD_TYPE_2 = 2;//观看视频奖励
     public final static int USER_ACCOUNT_REWARD_TYPE_3 = 3;//邀请好友奖励
     public final static int USER_ACCOUNT_REWARD_TYPE_4 = 4;//定期投资奖励
-
+    //奖励明细标题
     public final static String USER_ACCOUNT_REWARD_TITLE_1 = "分享好友奖励";
     public final static String USER_ACCOUNT_REWARD_TITLE_2 = "观看视频奖励";
     public final static String USER_ACCOUNT_REWARD_TITLE_3 = "邀请好友奖励";

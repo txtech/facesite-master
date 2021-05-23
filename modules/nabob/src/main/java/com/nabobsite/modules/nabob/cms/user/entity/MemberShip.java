@@ -26,6 +26,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="grade_name", attrName="gradeName", label="等级名称", queryType=QueryType.LIKE),
 		@Column(name="seq", attrName="seq", label="排序"),
+		@Column(name="level", attrName="level", label="等级"),
 		@Column(name="order_num", attrName="orderNum", label="刷单数量"),
 		@Column(name="commission_rate1", attrName="commissionRate1", label="一级佣金比例"),
 		@Column(name="commission_rate2", attrName="commissionRate2", label="二级佣金比例"),
@@ -49,6 +50,7 @@ public class MemberShip extends DataEntity<MemberShip> {
 	private static final long serialVersionUID = 1L;
 	private String gradeName;		// 等级名称
 	private Integer seq;		// 排序
+	private Integer level;
 	private Integer orderNum;		// 刷单数量
 	private String commissionRate1;		// 一级佣金比例
 	private String commissionRate2;		// 二级佣金比例
@@ -201,5 +203,13 @@ public class MemberShip extends DataEntity<MemberShip> {
 	public void setWithdrawMin(BigDecimal withdrawMin) {
 		this.withdrawMin = withdrawMin;
 	}
-	
+
+
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
 }

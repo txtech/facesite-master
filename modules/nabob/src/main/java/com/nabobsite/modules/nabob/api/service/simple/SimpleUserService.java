@@ -6,13 +6,16 @@ package com.nabobsite.modules.nabob.api.service.simple;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
+import com.jeesite.common.mybatis.mapper.query.QueryType;
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskDao;
 import com.nabobsite.modules.nabob.cms.task.dao.UserTaskRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.entity.UserTask;
+import com.nabobsite.modules.nabob.cms.user.dao.MemberShipDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
+import com.nabobsite.modules.nabob.cms.user.entity.MemberShip;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
@@ -30,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -51,6 +55,8 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public TaskInfoDao taskInfoDao;
 	@Autowired
 	public UserTaskDao userTaskDao;
+	@Autowired
+	public MemberShipDao memberShipDao;
 	@Autowired
 	public UserTaskRewardDao userTaskRewardDao;
 	@Autowired
@@ -420,6 +426,83 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return 0;
 		}
 	}
+
+	/**
+	 * 获取会员权益列表
+	 */
+	public List<MemberShip> getMemberShipList(){
+		try {
+			return memberShipDao.findList(new MemberShip());
+		} catch (Exception e) {
+			logger.error("获取会员权益列表异常",e);
+			return null;
+		}
+	}
+	/**
+	 * 获取会员权益列表
+	 */
+	public MemberShip getMemberShipByLevel(int level){
+		try {
+			MemberShip parms = new MemberShip();
+			parms.setLevel(level);
+			return memberShipDao.getByEntity(parms);
+		} catch (Exception e) {
+			logger.error("获取会员权益列表异常",e);
+			return null;
+		}
+	}
+	/**
+	 * @desc 获取用户解锁状态：1：解锁 2：锁定
+	 * @author nada
+	 * @create 2021/5/12 11:22 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public int getUserLock(String userId,int currentLevel,BigDecimal payMoney){
+		if(currentLevel == ContactUtils.USER_LEVEL_0 || currentLevel == ContactUtils.USER_LEVEL_1){
+			return 1;
+		}
+		MemberShip memberShip = this.getMemberShipByLevel(currentLevel);
+		if(memberShip == null){
+			return 2;
+		}
+		BigDecimal mustBalance = memberShip.getGradeMoney();
+		if(ContactUtils.isBiggerOrEqual(payMoney,mustBalance)){
+			return 1;
+		}else{
+			int teamNum = this.getLevelUpTeamNum(userId);
+			if(teamNum >= ContactUtils.USER_LEVEL_UP_TEAM_NUM){
+				return 1;
+			}
+		}
+		return 2;
+	}
+	/**
+	 * 获取会员权益最大等级
+	 */
+	public int getMemberShipMaxLevel(BigDecimal amount){
+		try {
+			int maxLevel = 0;
+			BigDecimal maxAmount = amount;
+			if(ContactUtils.isLesserOrEqualZero(maxAmount)){
+				return maxLevel;
+			}
+			MemberShip parms = new MemberShip();
+			parms.getSqlMap().getWhere().and("grade_money", QueryType.GTE, maxAmount);
+			List<MemberShip> memberShipList = memberShipDao.findList(parms);
+			for (MemberShip  memberShip : memberShipList) {
+				BigDecimal gradeMoney = memberShip.getGradeMoney();
+				if(ContactUtils.isBiggerOrEqual(gradeMoney,maxAmount)){
+					maxLevel = memberShip.getLevel();
+					maxAmount = memberShip.getGradeMoney();
+				}
+			}
+			return maxLevel;
+		} catch (Exception e) {
+			logger.error("获取会员权益最大等级异常",e);
+			return 0;
+		}
+	}
+
 
 	/**
 	 * @desc 加密铭感信息

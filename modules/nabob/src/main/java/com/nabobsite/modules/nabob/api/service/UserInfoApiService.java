@@ -13,7 +13,6 @@ import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
-import com.nabobsite.modules.nabob.api.common.LogicStaticContact;
 import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
 import com.nabobsite.modules.nabob.cms.base.service.SequenceService;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
@@ -297,7 +296,7 @@ public class UserInfoApiService extends SimpleUserService {
 				//注册新用户送奖励
 				String userId = initUser.getId();
 				int type = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_2;
-				Boolean isOk = userAccountApiService.updateAccountBalance(userId,type, LogicStaticContact.USER_REGISTER_REWARD,userId, ContactUtils.USER_ACCOUNT_DETAIL_TITLE_2);
+				Boolean isOk = userAccountApiService.updateAccountBalance(userId,type, ContactUtils.USER_REGISTER_REWARD,userId, ContactUtils.USER_ACCOUNT_DETAIL_TITLE_2);
 				if(!isOk){
 					logger.error("注册用户成功,用户送奖励失败,{}",userId);
 				}
@@ -421,15 +420,15 @@ public class UserInfoApiService extends SimpleUserService {
 				if(StringUtils.isAnyBlank(key,value)){
 					continue;
 				}
-				if(key.equalsIgnoreCase(ContactUtils.SYS_KEY_CURRENT_VERSION)){
+				if(key.equalsIgnoreCase(RedisPrefixContant.SYS_KEY_CURRENT_VERSION)){
 					configJson.put("appCurrentVersion",value);
 					continue;
 				}
-				if(key.equalsIgnoreCase(ContactUtils.SYS_KEY_UPDATE_VERSION)){
+				if(key.equalsIgnoreCase(RedisPrefixContant.SYS_KEY_UPDATE_VERSION)){
 					configJson.put("appUpdateVersion",value);
 					continue;
 				}
-				if(key.equalsIgnoreCase(ContactUtils.SYS_KEY_APP_DOWNLOAD_URL)){
+				if(key.equalsIgnoreCase(RedisPrefixContant.SYS_KEY_APP_DOWNLOAD_URL)){
 					configJson.put("appDownloadUrl",value);
 					continue;
 				}
