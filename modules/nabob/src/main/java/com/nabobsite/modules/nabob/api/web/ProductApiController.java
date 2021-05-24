@@ -47,9 +47,9 @@ public class ProductApiController extends BaseController {
 	}
 	@PostMapping(value = {"doWarehouseToBalance"})
 	@ApiOperation(value = "云仓库收益提取到余额")
-	public CommonResult<Boolean> doWarehouseToBalance(@RequestBody ProductUserWarehouseRecord userProductWarehouseRecord, HttpServletRequest request) {
+	public CommonResult<Boolean> doWarehouseToBalance(HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return productApiService.doWarehouseToBalance(token,userProductWarehouseRecord);
+		return productApiService.doWarehouseToBalance(token);
 	}
 	@PostMapping(value = {"doBotTask"})
 	@ApiOperation(value = "无人机产品刷单接口")
@@ -82,7 +82,7 @@ public class ProductApiController extends BaseController {
 	@ApiOperation(value = "云仓库产品详情")
 	public CommonResult<ProductWarehouse> getProductWarehouseInfo(@PathVariable String warehouseId,HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return productApiService.getProductWarehouseInfo(token,warehouseId);
+		return productApiService.getProductWarehouseInfo(warehouseId);
 	}
 	@RequestMapping(value = {"getUserWarehouseInfo/{warehouseId}"})
 	@ApiOperation(value = "用户云仓库产品详情")

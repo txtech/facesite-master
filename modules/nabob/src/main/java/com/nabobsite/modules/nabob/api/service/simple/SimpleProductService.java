@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 会员用户Service
  * @author face
@@ -33,6 +35,22 @@ public class SimpleProductService extends SimpleUserService {
 	@Autowired
 	public ProductUserWarehouseRecordDao userProductWarehouseRecordDao;
 
+	/**
+	 * @desc 用户云仓库产品列表
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public List<ProductUserWarehouse> getProductUserWarehouseListByUserId(String userId) {
+		try {
+			ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
+			userProductWarehouse.setUserId(userId);
+			return userProductWarehouseDao.findList(userProductWarehouse);
+		} catch (Exception e) {
+			logger.error("用户云仓库产品列表异常,{}",userId,e);
+			return null;
+		}
+	}
 	/**
 	 * @desc 用户云仓库产品
 	 * @author nada
