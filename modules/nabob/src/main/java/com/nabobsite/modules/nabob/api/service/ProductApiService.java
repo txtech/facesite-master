@@ -81,7 +81,6 @@ public class ProductApiService extends SimpleProductService {
 					incomeMoney = incomeMoney.divide(ContactUtils.MINUTE,5, BigDecimal.ROUND_HALF_UP);
 					incomeMoney = incomeMoney.divide(ContactUtils.SECOND,5, BigDecimal.ROUND_HALF_UP);
 
-
 					//保存云仓库记录日志 类型 1:个人 2:团队
 					String title = "收益提取";
 					int logType = ContactUtils.WAREHOUSE_TYPE_1;
