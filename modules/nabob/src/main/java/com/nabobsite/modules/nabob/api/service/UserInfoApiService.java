@@ -14,6 +14,8 @@ import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
+import com.nabobsite.modules.nabob.cms.sys.dao.SequenceCodeDao;
+import com.nabobsite.modules.nabob.cms.sys.entity.SequenceCode;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.sys.service.SequenceCodeService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoMembershipDao;
@@ -249,17 +251,16 @@ public class UserInfoApiService extends SimpleUserService {
 				//邀请码链接信息
 				String parent1UserId = userInfo.getParent1UserId();
 				if(StringUtils.isNotEmpty(inviteSecret) && StringUtils.isEmpty(parent1UserId)){
-					try {
-						String pidAndSid = HiDesUtils.desDeCode(inviteSecret);
-						if(StringUtils.isNotEmpty(pidAndSid)){
-							JSONObject pidAndSidJson = JSONObject.parseObject(pidAndSid);
-							String parentUserId = pidAndSidJson.getString("pid");
-							String parentSysId = pidAndSidJson.getString("sid");
-							userInfo.setParentSysId(parentSysId);
-							userInfo.setParent1UserId(parentUserId);
-						}
-					} catch (Exception e) {
-						logger.error("邀请码链接信息解析异常,{},{}",accountNo,inviteSecret,e);
+					String inviteSecretCode = HiDesUtils.desDeCode(inviteSecret);
+					SequenceCode sequenceCode = new SequenceCode();
+					sequenceCode.setId(inviteSecretCode);
+					sequenceCode = sequenceCodeDao.getByEntity(sequenceCode);
+					if(sequenceCode !=null && StringUtils.isNotEmpty(sequenceCode.getName())){
+						JSONObject pidAndSidJson = ContactUtils.str2JSONObject(sequenceCode.getName());
+						parent1UserId = pidAndSidJson.getString("pid");
+						String parentSysId = pidAndSidJson.getString("sid");
+						userInfo.setParentSysId(parentSysId);
+						userInfo.setParent1UserId(parent1UserId);
 					}
 				}
 				//当前用户信息作为上级业务员

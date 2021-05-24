@@ -12,7 +12,9 @@ import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
+import com.nabobsite.modules.nabob.cms.sys.dao.SequenceCodeDao;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
+import com.nabobsite.modules.nabob.cms.sys.entity.SequenceCode;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskUserRewardDao;
@@ -45,6 +47,8 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
 	public UserInfoDao userInfoDao;
 	@Autowired
+	public SequenceCodeDao sequenceCodeDao;
+	@Autowired
 	public TeamUserDao teamUserDao;
 	@Autowired
 	public SysConfigDao sysConfigDao;
@@ -76,7 +80,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			//修改邀请秘文
 			String userId = initUser.getId();
 			String parent1UserId = initUser.getParentSysId();
-			this.updateUserSecret(userId,parent1UserId);
+			this.updateUserSecret(userId,parent1UserId,initUser.getInviteCode());
 			//初始化总账户
 			dbResult = userAccountDao.insert(InstanceUtils.initUserAccount(userId));
 			if(!ContactUtils.dbResult(dbResult)){
@@ -110,18 +114,26 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean updateUserSecret(String userId,String parentSysId) {
+	public boolean updateUserSecret(String userId,String parentSysId,String code) {
 		try {
 			if(!ContactUtils.isOkUserId(userId)){
 				return false;
 			}
-			UserInfo userInfo = new UserInfo();
 			JSONObject secretJson = new JSONObject();
 			secretJson.put("pid",userId);
 			secretJson.put("sid",parentSysId);
+			SequenceCode sequenceCode = new SequenceCode();
+			sequenceCode.setId(code);
+			sequenceCode.setName(secretJson.toString());
+			long dbResult =  sequenceCodeDao.update(sequenceCode);
+			if(!ContactUtils.dbResult(dbResult)){
+				logger.error("修改序列失败");
+			}
+
+			UserInfo userInfo = new UserInfo();
 			userInfo.setId(userId);
-			userInfo.setInviteSecret( HiDesUtils.desEnCode(secretJson.toString()));
-			long dbResult = userInfoDao.update(userInfo);
+			userInfo.setInviteSecret(HiDesUtils.desEnCode(code));
+			dbResult = userInfoDao.update(userInfo);
 			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("修改用户邀请秘文异常,{}",userId,e);

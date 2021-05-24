@@ -266,10 +266,6 @@ public class InstanceUtils {
      */
     public static TeamUser initUserTeam(String userId){
         synchronized (userId){
-            JSONObject linkData = new JSONObject();
-            linkData.put("1",new JSONArray());
-            linkData.put("2",new JSONArray());
-            linkData.put("3",new JSONArray());
             TeamUser userTeam = new TeamUser();
             userTeam.setIsNewRecord(true);
             userTeam.setUserId(userId);
@@ -278,7 +274,6 @@ public class InstanceUtils {
             userTeam.setTeam1Num(0);
             userTeam.setTeam2Num(0);
             userTeam.setTeam3Num(0);
-            userTeam.setLinkData(linkData.toJSONString());
             return userTeam;
         }
     }
