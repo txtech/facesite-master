@@ -8,6 +8,8 @@ import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductUserWarehouse;
+import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;

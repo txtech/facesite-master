@@ -74,6 +74,11 @@ public class ContactUtils {
     public final static int WAREHOUSE_TYPE_1 = 1;//个人
     public final static int WAREHOUSE_TYPE_2 = 2;//团队
 
+    //用户云仓库产品类型
+    public final static int WAREHOUSE_PRODUCT_TYPE_1 = 1;//随存随取
+    public final static int WAREHOUSE_PRODUCT_TYPE_2 = 2;//定投
+
+    //云仓库操作类型
     public final static int WAREHOUSE_RECORD_TYPE_1 = 1;//定投
     public final static int WAREHOUSE_RECORD_TYPE_2 = 2;//撤资
     public final static int WAREHOUSE_RECORD_TYPE_3 = 3;//提现

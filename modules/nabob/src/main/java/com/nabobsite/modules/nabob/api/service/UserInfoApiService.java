@@ -15,8 +15,6 @@ import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
-import com.nabobsite.modules.nabob.cms.sys.dao.SequenceCodeDao;
-import com.nabobsite.modules.nabob.cms.sys.entity.SequenceCode;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.sys.service.SequenceCodeService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoMembershipDao;
