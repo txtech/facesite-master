@@ -29,6 +29,9 @@
 				team_num = team_num + #{team3Num},
 				team3_num = team3_num + #{team3Num},
 			</if>
+			<if test="validNum != null and validNum >0">
+				valid_num = valid_num + #{validNum}
+			</if>
 			updated = sysdate()
 		</set>
 		<where>

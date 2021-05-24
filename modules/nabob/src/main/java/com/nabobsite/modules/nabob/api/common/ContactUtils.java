@@ -54,6 +54,10 @@ public class ContactUtils {
     public final static int USER_STATUS_1 = 1;//正常
     public final static int USER_STATUS_3 = 3;//禁用
 
+    //用户状态
+    public final static int USER_VALID_1 = 1;//有效
+    public final static int USER_VALID_2 = 2;//未生效
+
     //用户解锁状态
     public final static int USER_LOCK_1 = 1;//正常
     public final static int USER_LOCK_2 = 2;//锁定

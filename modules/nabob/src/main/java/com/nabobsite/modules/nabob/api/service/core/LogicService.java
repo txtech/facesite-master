@@ -50,30 +50,37 @@ public class LogicService extends SimpleUserService {
 				return false;
 			}
 			String userId = userInfo.getId();
-			int currentLock = userInfo.getLock();
-			int currentLevel = userInfo.getLevel();
-			String parent1Id = userInfo.getParent1UserId();
-			BigDecimal currentTotalMoney = userAccount.getTotalMoney();
-			int maxLevel = this.getMemberShipMaxLevel(currentTotalMoney);
-			if(currentLevel < maxLevel){
-				int userLock = this.getUserLock(userId,maxLevel,updateMoney);
-				Boolean isUpLevelOk = this.updateUpLevelAdnLock(userId,maxLevel,userLock);
-				logger.info("会员等级升级且解锁:{},{}",userId,isUpLevelOk);
-				if(isUpLevelOk && ContactUtils.isOkUserId(parent1Id)){
-					int teamNum = this.getTeamUserValidNum(parent1Id);
-					if(teamNum >= ContactUtils.USER_LEVEL_UP_TEAM_NUM){
-						isUpLevelOk = this.updateLock(parent1Id, ContactUtils.USER_LOCK_1);
-						logger.info("上级用户不升级只解锁:{},{}",parent1Id,isUpLevelOk);
+			synchronized (userId) {
+				int num = 1;
+				int currentLock = userInfo.getLock();
+				int currentLevel = userInfo.getLevel();
+				String parent1Id = userInfo.getParent1UserId();
+				BigDecimal currentTotalMoney = userAccount.getTotalMoney();
+				int maxLevel = this.getMemberShipMaxLevel(currentTotalMoney);
+				if(currentLevel < maxLevel){
+					int userLock = this.getUserLock(userId,maxLevel,updateMoney);
+					int valid = ContactUtils.USER_VALID_1;
+					Boolean isUpLevelOk = this.updateUpLevelAdnLock(userId,maxLevel,userLock,valid);
+					logger.info("会员等级升级且解锁:{},{}",userId,isUpLevelOk);
+					if(isUpLevelOk){
+						boolean isOK = this.updateDirectTeamNum(userId,parent1Id,num);
+						logger.info("充值修改团队数:{},{}",parent1Id,isOK);
+
+						int teamNum = this.getTeamUserValidNum(parent1Id);
+						if(teamNum >= ContactUtils.USER_LEVEL_UP_TEAM_NUM){
+							isUpLevelOk = this.updateLock(parent1Id, ContactUtils.USER_LOCK_1);
+							logger.info("上级用户不升级只解锁:{},{}",parent1Id,isUpLevelOk);
+						}
+					}
+				}else{
+					int userLock = this.getUserLock(userId,currentLevel,updateMoney);
+					if(currentLock != ContactUtils.USER_LOCK_1 && userLock == ContactUtils.USER_LOCK_1){
+						Boolean isUpLevelOk = this.updateLock(userId,userLock);
+						logger.info("用户不升级只解锁:{},{}",userId,isUpLevelOk);
 					}
 				}
-			}else{
-				int userLock = this.getUserLock(userId,currentLevel,updateMoney);
-				if(currentLock != ContactUtils.USER_LOCK_1 && userLock == ContactUtils.USER_LOCK_1){
-					Boolean isUpLevelOk = this.updateLock(userId,userLock);
-					logger.info("用户不升级只解锁:{},{}",userId,isUpLevelOk);
-				}
+				return true;
 			}
-			return true;
 		} catch (Exception e) {
 			logger.error("会员等级升级异常",e);
 			return false;
@@ -86,35 +93,20 @@ public class LogicService extends SimpleUserService {
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	public Boolean updateTeam(String parent1UserId,String parent2UserId,String parent3UserId) {
+	public synchronized Boolean registerUpdateTeam(String parent1UserId,String parent2UserId,String parent3UserId) {
 		try {
 			int num = 1;
 			if(ContactUtils.isOkUserId(parent1UserId)){
-				TeamUser teamUser = new TeamUser();
-				teamUser.setId(parent1UserId);
-				teamUser.setTeam1Num(num);
-				long dbResult = teamUserDao.updateTeamNum(teamUser);
-				if(ContactUtils.dbResult(dbResult)){
-					logger.info("修改1级团队人数:{}",parent1UserId);
-				}
+				boolean isOK = this.updateTeamNum(parent1UserId,num);
+				logger.info("修改1级团队人数:{},{}",parent1UserId,isOK);
 			}
 			if(ContactUtils.isOkUserId(parent2UserId)){
-				TeamUser teamUser = new TeamUser();
-				teamUser.setId(parent2UserId);
-				teamUser.setTeam2Num(num);
-				long dbResult = teamUserDao.updateTeamNum(teamUser);
-				if(ContactUtils.dbResult(dbResult)){
-					logger.info("修改2级团队人数:{}",parent2UserId);
-				}
+				boolean isOK = this.updateTeamNum(parent2UserId,num);
+				logger.info("修改2级团队人数:{},{}",parent2UserId,isOK);
 			}
 			if(ContactUtils.isOkUserId(parent3UserId)){
-				TeamUser teamUser = new TeamUser();
-				teamUser.setId(parent3UserId);
-				teamUser.setTeam3Num(num);
-				long dbResult = teamUserDao.updateTeamNum(teamUser);
-				if(ContactUtils.dbResult(dbResult)){
-					logger.info("修改3级团队人数:{}",parent3UserId);
-				}
+				boolean isOK = this.updateTeamNum(parent3UserId,num);
+				logger.info("修改3级团队人数:{},{}",parent3UserId,isOK);
 			}
 			return true;
 		} catch (Exception e) {

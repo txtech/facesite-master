@@ -150,12 +150,56 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	}
 
 	/**
+	 * @desc 修改团队数量
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean updateTeamNum(String userId,int num) {
+		try {
+			if(!ContactUtils.isOkUserId(userId)){
+				return null;
+			}
+			TeamUser teamUser = new TeamUser();
+			teamUser.setId(userId);
+			teamUser.setTeam1Num(num);
+			long dbResult = teamUserDao.updateTeamNum(teamUser);
+			return ContactUtils.dbResult(dbResult);
+		} catch (Exception e) {
+			logger.error("修改团队数量异常",e);
+			return null;
+		}
+	}
+
+	/**
+	 * @desc 修改直推团队数量
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean updateDirectTeamNum(String userId,String parent1UserId,int num) {
+		try {
+			if(!ContactUtils.isOkUserId(parent1UserId)){
+				return null;
+			}
+			TeamUser teamUser = new TeamUser();
+			teamUser.setId(userId);
+			teamUser.setValidNum(num);
+			long dbResult = teamUserDao.updateTeamNum(teamUser);
+			return ContactUtils.dbResult(dbResult);
+		} catch (Exception e) {
+			logger.error("修改团队数量异常",e);
+			return null;
+		}
+	}
+
+	/**
 	 * @desc 账号等级升级和解锁
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean updateUpLevelAdnLock(String userId,int upLevel,int userLock) {
+	public Boolean updateUpLevelAdnLock(String userId,int upLevel,int userLock,int valid) {
 		try {
 			if(!ContactUtils.isOkUserId(userId)){
 				return null;
@@ -164,6 +208,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			userInfo.setId(userId);
 			userInfo.setLock(userLock);
 			userInfo.setLevel(upLevel);
+			userInfo.setIsValid(valid);
 			long dbResult = userInfoDao.update(userInfo);
 			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {

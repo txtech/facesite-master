@@ -37,6 +37,7 @@ public class InstanceUtils {
             userInfo.setName(accountNo);
             userInfo.setPhoneNumber(accountNo);
             userInfo.setLevel(0);
+            userInfo.setIsValid(ContactUtils.USER_VALID_2);
             userInfo.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().getBytes()));
             userInfo.setLock(ContactUtils.USER_LOCK_1);
             userInfo.setUserStatus(ContactUtils.USER_STATUS_1);

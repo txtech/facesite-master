@@ -37,7 +37,7 @@ public class UserRegisterTrigger extends TriggerOperation {
 		String parent1UserId = curUserInfo.getParent1UserId();
 		String parent2UserId = curUserInfo.getParent2UserId();
 		String parent3UserId = curUserInfo.getParent3UserId();
-		boolean isUpdateOk = logicService.updateTeam(parent1UserId,parent2UserId,parent3UserId);
+		boolean isUpdateOk = logicService.registerUpdateTeam(parent1UserId,parent2UserId,parent3UserId);
 		logger.info("注册触发器更新3级团队人数:{},{}",userId,isUpdateOk);
 	}
 
