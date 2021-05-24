@@ -30,11 +30,11 @@ public class SimpleProductService extends SimpleUserService {
 	@Autowired
 	public ProductUserBotLogDao userProductBotLogDao;
 	@Autowired
-	public ProductUserWarehouseDao userProductWarehouseDao;
+	public ProductUserWarehouseDao productUserWarehouseDao;
 	@Autowired
 	public ProductUserWarehouseLogDao userProductWarehouseLogDao;
 	@Autowired
-	public ProductUserWarehouseRecordDao userProductWarehouseRecordDao;
+	public ProductUserWarehouseRecordDao productUserWarehouseRecordDao;
 
 	/**
 	 * @desc 用户云仓库产品列表
@@ -46,7 +46,7 @@ public class SimpleProductService extends SimpleUserService {
 		try {
 			ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
 			userProductWarehouse.setUserId(userId);
-			return userProductWarehouseDao.findList(userProductWarehouse);
+			return productUserWarehouseDao.findList(userProductWarehouse);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品列表异常,{}",userId,e);
 			return null;
@@ -63,7 +63,7 @@ public class SimpleProductService extends SimpleUserService {
 			ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
 			userProductWarehouse.setUserId(userId);
 			userProductWarehouse.setWarehouseId(warehouseId);
-			return userProductWarehouseDao.getByEntity(userProductWarehouse);
+			return productUserWarehouseDao.getByEntity(userProductWarehouse);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品异常,{},{}",userId,warehouseId,e);
 			return null;

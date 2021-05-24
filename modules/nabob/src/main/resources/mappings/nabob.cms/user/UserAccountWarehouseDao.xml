@@ -11,5 +11,61 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+
+	<!--增加-->
+	<update id="updateAccountWarehouse" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse">
+		update
+			t1_user_account_warehouse
+		<set>
+			<if test="asstesHeldMoney != null and asstesHeldMoney !=0">
+				asstes_held_money = asstes_held_money + #{asstesHeldMoney},
+			</if>
+			<if test="accumulativeIncomeMoney != null and accumulativeIncomeMoney !=0">
+				accumulative_income_money = accumulative_income_money + #{accumulativeIncomeMoney},
+			</if>
+			<if test="personalIncomeMoney != null and personalIncomeMoney !=0">
+				personal_income_money = personal_income_money + #{personalIncomeMoney},
+			</if>
+			<if test="personalAccumulativeIncomeMoney != null and personalAccumulativeIncomeMoney !=0">
+				personal_accumulative_income_money = personal_accumulative_income_money + #{personalAccumulativeIncomeMoney},
+			</if>
+			<if test="teamIncomeMoney != null and teamIncomeMoney !=0">
+				team_income_money = team_income_money + #{teamIncomeMoney},
+			</if>
+			<if test="teamAccumulativeIncomeMoney != null and teamAccumulativeIncomeMoney !=0">
+				team_accumulative_income_money = team_accumulative_income_money + #{teamAccumulativeIncomeMoney},
+			</if>
+			<if test="psersonUpdateTime != null">
+				pserson_update_time = #{psersonUpdateTime},
+			</if>
+			<if test="teamUpdateTime != null">
+				team_update_time = #{teamUpdateTime},
+			</if>
+			<if test="remarks != null and remarks !='' ">
+				remarks = #{remarks},
+			</if>
+			updated = sysdate()
+		</set>
+		<where>
+			<if test="asstesHeldMoney != null and asstesHeldMoney !=0">
+				(asstes_held_money  + #{asstesHeldMoney}) >=0 and
+			</if>
+			<if test="accumulativeIncomeMoney != null and accumulativeIncomeMoney !=0">
+				(accumulative_income_money + #{accumulativeIncomeMoney}) >= 0 and
+			</if>
+			<if test="personalIncomeMoney != null and personalIncomeMoney !=0">
+				(personal_income_money + #{personalIncomeMoney}) >= 0 and
+			</if>
+			<if test="personalAccumulativeIncomeMoney != null and personalAccumulativeIncomeMoney !=0">
+				(personal_accumulative_income_money + #{personalAccumulativeIncomeMoney}) >=0 and
+			</if>
+			<if test="teamIncomeMoney != null and teamIncomeMoney !=0">
+				(team_income_money + #{teamIncomeMoney}) >=0 and
+			</if>
+			<if test="teamAccumulativeIncomeMoney != null and teamAccumulativeIncomeMoney !=0">
+				(team_accumulative_income_money + #{teamAccumulativeIncomeMoney}) >=0 and
+			</if>
+			user_id = #{userId}
+		</where>
+	</update>
 </mapper>

@@ -14,5 +14,6 @@ import com.nabobsite.modules.nabob.cms.product.entity.ProductUserWarehouse;
  */
 @MyBatisDao
 public interface ProductUserWarehouseDao extends CrudDao<ProductUserWarehouse> {
-	
+
+    long updateUserWarehousee(ProductUserWarehouse productUserWarehouse);
 }
