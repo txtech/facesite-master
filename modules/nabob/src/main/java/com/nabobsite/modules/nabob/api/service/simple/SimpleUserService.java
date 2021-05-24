@@ -193,8 +193,11 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean updateDirectTeamNum(String userId,int num) {
 		try {
+			if(!ContactUtils.isOkUserId(userId)){
+				return null;
+			}
 			TeamUser teamUser = new TeamUser();
-			teamUser.setId(userId);
+			teamUser.setUserId(userId);
 			teamUser.setValidNum(num);
 			long dbResult = teamUserDao.updateTeamNum(teamUser);
 			return ContactUtils.dbResult(dbResult);
@@ -583,6 +586,27 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return 0;
 		}
 	}
+
+	/**
+	 * 获取邀请码
+	 * @param inviteSecretCode
+	 * @return
+	 */
+	public String getSequenceCodeName(String inviteSecretCode){
+		try {
+			SequenceCode sequenceCode = new SequenceCode();
+			sequenceCode.setId(inviteSecretCode);
+			sequenceCode = sequenceCodeDao.getByEntity(sequenceCode);
+			if(sequenceCode == null){
+				return null;
+			}
+			return sequenceCode.getName();
+		} catch (Exception e) {
+			logger.error("获取邀请码异常",e);
+			return null;
+		}
+	}
+
 
 
 	/**

@@ -118,6 +118,9 @@ public class UserAccountApiService extends SimpleUserService {
 				userAccount.setUserId(userId);
 				userAccount.setTotalMoney(updateMoney);
 				userAccount.setAvailableMoney(updateMoney);
+				if(type == ContactUtils.USER_ACCOUNT_DETAIL_TYPE_1 || type == ContactUtils.USER_ACCOUNT_DETAIL_TYPE_2){
+					userAccount.setRechargeMoney(updateMoney);
+				}
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改账户总余额失败,修改账户失败:{},{}",userId,updateMoney);

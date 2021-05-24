@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccountBackup;
 /**
  * 用户账户备份DAO接口
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-24
  */
 @MyBatisDao
 public interface UserAccountBackupDao extends CrudDao<UserAccountBackup> {

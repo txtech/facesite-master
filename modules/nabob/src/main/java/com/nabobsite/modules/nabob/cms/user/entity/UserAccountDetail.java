@@ -4,8 +4,6 @@
 package com.nabobsite.modules.nabob.cms.user.entity;
 
 import javax.validation.constraints.NotBlank;
-
-import io.swagger.models.auth.In;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -22,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户账户明细Entity
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-24
  */
 @Table(name="t1_user_account_detail", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -47,6 +45,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="ledger_type", attrName="ledgerType", label="收入支出"),
+		@Column(name="recharge_money", attrName="rechargeMoney", label="充值资金"),
 	}, orderBy="a.id DESC"
 )
 public class UserAccountDetail extends DataEntity<UserAccountDetail> {
@@ -70,6 +69,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	private Integer ledgerType;		// 收入支出
+	private BigDecimal rechargeMoney;		// 充值资金
 	
 	public UserAccountDetail() {
 		this(null);
@@ -243,6 +243,15 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 
 	public void setLedgerType(Integer ledgerType) {
 		this.ledgerType = ledgerType;
+	}
+	
+	@NotNull(message="充值资金不能为空")
+	public BigDecimal getRechargeMoney() {
+		return rechargeMoney;
+	}
+
+	public void setRechargeMoney(BigDecimal rechargeMoney) {
+		this.rechargeMoney = rechargeMoney;
 	}
 	
 }

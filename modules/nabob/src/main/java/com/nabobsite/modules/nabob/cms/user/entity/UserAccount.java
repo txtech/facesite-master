@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户账户Entity
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-24
  */
 @Table(name="t1_user_account", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -45,6 +45,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
+		@Column(name="recharge_money", attrName="rechargeMoney", label="充值资金"),
 	}, orderBy="a.id DESC"
 )
 public class UserAccount extends DataEntity<UserAccount> {
@@ -68,6 +69,7 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private BigDecimal rechargeMoney;		// 充值资金
 	
 	public UserAccount() {
 		this(null);
@@ -238,6 +240,15 @@ public class UserAccount extends DataEntity<UserAccount> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	
+	@NotNull(message="充值资金不能为空")
+	public BigDecimal getRechargeMoney() {
+		return rechargeMoney;
+	}
+
+	public void setRechargeMoney(BigDecimal rechargeMoney) {
+		this.rechargeMoney = rechargeMoney;
 	}
 	
 }

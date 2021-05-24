@@ -5,6 +5,7 @@ package com.nabobsite.modules.nabob.api.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.modules.sys.entity.User;
+import com.jeesite.modules.sys.service.UserService;
 import com.jeesite.modules.sys.utils.UserUtils;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
@@ -49,6 +50,8 @@ public class UserInfoApiService extends SimpleUserService {
 	private SysApiService sysApiService;
 	@Autowired
 	private UserInfoMembershipDao memberShipDao;
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * @desc 用户忘记密码
@@ -252,15 +255,22 @@ public class UserInfoApiService extends SimpleUserService {
 				String parent1UserId = userInfo.getParent1UserId();
 				if(StringUtils.isNotEmpty(inviteSecret) && StringUtils.isEmpty(parent1UserId)){
 					String inviteSecretCode = HiDesUtils.desDeCode(inviteSecret);
-					SequenceCode sequenceCode = new SequenceCode();
-					sequenceCode.setId(inviteSecretCode);
-					sequenceCode = sequenceCodeDao.getByEntity(sequenceCode);
-					if(sequenceCode !=null && StringUtils.isNotEmpty(sequenceCode.getName())){
-						JSONObject pidAndSidJson = ContactUtils.str2JSONObject(sequenceCode.getName());
-						parent1UserId = pidAndSidJson.getString("pid");
+					String  sequenceCode = this.getSequenceCodeName(inviteSecretCode);
+					if(StringUtils.isNotEmpty(sequenceCode)){
+						JSONObject pidAndSidJson = ContactUtils.str2JSONObject(sequenceCode);
+						String parent1Id = pidAndSidJson.getString("pid");
 						String parentSysId = pidAndSidJson.getString("sid");
-						userInfo.setParentSysId(parentSysId);
-						userInfo.setParent1UserId(parent1UserId);
+						UserInfo userInfo1 = this.getUserInfoByUserId(parent1Id);
+						if(userInfo1 !=null){
+							parent1UserId = parent1Id;
+							userInfo.setParent1UserId(parent1Id);
+						}
+						if(ContactUtils.isOkUserId(parentSysId)){
+							User user = userService.get(new User(parentSysId));
+							if(user !=null){
+								userInfo.setParentSysId(parentSysId);
+							}
+						}
 					}
 				}
 				//当前用户信息作为上级业务员

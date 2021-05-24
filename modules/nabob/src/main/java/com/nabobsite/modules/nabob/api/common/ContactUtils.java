@@ -76,7 +76,7 @@ public class ContactUtils {
     public final static int WAREHOUSE_RECORD_TYPE_3 = 3;//提现
 
     //账户明细类型
-    public final static int USER_ACCOUNT_DETAIL_TYPE_1 = 1;//余额账户
+    public final static int USER_ACCOUNT_DETAIL_TYPE_1 = 1;//订单充值
     public final static int USER_ACCOUNT_DETAIL_TYPE_2 = 2;//新用户注册送奖励
     public final static int USER_ACCOUNT_DETAIL_TYPE_20 = 20;//佣金账户
     public final static int USER_ACCOUNT_DETAIL_TYPE_30 = 30;//仓库资金

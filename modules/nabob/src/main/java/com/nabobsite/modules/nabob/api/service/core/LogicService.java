@@ -45,9 +45,6 @@ public class LogicService extends SimpleUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean memberLevelUp(UserInfo userInfo,UserAccount userAccount,int  type,BigDecimal updateMoney) {
 		try {
-			if(type != ContactUtils.ORDER_TYPE_RECHANGE){
-				return false;
-			}
 			String userId = userInfo.getId();
 			synchronized (userId) {
 				int num = 1;

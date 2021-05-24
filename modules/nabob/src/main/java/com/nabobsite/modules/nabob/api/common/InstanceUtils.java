@@ -80,6 +80,7 @@ public class InstanceUtils {
             userAccount.setTeam1Money(new BigDecimal("0"));
             userAccount.setTeam2Money(new BigDecimal("0"));
             userAccount.setTeam3Money(new BigDecimal("0"));
+            userAccount.setRechargeMoney(new BigDecimal("0"));
             userAccount.setRewardMoney(ContactUtils.USER_TACK_BASE_MONEY);
             userAccount.setAccountStatus(ContactUtils.USER_ACCOUNT_STATUS_1);
             return userAccount;
@@ -108,6 +109,7 @@ public class InstanceUtils {
             userAccountDetail.setCommissionMoney(new BigDecimal("0"));
             userAccountDetail.setClaimableMoney(new BigDecimal("0"));
             userAccountDetail.setRewardMoney(new BigDecimal("0"));
+            userAccountDetail.setRechargeMoney(new BigDecimal("0"));
             userAccountDetail.setLedgerType(1);
             return userAccountDetail;
         }

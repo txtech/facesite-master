@@ -20,6 +20,9 @@
 			<if test="totalMoney != null and totalMoney !=0">
 				total_money = total_money + #{totalMoney},
 			</if>
+			<if test="rechargeMoney != null and rechargeMoney !=0">
+				recharge_money = recharge_money + #{rechargeMoney},
+			</if>
 			<if test="availableMoney != null and availableMoney !=0">
 				available_money = available_money + #{availableMoney},
 			</if>
