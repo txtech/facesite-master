@@ -194,13 +194,13 @@ public class UserAccountApiService extends SimpleUserService {
 					userAccountDetail.setWarehouseMoney(updateMoney.negate());
 					userAccountDetail.setAvailableMoney(updateMoney);
 				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
-					userAccountDetail.setAiAssetsMoney(updateMoney.negate());
+					userAccountDetail.setIncomeMoney(updateMoney);
 					userAccountDetail.setAvailableMoney(updateMoney);
 				}
 
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
-					logger.error("修改佣金账户失败,记录明细失败:{},{}",userId,updateMoney);
+					logger.error("修改云仓库账户失败,记录明细失败:{},{}",userId,updateMoney);
 					return false;
 				}
 				UserAccount userAccount = new UserAccount();
@@ -212,12 +212,12 @@ public class UserAccountApiService extends SimpleUserService {
 					userAccount.setWarehouseMoney(updateMoney.negate());
 					userAccount.setAvailableMoney(updateMoney);
 				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
-					userAccount.setAiAssetsMoney(updateMoney.negate());
+					userAccount.setIncomeMoney(updateMoney);
 					userAccount.setAvailableMoney(updateMoney);
 				}
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
-					logger.error("修改佣金账户失败,修改账户失败:{},{}",userId,updateMoney);
+					logger.error("修改云仓库账户失败,修改账户失败:{},{}",userId,updateMoney);
 					return false;
 				}
 				return true;

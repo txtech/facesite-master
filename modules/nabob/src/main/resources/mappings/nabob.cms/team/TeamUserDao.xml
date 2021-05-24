@@ -30,7 +30,7 @@
 				team3_num = team3_num + #{team3Num},
 			</if>
 			<if test="validNum != null and validNum >0">
-				valid_num = valid_num + #{validNum}
+				valid_num = valid_num + #{validNum},
 			</if>
 			updated = sysdate()
 		</set>

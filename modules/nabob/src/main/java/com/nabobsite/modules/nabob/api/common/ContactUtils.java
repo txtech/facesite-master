@@ -26,6 +26,9 @@ public class ContactUtils {
     private static final Logger logger = LoggerFactory.getLogger(ContactUtils.class);
 
     public final static BigDecimal ZERO = new BigDecimal("0");
+    public final static BigDecimal HOUR = new BigDecimal("24");
+    public final static BigDecimal MINUTE = new BigDecimal("60");
+    public final static BigDecimal SECOND = new BigDecimal("60");
     public static String CHART_UTF ="UTF-8";
     public final static String LANG = "lang";
     public final static String TOKEN = "token";

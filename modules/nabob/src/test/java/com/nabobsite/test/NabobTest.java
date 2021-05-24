@@ -3,8 +3,11 @@ package com.nabobsite.test;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.I18nUtils;
 import org.junit.Test;
+
+import java.math.BigDecimal;
 
 /**
  * @ClassName nada
@@ -16,6 +19,22 @@ public class NabobTest {
 
     private final static String Authorization = "109f3fff945a441aa2c917ca2b23d21e";
     private final static String baseReqUrl = "http://localhost:9999/aurora/f/api/";
+
+    @Test
+    public void Test1(){
+        ////0.01/24/60/60*10*100
+        BigDecimal warehouseMoney = new BigDecimal("100.00000");
+        BigDecimal dailyInterestRate = new BigDecimal("0.010000");
+        BigDecimal incomeMoney = dailyInterestRate.multiply(new BigDecimal(10)).multiply(warehouseMoney);
+        System.out.println(incomeMoney);
+         incomeMoney = incomeMoney.divide(ContactUtils.HOUR,5, BigDecimal.ROUND_HALF_UP);
+        System.out.println(incomeMoney);
+        incomeMoney = incomeMoney.divide(ContactUtils.MINUTE,5, BigDecimal.ROUND_HALF_UP);
+        System.out.println(incomeMoney);
+        incomeMoney = incomeMoney.divide(ContactUtils.SECOND,5, BigDecimal.ROUND_HALF_UP);
+        System.out.println(incomeMoney);
+
+    }
 
     @Test
     public void userRegister(){

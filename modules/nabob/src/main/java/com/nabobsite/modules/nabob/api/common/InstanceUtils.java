@@ -210,15 +210,16 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
-    public static ProductUserWarehouseLog initUserProductWarehouseLog(String userId, String warehouseId, int type, String title, BigDecimal money){
-        ProductUserWarehouseLog userProductWarehouseLog = new ProductUserWarehouseLog();
-        userProductWarehouseLog.setIsNewRecord(true);
-        userProductWarehouseLog.setUserId(userId);
-        userProductWarehouseLog.setWarehouseId(warehouseId);
-        userProductWarehouseLog.setType(type);
-        userProductWarehouseLog.setTitle(title);
-        userProductWarehouseLog.setIncomeMoney(money);
-        return userProductWarehouseLog;
+    public static ProductUserWarehouseLog initUserProductWarehouseLog(String userId, String warehouseId, int type,int productType, String title, BigDecimal money){
+        ProductUserWarehouseLog productUserWarehouseLog = new ProductUserWarehouseLog();
+        productUserWarehouseLog.setIsNewRecord(true);
+        productUserWarehouseLog.setUserId(userId);
+        productUserWarehouseLog.setWarehouseId(warehouseId);
+        productUserWarehouseLog.setType(type);
+        productUserWarehouseLog.setProductType(productType);
+        productUserWarehouseLog.setTitle(title);
+        productUserWarehouseLog.setIncomeMoney(money);
+        return productUserWarehouseLog;
     }
 
     /**

@@ -11,6 +11,7 @@ import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleProductService;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,54 +41,64 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doWarehouseToBalance(String token,ProductUserWarehouseRecord userProductWarehouseRecord) {
+	public CommonResult<Boolean> doWarehouseToBalance(String token,ProductUserWarehouseRecord productUserWarehouseRecord) {
 		try {
-			String warehouseId = userProductWarehouseRecord.getWarehouseId();
-			BigDecimal money = userProductWarehouseRecord.getMoney();
-			if(StringUtils.isAnyEmpty(warehouseId)){
-				return ResultUtil.failed(I18nCode.CODE_10006);
-			}
-			if(ContactUtils.isLesserOrEqualZero(money)){
-				return ResultUtil.failed(I18nCode.CODE_10006);
-			}
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
+			String warehouseId = "1";
 			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
 			if(productWarehouse == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
-			BigDecimal limitPrice = productWarehouse.getLimitPrice();
-			if(ContactUtils.isLesser(money,limitPrice)){
-				return ResultUtil.failed(I18nCode.CODE_10100);
-			}
 			synchronized (userId) {
+				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
+				if(oldUserAccount == null){
+					return ResultUtil.failed(I18nCode.CODE_10011);
+				}
+				ProductUserWarehouse oldProductUserWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
+				if(oldProductUserWarehouse == null){
+					return ResultUtil.failed(I18nCode.CODE_10004);
+				}
+				if(ContactUtils.isLesserOrEqualZero(oldUserAccount.getWarehouseMoney())){
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
+				long psersonUpdateTime = oldProductUserWarehouse.getPsersonUpdateTime().getTime();
+				long diffTime = (new Date().getTime() - psersonUpdateTime)/1000;
+
+
+				BigDecimal warehouseMoney = oldUserAccount.getWarehouseMoney();
+				BigDecimal dailyInterestRate = productWarehouse.getDailyInterestRate();
+				BigDecimal incomeMoney = dailyInterestRate.multiply(new BigDecimal(diffTime)).multiply(warehouseMoney);
+				incomeMoney = incomeMoney.divide(ContactUtils.HOUR,5, BigDecimal.ROUND_HALF_UP);
+				incomeMoney = incomeMoney.divide(ContactUtils.MINUTE,5, BigDecimal.ROUND_HALF_UP);
+				incomeMoney = incomeMoney.divide(ContactUtils.SECOND,5, BigDecimal.ROUND_HALF_UP);
+
 				String title = "收益提取";
-				ProductUserWarehouseLog userProductWarehouseLog = InstanceUtils.initUserProductWarehouseLog(userId,warehouseId,1,title,money);
-				long dbResult = userProductWarehouseLogDao.insert(userProductWarehouseLog);
-				if(!ContactUtils.dbResult(dbResult)){
-					return ResultUtil.failed(I18nCode.CODE_10004);
-				}
 				int type = ContactUtils.WAREHOUSE_RECORD_TYPE_3;
-				userProductWarehouseRecord.setUserId(userId);
-				userProductWarehouseRecord.setType(type);
-				dbResult = userProductWarehouseRecordDao.insert(userProductWarehouseRecord);
+				int productType = ContactUtils.WAREHOUSE_TYPE_1;
+				ProductUserWarehouseLog productUserWarehouseLog = InstanceUtils.initUserProductWarehouseLog(userId,warehouseId,type,productType,title,incomeMoney);
+				long dbResult = userProductWarehouseLogDao.insert(productUserWarehouseLog);
 				if(!ContactUtils.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				ProductUserWarehouse oldUserProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
-				if(oldUserProductWarehouse == null){
-					return ResultUtil.failed(I18nCode.CODE_10004);
-				}
-				ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
-				userProductWarehouse.setId(oldUserProductWarehouse.getId());
-				userProductWarehouse.setAsstesHeldMoney(money);
-				dbResult = userProductWarehouseDao.update(userProductWarehouse);
+
+				productUserWarehouseRecord.setUserId(userId);
+				productUserWarehouseRecord.setType(type);
+				dbResult = userProductWarehouseRecordDao.insert(productUserWarehouseRecord);
 				if(!ContactUtils.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				Boolean isOk = userAccountApiService.updateAccountWarehouseMoney(userId,type,money,warehouseId,title);
+
+				ProductUserWarehouse productUserWarehouse = new ProductUserWarehouse();
+				productUserWarehouse.setId(oldProductUserWarehouse.getId());
+				productUserWarehouse.setAsstesHeldMoney(incomeMoney);
+				dbResult = userProductWarehouseDao.update(productUserWarehouse);
+				if(!ContactUtils.dbResult(dbResult)){
+					return ResultUtil.failed(I18nCode.CODE_10004);
+				}
+				Boolean isOk = userAccountApiService.updateAccountWarehouseMoney(userId,type,incomeMoney,warehouseId,title);
 				if(isOk){
 					return ResultUtil.success(true);
 				}
@@ -127,6 +139,13 @@ public class ProductApiService extends SimpleProductService {
 				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
 			synchronized (userId) {
+				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
+				if(oldUserAccount == null){
+					return ResultUtil.failed(I18nCode.CODE_10011);
+				}
+				if(ContactUtils.isLesser(oldUserAccount.getWarehouseMoney(),money)){
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
 				int type = ContactUtils.WAREHOUSE_RECORD_TYPE_2;
 				userProductWarehouseRecord.setUserId(userId);
 				userProductWarehouseRecord.setMoney(money.negate());
@@ -188,6 +207,14 @@ public class ProductApiService extends SimpleProductService {
 				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
 			synchronized (userId) {
+				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
+				if(oldUserAccount == null){
+					return ResultUtil.failed(I18nCode.CODE_10011);
+				}
+				BigDecimal diffMoney = ContactUtils.subtract(oldUserAccount.getTotalMoney(),oldUserAccount.getWarehouseMoney());
+				if(ContactUtils.isLesser(diffMoney,money)){
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
 				int type = ContactUtils.WAREHOUSE_RECORD_TYPE_1;
 				productUserWarehouseRecord.setUserId(userId);
 				productUserWarehouseRecord.setType(type);
