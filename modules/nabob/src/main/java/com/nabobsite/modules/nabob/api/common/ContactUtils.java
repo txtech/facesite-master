@@ -25,24 +25,19 @@ public class ContactUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(ContactUtils.class);
 
+    public final static BigDecimal ZERO = new BigDecimal("0");
     public static String CHART_UTF ="UTF-8";
     public final static String LANG = "lang";
     public final static String TOKEN = "token";
     public final static String USERID = "userId";
     public final static String AUTHORIZATION = "Authorization";
 
-
-    public final static BigDecimal ZERO = new BigDecimal("0");
-
     //用户升级人数
     public final static int USER_LEVEL_UP_TEAM_NUM = 5;
-    //用户注册奖励
+    //用户注册送现金
     public final static BigDecimal USER_REGISTER_REWARD = new BigDecimal("100");
     //用户注册奖励
     public final static BigDecimal USER_TACK_BASE_MONEY = new BigDecimal("990");
-    //用户增值比例
-    public final static BigDecimal PRODUCT_COMMISSION_OTHER_RATE = new BigDecimal("0.5");
-
 
     //用户等级
     public final static int USER_LEVEL_0 = 0;

@@ -17,6 +17,7 @@ import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskUserRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.team.dao.TeamUserDao;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
@@ -410,20 +411,41 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	}
 
 	/**
-	 * @desc 获取用户一级团队个数
+	 * 获取团队用户信息
+	 * @param userId
+	 * @return
+	 */
+	public TeamUser getTeamUserByUserId(String userId){
+		try {
+			if(!ContactUtils.isOkUserId(userId)){
+				return null;
+			}
+			TeamUser teamUser = new TeamUser();
+			teamUser.setId(userId);
+			return teamUserDao.get(teamUser);
+		} catch (Exception e) {
+			logger.error("获取用户团队个数异常",e);
+			return null;
+		}
+	}
+	/**
+	 * @desc 团队直推有效个数
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
-	public int getLevelUpTeamNum(String userId){
+	public int getTeamUserValidNum(String userId){
 		try {
 			if(!ContactUtils.isOkUserId(userId)){
 				return 0;
 			}
-			UserInfo userInfo = new UserInfo();
-			userInfo.setId(userId);
-			return userInfoDao.getOkLevelTeam1Num(userInfo);
+			TeamUser teamUser = this.getTeamUserByUserId(userId);
+			if(teamUser == null){
+				return 0;
+			}
+			int teamNum = teamUser.getValidNum();
+			return teamNum;
 		} catch (Exception e) {
-			logger.error("获取用户团队个数异常",e);
+			logger.error("团队直推有效个数异常",e);
 			return 0;
 		}
 	}
@@ -460,22 +482,21 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public int getUserLock(String userId,int currentLevel,BigDecimal payMoney){
 		if(currentLevel == ContactUtils.USER_LEVEL_0 || currentLevel == ContactUtils.USER_LEVEL_1){
-			return 1;
+			return ContactUtils.USER_LOCK_1;
 		}
 		UserInfoMembership memberShip = this.getMemberShipByLevel(currentLevel);
 		if(memberShip == null){
-			return 2;
+			return ContactUtils.USER_LOCK_2;
 		}
 		BigDecimal mustBalance = memberShip.getGradeMoney();
 		if(ContactUtils.isBiggerOrEqual(payMoney,mustBalance)){
-			return 1;
-		}else{
-			int teamNum = this.getLevelUpTeamNum(userId);
-			if(teamNum >= ContactUtils.USER_LEVEL_UP_TEAM_NUM){
-				return 1;
-			}
+			return ContactUtils.USER_LOCK_1;
 		}
-		return 2;
+		int teamNum = this.getTeamUserValidNum(userId);
+		if(teamNum >= ContactUtils.USER_LEVEL_UP_TEAM_NUM){
+			return ContactUtils.USER_LOCK_1;
+		}
+		return ContactUtils.USER_LOCK_2;
 	}
 	/**
 	 * 获取会员权益最大等级
