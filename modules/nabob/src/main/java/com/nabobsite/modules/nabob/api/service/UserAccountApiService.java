@@ -161,6 +161,7 @@ public class UserAccountApiService extends SimpleUserService {
 					logger.error("修改佣金账户失败,修改账户失败:{},{}",userId,commissionMoney);
 					return false;
 				}
+				triggerApiService.commissionTrigger(userId,type,commissionMoney);
 				return true;
 			}
 		} catch (Exception e) {

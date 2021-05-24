@@ -29,7 +29,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="team1_num", attrName="team1Num", label="一级团队人数"),
 		@Column(name="team2_num", attrName="team2Num", label="二级团队人数"),
 		@Column(name="team3_num", attrName="team3Num", label="三级团队人数"),
-		@Column(name="link_data", attrName="linkData", label="团队链"),
 		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
@@ -47,7 +46,6 @@ public class TeamUser extends DataEntity<TeamUser> {
 	private Integer team1Num;		// 一级团队人数
 	private Integer team2Num;		// 二级团队人数
 	private Integer team3Num;		// 三级团队人数
-	private String linkData;		// 团队链
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
@@ -113,15 +111,6 @@ public class TeamUser extends DataEntity<TeamUser> {
 
 	public void setTeam3Num(Integer team3Num) {
 		this.team3Num = team3Num;
-	}
-	
-	@NotBlank(message="团队链不能为空")
-	public String getLinkData() {
-		return linkData;
-	}
-
-	public void setLinkData(String linkData) {
-		this.linkData = linkData;
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

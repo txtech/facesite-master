@@ -2,6 +2,7 @@ package com.nabobsite.modules.nabob.api.pool;
 
 import com.nabobsite.modules.nabob.api.pool.trigger.InitLoadDbDataTrigger;
 import com.nabobsite.modules.nabob.api.pool.trigger.UserBalanceTrigger;
+import com.nabobsite.modules.nabob.api.pool.trigger.UserCommissionTrigger;
 import com.nabobsite.modules.nabob.api.pool.trigger.UserRegisterTrigger;
 import com.nabobsite.modules.nabob.api.pool.manager.TriggerPoolManagerImpl;
 import com.nabobsite.modules.nabob.api.pool.manager.TriggerThread;
@@ -66,6 +67,17 @@ public class TriggerApiService {
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void balanceTrigger(String userId, int type, BigDecimal updateMoney) {
         TriggerThread callback = new UserBalanceTrigger(userId,type,updateMoney, userInfoDao,logicService);
+        triggerPoolManager.submit(callback);
+    }
+
+    /**
+     * @desc 用户刷单佣金触发器
+     * @author nada
+     * @create 2021/5/11 10:33 下午
+     */
+    @Transactional(readOnly = false, rollbackFor = Exception.class)
+    public void commissionTrigger(String userId, int type, BigDecimal updateMoney) {
+        UserCommissionTrigger callback = new UserCommissionTrigger(userId,type,updateMoney, userInfoDao,logicService);
         triggerPoolManager.submit(callback);
     }
 }

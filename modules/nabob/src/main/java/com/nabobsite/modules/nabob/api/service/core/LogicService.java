@@ -5,7 +5,6 @@ package com.nabobsite.modules.nabob.api.service.core;
 
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
-import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.springframework.stereotype.Service;
@@ -63,7 +62,7 @@ public class LogicService extends SimpleUserService {
 					Boolean isUpLevelOk = this.updateUpLevelAdnLock(userId,maxLevel,userLock,valid);
 					logger.info("会员等级升级且解锁:{},{}",userId,isUpLevelOk);
 					if(isUpLevelOk){
-						boolean isOK = this.updateDirectTeamNum(userId,parent1Id,num);
+						boolean isOK = this.updateDirectTeamNum(userId,num);
 						logger.info("充值修改团队数:{},{}",parent1Id,isOK);
 
 						int teamNum = this.getTeamUserValidNum(parent1Id);

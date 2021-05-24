@@ -30,6 +30,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="user_status", attrName="userStatus", label="状态 1", comment="状态 1:正常 2:禁用"),
 		@Column(name="level", attrName="level", label="级别"),
 		@Column(name="is_valid", attrName="isValid", label="是否有效"),
+		@Column(name="valid_date", attrName="validDate", label="有效期"),
 		@Column(name="name", attrName="name", label="名称", queryType=QueryType.LIKE),
 		@Column(name="lock", attrName="lock", label="解锁状态：1", comment="解锁状态：1:解锁 2:锁定"),
 		@Column(name="account_no", attrName="accountNo", label="账号"),
@@ -75,6 +76,7 @@ public class UserInfo extends DataEntity<UserInfo> {
     private String imgCode; //图片验证码code
     private String oldPassword;
     private Integer isValid;
+	private Date validDate;
 	
 	public UserInfo() {
 		this(null);
@@ -303,5 +305,13 @@ public class UserInfo extends DataEntity<UserInfo> {
 
 	public void setIsValid(Integer isValid) {
 		this.isValid = isValid;
+	}
+
+	public Date getValidDate() {
+		return validDate;
+	}
+
+	public void setValidDate(Date validDate) {
+		this.validDate = validDate;
 	}
 }

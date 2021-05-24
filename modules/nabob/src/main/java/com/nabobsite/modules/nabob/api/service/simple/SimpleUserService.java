@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.service.simple;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -177,11 +179,8 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean updateDirectTeamNum(String userId,String parent1UserId,int num) {
+	public Boolean updateDirectTeamNum(String userId,int num) {
 		try {
-			if(!ContactUtils.isOkUserId(parent1UserId)){
-				return null;
-			}
 			TeamUser teamUser = new TeamUser();
 			teamUser.setId(userId);
 			teamUser.setValidNum(num);
@@ -209,6 +208,9 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			userInfo.setLock(userLock);
 			userInfo.setLevel(upLevel);
 			userInfo.setIsValid(valid);
+			if(valid == ContactUtils.USER_VALID_1){
+				userInfo.setValidDate(new Date());
+			}
 			long dbResult = userInfoDao.update(userInfo);
 			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
