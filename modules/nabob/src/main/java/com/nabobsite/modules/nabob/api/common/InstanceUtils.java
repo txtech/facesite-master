@@ -14,6 +14,8 @@ import com.nabobsite.modules.nabob.cms.user.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.DigestUtils;
+
+import javax.xml.crypto.Data;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -228,6 +230,8 @@ public class InstanceUtils {
             UserAccountWarehouse userAccountWarehouse = new UserAccountWarehouse();
             userAccountWarehouse.setIsNewRecord(true);
             userAccountWarehouse.setUserId(userId);
+            userAccountWarehouse.setTeamUpdateTime(new Date());
+            userAccountWarehouse.setPsersonUpdateTime(new Date());
             userAccountWarehouse.setAsstesHeldMoney(new BigDecimal("0"));
             userAccountWarehouse.setAccumulativeIncomeMoney(new BigDecimal("0"));
             userAccountWarehouse.setPersonalIncomeMoney(new BigDecimal("0"));

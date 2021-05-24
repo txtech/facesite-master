@@ -60,7 +60,6 @@ public class ProductApiService extends SimpleProductService {
 			}
 			synchronized (userId) {
 				for (ProductUserWarehouse oldUserWarehouse : productUserWarehouseList) {
-					String id = oldUserWarehouse.getId();
 					String warehouseId = oldUserWarehouse.getWarehouseId();
 					ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
 					if(productWarehouse == null){
@@ -489,8 +488,6 @@ public class ProductApiService extends SimpleProductService {
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
-
-
 
 	/**
 	 * @desc 用户云仓库个人收入记录列表

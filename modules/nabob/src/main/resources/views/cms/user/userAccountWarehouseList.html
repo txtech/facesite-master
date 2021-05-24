@@ -85,6 +85,20 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('个人动态收益更新时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="psersonUpdateTime" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('团队动态收益更新时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="teamUpdateTime" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
 				</div>
@@ -113,6 +127,8 @@ $('#dataGrid').dataGrid({
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
+		{header:'${text("个人动态收益更新时间")}', name:'psersonUpdateTime', index:'a.pserson_update_time', width:150, align:"center"},
+		{header:'${text("团队动态收益更新时间")}', name:'teamUpdateTime', index:'a.team_update_time', width:150, align:"center"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:userAccountWarehouse:edit')){ %>

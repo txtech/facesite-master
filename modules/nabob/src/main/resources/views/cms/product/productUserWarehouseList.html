@@ -123,7 +123,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/product/productUserWarehouse/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户产品仓库信息")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("产品仓库ID")}', name:'warehouseId', index:'a.warehouse_id', width:150, align:"center"},
+		{header:'${text("产品仓库ID")}', name:'warehouseId', index:'a.warehouse_id', width:150, align:"left"},
 		{header:'${text("持有理财资产")}', name:'asstesHeldMoney', index:'a.asstes_held_money', width:150, align:"left"},
 		{header:'${text("累计动态收益")}', name:'accumulativeIncomeMoney', index:'a.accumulative_income_money', width:150, align:"left"},
 		{header:'${text("个人动态受益")}', name:'personalIncomeMoney', index:'a.personal_income_money', width:150, align:"left"},

@@ -5,10 +5,10 @@ package com.nabobsite.modules.nabob.cms.product.entity;
 
 import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import com.jeesite.common.mybatis.annotation.JoinTable;
 import com.jeesite.common.mybatis.annotation.JoinTable.Type;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户产品仓库信息Entity
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-24
  */
 @Table(name="t1_product_user_warehouse", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -77,7 +77,7 @@ public class ProductUserWarehouse extends DataEntity<ProductUserWarehouse> {
 		this.userId = userId;
 	}
 	
-	@NotNull(message="产品仓库ID不能为空")
+	@NotBlank(message="产品仓库ID不能为空")
 	public String getWarehouseId() {
 		return warehouseId;
 	}

@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
 /**
  * 用户账户仓库信息DAO接口
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-24
  */
 @MyBatisDao
 public interface UserAccountWarehouseDao extends CrudDao<UserAccountWarehouse> {

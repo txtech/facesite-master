@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户账户仓库信息Entity
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-24
  */
 @Table(name="t1_user_account_warehouse", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -37,6 +37,8 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
+		@Column(name="pserson_update_time", attrName="psersonUpdateTime", label="个人动态收益更新时间"),
+		@Column(name="team_update_time", attrName="teamUpdateTime", label="团队动态收益更新时间"),
 	}, orderBy="a.id DESC"
 )
 public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
@@ -52,6 +54,8 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private Date psersonUpdateTime;		// 个人动态收益更新时间
+	private Date teamUpdateTime;		// 团队动态收益更新时间
 	
 	public UserAccountWarehouse() {
 		this(null);
@@ -150,6 +154,26 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@NotNull(message="个人动态收益更新时间不能为空")
+	public Date getPsersonUpdateTime() {
+		return psersonUpdateTime;
+	}
+
+	public void setPsersonUpdateTime(Date psersonUpdateTime) {
+		this.psersonUpdateTime = psersonUpdateTime;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@NotNull(message="团队动态收益更新时间不能为空")
+	public Date getTeamUpdateTime() {
+		return teamUpdateTime;
+	}
+
+	public void setTeamUpdateTime(Date teamUpdateTime) {
+		this.teamUpdateTime = teamUpdateTime;
 	}
 	
 }
