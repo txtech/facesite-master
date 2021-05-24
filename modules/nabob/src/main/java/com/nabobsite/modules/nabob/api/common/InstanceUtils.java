@@ -76,10 +76,6 @@ public class InstanceUtils {
             userAccount.setIncrementMoney(new BigDecimal("0"));
             userAccount.setCommissionMoney(new BigDecimal("0"));
             userAccount.setClaimableMoney(new BigDecimal("0"));
-            userAccount.setTeamMoney(new BigDecimal("0"));
-            userAccount.setTeam1Money(new BigDecimal("0"));
-            userAccount.setTeam2Money(new BigDecimal("0"));
-            userAccount.setTeam3Money(new BigDecimal("0"));
             userAccount.setRechargeMoney(new BigDecimal("0"));
             userAccount.setRewardMoney(ContactUtils.USER_TACK_BASE_MONEY);
             userAccount.setAccountStatus(ContactUtils.USER_ACCOUNT_STATUS_1);
@@ -277,6 +273,10 @@ public class InstanceUtils {
             userTeam.setTeam1Num(0);
             userTeam.setTeam2Num(0);
             userTeam.setTeam3Num(0);
+            userTeam.setTeamMoney(new BigDecimal("0"));
+            userTeam.setTeam1Money(new BigDecimal("0"));
+            userTeam.setTeam2Money(new BigDecimal("0"));
+            userTeam.setTeam3Money(new BigDecimal("0"));
             return userTeam;
         }
     }

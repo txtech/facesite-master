@@ -35,10 +35,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="increment_money", attrName="incrementMoney", label="增值账户"),
 		@Column(name="claimable_money", attrName="claimableMoney", label="可提取账户"),
 		@Column(name="reward_money", attrName="rewardMoney", label="奖励账户"),
-		@Column(name="team_money", attrName="teamMoney", label="团队收益"),
-		@Column(name="team1_money", attrName="team1Money", label="一级团队收益"),
-		@Column(name="team2_money", attrName="team2Money", label="二级团队收益"),
-		@Column(name="team3_money", attrName="team3Money", label="三级团队收益"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
 		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
@@ -62,10 +58,6 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private BigDecimal incrementMoney;		// 增值账户
 	private BigDecimal claimableMoney;		// 可提取账户
 	private BigDecimal rewardMoney;		// 奖励账户
-	private BigDecimal teamMoney;		// 团队收益
-	private BigDecimal team1Money;		// 一级团队收益
-	private BigDecimal team2Money;		// 二级团队收益
-	private BigDecimal team3Money;		// 三级团队收益
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
@@ -177,42 +169,6 @@ public class UserAccount extends DataEntity<UserAccount> {
 
 	public void setRewardMoney(BigDecimal rewardMoney) {
 		this.rewardMoney = rewardMoney;
-	}
-	
-	@NotNull(message="团队收益不能为空")
-	public BigDecimal getTeamMoney() {
-		return teamMoney;
-	}
-
-	public void setTeamMoney(BigDecimal teamMoney) {
-		this.teamMoney = teamMoney;
-	}
-	
-	@NotNull(message="一级团队收益不能为空")
-	public BigDecimal getTeam1Money() {
-		return team1Money;
-	}
-
-	public void setTeam1Money(BigDecimal team1Money) {
-		this.team1Money = team1Money;
-	}
-	
-	@NotNull(message="二级团队收益不能为空")
-	public BigDecimal getTeam2Money() {
-		return team2Money;
-	}
-
-	public void setTeam2Money(BigDecimal team2Money) {
-		this.team2Money = team2Money;
-	}
-	
-	@NotNull(message="三级团队收益不能为空")
-	public BigDecimal getTeam3Money() {
-		return team3Money;
-	}
-
-	public void setTeam3Money(BigDecimal team3Money) {
-		this.team3Money = team3Money;
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

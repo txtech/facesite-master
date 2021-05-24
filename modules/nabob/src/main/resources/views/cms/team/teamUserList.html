@@ -53,15 +53,21 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('团队链')}：</label>
+					<label class="control-label">${text('团队收益')}：</label>
 					<div class="control-inline">
-						<#form:input path="linkData" class="form-control width-120"/>
+						<#form:input path="teamMoney" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('备注信息')}：</label>
 					<div class="control-inline">
 						<#form:input path="remarks" maxlength="520" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('一级团队收益')}：</label>
+					<div class="control-inline">
+						<#form:input path="team1Money" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -72,10 +78,22 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('二级团队收益')}：</label>
+					<div class="control-inline">
+						<#form:input path="team2Money" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('更新时间')}：</label>
 					<div class="control-inline">
 						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('三级团队收益')}：</label>
+					<div class="control-inline">
+						<#form:input path="team3Money" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -108,10 +126,13 @@ $('#dataGrid').dataGrid({
 		{header:'${text("一级团队人数")}', name:'team1Num', index:'a.team1_num', width:150, align:"center"},
 		{header:'${text("二级团队人数")}', name:'team2Num', index:'a.team2_num', width:150, align:"center"},
 		{header:'${text("三级团队人数")}', name:'team3Num', index:'a.team3_num', width:150, align:"center"},
-		{header:'${text("团队链")}', name:'linkData', index:'a.link_data', width:150, align:"left"},
+		{header:'${text("团队收益")}', name:'teamMoney', index:'a.team_money', width:150, align:"left"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
+		{header:'${text("一级团队收益")}', name:'team1Money', index:'a.team1_money', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("二级团队收益")}', name:'team2Money', index:'a.team2_money', width:150, align:"left"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
+		{header:'${text("三级团队收益")}', name:'team3Money', index:'a.team3_money', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];

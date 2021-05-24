@@ -6,9 +6,10 @@ package com.nabobsite.modules.nabob.cms.team.entity;
 import javax.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.math.BigDecimal;
 import com.jeesite.common.mybatis.annotation.JoinTable;
 import com.jeesite.common.mybatis.annotation.JoinTable.Type;
+import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.jeesite.common.entity.DataEntity;
@@ -19,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户团队Entity
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-24
  */
 @Table(name="t1_team_user", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -29,9 +30,13 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="team1_num", attrName="team1Num", label="一级团队人数"),
 		@Column(name="team2_num", attrName="team2Num", label="二级团队人数"),
 		@Column(name="team3_num", attrName="team3Num", label="三级团队人数"),
+		@Column(name="team_money", attrName="teamMoney", label="团队收益"),
 		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
+		@Column(name="team1_money", attrName="team1Money", label="一级团队收益"),
 		@Column(name="created", attrName="created", label="创建时间"),
+		@Column(name="team2_money", attrName="team2Money", label="二级团队收益"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
+		@Column(name="team3_money", attrName="team3Money", label="三级团队收益"),
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
@@ -46,8 +51,12 @@ public class TeamUser extends DataEntity<TeamUser> {
 	private Integer team1Num;		// 一级团队人数
 	private Integer team2Num;		// 二级团队人数
 	private Integer team3Num;		// 三级团队人数
+	private BigDecimal teamMoney;		// 团队收益
+	private BigDecimal team1Money;		// 一级团队收益
 	private Date created;		// 创建时间
+	private BigDecimal team2Money;		// 二级团队收益
 	private Date updated;		// 更新时间
+	private BigDecimal team3Money;		// 三级团队收益
 	private String delFlag;		// 删除标志
 	
 	public TeamUser() {
@@ -113,6 +122,24 @@ public class TeamUser extends DataEntity<TeamUser> {
 		this.team3Num = team3Num;
 	}
 	
+	@NotNull(message="团队收益不能为空")
+	public BigDecimal getTeamMoney() {
+		return teamMoney;
+	}
+
+	public void setTeamMoney(BigDecimal teamMoney) {
+		this.teamMoney = teamMoney;
+	}
+	
+	@NotNull(message="一级团队收益不能为空")
+	public BigDecimal getTeam1Money() {
+		return team1Money;
+	}
+
+	public void setTeam1Money(BigDecimal team1Money) {
+		this.team1Money = team1Money;
+	}
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getCreated() {
 		return created;
@@ -122,6 +149,15 @@ public class TeamUser extends DataEntity<TeamUser> {
 		this.created = created;
 	}
 	
+	@NotNull(message="二级团队收益不能为空")
+	public BigDecimal getTeam2Money() {
+		return team2Money;
+	}
+
+	public void setTeam2Money(BigDecimal team2Money) {
+		this.team2Money = team2Money;
+	}
+	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
@@ -129,6 +165,15 @@ public class TeamUser extends DataEntity<TeamUser> {
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+	
+	@NotNull(message="三级团队收益不能为空")
+	public BigDecimal getTeam3Money() {
+		return team3Money;
+	}
+
+	public void setTeam3Money(BigDecimal team3Money) {
+		this.team3Money = team3Money;
 	}
 	
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
