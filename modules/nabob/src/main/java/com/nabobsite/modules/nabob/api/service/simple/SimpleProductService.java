@@ -5,6 +5,7 @@ package com.nabobsite.modules.nabob.api.service.simple;
 
 import com.nabobsite.modules.nabob.cms.product.dao.*;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
+import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,7 +103,6 @@ public class SimpleProductService extends SimpleUserService {
 			return null;
 		}
 	}
-
 
 	/**
 	 * @desc 获取云仓库产品详情

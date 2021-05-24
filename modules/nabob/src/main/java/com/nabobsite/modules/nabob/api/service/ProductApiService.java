@@ -4,6 +4,7 @@
 package com.nabobsite.modules.nabob.api.service;
 
 import com.jeesite.common.lang.StringUtils;
+import com.jeesite.common.shiro.realms.Da;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
@@ -11,6 +12,7 @@ import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleProductService;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
+import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -234,7 +236,7 @@ public class ProductApiService extends SimpleProductService {
 			return false;
 		}
 
-		//更新仓库账户
+		//更新用户仓库
 		ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
 		userProductWarehouse.setId(oldUserProductWarehouse.getId());
 		if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
@@ -246,6 +248,19 @@ public class ProductApiService extends SimpleProductService {
 			userProductWarehouse.setPsersonUpdateTime(new Date());
 		}
 		dbResult = userProductWarehouseDao.update(userProductWarehouse);
+		if(!ContactUtils.dbResult(dbResult)){
+			return false;
+		}
+
+		//更新仓库账户
+		UserAccountWarehouse userAccountWarehouse = new UserAccountWarehouse();
+		userAccountWarehouse.setUserId(userId);
+		userAccountWarehouse.setPsersonUpdateTime(new Date());
+		userAccountWarehouse.setAccumulativeIncomeMoney(money);
+		userAccountWarehouse.setPersonalIncomeMoney(money);
+		userAccountWarehouse.setPersonalAccumulativeIncomeMoney(money);
+		userAccountWarehouse.setAsstesHeldMoney(oldUserProductWarehouse.getAsstesHeldMoney().add(money));
+		dbResult = userAccountWarehouseDao.update(userAccountWarehouse);
 		if(!ContactUtils.dbResult(dbResult)){
 			return false;
 		}
