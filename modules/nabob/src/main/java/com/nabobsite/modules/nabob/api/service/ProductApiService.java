@@ -165,15 +165,15 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doWarehouseDeposit(String token,ProductUserWarehouseRecord userProductWarehouseRecord) {
+	public CommonResult<Boolean> doWarehouseDeposit(String token,ProductUserWarehouseRecord productUserWarehouseRecord) {
 		try {
-			String warehouseId = userProductWarehouseRecord.getWarehouseId();
-			BigDecimal money = userProductWarehouseRecord.getMoney();
+			String warehouseId = productUserWarehouseRecord.getWarehouseId();
+			BigDecimal money = productUserWarehouseRecord.getMoney();
 			if(StringUtils.isAnyEmpty(warehouseId)){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
 			if(ContactUtils.isLesserOrEqualZero(money)){
-				return ResultUtil.failed(I18nCode.CODE_10006);
+				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
@@ -189,14 +189,14 @@ public class ProductApiService extends SimpleProductService {
 			}
 			synchronized (userId) {
 				int type = ContactUtils.WAREHOUSE_RECORD_TYPE_1;
-				userProductWarehouseRecord.setUserId(userId);
-				userProductWarehouseRecord.setType(type);
-				long dbResult = userProductWarehouseRecordDao.insert(userProductWarehouseRecord);
+				productUserWarehouseRecord.setUserId(userId);
+				productUserWarehouseRecord.setType(type);
+				long dbResult = userProductWarehouseRecordDao.insert(productUserWarehouseRecord);
 				if(!ContactUtils.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				ProductUserWarehouse oldUserProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
-				if(oldUserProductWarehouse == null){
+				ProductUserWarehouse oldProductUserWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
+				if(oldProductUserWarehouse == null){
 					ProductUserWarehouse userProductWarehouse = InstanceUtils.initUserProductWarehouse(userId,warehouseId,money);
 					dbResult = userProductWarehouseDao.insert(userProductWarehouse);
 					if(!ContactUtils.dbResult(dbResult)){
@@ -204,7 +204,7 @@ public class ProductApiService extends SimpleProductService {
 					}
 				}else{
 					ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
-					userProductWarehouse.setId(oldUserProductWarehouse.getId());
+					userProductWarehouse.setId(oldProductUserWarehouse.getId());
 					userProductWarehouse.setAsstesHeldMoney(money);
 					dbResult = userProductWarehouseDao.update(userProductWarehouse);
 					if(!ContactUtils.dbResult(dbResult)){
