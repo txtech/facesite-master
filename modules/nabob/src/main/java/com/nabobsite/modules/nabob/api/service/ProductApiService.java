@@ -35,7 +35,6 @@ public class ProductApiService extends SimpleProductService {
 	@Autowired
 	protected UserAccountApiService userAccountApiService;
 
-
 	/**
 	 * @desc 云仓库收益提取到余额
 	 * @author nada
