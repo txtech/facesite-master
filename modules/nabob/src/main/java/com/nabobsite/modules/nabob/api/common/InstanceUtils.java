@@ -96,13 +96,9 @@ public class InstanceUtils {
             userAccountDetail.setUnique(uniqueId);
             userAccountDetail.setTotalMoney(new BigDecimal("0"));
             userAccountDetail.setAvailableMoney(new BigDecimal("0"));
-            userAccountDetail.setWarehouseMoney(new BigDecimal("0"));
-            userAccountDetail.setAiAssetsMoney(new BigDecimal("0"));
-            userAccountDetail.setIncomeMoney(new BigDecimal("0"));
             userAccountDetail.setIncrementMoney(new BigDecimal("0"));
             userAccountDetail.setCommissionMoney(new BigDecimal("0"));
             userAccountDetail.setClaimableMoney(new BigDecimal("0"));
-            userAccountDetail.setRewardMoney(new BigDecimal("0"));
             userAccountDetail.setRechargeMoney(new BigDecimal("0"));
             userAccountDetail.setLedgerType(1);
             return userAccountDetail;

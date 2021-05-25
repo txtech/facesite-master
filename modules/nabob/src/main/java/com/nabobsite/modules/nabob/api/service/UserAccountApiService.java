@@ -190,9 +190,7 @@ public class UserAccountApiService extends SimpleUserService {
 			synchronized (userId){
 				int detailType = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_30;
 				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,detailType,uniqueId,title);
-				userAccountDetail.setIncomeMoney(updateMoney);
 				userAccountDetail.setAvailableMoney(updateMoney);
-
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
 					logger.error("修改云仓库账户失败,记录明细失败:{},{}",userId,updateMoney);
@@ -224,7 +222,6 @@ public class UserAccountApiService extends SimpleUserService {
 			synchronized (userId){
 				int type = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_40;
 				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,type,uniqueId,title);
-				userAccountDetail.setRewardMoney(updateMoney);
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
 					logger.error("修改奖励账户失败,记录明细失败:{},{}",userId,updateMoney);
@@ -232,7 +229,6 @@ public class UserAccountApiService extends SimpleUserService {
 				}
 				UserAccount userAccount = new UserAccount();
 				userAccount.setUserId(userId);
-				//userAccount.setRewardMoney(updateMoney);
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改奖励账户失败,修改账户失败:{},{}",userId,updateMoney);

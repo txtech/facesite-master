@@ -49,10 +49,6 @@ public class ProductApiService extends SimpleProductService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
-			if(oldUserAccount == null){
-				return ResultUtil.failed(I18nCode.CODE_10011);
-			}
 			List<ProductUserWarehouse> productUserWarehouseList = this.getProductUserWarehouseListByUserId(userId);
 			if(productUserWarehouseList == null || productUserWarehouseList.isEmpty()){
 				return ResultUtil.failed(I18nCode.CODE_10006);
