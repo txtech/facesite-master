@@ -53,6 +53,6 @@ public class CashApiController extends BaseController {
 	@ApiOperation(value = "获取订单详情")
 	public CommonResult<OrderCash> getCashOrderInfo(@PathVariable String orderNo,HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return cashApiService.getCashOrderInfo(token,new OrderCash());
+		return cashApiService.getCashOrderInfo(token,orderNo);
 	}
 }

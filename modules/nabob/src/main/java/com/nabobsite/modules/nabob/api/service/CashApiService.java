@@ -134,8 +134,10 @@ public class CashApiService extends SimpleOrderService {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<OrderCash> getCashOrderInfo(String token, OrderCash cash) {
+	public CommonResult<OrderCash> getCashOrderInfo(String token,String orderNo) {
 		try {
+			OrderCash cash = new OrderCash();
+			cash.setOrderNo(orderNo);
 			OrderCash result = cashDao.getByEntity(cash);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
