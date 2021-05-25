@@ -121,10 +121,10 @@ public class ProductApiController extends BaseController {
 		int type = ContactUtils.WAREHOUSE_TYPE_2;
 		return productApiService.getUserWarehouseIncomeList(token,type,productType);
 	}
-	@RequestMapping(value = {"getUserWarehouseOperationList"})
+	@RequestMapping(value = {"getUserWarehouseOperationList/{warehouseId}"})
 	@ApiOperation(value = "用户云仓库操纵记录列表")
-	public CommonResult<List<ProductUserWarehouseRecord>> getUserWarehouseOperationList(HttpServletRequest request) {
+	public CommonResult<List<ProductUserWarehouseRecord>> getUserWarehouseOperationList(@PathVariable String warehouseId, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return productApiService.getUserWarehouseOperationList(token);
+		return productApiService.getUserWarehouseOperationList(token,warehouseId);
 	}
 }

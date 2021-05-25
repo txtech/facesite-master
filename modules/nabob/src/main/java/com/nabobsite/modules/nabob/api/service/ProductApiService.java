@@ -551,7 +551,7 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<ProductUserWarehouseRecord>> getUserWarehouseOperationList(String token) {
+	public CommonResult<List<ProductUserWarehouseRecord>> getUserWarehouseOperationList(String token,String warehouseId) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
@@ -559,6 +559,7 @@ public class ProductApiService extends SimpleProductService {
 			}
 			ProductUserWarehouseRecord userProductWarehouseRecord = new ProductUserWarehouseRecord();
 			userProductWarehouseRecord.setUserId(userId);
+			userProductWarehouseRecord.setWarehouseId(warehouseId);
 			List<ProductUserWarehouseRecord> result = productUserWarehouseRecordDao.findList(userProductWarehouseRecord);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
