@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.service.UserService;
@@ -16,6 +17,7 @@ import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
+import com.nabobsite.modules.nabob.cms.sys.entity.SysNotice;
 import com.nabobsite.modules.nabob.cms.sys.service.SequenceCodeService;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
@@ -485,6 +487,21 @@ public class UserInfoApiService extends SimpleUserService {
 			return ResultUtil.success(configJson);
 		} catch (Exception e) {
 			logger.error("获取系统配置异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 获取系统通知
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	public CommonResult<List<SysNotice>> getSysNotice() {
+		try {
+			List<SysNotice> result = sysNoticeDao.findList(new SysNotice());
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("获取系统通知异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}

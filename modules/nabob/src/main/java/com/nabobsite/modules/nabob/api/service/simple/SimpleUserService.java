@@ -17,6 +17,7 @@ import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseProgressDao;
 import com.nabobsite.modules.nabob.cms.sys.dao.SequenceCodeDao;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
+import com.nabobsite.modules.nabob.cms.sys.dao.SysNoticeDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SequenceCode;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
@@ -52,6 +53,8 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public SequenceCodeDao sequenceCodeDao;
 	@Autowired
 	public SysConfigDao sysConfigDao;
+	@Autowired
+	public SysNoticeDao sysNoticeDao;
 
 	@Autowired
 	public UserInfoDao userInfoDao;

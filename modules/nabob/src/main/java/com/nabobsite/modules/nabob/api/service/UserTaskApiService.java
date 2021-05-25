@@ -34,7 +34,7 @@ import java.util.Random;
  */
 @Service
 @Transactional(readOnly=true)
-public class TaskApiService extends ProductApiService {
+public class UserTaskApiService extends ProductApiService {
 
 	@Autowired
 	private UserAccountApiService userAccountApiService;

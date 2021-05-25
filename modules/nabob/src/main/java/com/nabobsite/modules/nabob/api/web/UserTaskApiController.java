@@ -6,7 +6,7 @@ package com.nabobsite.modules.nabob.api.web;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
-import com.nabobsite.modules.nabob.api.service.TaskApiService;
+import com.nabobsite.modules.nabob.api.service.UserTaskApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouseProgress;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskUserReward;
@@ -35,13 +35,13 @@ import java.util.List;
 public class UserTaskApiController extends BaseController {
 
 	@Autowired
-	private TaskApiService taskApiService;
+	private UserTaskApiService userTaskApiService;
 
 	@ApiOperation(value = "用户任务")
 	@PostMapping(value = "doUserTask/{taskId}")
 	public CommonResult<Boolean> doUserTask(@PathVariable String taskId,HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return taskApiService.doUserTask(taskId,token);
+		return userTaskApiService.doUserTask(taskId,token);
 	}
 
 	@RequestMapping(value = {"getTaskInfo/{taskId}"})
@@ -49,34 +49,34 @@ public class UserTaskApiController extends BaseController {
 	public CommonResult<TaskInfo> getTaskInfo(@PathVariable String taskId, HttpServletRequest request) {
 		TaskInfo taskInfo = new TaskInfo();
 		taskInfo.setId(taskId);
-		return taskApiService.getTaskInfo(taskInfo);
+		return userTaskApiService.getTaskInfo(taskInfo);
 	}
 
 	@RequestMapping(value = {"getUserTaskInfo"})
 	@ApiOperation(value = "获取用户任务信息")
 	public CommonResult<UserAccountTask> getTaskInfo(HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return taskApiService.getUserTaskInfo(token);
+		return userTaskApiService.getUserTaskInfo(token);
 	}
 
 	@RequestMapping(value = {"getTaskRewardList"})
 	@ApiOperation(value = "获取任务奖励列表")
 	public CommonResult<List<TaskUserReward>> getTaskRewardList(HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return taskApiService.getTaskRewardList(token);
+		return userTaskApiService.getTaskRewardList(token);
 	}
 
 	@RequestMapping(value = {"getCompletings"})
 	@ApiOperation(value = "获取任务进行中列表")
 	public CommonResult<List<ProductWarehouseProgress>> getCompletings(HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return taskApiService.getCompletings(token);
+		return userTaskApiService.getCompletings(token);
 	}
 
 	@RequestMapping(value = {"doWithDrawTaskReward"})
 	@ApiOperation(value = "任务提现接口")
 	public CommonResult<Boolean> doWithDrawTaskReward(HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return taskApiService.doWithDrawTaskReward(token);
+		return userTaskApiService.doWithDrawTaskReward(token);
 	}
 }

@@ -315,16 +315,9 @@ public class ProductApiService extends SimpleProductService {
 		try {
 			String botId = userProductBotLog.getBotId();
 			String orderNo = userProductBotLog.getOrderNo();
-			BigDecimal incomeRate = userProductBotLog.getIncomeRate();
-			BigDecimal incomeMoney = userProductBotLog.getIncomeMoney();
-			BigDecimal orderAmount = userProductBotLog.getOrderAmount();
 			if(StringUtils.isAnyEmpty(botId,orderNo)){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
-			if(ContactUtils.isLesserOrEqualZero(incomeRate) || ContactUtils.isLesserOrEqualZero(incomeMoney)  || ContactUtils.isLesserOrEqualZero(orderAmount) ){
-				return ResultUtil.failed(I18nCode.CODE_10006);
-			}
-
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo== null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
@@ -347,15 +340,6 @@ public class ProductApiService extends SimpleProductService {
 				//佣金
 				String title = ContactUtils.USER_ACCOUNT_DETAIL_TITLE_4;
 				BigDecimal commissionMoney = ContactUtils.multiply(productBotPrice,commissionRate);
-				if(!ContactUtils.isEqual(commissionRate,incomeRate)){
-					return ResultUtil.failed(I18nCode.CODE_10100);
-				}
-				if(!ContactUtils.isEqual(commissionMoney,incomeMoney)){
-					return ResultUtil.failed(I18nCode.CODE_10100);
-				}
-				if(!ContactUtils.isEqual(mustPrice,orderAmount)){
-					return ResultUtil.failed(I18nCode.CODE_10100);
-				}
 				ProductUserBotLog checkUserProductBotLog =	this.getProductUserBotLogByOrderNo(orderNo);
 				if(checkUserProductBotLog!=null){
 					return ResultUtil.failed(I18nCode.CODE_10008);

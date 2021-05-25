@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
@@ -11,10 +12,11 @@ import com.nabobsite.modules.nabob.api.model.SmsModel;
 import com.nabobsite.modules.nabob.api.model.VerificationCodeModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
 import com.nabobsite.modules.nabob.api.service.SmsCodeApiService;
-import com.nabobsite.modules.nabob.api.service.TaskApiService;
+import com.nabobsite.modules.nabob.api.service.UserTaskApiService;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
+import com.nabobsite.modules.nabob.cms.sys.entity.SysNotice;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;
@@ -44,7 +46,7 @@ public class OpenApiController extends BaseController {
 	@Autowired
 	private SmsCodeApiService smsCodeApiService;
 	@Autowired
-	private TaskApiService taskApiService;
+	private UserTaskApiService userTaskApiService;
 	@Autowired
 	private ProductApiService productApiService;
 	@Autowired
@@ -90,6 +92,13 @@ public class OpenApiController extends BaseController {
 	}
 
 
+	@PostMapping(value = {"getSysNotice"})
+	@ApiOperation(value = "获取通知信息")
+	public CommonResult<List<SysNotice>> getSysNotice(HttpServletRequest request){
+		return userInfoApiService.getSysNotice();
+	}
+
+
 	@PostMapping(value = {"getMemberShipList"})
 	@ApiOperation(value = "获取会员资格列表")
 	public CommonResult<List<UserInfoMembership>> getMemberShipList(HttpServletRequest request){
@@ -106,7 +115,7 @@ public class OpenApiController extends BaseController {
 	@ApiOperation(value = "获取任务列表")
 	public CommonResult<List<TaskInfo>> getTaskList(HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return taskApiService.getTaskList(token);
+		return userTaskApiService.getTaskList(token);
 	}
 
 	@RequestMapping(value = {"getProductWarehouseList"})
