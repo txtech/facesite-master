@@ -72,14 +72,10 @@ public class InstanceUtils {
             userAccount.setUserId(userId);
             userAccount.setTotalMoney(new BigDecimal("0"));
             userAccount.setAvailableMoney(new BigDecimal("0"));
-//            userAccount.setWarehouseMoney(new BigDecimal("0"));
-//            userAccount.setAiAssetsMoney(new BigDecimal("0"));
-//            userAccount.setIncomeMoney(new BigDecimal("0"));
             userAccount.setIncrementMoney(new BigDecimal("0"));
             userAccount.setCommissionMoney(new BigDecimal("0"));
             userAccount.setClaimableMoney(new BigDecimal("0"));
             userAccount.setRechargeMoney(new BigDecimal("0"));
-//            userAccount.setRewardMoney(ContactUtils.USER_TACK_BASE_MONEY);
             userAccount.setAccountStatus(ContactUtils.USER_ACCOUNT_STATUS_1);
             return userAccount;
         }

@@ -47,13 +47,9 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private Integer accountStatus;		// 账户状态 1:可用 2:冻结
 	private BigDecimal totalMoney;		// 总资金
 	private BigDecimal availableMoney;		// 可用资金
-//	private BigDecimal warehouseMoney;		// 仓库资金
-//	private BigDecimal incomeMoney;		// 收入资金
-//	private BigDecimal aiAssetsMoney;		// 云资产
 	private BigDecimal commissionMoney;		// 佣金账户
 	private BigDecimal incrementMoney;		// 增值账户
 	private BigDecimal claimableMoney;		// 可提取账户
-//	private BigDecimal rewardMoney;		// 奖励账户
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
