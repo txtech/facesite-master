@@ -1,5 +1,6 @@
 package com.nabobsite.modules.nabob.interceptor;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.lang.StringUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
@@ -57,6 +58,9 @@ public class ApiResponseBody  implements ResponseBodyAdvice<CommonResult> {
         String i8nCode = commonResult.getI18n();
         if(StringUtils.isNotEmpty(i8nCode)){
             commonResult.setMessage(I18nUtils.getText(i8nCode,lang));
+        }
+        if(commonResult.getResult() == null){
+            commonResult.setResult(new JSONObject());
         }
         return commonResult;
     }
