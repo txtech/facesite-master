@@ -11,5 +11,27 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+
+	<update id="updateUserAccountTask" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccountTask">
+		update
+			t1_user_account_task
+		<set>
+			<if test="taskInitialNum != null and taskInitialNum !=0">
+				task_initial_num = task_initial_num + #{taskInitialNum},
+			</if>
+			<if test="taskOrderNum != null and taskOrderNum !=0">
+				task_order_num = task_order_num + #{taskOrderNum},
+			</if>
+			<if test="remarks != null and remarks !='' ">
+				remarks = #{remarks},
+			</if>
+			updated = sysdate()
+		</set>
+		<where>
+			<if test="totalMoney != null and totalMoney !=0">
+				(task_initial_num + #{taskInitialNum}) >= 0 and
+			</if>
+			user_id = #{userId}
+		</where>
+	</update>
 </mapper>

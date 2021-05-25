@@ -14,5 +14,6 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccountTask;
  */
 @MyBatisDao
 public interface UserAccountTaskDao extends CrudDao<UserAccountTask> {
-	
+
+    long updateUserAccountTask(UserAccountTask userAccountTask);
 }

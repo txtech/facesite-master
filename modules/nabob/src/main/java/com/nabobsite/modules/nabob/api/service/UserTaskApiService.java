@@ -51,20 +51,30 @@ public class UserTaskApiService extends ProductApiService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserAccountTask userAccountTask = this.getUserAccountTaskByUserId(userId);
-			if(userAccountTask == null){
+			UserAccountTask oldUserAccountTask = this.getUserAccountTaskByUserId(userId);
+			if(oldUserAccountTask == null){
 				return ResultUtil.failed(I18nCode.CODE_10009);
 			}
-			BigDecimal taskInitialNum =	userAccountTask.getTaskInitialNum();
-			BigDecimal totalRewardMoney =	userAccountTask.getTotalRewardMoney();
+			String userTaskId = oldUserAccountTask.getId();
+			BigDecimal taskInitialNum =	oldUserAccountTask.getTaskInitialNum();
+			int taskOrderNum =	oldUserAccountTask.getTaskOrderNum();
+			BigDecimal totalRewardMoney =	oldUserAccountTask.getTotalRewardMoney();
 			if(ContactUtils.isLesserOrEqualZero(taskInitialNum) || ContactUtils.isLesserOrEqualZero(totalRewardMoney)){
 				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
 			if(ContactUtils.isLesser(taskInitialNum,totalRewardMoney)){
 				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
-			String title = "任务奖励";
-			Boolean isOk = userAccountApiService.updateAccountRewardMoney(userId,taskInitialNum,userId,title);
+
+			UserAccountTask userAccountTask = new UserAccountTask();
+			userAccountTask.setUserId(userId);
+			userAccountTask.setTaskInitialNum(taskInitialNum.negate());
+			long dbResult = userAccountTaskDao.updateUserAccountTask(userAccountTask);
+			if(ContactUtils.dbResult(dbResult)){
+				return ResultUtil.failed(I18nCode.CODE_10100);
+			}
+			String title = "提取奖励";
+			Boolean isOk = userAccountApiService.updateAccountRewardMoney(userId,taskInitialNum,userTaskId,title);
 			if(isOk){
 				return ResultUtil.success(true);
 			}
@@ -117,14 +127,16 @@ public class UserTaskApiService extends ProductApiService {
 						logger.error("任务已经完成:{},{}",userId,taskId);
 						return ResultUtil.failed(I18nCode.CODE_10102);
 					}
-				}else{
-					taskJson  = new JSONObject();
 				}
-
+				boolean isFishTask = false;
+				if(taskFinishNumber+1 >= taskNum){
+					isFishTask = true;
+				}
 				taskJson.put(taskId,taskFinishNumber+1);
-				Boolean isOk = this.updateTaskFinishNumber(userTaskId,1,taskJson);
+				Boolean isOk = this.updateTaskFinishNumber(userTaskId,1,taskJson,isFishTask);
 				if(isOk){
-					this.sendReward(userId,taskId,type,rewardMoney,taskFinishNumber+1,taskNum);
+					isOk = this.sendReward(userId,taskId,type,rewardMoney,taskFinishNumber+1,taskNum);
+					logger.error("任务奖励:{},{},{}",userId,taskId,isOk);
 					return ResultUtil.success(true);
 				}
 				return ResultUtil.failed(I18nCode.CODE_10004);
@@ -159,7 +171,15 @@ public class UserTaskApiService extends ProductApiService {
 			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}
-			return userAccountApiService.updateAccountRewardMoney(userId,rewardMoney,taskId,title);
+			UserAccountTask userAccountTask = new UserAccountTask();
+			userAccountTask.setUserId(userId);
+			userAccountTask.setTaskOrderNum(taskNum);
+			userAccountTask.setTaskInitialNum(rewardMoney);
+			dbResult = userAccountTaskDao.updateUserAccountTask(userAccountTask);
+			if(ContactUtils.dbResult(dbResult)){
+				return true;
+			}
+			return false;
 		} catch (Exception e) {
 			logger.error("完成任务送奖励异常",e);
 			return false;
@@ -172,12 +192,17 @@ public class UserTaskApiService extends ProductApiService {
 	 * @create 2021/5/13 8:03 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean updateTaskFinishNumber(String id,int finishNumber,JSONObject taskJson){
+	public Boolean updateTaskFinishNumber(String id,int finishNumber,JSONObject taskJson,boolean isFishTask){
 		try {
 			UserAccountTask userTaskPrams = new UserAccountTask();
 			userTaskPrams.setId(id);
 			userTaskPrams.setTaskOrderNum(finishNumber);
 			userTaskPrams.setTaskFinishData(taskJson.toJSONString());
+			if(isFishTask){
+				userTaskPrams.setTaskStatus(ContactUtils.USER_TASK_STATUS_3);
+			}else{
+				userTaskPrams.setTaskStatus(ContactUtils.USER_TASK_STATUS_2);
+			}
 			long dbResult = userAccountTaskDao.update(userTaskPrams);
 			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {

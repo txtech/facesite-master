@@ -232,6 +232,8 @@ public class UserAccountApiService extends SimpleUserService {
 				}
 				UserAccount userAccount = new UserAccount();
 				userAccount.setUserId(userId);
+				userAccount.setTotalMoney(updateMoney);
+				userAccount.setAvailableMoney(updateMoney);
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改奖励账户失败,修改账户失败:{},{}",userId,updateMoney);

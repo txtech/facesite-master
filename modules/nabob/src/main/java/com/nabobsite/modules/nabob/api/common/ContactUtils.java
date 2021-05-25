@@ -369,12 +369,12 @@ public class ContactUtils {
     public static JSONObject str2JSONObject(String str) {
         try {
             if(StringUtils.isEmpty(str)){
-                return null;
+                return new JSONObject();
             }
             JSONObject obj = JSONObject.parseObject(str);
             return obj;
         } catch (Exception e) {
-            return null;
+            return new JSONObject();
         }
     }
 }
