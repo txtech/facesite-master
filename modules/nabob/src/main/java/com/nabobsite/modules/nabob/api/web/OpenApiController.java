@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.model.SmsModel;
 import com.nabobsite.modules.nabob.api.model.VerificationCodeModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
-import com.nabobsite.modules.nabob.api.service.SysApiService;
+import com.nabobsite.modules.nabob.api.service.SmsCodeApiService;
 import com.nabobsite.modules.nabob.api.service.TaskApiService;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
@@ -42,7 +42,7 @@ import java.util.List;
 public class OpenApiController extends BaseController {
 
 	@Autowired
-	private SysApiService sysApiService;
+	private SmsCodeApiService smsCodeApiService;
 	@Autowired
 	private TaskApiService taskApiService;
 	@Autowired
@@ -126,38 +126,38 @@ public class OpenApiController extends BaseController {
 	@ApiOperation(value = "发送短信验证码")
 	public CommonResult<Boolean> sendSms(@RequestBody SmsModel smsModel, HttpServletRequest request) {
 		String ipAddr = HttpBrowserTools.getIpAddr(request);
-		return sysApiService.sendSms(smsModel);
+		return smsCodeApiService.sendSms(smsModel);
 	}
 
 	@RequestMapping(value = {"checkSmsCode"})
 	@ApiOperation(value = "验证短信验证码")
 	public CommonResult<Boolean> checkSmsCode(@RequestBody SmsModel smsModel, HttpServletRequest request) {
 		String ipAddr = HttpBrowserTools.getIpAddr(request);
-		return sysApiService.checkSmsCode(smsModel);
+		return smsCodeApiService.checkSmsCode(smsModel);
 	}
 
 	@RequestMapping(value = {"getRandomCode"})
 	@ApiOperation(value = "获取随机码")
 	public CommonResult<Boolean> getRandomCode(@RequestBody SmsModel smsModel,HttpServletRequest request) {
-		return sysApiService.getRandomCode(smsModel);
+		return smsCodeApiService.getRandomCode(smsModel);
 	}
 
 	@RequestMapping(value = {"checkRandomCode"})
 	@ApiOperation(value = "验证随机码")
 	public CommonResult<Boolean> checkRandomCode(@RequestBody SmsModel smsModel, HttpServletRequest request) {
 		String ipAddr = HttpBrowserTools.getIpAddr(request);
-		return sysApiService.checkRandomCode(smsModel);
+		return smsCodeApiService.checkRandomCode(smsModel);
 	}
 
 	@RequestMapping(value = {"getImgRandomCode"})
 	@ApiOperation(value = "获取图片随机码")
 	public CommonResult<JSONObject> getImgRandomCode(HttpServletRequest request) {
-		return sysApiService.getImgRandomCode();
+		return smsCodeApiService.getImgRandomCode();
 	}
 
 	@RequestMapping(value = {"checkImgRandomCode"})
 	@ApiOperation(value = "验证图片随机码")
 	public CommonResult<Boolean> checkImgRandomCode(@RequestBody VerificationCodeModel verificationCodeModel, HttpServletRequest request) {
-		return sysApiService.checkImgRandomCode(verificationCodeModel);
+		return smsCodeApiService.checkImgRandomCode(verificationCodeModel);
 	}
 }

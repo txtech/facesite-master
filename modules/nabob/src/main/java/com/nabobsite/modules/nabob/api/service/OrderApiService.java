@@ -35,9 +35,6 @@ public class OrderApiService extends SimpleOrderService {
 	@Autowired
 	private OrderHander orderHander;
 
-	@Autowired
-	private SysChannelDao sysChannelDao;
-
 	/**
 	 * @desc 充值订单
 	 * @author nada
@@ -67,7 +64,7 @@ public class OrderApiService extends SimpleOrderService {
 			synchronized (userId) {
 				order.setUserId(userId);
 				String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
-				long dbResult = orderDao.insert(InstanceUtils.initOrderInfo(order,orderNo,channel));
+				long dbResult = orderPayDao.insert(InstanceUtils.initOrderInfo(order,orderNo,channel));
 				if(!ContactUtils.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
@@ -90,25 +87,6 @@ public class OrderApiService extends SimpleOrderService {
 	}
 
 	/**
-	 * @desc 获取一个通道
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	public SysChannel getOneChannel() {
-		try {
-			List<SysChannel> channelList = sysChannelDao.findList(new SysChannel());
-			if(channelList == null || channelList.isEmpty()){
-				return null;
-			}
-			return channelList.get(0);
-		} catch (Exception e) {
-			logger.error("根据订单号获取异常",e);
-			return null;
-		}
-	}
-
-
-	/**
 	 * @desc 获取订单列表
 	 * @author nada
 	 * @create 2021/5/12 1:10 下午
@@ -121,31 +99,11 @@ public class OrderApiService extends SimpleOrderService {
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			order.setUserId(userId);
-			List<OrderPay> result = orderDao.findList(order);
+			List<OrderPay> result = orderPayDao.findList(order);
 			return ResultUtil.success(result,true);
 		} catch (Exception e) {
 			logger.error("获取订单列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 根据ID修改
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean updateOrderById(String id,OrderPay order) {
-		try {
-			if(StringUtils.isEmpty(id)){
-				return null;
-			}
-			order.setId(id);
-			long dbResult = orderDao.update(order);
-			return ContactUtils.dbResult(dbResult);
-		} catch (Exception e) {
-			logger.error("根据ID修改异常",e);
-			return null;
 		}
 	}
 

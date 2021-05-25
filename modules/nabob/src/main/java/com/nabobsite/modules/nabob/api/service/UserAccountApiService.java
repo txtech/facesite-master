@@ -32,10 +32,6 @@ import java.util.List;
 public class UserAccountApiService extends SimpleUserService {
 
 	@Autowired
-	private UserAccountBackupDao userAccountLogDao;
-	@Autowired
-	private UserAccountDetailDao userAccountDetailDao;
-	@Autowired
 	private TriggerApiService triggerApiService;
 
 	/**
@@ -281,8 +277,8 @@ public class UserAccountApiService extends SimpleUserService {
 					return false;
 				}
 				String detailId = userAccountDetail.getId();
-				UserAccountBackup userAccountLog = InstanceUtils.initUserAccountLog(detailId,title,oldUserAccount);
-				dbResult = userAccountLogDao.insert(userAccountLog);
+				UserAccountBackup userAccountBackup = InstanceUtils.initUserAccountLog(detailId,title,oldUserAccount);
+				dbResult = userAccountBackupDao.insert(userAccountBackup);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改账失败,记录日志失败:{},{},{}",userId,accountId,updateMoney);
 					return false;

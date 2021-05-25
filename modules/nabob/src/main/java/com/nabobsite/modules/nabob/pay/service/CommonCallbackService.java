@@ -7,6 +7,7 @@ import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.OrderApiService;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
+import com.nabobsite.modules.nabob.api.service.simple.SimpleOrderService;
 import com.nabobsite.modules.nabob.cms.order.dao.OrderPayDao;
 import com.nabobsite.modules.nabob.cms.order.entity.OrderPay;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,8 @@ import java.math.BigDecimal;
  */
 @Service
 @Transactional(readOnly=true)
-public class CommonCallbackService extends CrudService<OrderPayDao, OrderPay> {
+public class CommonCallbackService extends SimpleOrderService {
 
-	@Autowired
-	private OrderApiService orderApiService;
 	@Autowired
 	private UserAccountApiService userAccountApiService;
 
@@ -38,7 +37,7 @@ public class CommonCallbackService extends CrudService<OrderPayDao, OrderPay> {
 	public boolean callBack(String orderNo,String pOrderNo,int backStatus,String message) {
 		try {
 			synchronized (orderNo) {
-				OrderPay oldOrder = orderApiService.getOrderByOrderNo(orderNo);
+				OrderPay oldOrder = this.getOrderByOrderNo(orderNo);
 				if(oldOrder == null){
 					logger.error("充值订单回调失败,订单不存在:{},{}",orderNo,pOrderNo);
 					return false;
@@ -91,7 +90,7 @@ public class CommonCallbackService extends CrudService<OrderPayDao, OrderPay> {
 			}else if(backStatus == ContactUtils.ORDER_STATUS_4){
 				newOrder.setOrderStatus(ContactUtils.ORDER_STATUS_4);
 			}
-			Boolean isOk = orderApiService.updateOrderById(id,newOrder);
+			Boolean isOk = this.updateOrderById(id,newOrder);
 			if(!isOk){
 				logger.error("充值订单回调失败,更新订单失败:{},{}",orderNo,pOrderNo);
 				return false;

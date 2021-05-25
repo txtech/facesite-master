@@ -189,7 +189,7 @@ public class ProductApiService extends SimpleProductService {
 				String title = "收益提取";
 				int logType = ContactUtils.WAREHOUSE_TYPE_1;
 				ProductUserWarehouseLog productUserWarehouseLog = InstanceUtils.initProductUserWarehouseLog(userId,warehouseId,productType,logType,title,incomeMoney);
-				long dbResult = userProductWarehouseLogDao.insert(productUserWarehouseLog);
+				long dbResult = productUserWarehouseLogDao.insert(productUserWarehouseLog);
 				if(!ContactUtils.dbResult(dbResult)){
 					return false;
 				}
@@ -330,7 +330,7 @@ public class ProductApiService extends SimpleProductService {
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			String userId = userInfo.getId();
-			ProductBot productBot = this.getProductBotInfoById(botId);
+			ProductBot productBot = this.getProductBotById(botId);
 			if(productBot == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
@@ -356,7 +356,7 @@ public class ProductApiService extends SimpleProductService {
 				if(!ContactUtils.isEqual(mustPrice,orderAmount)){
 					return ResultUtil.failed(I18nCode.CODE_10100);
 				}
-				ProductUserBotLog checkUserProductBotLog =	this.getUserProductBotLogByOrderNo(orderNo);
+				ProductUserBotLog checkUserProductBotLog =	this.getProductUserBotLogByOrderNo(orderNo);
 				if(checkUserProductBotLog!=null){
 					return ResultUtil.failed(I18nCode.CODE_10008);
 				}
@@ -366,10 +366,10 @@ public class ProductApiService extends SimpleProductService {
 					logger.error("无人机刷单记录失败:{},{},{},{}",userId,orderNo,userId,botId);
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				ProductUserBot oldUserProductBot =	this.getUserProductBotByUserAndId(userId,botId);
+				ProductUserBot oldUserProductBot =	this.getProductUserBotByUserAndId(userId,botId);
 				if(oldUserProductBot == null){
 					ProductUserBot userProductBot = InstanceUtils.initProductUserBot(userProductBotLog);
-					dbResult = userProductBotDao.insert(userProductBot);
+					dbResult = productUserBotDao.insert(userProductBot);
 					if(!ContactUtils.dbResult(dbResult)){
 						logger.error("用户无人机刷单汇总初始化失败:{},{},{},{}",userId,orderNo,userId,botId);
 						return ResultUtil.failed(I18nCode.CODE_10004);
@@ -384,7 +384,7 @@ public class ProductApiService extends SimpleProductService {
 					userProductBot.setId(oldUserProductBot.getId());
 					userProductBot.setTodayOrders(oldUserProductBot.getTodayOrders()+1);
 					userProductBot.setTodayIncomeMoney(todayIncomeMoney);
-					dbResult = userProductBotDao.update(userProductBot);
+					dbResult = productUserBotDao.update(userProductBot);
 					if(!ContactUtils.dbResult(dbResult)){
 						logger.error("用户无人机刷单汇总更新失败:{},{},{},{}",userId,orderNo,userId,botId);
 						return ResultUtil.failed(I18nCode.CODE_10004);
@@ -441,11 +441,11 @@ public class ProductApiService extends SimpleProductService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			ProductUserBot result = this.getUserProductBotByUserAndId(userId,botId);
+			ProductUserBot result = this.getProductUserBotByUserAndId(userId,botId);
 			if(result ==  null){
 				result = new ProductUserBot();
 			}
-			ProductBot productBot = this.getProductBotInfoById(botId) ;
+			ProductBot productBot = this.getProductBotById(botId) ;
 			if(productBot!=null){
 				result.setDailyNum(productBot.getDailyNum());
 			}
@@ -555,7 +555,7 @@ public class ProductApiService extends SimpleProductService {
 			userProductWarehouseLog.setUserId(userId);
 			userProductWarehouseLog.setType(type);
 			userProductWarehouseLog.setProductType(productType);
-			List<ProductUserWarehouseLog> result = userProductWarehouseLogDao.findList(userProductWarehouseLog);
+			List<ProductUserWarehouseLog> result = productUserWarehouseLogDao.findList(userProductWarehouseLog);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库收入记录列表异常",e);

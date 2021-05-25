@@ -12,6 +12,7 @@ import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
+import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseProgressDao;
 import com.nabobsite.modules.nabob.cms.sys.dao.SequenceCodeDao;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SequenceCode;
@@ -46,27 +47,35 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
 	public RedisOpsUtil redisOpsUtil;
 	@Autowired
+	public SequenceCodeDao sequenceCodeDao;
+	@Autowired
+	public SysConfigDao sysConfigDao;
+
+	@Autowired
 	public UserInfoDao userInfoDao;
 	@Autowired
-	public SequenceCodeDao sequenceCodeDao;
+	public UserAccountDao userAccountDao;
+	@Autowired
+	public UserAccountBackupDao userAccountBackupDao;
+	@Autowired
+	public UserAccountDetailDao userAccountDetailDao;
+	@Autowired
+	public UserInfoMembershipDao userInfoMembershipDao;
+	@Autowired
+	public UserAccountWarehouseDao userAccountWarehouseDao;
+
+	@Autowired
+	public TaskInfoDao taskInfoDao;
+	@Autowired
+	public TaskUserRewardDao taskUserRewardDao;
+	@Autowired
+	public UserAccountTaskDao userAccountTaskDao;
+
 	@Autowired
 	public TeamUserDao teamUserDao;
 	@Autowired
 	public TeamUserRewardDao teamUserRewardDao;
-	@Autowired
-	public SysConfigDao sysConfigDao;
-	@Autowired
-	public UserAccountDao userAccountDao;
-	@Autowired
-	public TaskInfoDao taskInfoDao;
-	@Autowired
-	public UserAccountTaskDao userAccountTaskDao;
-	@Autowired
-	public UserInfoMembershipDao userInfoMembershipDao;
-	@Autowired
-	public TaskUserRewardDao userTaskRewardDao;
-	@Autowired
-	public UserAccountWarehouseDao userAccountWarehouseDao;
+
 
 	/**
 	 * @desc 保存用户

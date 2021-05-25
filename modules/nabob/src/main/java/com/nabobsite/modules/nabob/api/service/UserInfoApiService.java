@@ -19,7 +19,6 @@ import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.sys.service.SequenceCodeService;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
-import com.nabobsite.modules.nabob.cms.user.dao.UserInfoMembershipDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
@@ -47,9 +46,7 @@ public class UserInfoApiService extends SimpleUserService {
 	@Autowired
 	private TriggerApiService triggerApiService;
 	@Autowired
-	private SysApiService sysApiService;
-	@Autowired
-	private UserInfoMembershipDao memberShipDao;
+	private SmsCodeApiService smsCodeApiService;
 	@Autowired
 	private UserService userService;
 
@@ -67,7 +64,7 @@ public class UserInfoApiService extends SimpleUserService {
 			if(StringUtils.isAnyEmpty(accountNo,smsCode,newPassword)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			Boolean isOk = sysApiService.verifSmsCode(accountNo,smsCode);
+			Boolean isOk = smsCodeApiService.verifSmsCode(accountNo,smsCode);
 			if(!isOk){
 				return ResultUtil.failed(I18nCode.CODE_10010);
 			}
@@ -171,7 +168,7 @@ public class UserInfoApiService extends SimpleUserService {
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			if(StringUtils.isNotEmpty(imgCodeKey) && StringUtils.isNotEmpty(imgCode)){
-				Boolean isOk = sysApiService.verifImgRandomCode(imgCodeKey,imgCode);
+				Boolean isOk = smsCodeApiService.verifImgRandomCode(imgCodeKey,imgCode);
 				if(!isOk){
 					return ResultUtil.failed(I18nCode.CODE_10010);
 				}
@@ -434,7 +431,7 @@ public class UserInfoApiService extends SimpleUserService {
 		try {
 			UserInfoMembership memberShip = new UserInfoMembership();
 			memberShip.setId(id);
-			UserInfoMembership result = memberShipDao.getByEntity(memberShip);
+			UserInfoMembership result = userInfoMembershipDao.getByEntity(memberShip);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取会员资格异常",e);

@@ -34,12 +34,8 @@ import java.util.Random;
  */
 @Service
 @Transactional(readOnly=true)
-public class TaskApiService extends SimpleUserService {
+public class TaskApiService extends ProductApiService {
 
-	@Autowired
-	private TaskUserRewardDao userTaskRewardDao;
-	@Autowired
-	private ProductWarehouseProgressDao userTaskProgressDao;
 	@Autowired
 	private UserAccountApiService userAccountApiService;
 
@@ -153,9 +149,9 @@ public class TaskApiService extends SimpleUserService {
 			}else if(type == ContactUtils.USER_ACCOUNT_REWARD_TYPE_4){
 				title = ContactUtils.USER_ACCOUNT_REWARD_TITLE_4;
 			}
-			TaskUserReward userTaskReward = InstanceUtils.initUserTaskReward(userId,taskId,type,title,finishNumber,taskNum,rewardMoney);
-			userTaskReward.setUserId(userId);
-			long dbResult = userTaskRewardDao.insert(userTaskReward);
+			TaskUserReward taskUserReward = InstanceUtils.initUserTaskReward(userId,taskId,type,title,finishNumber,taskNum,rewardMoney);
+			taskUserReward.setUserId(userId);
+			long dbResult = taskUserRewardDao.insert(taskUserReward);
 			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}
@@ -197,9 +193,9 @@ public class TaskApiService extends SimpleUserService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			TaskUserReward userTaskReward = new TaskUserReward();
-			userTaskReward.setUserId(userId);
-			List<TaskUserReward> userTaskRewardList = userTaskRewardDao.findList(userTaskReward);
+			TaskUserReward taskUserReward = new TaskUserReward();
+			taskUserReward.setUserId(userId);
+			List<TaskUserReward> userTaskRewardList = taskUserRewardDao.findList(taskUserReward);
 			return ResultUtil.success(userTaskRewardList,true);
 		} catch (Exception e) {
 			logger.error("获取任务奖励列表异常",e);

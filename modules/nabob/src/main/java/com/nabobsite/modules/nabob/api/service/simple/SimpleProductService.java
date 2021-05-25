@@ -24,17 +24,21 @@ public class SimpleProductService extends SimpleUserService {
 	@Autowired
 	public ProductBotDao productBotDao;
 	@Autowired
-	public ProductWarehouseDao productWarehouseDao;
-	@Autowired
-	public ProductUserBotDao userProductBotDao;
+	public ProductUserBotDao productUserBotDao;
 	@Autowired
 	public ProductUserBotLogDao userProductBotLogDao;
+
+	@Autowired
+	public ProductWarehouseDao productWarehouseDao;
 	@Autowired
 	public ProductUserWarehouseDao productUserWarehouseDao;
 	@Autowired
-	public ProductUserWarehouseLogDao userProductWarehouseLogDao;
+	public ProductWarehouseProgressDao userTaskProgressDao;
+	@Autowired
+	public ProductUserWarehouseLogDao productUserWarehouseLogDao;
 	@Autowired
 	public ProductUserWarehouseRecordDao productUserWarehouseRecordDao;
+
 
 	/**
 	 * @desc 用户云仓库产品列表
@@ -92,12 +96,12 @@ public class SimpleProductService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public ProductUserBot getUserProductBotByUserAndId(String userId, String botId) {
+	public ProductUserBot getProductUserBotByUserAndId(String userId, String botId) {
 		try {
 			ProductUserBot userProductBot = new ProductUserBot();
 			userProductBot.setUserId(userId);
 			userProductBot.setBotId(botId);
-			return userProductBotDao.getByEntity(userProductBot);
+			return productUserBotDao.getByEntity(userProductBot);
 		} catch (Exception e) {
 			logger.error("用户无人机产品异常,{},{}",userId,botId,e);
 			return null;
@@ -125,7 +129,7 @@ public class SimpleProductService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public ProductBot getProductBotInfoById(String id) {
+	public ProductBot getProductBotById(String id) {
 		try {
 			ProductBot productBotInfo = new ProductBot();
 			productBotInfo.setId(id);
@@ -140,7 +144,7 @@ public class SimpleProductService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public ProductUserBotLog getUserProductBotLogByOrderNo(String orderNo) {
+	public ProductUserBotLog getProductUserBotLogByOrderNo(String orderNo) {
 		try {
 			ProductUserBotLog userProductBotLog = new ProductUserBotLog();
 			userProductBotLog.setOrderNo(orderNo);

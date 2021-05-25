@@ -39,11 +39,7 @@ import java.util.List;
 public class CashApiService extends SimpleOrderService {
 
 	@Autowired
-	private OrderCashDao cashDao;
-	@Autowired
 	private CashHander cashHander;
-	@Autowired
-	private SysChannelDao sysChannelDao;
 
 	/**
 	 * @desc 提款订单
@@ -105,7 +101,7 @@ public class CashApiService extends SimpleOrderService {
 			synchronized (userId) {
 				orderCash.setUserId(userId);
 				String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
-				long dbResult = cashDao.insert(InstanceUtils.initOrderCash(orderCash,orderNo,channel));
+				long dbResult = orderCashDao.insert(InstanceUtils.initOrderCash(orderCash,orderNo,channel));
 				if(!ContactUtils.dbResult(dbResult)){
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
@@ -128,24 +124,6 @@ public class CashApiService extends SimpleOrderService {
 	}
 
 	/**
-	 * @desc 获取一个通道
-	 * @author nada
-	 * @create 2021/5/11 2:55 下午
-	 */
-	public SysChannel getOneChannel() {
-		try {
-			List<SysChannel> channelList = sysChannelDao.findList(new SysChannel());
-			if(channelList == null || channelList.isEmpty()){
-				return null;
-			}
-			return channelList.get(0);
-		} catch (Exception e) {
-			logger.error("根据订单号获取异常",e);
-			return null;
-		}
-	}
-
-	/**
 	 * @desc 获取提款订单列表
 	 * @author nada
 	 * @create 2021/5/12 1:10 下午
@@ -154,7 +132,7 @@ public class CashApiService extends SimpleOrderService {
 	public CommonResult<List<OrderCash>> getCashOrderList(String token) {
 		try {
 			OrderCash cash = new OrderCash();
-			List<OrderCash> retsult = cashDao.findList(cash);
+			List<OrderCash> retsult = orderCashDao.findList(cash);
 			return ResultUtil.success(retsult,true);
 		} catch (Exception e) {
 			logger.error("获取提款订单列表异常",e);
@@ -172,7 +150,7 @@ public class CashApiService extends SimpleOrderService {
 		try {
 			OrderCash cash = new OrderCash();
 			cash.setOrderNo(orderNo);
-			OrderCash result = cashDao.getByEntity(cash);
+			OrderCash result = orderCashDao.getByEntity(cash);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取提款订单详情异常",e);

@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 @Service
 @Transactional(readOnly=true)
-public class SysApiService extends SimpleUserService {
+public class SmsCodeApiService extends SimpleUserService {
 
 	private static final String smsUrl = "http://api.wftqm.com/api/sms/mtsend";
 
