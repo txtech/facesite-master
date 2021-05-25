@@ -53,9 +53,6 @@ public class ProductApiService extends SimpleProductService {
 			if(oldUserAccount == null){
 				return ResultUtil.failed(I18nCode.CODE_10011);
 			}
-			if(ContactUtils.isLesserOrEqualZero(oldUserAccount.getWarehouseMoney())){
-				return ResultUtil.failed(I18nCode.CODE_10104);
-			}
 			List<ProductUserWarehouse> productUserWarehouseList = this.getProductUserWarehouseListByUserId(userId);
 			if(productUserWarehouseList == null || productUserWarehouseList.isEmpty()){
 				return ResultUtil.failed(I18nCode.CODE_10006);
@@ -67,30 +64,7 @@ public class ProductApiService extends SimpleProductService {
 					if(productWarehouse == null){
 						continue;
 					}
-					//产品类型：1 随存随取 2:定投
-					int productType = productWarehouse.getType();
-					if(productType != ContactUtils.WAREHOUSE_PRODUCT_TYPE_1){
-						continue;
-					}
-					long psersonUpdateTime = oldUserWarehouse.getPsersonUpdateTime().getTime();
-					long diffTime = (new Date().getTime() - psersonUpdateTime)/1000;
-					BigDecimal warehouseMoney = oldUserAccount.getWarehouseMoney();
-					BigDecimal dailyInterestRate = productWarehouse.getDailyInterestRate();
-					BigDecimal incomeMoney = dailyInterestRate.multiply(new BigDecimal(diffTime)).multiply(warehouseMoney);
-					incomeMoney = incomeMoney.divide(ContactUtils.HOUR,5, BigDecimal.ROUND_HALF_UP);
-					incomeMoney = incomeMoney.divide(ContactUtils.MINUTE,5, BigDecimal.ROUND_HALF_UP);
-					incomeMoney = incomeMoney.divide(ContactUtils.SECOND,5, BigDecimal.ROUND_HALF_UP);
-
-					String title = "收益提取";
-					int logType = ContactUtils.WAREHOUSE_TYPE_1;
-					ProductUserWarehouseLog productUserWarehouseLog = InstanceUtils.initUserProductWarehouseLog(userId,warehouseId,productType,logType,title,incomeMoney);
-					long dbResult = userProductWarehouseLogDao.insert(productUserWarehouseLog);
-					if(!ContactUtils.dbResult(dbResult)){
-						return ResultUtil.failed(I18nCode.CODE_10004);
-					}
-
-					int type =  ContactUtils.WAREHOUSE_RECORD_TYPE_1;
-					Boolean isOk = this.doWarehouseRecord(userId,warehouseId,incomeMoney,type,title);
+					Boolean isOk = this.doWithdrawToTotalAmount(userId,warehouseId,ContactUtils.WAREHOUSE_RECORD_TYPE_3,oldUserWarehouse,productWarehouse);
 					if(isOk){
 						return ResultUtil.success(true);
 					}
@@ -123,25 +97,16 @@ public class ProductApiService extends SimpleProductService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
-			if(productWarehouse == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
-			}
-			BigDecimal limitPrice = productWarehouse.getLimitPrice();
-			if(ContactUtils.isLesser(money,limitPrice)){
-				return ResultUtil.failed(I18nCode.CODE_10100);
-			}
 			synchronized (userId) {
-				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
-				if(oldUserAccount == null){
-					return ResultUtil.failed(I18nCode.CODE_10011);
+				ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
+				if(productWarehouse == null){
+					return ResultUtil.failed(I18nCode.CODE_10006);
 				}
-				if(ContactUtils.isLesser(oldUserAccount.getWarehouseMoney(),money)){
-					return ResultUtil.failed(I18nCode.CODE_10104);
+				BigDecimal limitPrice = productWarehouse.getLimitPrice();
+				if(ContactUtils.isLesser(money,limitPrice)){
+					return ResultUtil.failed(I18nCode.CODE_10100);
 				}
-				String title = "产品撤资";
-				int type = ContactUtils.WAREHOUSE_RECORD_TYPE_2;
-				Boolean isOk = this.doWarehouseRecord(userId,warehouseId,money,type,title);
+				Boolean isOk = this.doWarehouseDepositAndWithdraw(userId,warehouseId,money,ContactUtils.WAREHOUSE_RECORD_TYPE_2);
 				if(isOk){
 					return ResultUtil.success(true);
 				}
@@ -173,27 +138,26 @@ public class ProductApiService extends SimpleProductService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
-			if(productWarehouse == null){
-				return ResultUtil.failed(I18nCode.CODE_10006);
-			}
-			BigDecimal limitPrice = productWarehouse.getLimitPrice();
-			if(ContactUtils.isLesser(money,limitPrice)){
-				return ResultUtil.failed(I18nCode.CODE_10100);
-			}
 			synchronized (userId) {
-				UserAccount oldUserAccount = this.getUserAccountByUserId(userId);
-				if(oldUserAccount == null){
-					return ResultUtil.failed(I18nCode.CODE_10011);
+				ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
+				if(productWarehouse == null){
+					return ResultUtil.failed(I18nCode.CODE_10006);
 				}
-				BigDecimal diffMoney = ContactUtils.subtract(oldUserAccount.getTotalMoney(),oldUserAccount.getWarehouseMoney());
-				if(ContactUtils.isLesser(diffMoney,money)){
-					return ResultUtil.failed(I18nCode.CODE_10104);
+				BigDecimal limitPrice = productWarehouse.getLimitPrice();
+				if(ContactUtils.isLesser(money,limitPrice)){
+					return ResultUtil.failed(I18nCode.CODE_10100);
 				}
 
-				String title = "产品投资";
-				int type =  ContactUtils.WAREHOUSE_RECORD_TYPE_1;
-				Boolean isOk = this.doWarehouseRecord(userId,warehouseId,money,type,title);
+				ProductUserWarehouse productUserWarehouse = this.getProductUserWarehouseByUserIdAndId(userId,warehouseId);
+				if(productUserWarehouse == null){
+					productUserWarehouse = InstanceUtils.initProductUserWarehouse(userId,warehouseId,new BigDecimal("0"));
+					long dbResult = productUserWarehouseDao.insert(productUserWarehouse);
+					if(!ContactUtils.dbResult(dbResult)){
+						return ResultUtil.failed(I18nCode.CODE_10004);
+					}
+				}
+
+				Boolean isOk = this.doWarehouseDepositAndWithdraw(userId,warehouseId,money,ContactUtils.WAREHOUSE_RECORD_TYPE_1);
 				if(isOk){
 					return ResultUtil.success(true);
 				}
@@ -206,65 +170,143 @@ public class ProductApiService extends SimpleProductService {
 	}
 
 	/**
-	 * 云仓库账户操作和日志操作记录
+	 * 云仓库收益提现
+	 * 产品类型：1 随存随取 2:定投
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean doWarehouseRecord(String userId,String warehouseId,BigDecimal money,int type,String title) {
-		//保存操作记录 类型 1:存款 2:撤资 3:收益提现
-		ProductUserWarehouseRecord productUserWarehouseRecord = new ProductUserWarehouseRecord();
-		productUserWarehouseRecord.setUserId(userId);
-		productUserWarehouseRecord.setType(type);
-		if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
-			productUserWarehouseRecord.setMoney(money);
-		}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
-			productUserWarehouseRecord.setMoney(money.negate());
-		}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
-			productUserWarehouseRecord.setMoney(money);
-		}
-		long dbResult = productUserWarehouseRecordDao.insert(productUserWarehouseRecord);
-		if(!ContactUtils.dbResult(dbResult)){
-			return false;
-		}
+	public Boolean doWithdrawToTotalAmount(String userId,String warehouseId,int type,ProductUserWarehouse oldUserWarehouse,ProductWarehouse productWarehouse) {
+		try {
+			int productType = productWarehouse.getType();
+			if(productType != ContactUtils.WAREHOUSE_PRODUCT_TYPE_1){
+				return false;
+			}
+			long psersonUpdateTime = oldUserWarehouse.getPsersonUpdateTime().getTime();
+			long diffTime = (new Date().getTime() - psersonUpdateTime)/1000;
+			BigDecimal warehouseMoney = oldUserWarehouse.getAsstesHeldMoney();
+			BigDecimal dailyInterestRate = productWarehouse.getDailyInterestRate();
+			BigDecimal incomeMoney = dailyInterestRate.multiply(new BigDecimal(diffTime)).multiply(warehouseMoney);
+			incomeMoney = incomeMoney.divide(ContactUtils.HOUR,5, BigDecimal.ROUND_HALF_UP);
+			incomeMoney = incomeMoney.divide(ContactUtils.MINUTE,5, BigDecimal.ROUND_HALF_UP);
+			incomeMoney = incomeMoney.divide(ContactUtils.SECOND,5, BigDecimal.ROUND_HALF_UP);
 
-		//更新用户仓库 类型 1:存款 2:撤资 3:收益提现
-		ProductUserWarehouse updateWarehouse = new ProductUserWarehouse();
-		updateWarehouse.setUserId(userId);
-		updateWarehouse.setWarehouseId(warehouseId);
-		if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
-			updateWarehouse.setAsstesHeldMoney(money); //持有理财资产
-		}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
-			updateWarehouse.setAsstesHeldMoney(money.negate()); //持有理财资产
-		}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
-			updateWarehouse.setPersonalIncomeMoney(money); //个人动态受益
-			updateWarehouse.setPersonalAccumulativeIncomeMoney(money); // 累计个人受益
-			updateWarehouse.setAccumulativeIncomeMoney(money); //累计动态收益
+			if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
+				String title = "收益提取";
+				int logType = ContactUtils.WAREHOUSE_TYPE_1;
+				ProductUserWarehouseLog productUserWarehouseLog = InstanceUtils.initProductUserWarehouseLog(userId,warehouseId,productType,logType,title,incomeMoney);
+				long dbResult = userProductWarehouseLogDao.insert(productUserWarehouseLog);
+				if(!ContactUtils.dbResult(dbResult)){
+					return false;
+				}
+			}
+
+			ProductUserWarehouse updateWarehouse = new ProductUserWarehouse();
+			updateWarehouse.setUserId(userId);
+			updateWarehouse.setWarehouseId(warehouseId);
+			updateWarehouse.setPersonalAccumulativeIncomeMoney(incomeMoney); // 累计个人收益
+			updateWarehouse.setAccumulativeIncomeMoney(incomeMoney); //累计总收益
 			updateWarehouse.setPsersonUpdateTime(new Date()); //个人动态收益更新时间
-		}
-		dbResult = productUserWarehouseDao.updateUserWarehousee(updateWarehouse);
-		if(!ContactUtils.dbResult(dbResult)){
-			return false;
-		}
+			if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
+				updateWarehouse.setIncomeMoney(incomeMoney);//当前收益
+				updateWarehouse.setPersonalIncomeMoney(incomeMoney); //个人收益
+			}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
+				updateWarehouse.setIncomeMoney(incomeMoney);//当前收益
+				updateWarehouse.setPersonalIncomeMoney(incomeMoney); //个人收益
+			}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
+				if(!ContactUtils.isLesserOrEqualZero(oldUserWarehouse.getIncomeMoney())){
+					updateWarehouse.setIncomeMoney(oldUserWarehouse.getIncomeMoney().negate());//当前收益
+					updateWarehouse.setPersonalIncomeMoney(oldUserWarehouse.getIncomeMoney().negate()); //个人收益
+				}
+			}
+			long dbResult = productUserWarehouseDao.updateUserWarehousee(updateWarehouse);
+			if(!ContactUtils.dbResult(dbResult)){
+				return false;
+			}
 
-		//更新仓库账户 类型 1:存款 2:撤资 3:收益提现
-		UserAccountWarehouse userAccountWarehouse = new UserAccountWarehouse();
-		userAccountWarehouse.setUserId(userId);
-		if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
-			userAccountWarehouse.setAsstesHeldMoney(money); //仓库持有资产
-		}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
-			userAccountWarehouse.setAsstesHeldMoney(money.negate());//仓库持有资产
-		}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
-			userAccountWarehouse.setPersonalIncomeMoney(money); //个人受益
-			userAccountWarehouse.setPersonalAccumulativeIncomeMoney(money); //个人累计收益
-			userAccountWarehouse.setAccumulativeIncomeMoney(money); //累计收益
+			UserAccountWarehouse userAccountWarehouse = new UserAccountWarehouse();
+			userAccountWarehouse.setUserId(userId);
+			userAccountWarehouse.setPersonalAccumulativeIncomeMoney(incomeMoney); //个人累计收益
+			userAccountWarehouse.setAccumulativeIncomeMoney(incomeMoney); //累计总收益
 			userAccountWarehouse.setPsersonUpdateTime(new Date()); //收益更新时间
-		}
-		dbResult = userAccountWarehouseDao.updateAccountWarehouse(userAccountWarehouse);
-		if(!ContactUtils.dbResult(dbResult)){
+			if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
+				userAccountWarehouse.setIncomeMoney(incomeMoney);//当前收益
+				userAccountWarehouse.setPersonalIncomeMoney(incomeMoney); //个人收益
+			}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
+				userAccountWarehouse.setIncomeMoney(incomeMoney);//当前收益
+				userAccountWarehouse.setPersonalIncomeMoney(incomeMoney); //个人收益
+			}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
+				if(!ContactUtils.isLesserOrEqualZero(oldUserWarehouse.getIncomeMoney())){
+					incomeMoney = incomeMoney.add(oldUserWarehouse.getIncomeMoney());
+					userAccountWarehouse.setIncomeMoney(oldUserWarehouse.getIncomeMoney().negate());//当前收益
+					userAccountWarehouse.setPersonalIncomeMoney(oldUserWarehouse.getIncomeMoney().negate()); //个人收益
+				}
+			}
+			dbResult = userAccountWarehouseDao.updateAccountWarehouse(userAccountWarehouse);
+			if(!ContactUtils.dbResult(dbResult)){
+				return false;
+			}
+
+			if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
+				String title = ContactUtils.USER_ACCOUNT_DETAIL_TITLE_5;
+				return userAccountApiService.updateAccountWarehouseMoney(userId,incomeMoney,warehouseId,title);
+			}
+			return true;
+		} catch (Exception e) {
+			logger.error("云仓库收益提现异常",e);
 			return false;
 		}
+	}
 
-		//更新总账户
-		return userAccountApiService.updateAccountWarehouseMoney(userId,type,money,warehouseId,title);
+	/**
+	 * 云仓库账户操作
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean doWarehouseDepositAndWithdraw(String userId,String warehouseId,BigDecimal money,int type) {
+		try {
+			//保存操作记录 类型 1:存款 2:撤资
+			ProductUserWarehouseRecord productUserWarehouseRecord = new ProductUserWarehouseRecord();
+			productUserWarehouseRecord.setUserId(userId);
+			productUserWarehouseRecord.setType(type);
+			if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
+				productUserWarehouseRecord.setMoney(money);
+			}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
+				productUserWarehouseRecord.setMoney(money.negate());
+			}
+			long dbResult = productUserWarehouseRecordDao.insert(productUserWarehouseRecord);
+			if(!ContactUtils.dbResult(dbResult)){
+				return false;
+			}
+
+			//更新用户云仓库 类型 1:存款 2:撤资
+			ProductUserWarehouse updateWarehouse = new ProductUserWarehouse();
+			updateWarehouse.setUserId(userId);
+			updateWarehouse.setWarehouseId(warehouseId);
+			if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
+				updateWarehouse.setAsstesHeldMoney(money); //持有理财资产
+			}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
+				updateWarehouse.setAsstesHeldMoney(money.negate()); //持有理财资产
+			}
+			dbResult = productUserWarehouseDao.updateUserWarehousee(updateWarehouse);
+			if(!ContactUtils.dbResult(dbResult)){
+				return false;
+			}
+
+			//更新仓库账户 类型 1:存款 2:撤资
+			UserAccountWarehouse userAccountWarehouse = new UserAccountWarehouse();
+			userAccountWarehouse.setUserId(userId);
+			if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
+				userAccountWarehouse.setAsstesHeldMoney(money); //仓库持有资产
+			}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
+				userAccountWarehouse.setAsstesHeldMoney(money.negate());//仓库持有资产
+			}
+			dbResult = userAccountWarehouseDao.updateAccountWarehouse(userAccountWarehouse);
+			if(!ContactUtils.dbResult(dbResult)){
+				return false;
+			}
+			return true;
+		} catch (Exception e) {
+			logger.error("云仓库账户操作异常",e);
+			return false;
+		}
 	}
 
 	/**
@@ -330,7 +372,7 @@ public class ProductApiService extends SimpleProductService {
 				}
 				ProductUserBot oldUserProductBot =	this.getUserProductBotByUserAndId(userId,botId);
 				if(oldUserProductBot == null){
-					ProductUserBot userProductBot = InstanceUtils.initUserProductBot(userProductBotLog);
+					ProductUserBot userProductBot = InstanceUtils.initProductUserBot(userProductBotLog);
 					dbResult = userProductBotDao.insert(userProductBot);
 					if(!ContactUtils.dbResult(dbResult)){
 						logger.error("用户无人机刷单汇总初始化失败:{},{},{},{}",userId,orderNo,userId,botId);
@@ -437,7 +479,7 @@ public class ProductApiService extends SimpleProductService {
 				String warehouseId = entity.getId();
 				BigDecimal asstesHeldMoney = new BigDecimal("0");
 				if(ContactUtils.isOkUserId(userId)){
-					ProductUserWarehouse userProductWarehouse = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
+					ProductUserWarehouse userProductWarehouse = this.getProductUserWarehouseByUserIdAndId(userId,warehouseId);
 					if(userProductWarehouse != null && !ContactUtils.isLesserOrEqualZero(userProductWarehouse.getAsstesHeldMoney())){
 						asstesHeldMoney = userProductWarehouse.getAsstesHeldMoney();
 					}
@@ -476,7 +518,7 @@ public class ProductApiService extends SimpleProductService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			ProductUserWarehouse result = this.getUserProductWarehouseByUserIdAndId(userId,warehouseId);
+			ProductUserWarehouse result = this.getProductUserWarehouseByUserIdAndId(userId,warehouseId);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("用户云仓库产品详情异常",e);

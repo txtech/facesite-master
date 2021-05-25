@@ -90,9 +90,29 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('个人动态收益更新时间')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="psersonUpdateTime" readonly="true" maxlength="20" class="form-control laydate required"
+									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
 								<span class="required hide">*</span> ${text('更新时间')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate"
+									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('团队动态收益更新时间')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="teamUpdateTime" readonly="true" maxlength="20" class="form-control laydate required"
 									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 							</div>
 						</div>
@@ -122,20 +142,18 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('个人动态收益更新时间')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('当前总收益')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="psersonUpdateTime" readonly="true" maxlength="20" class="form-control laydate required"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+								<#form:input path="incomeMoney" class="form-control required number"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required ">*</span> ${text('团队动态收益更新时间')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('云资产')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="teamUpdateTime" readonly="true" maxlength="20" class="form-control laydate required"
-									dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+								<#form:input path="aiAssetsMoney" class="form-control required number"/>
 							</div>
 						</div>
 					</div>

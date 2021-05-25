@@ -41,7 +41,7 @@ public class ProductUserWarehouseRecord extends DataEntity<ProductUserWarehouseR
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户ID
 	private String warehouseId;		// 产品仓库ID
-	private Integer type;		// 类型 1:存款 2:撤资 3:收益提现
+	private Integer type;		// 类型 1:存款 2:撤资
 	private BigDecimal money;		// 持有资产
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间

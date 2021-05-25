@@ -182,7 +182,7 @@ public class UserAccountApiService extends SimpleUserService {
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean updateAccountWarehouseMoney(String userId,int type,BigDecimal updateMoney,String uniqueId, String title) {
+	public boolean updateAccountWarehouseMoney(String userId,BigDecimal updateMoney,String uniqueId, String title) {
 		try {
 			if(StringUtils.isEmpty(userId)){
 				return false;
@@ -190,16 +190,8 @@ public class UserAccountApiService extends SimpleUserService {
 			synchronized (userId){
 				int detailType = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_30;
 				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,detailType,uniqueId,title);
-				if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
-					userAccountDetail.setWarehouseMoney(updateMoney);
-					userAccountDetail.setAvailableMoney(updateMoney.negate());
-				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
-					userAccountDetail.setWarehouseMoney(updateMoney.negate());
-					userAccountDetail.setAvailableMoney(updateMoney);
-				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
-					userAccountDetail.setIncomeMoney(updateMoney);
-					userAccountDetail.setAvailableMoney(updateMoney);
-				}
+				userAccountDetail.setIncomeMoney(updateMoney);
+				userAccountDetail.setAvailableMoney(updateMoney);
 
 				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
@@ -208,16 +200,6 @@ public class UserAccountApiService extends SimpleUserService {
 				}
 				UserAccount userAccount = new UserAccount();
 				userAccount.setUserId(userId);
-				if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
-					userAccount.setWarehouseMoney(updateMoney);
-					userAccount.setAvailableMoney(updateMoney.negate());
-				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
-					userAccount.setWarehouseMoney(updateMoney.negate());
-					userAccount.setAvailableMoney(updateMoney);
-				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
-					userAccount.setIncomeMoney(updateMoney);
-					userAccount.setAvailableMoney(updateMoney);
-				}
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改云仓库账户失败,修改账户失败:{},{}",userId,updateMoney);
@@ -250,7 +232,7 @@ public class UserAccountApiService extends SimpleUserService {
 				}
 				UserAccount userAccount = new UserAccount();
 				userAccount.setUserId(userId);
-				userAccount.setRewardMoney(updateMoney);
+				//userAccount.setRewardMoney(updateMoney);
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改奖励账户失败,修改账户失败:{},{}",userId,updateMoney);

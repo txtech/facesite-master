@@ -72,14 +72,14 @@ public class InstanceUtils {
             userAccount.setUserId(userId);
             userAccount.setTotalMoney(new BigDecimal("0"));
             userAccount.setAvailableMoney(new BigDecimal("0"));
-            userAccount.setWarehouseMoney(new BigDecimal("0"));
-            userAccount.setAiAssetsMoney(new BigDecimal("0"));
-            userAccount.setIncomeMoney(new BigDecimal("0"));
+//            userAccount.setWarehouseMoney(new BigDecimal("0"));
+//            userAccount.setAiAssetsMoney(new BigDecimal("0"));
+//            userAccount.setIncomeMoney(new BigDecimal("0"));
             userAccount.setIncrementMoney(new BigDecimal("0"));
             userAccount.setCommissionMoney(new BigDecimal("0"));
             userAccount.setClaimableMoney(new BigDecimal("0"));
             userAccount.setRechargeMoney(new BigDecimal("0"));
-            userAccount.setRewardMoney(ContactUtils.USER_TACK_BASE_MONEY);
+//            userAccount.setRewardMoney(ContactUtils.USER_TACK_BASE_MONEY);
             userAccount.setAccountStatus(ContactUtils.USER_ACCOUNT_STATUS_1);
             return userAccount;
         }
@@ -169,7 +169,7 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
-    public static ProductUserBot initUserProductBot(ProductUserBotLog userProductBotLog){
+    public static ProductUserBot initProductUserBot(ProductUserBotLog userProductBotLog){
         ProductUserBot userProductBot = new ProductUserBot();
         userProductBot.setIsNewRecord(true);
         userProductBot.setUserId(userProductBotLog.getUserId());
@@ -187,7 +187,7 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
-    public static ProductUserWarehouse initUserProductWarehouse(String userId, String warehouseId, BigDecimal asstesHeldMoney){
+    public static ProductUserWarehouse initProductUserWarehouse(String userId, String warehouseId, BigDecimal asstesHeldMoney){
         ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
         userProductWarehouse.setIsNewRecord(true);
         userProductWarehouse.setUserId(userId);
@@ -198,6 +198,8 @@ public class InstanceUtils {
         userProductWarehouse.setAccumulativeIncomeMoney(new BigDecimal("0"));
         userProductWarehouse.setTeamAccumulativeIncomeMoney(new BigDecimal("0"));
         userProductWarehouse.setPersonalAccumulativeIncomeMoney(new BigDecimal("0"));
+        userProductWarehouse.setAiAssetsMoney(new BigDecimal("0"));
+        userProductWarehouse.setIncomeMoney(new BigDecimal("0"));
         userProductWarehouse.setTeamUpdateTime(new Date());
         userProductWarehouse.setPsersonUpdateTime(new Date());
         return userProductWarehouse;
@@ -208,7 +210,7 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
-    public static ProductUserWarehouseLog initUserProductWarehouseLog(String userId, String warehouseId, int logType,int productType, String title, BigDecimal money){
+    public static ProductUserWarehouseLog initProductUserWarehouseLog(String userId, String warehouseId, int logType,int productType, String title, BigDecimal money){
         ProductUserWarehouseLog productUserWarehouseLog = new ProductUserWarehouseLog();
         productUserWarehouseLog.setIsNewRecord(true);
         productUserWarehouseLog.setUserId(userId);
@@ -238,6 +240,8 @@ public class InstanceUtils {
             userAccountWarehouse.setPersonalAccumulativeIncomeMoney(new BigDecimal("0"));
             userAccountWarehouse.setTeamIncomeMoney(new BigDecimal("0"));
             userAccountWarehouse.setTeamAccumulativeIncomeMoney(new BigDecimal("0"));
+            userAccountWarehouse.setIncomeMoney(new BigDecimal("0"));
+            userAccountWarehouse.setAiAssetsMoney(new BigDecimal("0"));
             return userAccountWarehouse;
         }
     }

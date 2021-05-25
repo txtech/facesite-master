@@ -58,7 +58,7 @@ public class SimpleProductService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public ProductUserWarehouse getUserProductWarehouseByUserIdAndId(String userId,String warehouseId) {
+	public ProductUserWarehouse getProductUserWarehouseByUserIdAndId(String userId,String warehouseId) {
 		try {
 			ProductUserWarehouse userProductWarehouse = new ProductUserWarehouse();
 			userProductWarehouse.setUserId(userId);

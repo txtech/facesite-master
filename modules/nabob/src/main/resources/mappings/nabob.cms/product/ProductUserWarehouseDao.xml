@@ -23,8 +23,30 @@
 			<if test="accumulativeIncomeMoney != null and accumulativeIncomeMoney !=0">
 				accumulative_income_money = accumulative_income_money + #{accumulativeIncomeMoney},
 			</if>
-			<if test="personalIncomeMoney != null and personalIncomeMoney !=0">
+			<if test="incomeMoney != null and incomeMoney &gt; 0">
+				income_money = income_money + #{incomeMoney},
+			</if>
+			<if test="personalIncomeMoney != null and personalIncomeMoney &gt; 0">
 				personal_income_money = personal_income_money + #{personalIncomeMoney},
+			</if>
+			<if test="incomeMoney != null and incomeMoney &lt; 0">
+				income_money =
+				case
+				when income_money &lt;=0  then 0
+				when income_money &lt;= abs(#{incomeMoney})  then 0
+				when income_money &gt; abs(#{incomeMoney})  then income_money + #{incomeMoney}
+				end,
+			</if>
+			<if test="personalIncomeMoney != null and personalIncomeMoney &lt; 0">
+				personal_income_money =
+				case
+				when personal_income_money &lt;=0  then 0
+				when personal_income_money &lt;= abs(#{personalIncomeMoney})  then 0
+				when personal_income_money &gt; abs(#{personalIncomeMoney})  then personal_income_money + #{personalIncomeMoney}
+				end,
+			</if>
+			<if test="aiAssetsMoney != null and aiAssetsMoney !=0">
+				ai_assets_money = ai_assets_money + #{aiAssetsMoney},
 			</if>
 			<if test="personalAccumulativeIncomeMoney != null and personalAccumulativeIncomeMoney !=0">
 				personal_accumulative_income_money = personal_accumulative_income_money + #{personalAccumulativeIncomeMoney},
@@ -52,9 +74,6 @@
 			</if>
 			<if test="accumulativeIncomeMoney != null and accumulativeIncomeMoney !=0">
 				(accumulative_income_money + #{accumulativeIncomeMoney}) >= 0 and
-			</if>
-			<if test="personalIncomeMoney != null and personalIncomeMoney !=0">
-				(personal_income_money + #{personalIncomeMoney}) >= 0 and
 			</if>
 			<if test="personalAccumulativeIncomeMoney != null and personalAccumulativeIncomeMoney !=0">
 				(personal_accumulative_income_money + #{personalAccumulativeIncomeMoney}) >=0 and

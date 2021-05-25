@@ -66,9 +66,23 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label">${text('个人动态收益更新时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="psersonUpdateTime" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label">${text('更新时间')}：</label>
 					<div class="control-inline">
 						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('团队动态收益更新时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="teamUpdateTime" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 					</div>
 				</div>
@@ -85,17 +99,15 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('个人动态收益更新时间')}：</label>
+					<label class="control-label">${text('当前总收益')}：</label>
 					<div class="control-inline">
-						<#form:input path="psersonUpdateTime" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+						<#form:input path="incomeMoney" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('团队动态收益更新时间')}：</label>
+					<label class="control-label">${text('云资产')}：</label>
 					<div class="control-inline">
-						<#form:input path="teamUpdateTime" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+						<#form:input path="aiAssetsMoney" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -124,11 +136,13 @@ $('#dataGrid').dataGrid({
 		{header:'${text("团队收益")}', name:'teamIncomeMoney', index:'a.team_income_money', width:150, align:"left"},
 		{header:'${text("团队累计收益")}', name:'teamAccumulativeIncomeMoney', index:'a.team_accumulative_income_money', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("个人动态收益更新时间")}', name:'psersonUpdateTime', index:'a.pserson_update_time', width:150, align:"center"},
 		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
+		{header:'${text("团队动态收益更新时间")}', name:'teamUpdateTime', index:'a.team_update_time', width:150, align:"center"},
 		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
 		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
-		{header:'${text("个人动态收益更新时间")}', name:'psersonUpdateTime', index:'a.pserson_update_time', width:150, align:"center"},
-		{header:'${text("团队动态收益更新时间")}', name:'teamUpdateTime', index:'a.team_update_time', width:150, align:"center"},
+		{header:'${text("当前总收益")}', name:'incomeMoney', index:'a.income_money', width:150, align:"left"},
+		{header:'${text("云资产")}', name:'aiAssetsMoney', index:'a.ai_assets_money', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:userAccountWarehouse:edit')){ %>

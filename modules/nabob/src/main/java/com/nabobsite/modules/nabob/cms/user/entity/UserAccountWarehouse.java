@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户账户仓库信息Entity
  * @author face
- * @version 2021-05-24
+ * @version 2021-05-25
  */
 @Table(name="t1_user_account_warehouse", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -32,13 +32,15 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="team_income_money", attrName="teamIncomeMoney", label="团队收益"),
 		@Column(name="team_accumulative_income_money", attrName="teamAccumulativeIncomeMoney", label="团队累计收益"),
 		@Column(name="created", attrName="created", label="创建时间"),
+		@Column(name="pserson_update_time", attrName="psersonUpdateTime", label="个人动态收益更新时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
+		@Column(name="team_update_time", attrName="teamUpdateTime", label="团队动态收益更新时间"),
 		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
-		@Column(name="pserson_update_time", attrName="psersonUpdateTime", label="个人动态收益更新时间"),
-		@Column(name="team_update_time", attrName="teamUpdateTime", label="团队动态收益更新时间"),
+		@Column(name="income_money", attrName="incomeMoney", label="当前总收益"),
+		@Column(name="ai_assets_money", attrName="aiAssetsMoney", label="云资产"),
 	}, orderBy="a.id DESC"
 )
 public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
@@ -52,10 +54,12 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	private BigDecimal teamIncomeMoney;		// 团队收益
 	private BigDecimal teamAccumulativeIncomeMoney;		// 团队累计收益
 	private Date created;		// 创建时间
-	private Date updated;		// 更新时间
-	private String delFlag;		// 删除标志
 	private Date psersonUpdateTime;		// 个人动态收益更新时间
+	private Date updated;		// 更新时间
 	private Date teamUpdateTime;		// 团队动态收益更新时间
+	private String delFlag;		// 删除标志
+	private BigDecimal incomeMoney;		// 当前总收益
+	private BigDecimal aiAssetsMoney;		// 云资产
 	
 	public UserAccountWarehouse() {
 		this(null);
@@ -139,12 +143,32 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@NotNull(message="个人动态收益更新时间不能为空")
+	public Date getPsersonUpdateTime() {
+		return psersonUpdateTime;
+	}
+
+	public void setPsersonUpdateTime(Date psersonUpdateTime) {
+		this.psersonUpdateTime = psersonUpdateTime;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getUpdated() {
 		return updated;
 	}
 
 	public void setUpdated(Date updated) {
 		this.updated = updated;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@NotNull(message="团队动态收益更新时间不能为空")
+	public Date getTeamUpdateTime() {
+		return teamUpdateTime;
+	}
+
+	public void setTeamUpdateTime(Date teamUpdateTime) {
+		this.teamUpdateTime = teamUpdateTime;
 	}
 	
 	@Length(min=0, max=1, message="删除标志长度不能超过 1 个字符")
@@ -156,24 +180,22 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 		this.delFlag = delFlag;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@NotNull(message="个人动态收益更新时间不能为空")
-	public Date getPsersonUpdateTime() {
-		return psersonUpdateTime;
+	@NotNull(message="当前总收益不能为空")
+	public BigDecimal getIncomeMoney() {
+		return incomeMoney;
 	}
 
-	public void setPsersonUpdateTime(Date psersonUpdateTime) {
-		this.psersonUpdateTime = psersonUpdateTime;
+	public void setIncomeMoney(BigDecimal incomeMoney) {
+		this.incomeMoney = incomeMoney;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@NotNull(message="团队动态收益更新时间不能为空")
-	public Date getTeamUpdateTime() {
-		return teamUpdateTime;
+	@NotNull(message="云资产不能为空")
+	public BigDecimal getAiAssetsMoney() {
+		return aiAssetsMoney;
 	}
 
-	public void setTeamUpdateTime(Date teamUpdateTime) {
-		this.teamUpdateTime = teamUpdateTime;
+	public void setAiAssetsMoney(BigDecimal aiAssetsMoney) {
+		this.aiAssetsMoney = aiAssetsMoney;
 	}
 	
 }

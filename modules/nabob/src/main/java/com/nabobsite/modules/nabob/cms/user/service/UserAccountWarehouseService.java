@@ -16,7 +16,7 @@ import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
 /**
  * 用户账户仓库信息Service
  * @author face
- * @version 2021-05-24
+ * @version 2021-05-25
  */
 @Service
 @Transactional(readOnly=true)

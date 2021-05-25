@@ -81,7 +81,7 @@ public class ContactUtils {
     //云仓库操作类型
     public final static int WAREHOUSE_RECORD_TYPE_1 = 1;//定投
     public final static int WAREHOUSE_RECORD_TYPE_2 = 2;//撤资
-    public final static int WAREHOUSE_RECORD_TYPE_3 = 3;//提现
+    public final static int WAREHOUSE_RECORD_TYPE_3 = 3;//收益提现
 
     //账户明细类型
     public final static int USER_ACCOUNT_DETAIL_TYPE_1 = 1;//订单充值
@@ -95,6 +95,7 @@ public class ContactUtils {
     public final static String USER_ACCOUNT_DETAIL_TITLE_2 = "注册奖励";
     public final static String USER_ACCOUNT_DETAIL_TITLE_3 = "任务奖励";
     public final static String USER_ACCOUNT_DETAIL_TITLE_4 = "刷单佣金";
+    public final static String USER_ACCOUNT_DETAIL_TITLE_5 = "动态收益";
 
     //奖励明细类型
     public final static int USER_ACCOUNT_REWARD_TYPE_1 = 1;//分享好友奖励

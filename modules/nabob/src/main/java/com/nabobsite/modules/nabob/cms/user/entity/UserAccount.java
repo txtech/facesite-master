@@ -28,13 +28,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="account_status", attrName="accountStatus", label="账户状态 1", comment="账户状态 1:可用 2:冻结"),
 		@Column(name="total_money", attrName="totalMoney", label="总资金"),
 		@Column(name="available_money", attrName="availableMoney", label="可用资金"),
-		@Column(name="warehouse_money", attrName="warehouseMoney", label="仓库资金"),
-		@Column(name="income_money", attrName="incomeMoney", label="收入资金"),
-		@Column(name="ai_assets_money", attrName="aiAssetsMoney", label="云资产"),
 		@Column(name="commission_money", attrName="commissionMoney", label="佣金账户"),
 		@Column(name="increment_money", attrName="incrementMoney", label="增值账户"),
 		@Column(name="claimable_money", attrName="claimableMoney", label="可提取账户"),
-		@Column(name="reward_money", attrName="rewardMoney", label="奖励账户"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
 		@Column(name="REMARKS", attrName="remarks", label="备注信息", queryType=QueryType.LIKE),
@@ -51,13 +47,13 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private Integer accountStatus;		// 账户状态 1:可用 2:冻结
 	private BigDecimal totalMoney;		// 总资金
 	private BigDecimal availableMoney;		// 可用资金
-	private BigDecimal warehouseMoney;		// 仓库资金
-	private BigDecimal incomeMoney;		// 收入资金
-	private BigDecimal aiAssetsMoney;		// 云资产
+//	private BigDecimal warehouseMoney;		// 仓库资金
+//	private BigDecimal incomeMoney;		// 收入资金
+//	private BigDecimal aiAssetsMoney;		// 云资产
 	private BigDecimal commissionMoney;		// 佣金账户
 	private BigDecimal incrementMoney;		// 增值账户
 	private BigDecimal claimableMoney;		// 可提取账户
-	private BigDecimal rewardMoney;		// 奖励账户
+//	private BigDecimal rewardMoney;		// 奖励账户
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
@@ -108,33 +104,7 @@ public class UserAccount extends DataEntity<UserAccount> {
 		this.availableMoney = availableMoney;
 	}
 	
-	@NotNull(message="仓库资金不能为空")
-	public BigDecimal getWarehouseMoney() {
-		return warehouseMoney;
-	}
 
-	public void setWarehouseMoney(BigDecimal warehouseMoney) {
-		this.warehouseMoney = warehouseMoney;
-	}
-	
-	@NotNull(message="收入资金不能为空")
-	public BigDecimal getIncomeMoney() {
-		return incomeMoney;
-	}
-
-	public void setIncomeMoney(BigDecimal incomeMoney) {
-		this.incomeMoney = incomeMoney;
-	}
-	
-	@NotNull(message="云资产不能为空")
-	public BigDecimal getAiAssetsMoney() {
-		return aiAssetsMoney;
-	}
-
-	public void setAiAssetsMoney(BigDecimal aiAssetsMoney) {
-		this.aiAssetsMoney = aiAssetsMoney;
-	}
-	
 	@NotNull(message="佣金账户不能为空")
 	public BigDecimal getCommissionMoney() {
 		return commissionMoney;
@@ -160,15 +130,6 @@ public class UserAccount extends DataEntity<UserAccount> {
 
 	public void setClaimableMoney(BigDecimal claimableMoney) {
 		this.claimableMoney = claimableMoney;
-	}
-	
-	@NotNull(message="奖励账户不能为空")
-	public BigDecimal getRewardMoney() {
-		return rewardMoney;
-	}
-
-	public void setRewardMoney(BigDecimal rewardMoney) {
-		this.rewardMoney = rewardMoney;
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
