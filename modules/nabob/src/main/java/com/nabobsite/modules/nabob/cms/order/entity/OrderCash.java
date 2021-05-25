@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 出款订单Entity
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-25
  */
 @Table(name="t1_order_cash", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -53,12 +53,12 @@ public class OrderCash extends DataEntity<OrderCash> {
 	private String channelId;		// 通道ID
 	private String orderNo;		// 订单号
 	private String porderNo;		// 上游订单号
-	private Long type;		// 类型 1:用户提款
+	private Integer type;		// 类型 1:用户提款
 	private Integer cashStatus;		// 状态 1:发起 2:出款中 3:出款失败 4:出款成功 9:退回
 	private BigDecimal cashMoney;		// 提现金额
 	private BigDecimal serviceCharge;		// 提现手续费
 	private String ipaddress;		// 提现地址
-	private Double cashRate;		// 出款费率
+	private BigDecimal cashRate;		// 出款费率
 	private String accountName;		// 账户名称
 	private String accountCard;		// 账户卡号
 	private String email;		// 邮箱
@@ -115,11 +115,11 @@ public class OrderCash extends DataEntity<OrderCash> {
 	}
 	
 	@NotNull(message="类型 1不能为空")
-	public Long getType() {
+	public Integer getType() {
 		return type;
 	}
 
-	public void setType(Long type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 	
@@ -161,11 +161,11 @@ public class OrderCash extends DataEntity<OrderCash> {
 	}
 	
 	@NotNull(message="出款费率不能为空")
-	public Double getCashRate() {
+	public BigDecimal getCashRate() {
 		return cashRate;
 	}
 
-	public void setCashRate(Double cashRate) {
+	public void setCashRate(BigDecimal cashRate) {
 		this.cashRate = cashRate;
 	}
 	

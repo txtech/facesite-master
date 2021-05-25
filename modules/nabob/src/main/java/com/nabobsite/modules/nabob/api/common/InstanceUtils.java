@@ -2,6 +2,7 @@ package com.nabobsite.modules.nabob.api.common;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.nabobsite.modules.nabob.cms.order.entity.OrderCash;
 import com.nabobsite.modules.nabob.cms.order.entity.OrderPay;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductUserBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductUserBotLog;
@@ -135,6 +136,24 @@ public class InstanceUtils {
         order.setActualMoney(params.getPayMoney());
         order.setType(ContactUtils.ORDER_TYPE_RECHANGE);
         order.setOrderStatus(ContactUtils.ORDER_STATUS_1);
+        return order;
+    }
+
+    /**
+     * @desc 初始化订单信息
+     * @author nada
+     * @create 2021/5/12 2:59 下午
+     */
+    public static OrderCash initOrderCash(OrderCash params, String orderNo, SysChannel sysChannel ){
+        OrderCash order = (OrderCash)params.clone();
+        order.setIsNewRecord(true);
+        order.setOrderNo(orderNo);
+        order.setCashRate(sysChannel.getPayRate());
+        order.setChannelId(sysChannel.getId());
+        order.setCashMoney(params.getCashMoney());
+        order.setType(ContactUtils.ORDER_TYPE_RECHANGE);
+        order.setCashStatus(ContactUtils.ORDER_STATUS_1);
+        order.setServiceCharge(params.getCashMoney().multiply(sysChannel.getPayRate()));
         return order;
     }
 

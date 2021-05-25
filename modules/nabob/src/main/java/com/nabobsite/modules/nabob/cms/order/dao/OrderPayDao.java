@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.order.entity.OrderPay;
 /**
  * 交易订单DAO接口
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-25
  */
 @MyBatisDao
 public interface OrderPayDao extends CrudDao<OrderPay> {

@@ -153,9 +153,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text("提现金额")}', name:'cashMoney', index:'a.cash_money', width:150, align:"left"},
 		{header:'${text("提现手续费")}', name:'serviceCharge', index:'a.service_charge', width:150, align:"left"},
 		{header:'${text("提现地址")}', name:'ipaddress', index:'a.ipaddress', width:150, align:"left"},
-		{header:'${text("出款费率")}', name:'cashRate', index:'a.cash_rate', width:150, align:"right", formatter: function(val, obj, row, act){
-			return js.formatNumber(val, 2, false, ''); // 数值类型格式化 (原始数值, 小数位数, 是否千分位, 默认值，金额情况下设置0.00);
-		}},
+		{header:'${text("出款费率")}', name:'cashRate', index:'a.cash_rate', width:150, align:"left"},
 		{header:'${text("账户名称")}', name:'accountName', index:'a.account_name', width:150, align:"left"},
 		{header:'${text("账户卡号")}', name:'accountCard', index:'a.account_card', width:150, align:"left"},
 		{header:'${text("邮箱")}', name:'email', index:'a.email', width:150, align:"left"},

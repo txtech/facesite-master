@@ -50,7 +50,6 @@ public class UserAccountApiService extends SimpleUserService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-
 			return ResultUtil.success(true);
 		} catch (Exception e) {
 			logger.error("用户认领增值账户异常",e);

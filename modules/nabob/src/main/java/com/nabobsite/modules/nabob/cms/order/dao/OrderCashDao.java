@@ -10,7 +10,7 @@ import com.nabobsite.modules.nabob.cms.order.entity.OrderCash;
 /**
  * 出款订单DAO接口
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-25
  */
 @MyBatisDao
 public interface OrderCashDao extends CrudDao<OrderCash> {

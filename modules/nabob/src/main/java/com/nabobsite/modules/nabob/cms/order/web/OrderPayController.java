@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.order.service.OrderPayService;
 /**
  * 交易订单Controller
  * @author face
- * @version 2021-05-23
+ * @version 2021-05-25
  */
 @Controller
 @RequestMapping(value = "${adminPath}/order/orderPay")
