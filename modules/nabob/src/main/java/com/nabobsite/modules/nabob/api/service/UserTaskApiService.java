@@ -92,21 +92,25 @@ public class UserTaskApiService extends ProductApiService {
 				return ResultUtil.failed(I18nCode.CODE_10019);
 			}
 			synchronized (userId) {
+				//任务类型 1:分享好友 2:观看视频 3:邀请好友 4:定期投资
 				int type = taskInfo.getType();
 				int taskNum = taskInfo.getTaskNumber();
 				BigDecimal rewardMoney = taskInfo.getRewardMoney();
-				UserAccountTask userTask = this.getUserAccountTaskByUserId(userId);
-				if(userTask == null){
+				UserAccountTask userAccountTask = this.getUserAccountTaskByUserId(userId);
+				if(userAccountTask == null){
 					return ResultUtil.failed(I18nCode.CODE_10019);
 				}
 
-				int taskStatus = userTask.getTaskStatus();
+				String userTaskId = userAccountTask.getId();
+				int taskStatus = userAccountTask.getTaskStatus();
+				String taskFinishData = userAccountTask.getTaskFinishData();
 				if(taskStatus == ContactUtils.USER_TASK_STATUS_3){
 					logger.error("任务已经完成:{},{}",userId,taskId);
 					return ResultUtil.failed(I18nCode.CODE_10102);
 				}
+
 				int taskFinishNumber = 0;
-				JSONObject taskJson = ContactUtils.str2JSONObject(userTask.getTaskFinishData());
+				JSONObject taskJson = ContactUtils.str2JSONObject(taskFinishData);
 				if(taskJson !=null){
 					taskFinishNumber = taskJson.containsKey(taskId)?taskJson.getInteger(taskId):0;
 					if(taskFinishNumber >= taskNum){
@@ -116,7 +120,7 @@ public class UserTaskApiService extends ProductApiService {
 				}else{
 					taskJson  = new JSONObject();
 				}
-				String userTaskId = userTask.getId();
+
 				taskJson.put(taskId,taskFinishNumber+1);
 				Boolean isOk = this.updateTaskFinishNumber(userTaskId,1,taskJson);
 				if(isOk){

@@ -35,7 +35,7 @@ public class ProductApiController extends BaseController {
 
 	//操作接口
 	@PostMapping(value = {"aiStartWarehouseDeposit"})
-	@ApiOperation(value = "云仓库定投产品存款")
+	@ApiOperation(value = "aiStart云仓库定投产品存款")
 	public CommonResult<Boolean> doAiStartWarehouseDeposit(@RequestBody ProductUserWarehouseRecord userProductWarehouseRecord, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		userProductWarehouseRecord.setMoney(new BigDecimal("100"));
