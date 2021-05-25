@@ -12,6 +12,8 @@ import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
+import com.nabobsite.modules.nabob.api.common.response.I18nCode;
+import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseProgressDao;
 import com.nabobsite.modules.nabob.cms.sys.dao.SequenceCodeDao;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
@@ -75,7 +77,6 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public TeamUserDao teamUserDao;
 	@Autowired
 	public TeamUserRewardDao teamUserRewardDao;
-
 
 	/**
 	 * @desc 保存用户
@@ -268,7 +269,25 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 		}
 	}
 
-
+	/**
+	 * @desc 获取用户账户信息
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	public UserAccount getUserAccountByToken(String token) {
+		try {
+			String userId = this.getUserIdByToken(token);
+			if(StringUtils.isEmpty(userId)){
+				return null;
+			}
+			UserAccount userAccount = new UserAccount();
+			userAccount.setUserId(userId);
+			return userAccountDao.getByEntity(userAccount);
+		} catch (Exception e) {
+			logger.error("获取用户账户信息异常,{}",e);
+			return null;
+		}
+	}
 	/**
 	 * @desc 获取用户账户信息
 	 * @author nada

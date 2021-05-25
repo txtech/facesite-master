@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -33,6 +34,13 @@ public class ProductApiController extends BaseController {
 	private ProductApiService productApiService;
 
 	//操作接口
+	@PostMapping(value = {"aiStartWarehouseDeposit"})
+	@ApiOperation(value = "云仓库定投产品存款")
+	public CommonResult<Boolean> doAiStartWarehouseDeposit(@RequestBody ProductUserWarehouseRecord userProductWarehouseRecord, HttpServletRequest request) {
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
+		userProductWarehouseRecord.setMoney(new BigDecimal("100"));
+		return productApiService.doWarehouseDeposit(token,userProductWarehouseRecord);
+	}
 	@PostMapping(value = {"doWarehouseDeposit"})
 	@ApiOperation(value = "云仓库定投产品存款")
 	public CommonResult<Boolean> doWarehouseDeposit(@RequestBody ProductUserWarehouseRecord userProductWarehouseRecord, HttpServletRequest request) {

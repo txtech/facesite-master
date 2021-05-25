@@ -42,13 +42,9 @@ public class UserAccountApiService extends SimpleUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> claim(String token) {
 		try {
-			String userId  = this.getUserIdByToken(token);
-			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10001);
-			}
-			UserAccount userAccount = this.getUserAccountByUserId(userId);
+			UserAccount userAccount = this.getUserAccountByToken(token);
 			if(userAccount == null){
-				return ResultUtil.failed(I18nCode.CODE_10009);
+				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
 			BigDecimal claimableMoney = userAccount.getClaimableMoney();
 			if(ContactUtils.isLesserOrEqualZero(claimableMoney)){
