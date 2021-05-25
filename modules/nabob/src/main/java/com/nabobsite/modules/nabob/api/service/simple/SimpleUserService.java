@@ -60,7 +60,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
 	public TaskInfoDao taskInfoDao;
 	@Autowired
-	public UserAccountTaskDao userTaskDao;
+	public UserAccountTaskDao userAccountTaskDao;
 	@Autowired
 	public UserInfoMembershipDao userInfoMembershipDao;
 	@Autowired
@@ -95,7 +95,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 				return false;
 			}
 			//初始化奖励账户
-			dbResult = userTaskDao.insert(InstanceUtils.initUserAccountTask(userId));
+			dbResult = userAccountTaskDao.insert(InstanceUtils.initUserAccountTask(userId));
 			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}
@@ -440,11 +440,11 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	 * @author nada
 	 * @create 2021/5/13 7:32 下午
 	 */
-	public UserAccountTask getUserTaskByUserId(String userId){
+	public UserAccountTask getUserAccountTaskByUserId(String userId){
 		try {
 			UserAccountTask userTaskPrams = new UserAccountTask();
 			userTaskPrams.setUserId(userId);
-			UserAccountTask userTask = userTaskDao.getByEntity(userTaskPrams);
+			UserAccountTask userTask = userAccountTaskDao.getByEntity(userTaskPrams);
 			return userTask;
 		} catch (Exception e) {
 			logger.error("获取用户任务异常",e);
@@ -463,7 +463,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			}
 			UserAccountTask userTaskPrams = new UserAccountTask();
 			userTaskPrams.setUserId(userId);
-			UserAccountTask userTask = userTaskDao.getByEntity(userTaskPrams);
+			UserAccountTask userTask = userAccountTaskDao.getByEntity(userTaskPrams);
 			if (userTask != null) {
 				String finishData = userTask.getTaskFinishData();
 				return ContactUtils.str2JSONObject(finishData);

@@ -72,4 +72,11 @@ public class UserTaskApiController extends BaseController {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return taskApiService.getCompletings(token);
 	}
+
+	@RequestMapping(value = {"doWithDrawTaskReward"})
+	@ApiOperation(value = "任务提现接口")
+	public CommonResult<Boolean> doWithDrawTaskReward(HttpServletRequest request) {
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
+		return taskApiService.doWithDrawTaskReward(token);
+	}
 }

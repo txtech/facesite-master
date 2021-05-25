@@ -44,6 +44,42 @@ public class TaskApiService extends SimpleUserService {
 	private UserAccountApiService userAccountApiService;
 
 	/**
+	 * @desc 任务提现接口
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> doWithDrawTaskReward(String token) {
+		try {
+			String userId  = this.getUserIdByToken(token);
+			if(!ContactUtils.isOkUserId(userId)){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			UserAccountTask userAccountTask = this.getUserAccountTaskByUserId(userId);
+			if(userAccountTask == null){
+				return ResultUtil.failed(I18nCode.CODE_10009);
+			}
+			BigDecimal taskInitialNum =	userAccountTask.getTaskInitialNum();
+			BigDecimal totalRewardMoney =	userAccountTask.getTotalRewardMoney();
+			if(ContactUtils.isLesserOrEqualZero(taskInitialNum) || ContactUtils.isLesserOrEqualZero(totalRewardMoney)){
+				return ResultUtil.failed(I18nCode.CODE_10100);
+			}
+			if(ContactUtils.isLesser(taskInitialNum,totalRewardMoney)){
+				return ResultUtil.failed(I18nCode.CODE_10100);
+			}
+			String title = "任务奖励";
+			Boolean isOk = userAccountApiService.updateAccountRewardMoney(userId,taskInitialNum,userId,title);
+			if(isOk){
+				return ResultUtil.success(true);
+			}
+			return ResultUtil.success(false);
+		} catch (Exception e) {
+			logger.error("任务提现接口异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
 	 * @desc 新用户做任务
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
@@ -63,7 +99,7 @@ public class TaskApiService extends SimpleUserService {
 				int type = taskInfo.getType();
 				int taskNum = taskInfo.getTaskNumber();
 				BigDecimal rewardMoney = taskInfo.getRewardMoney();
-				UserAccountTask userTask = this.getUserTaskByUserId(userId);
+				UserAccountTask userTask = this.getUserAccountTaskByUserId(userId);
 				if(userTask == null){
 					return ResultUtil.failed(I18nCode.CODE_10019);
 				}
@@ -142,7 +178,7 @@ public class TaskApiService extends SimpleUserService {
 			userTaskPrams.setId(id);
 			userTaskPrams.setTaskOrderNum(finishNumber);
 			userTaskPrams.setTaskFinishData(taskJson.toJSONString());
-			long dbResult = userTaskDao.update(userTaskPrams);
+			long dbResult = userAccountTaskDao.update(userTaskPrams);
 			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("修改任务完成数量异常",e);
@@ -276,7 +312,7 @@ public class TaskApiService extends SimpleUserService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserAccountTask result = this.getUserTaskByUserId(userId);
+			UserAccountTask result = this.getUserAccountTaskByUserId(userId);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取用户任务详情异常",e);
