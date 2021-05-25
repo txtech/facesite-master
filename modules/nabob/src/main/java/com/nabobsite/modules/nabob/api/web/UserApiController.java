@@ -8,6 +8,8 @@ import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.utils.HttpBrowserTools;
 import io.swagger.annotations.Api;
@@ -40,8 +42,8 @@ public class UserApiController extends BaseController {
 		return userInfoApiService.logout(token);
 	}
 
-	@PostMapping(value = {"updatePwd"})
 	@ApiOperation(value = "用户修改密码")
+	@PostMapping(value = {"updatePwd"})
 	public CommonResult<Boolean> updatePwd(@RequestBody UserInfo userInfo, HttpServletRequest request) {
 		String ip = HttpBrowserTools.getIpAddr(request);
 		logger.info("用户修改密码,来者何人:{}",ip);
@@ -61,6 +63,20 @@ public class UserApiController extends BaseController {
 	public CommonResult<List<UserInfo>> getUserDirectTeamList(HttpServletRequest request){
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return userInfoApiService.getUserDirectTeamList(token);
+	}
+
+	@ApiOperation(value = "用户获取团队信息")
+	@PostMapping(value = {"getUserTeamInfo"})
+	public CommonResult<TeamUser> getTeamUserInfo(HttpServletRequest request){
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
+		return userInfoApiService.getTeamUserInfo(token);
+	}
+
+	@ApiOperation(value = "用户获取团队奖励列表")
+	@PostMapping(value = {"getUserTeamRewardList"})
+	public CommonResult<List<TeamUserReward>> getUserTeamRewardList(HttpServletRequest request){
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
+		return userInfoApiService.getUserTeamRewardList(token);
 	}
 
 	@ApiOperation(value = "用户邀请好友链接")
