@@ -518,9 +518,9 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	/**
 	 * 获取会员权益列表
 	 */
-	public List<UserInfoMembership> getMemberShipList(){
+	public List<UserInfoMembership> getMemberShipList(UserInfoMembership userInfoMembership){
 		try {
-			return userInfoMembershipDao.findList(new UserInfoMembership());
+			return userInfoMembershipDao.findList(userInfoMembership);
 		} catch (Exception e) {
 			logger.error("获取会员权益列表异常",e);
 			return null;

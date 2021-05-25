@@ -46,7 +46,7 @@ public class CashApiController extends BaseController {
 	@ApiOperation(value = "获取订单列表")
 	public CommonResult<List<OrderCash>> getCashOrderList(HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return cashApiService.getCashOrderList(token,new OrderCash());
+		return cashApiService.getCashOrderList(token);
 	}
 
 	@PostMapping(value = {"getCashOrderInfo/{orderNo}"})

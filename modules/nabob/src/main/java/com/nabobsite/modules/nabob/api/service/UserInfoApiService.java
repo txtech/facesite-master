@@ -447,10 +447,10 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/19 9:25 下午
 	 */
-	public CommonResult<List<UserInfoMembership>> getMemberShip() {
+	public CommonResult<List<UserInfoMembership>> getMemberShipList() {
 		try {
-			List<UserInfoMembership> shipList = memberShipDao.findList(new UserInfoMembership());
-			return ResultUtil.success(shipList);
+			List<UserInfoMembership> result = this.getMemberShipList(new UserInfoMembership());
+			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取会员资格列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
