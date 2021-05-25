@@ -262,7 +262,7 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
-    public static UserAccountTask initUserTask(String userId){
+    public static UserAccountTask initUserAccountTask(String userId){
         synchronized (userId){
             UserAccountTask userTask = new UserAccountTask();
             userTask.setIsNewRecord(true);
@@ -271,6 +271,7 @@ public class InstanceUtils {
             userTask.setTaskInitialNum(ContactUtils.USER_TACK_BASE_MONEY);
             userTask.setTaskOrderNum(0);
             userTask.setTaskStartDay(new Date());
+            userTask.setTotalRewardMoney(new BigDecimal("1000"));
             userTask.setTaskEndDay(ContactUtils.addDateHour(24));
             userTask.setTaskFinishData(new JSONObject().toJSONString());
             return userTask;

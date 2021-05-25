@@ -32,7 +32,7 @@ import java.util.List;
 @RequestMapping(value = "${frontPath}/api/task")
 @ConditionalOnProperty(name="web.swagger.nabob.enabled", havingValue="true", matchIfMissing=true)
 @Api(tags = "用户任务接口(需要登陆)")
-public class TaskApiController extends BaseController {
+public class UserTaskApiController extends BaseController {
 
 	@Autowired
 	private TaskApiService taskApiService;

@@ -95,7 +95,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 				return false;
 			}
 			//初始化奖励账户
-			dbResult = userTaskDao.insert(InstanceUtils.initUserTask(userId));
+			dbResult = userTaskDao.insert(InstanceUtils.initUserAccountTask(userId));
 			if(!ContactUtils.dbResult(dbResult)){
 				return false;
 			}

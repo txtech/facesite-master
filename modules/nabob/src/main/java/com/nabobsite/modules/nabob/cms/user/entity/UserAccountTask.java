@@ -30,6 +30,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="task_order_num", attrName="taskOrderNum", label="完成个数"),
 		@Column(name="task_start_day", attrName="taskStartDay", label="任务开始日期"),
 		@Column(name="task_end_day", attrName="taskEndDay", label="任务结束日期"),
+		@Column(name="total_reward_money", attrName="totalRewardMoney", label="奖励金额"),
 		@Column(name="task_finish_data", attrName="taskFinishData", label="每个任务完成情况"),
 		@Column(name="created", attrName="created", label="创建时间"),
 		@Column(name="updated", attrName="updated", label="更新时间"),
@@ -48,6 +49,7 @@ public class UserAccountTask extends DataEntity<UserAccountTask> {
 	private Integer taskOrderNum;		// 完成个数
 	private Date taskStartDay;		// 任务开始日期
 	private Date taskEndDay;		// 任务结束日期
+	private BigDecimal totalRewardMoney;
 	private String taskFinishData;		// 每个任务完成情况
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
@@ -154,5 +156,12 @@ public class UserAccountTask extends DataEntity<UserAccountTask> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
+	public BigDecimal getTotalRewardMoney() {
+		return totalRewardMoney;
+	}
+
+	public void setTotalRewardMoney(BigDecimal totalRewardMoney) {
+		this.totalRewardMoney = totalRewardMoney;
+	}
 }
