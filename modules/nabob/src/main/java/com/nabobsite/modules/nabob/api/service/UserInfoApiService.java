@@ -331,10 +331,7 @@ public class UserInfoApiService extends SimpleUserService {
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("pid",userInfo.getId());
-			jsonObject.put("sid",userInfo.getParentSysId());
-			String registerUrl = "param_parent="+ HiDesUtils.desEnCode(jsonObject.toString());
+			String registerUrl = "param_parent="+ userInfo.getInviteSecret();
 			JSONObject result = new JSONObject();
 			result.put("shareUrl",registerUrl);
 			return ResultUtil.success(result);
@@ -409,7 +406,7 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<TeamUserReward>> getUserTeamRewardList(String token) {
+	public CommonResult<List<TeamUserReward>> getTeamUserRewardList(String token) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){

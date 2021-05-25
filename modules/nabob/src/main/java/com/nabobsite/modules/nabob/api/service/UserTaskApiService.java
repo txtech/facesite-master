@@ -209,7 +209,7 @@ public class UserTaskApiService extends ProductApiService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<ProductWarehouseProgress>> getCompletings(String token) {
+	public CommonResult<List<ProductWarehouseProgress>> getCompletings() {
 		try {
 			List<ProductWarehouseProgress> result = userTaskProgressDao.findList(new ProductWarehouseProgress());
 			if(result == null || result.size()<100){

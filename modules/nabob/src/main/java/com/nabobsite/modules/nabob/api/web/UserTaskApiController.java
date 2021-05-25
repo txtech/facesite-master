@@ -44,16 +44,15 @@ public class UserTaskApiController extends BaseController {
 		return userTaskApiService.doUserTask(taskId,token);
 	}
 
-	@RequestMapping(value = {"getTaskInfo/{taskId}"})
-	@ApiOperation(value = "获取任务详情")
-	public CommonResult<TaskInfo> getTaskInfo(@PathVariable String taskId, HttpServletRequest request) {
-		TaskInfo taskInfo = new TaskInfo();
-		taskInfo.setId(taskId);
-		return userTaskApiService.getTaskInfo(taskInfo);
+	@RequestMapping(value = {"doWithDrawTaskReward"})
+	@ApiOperation(value = "任务提现接口")
+	public CommonResult<Boolean> doWithDrawTaskReward(HttpServletRequest request) {
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
+		return userTaskApiService.doWithDrawTaskReward(token);
 	}
 
 	@RequestMapping(value = {"getUserTaskInfo"})
-	@ApiOperation(value = "获取用户任务信息")
+	@ApiOperation(value = "获取用户任务账户")
 	public CommonResult<UserAccountTask> getTaskInfo(HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return userTaskApiService.getUserTaskInfo(token);
@@ -66,17 +65,17 @@ public class UserTaskApiController extends BaseController {
 		return userTaskApiService.getTaskRewardList(token);
 	}
 
+	@RequestMapping(value = {"getTaskInfo/{taskId}"})
+	@ApiOperation(value = "获取任务详情")
+	public CommonResult<TaskInfo> getTaskInfo(@PathVariable String taskId, HttpServletRequest request) {
+		TaskInfo taskInfo = new TaskInfo();
+		taskInfo.setId(taskId);
+		return userTaskApiService.getTaskInfo(taskInfo);
+	}
+
 	@RequestMapping(value = {"getCompletings"})
 	@ApiOperation(value = "获取任务进行中列表")
 	public CommonResult<List<ProductWarehouseProgress>> getCompletings(HttpServletRequest request) {
-		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return userTaskApiService.getCompletings(token);
-	}
-
-	@RequestMapping(value = {"doWithDrawTaskReward"})
-	@ApiOperation(value = "任务提现接口")
-	public CommonResult<Boolean> doWithDrawTaskReward(HttpServletRequest request) {
-		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return userTaskApiService.doWithDrawTaskReward(token);
+		return userTaskApiService.getCompletings();
 	}
 }

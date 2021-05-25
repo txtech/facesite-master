@@ -74,9 +74,9 @@ public class UserApiController extends BaseController {
 
 	@ApiOperation(value = "用户获取团队奖励列表")
 	@PostMapping(value = {"getUserTeamRewardList"})
-	public CommonResult<List<TeamUserReward>> getUserTeamRewardList(HttpServletRequest request){
+	public CommonResult<List<TeamUserReward>> getTeamUserRewardList(HttpServletRequest request){
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return userInfoApiService.getUserTeamRewardList(token);
+		return userInfoApiService.getTeamUserRewardList(token);
 	}
 
 	@ApiOperation(value = "用户邀请好友链接")
