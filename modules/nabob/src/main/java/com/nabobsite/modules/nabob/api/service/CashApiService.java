@@ -15,6 +15,9 @@ import com.nabobsite.modules.nabob.cms.order.dao.OrderCashDao;
 import com.nabobsite.modules.nabob.cms.order.entity.OrderCash;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysChannelDao;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;
 import com.nabobsite.modules.nabob.pay.hander.CashHander;
 import com.nabobsite.modules.nabob.pay.hander.OrderHander;
 import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
@@ -54,16 +57,46 @@ public class CashApiService extends SimpleOrderService {
 			String accountName = orderCash.getAccountName();
 			String phoneNumber = orderCash.getPhoneNumber();
 			String accountCard = orderCash.getAccountCard();
-			BigDecimal payMoney = orderCash.getCashMoney();
+			BigDecimal cashMoney = orderCash.getCashMoney();
 			if(StringUtils.isAnyEmpty(token,accountName,accountCard,email,phoneNumber)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			if(ContactUtils.isLesserOrEqual(payMoney, ContactUtils.ZERO)){
+			if(ContactUtils.isLesserOrEqual(cashMoney, ContactUtils.ZERO)){
 				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
-			String userId  = this.getUserIdByToken(token);
+			UserInfo userInfo  = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			String userId = userInfo.getId();
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			UserAccount userAccount = this.getUserAccountByUserId(userId);
+			if(userAccount == null){
+				return ResultUtil.failed(I18nCode.CODE_10009);
+			}
+			BigDecimal availableMoney = userAccount.getAvailableMoney();
+			if(ContactUtils.isLesserOrEqualZero(availableMoney)){
+				return ResultUtil.failed(I18nCode.CODE_10104);
+			}
+			if(ContactUtils.isLesser(availableMoney,cashMoney)){
+				return ResultUtil.failed(I18nCode.CODE_10104);
+			}
+
+			UserInfoMembership parms = new UserInfoMembership();
+			parms.setLevel(userInfo.getLevel());
+			UserInfoMembership userInfoMembership = userInfoMembershipDao.getByEntity(parms);
+			if(userInfoMembership == null){
+				return ResultUtil.failed(I18nCode.CODE_10104);
+			}
+			BigDecimal minWithdraw = userInfoMembership.getWithdrawMin();
+			BigDecimal maxWithdraw = userInfoMembership.getWithdrawMax();
+			if(ContactUtils.isLesserOrEqual(cashMoney,minWithdraw)){
+				return ResultUtil.failed(I18nCode.CODE_10100);
+			}
+			if(ContactUtils.isLesserOrEqual(maxWithdraw,cashMoney)){
+				return ResultUtil.failed(I18nCode.CODE_10100);
 			}
 			SysChannel channel = this.getOneChannel();
 			if(channel == null){

@@ -62,7 +62,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
 	public UserAccountTaskDao userTaskDao;
 	@Autowired
-	public UserInfoMembershipDao memberShipDao;
+	public UserInfoMembershipDao userInfoMembershipDao;
 	@Autowired
 	public TaskUserRewardDao userTaskRewardDao;
 	@Autowired
@@ -520,7 +520,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	 */
 	public List<UserInfoMembership> getMemberShipList(){
 		try {
-			return memberShipDao.findList(new UserInfoMembership());
+			return userInfoMembershipDao.findList(new UserInfoMembership());
 		} catch (Exception e) {
 			logger.error("获取会员权益列表异常",e);
 			return null;
@@ -533,7 +533,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 		try {
 			UserInfoMembership parms = new UserInfoMembership();
 			parms.setLevel(level);
-			return memberShipDao.getByEntity(parms);
+			return userInfoMembershipDao.getByEntity(parms);
 		} catch (Exception e) {
 			logger.error("获取会员权益列表异常",e);
 			return null;
@@ -575,7 +575,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			}
 			UserInfoMembership parms = new UserInfoMembership();
 			parms.getSqlMap().getWhere().and("grade_money", QueryType.GTE, maxAmount);
-			List<UserInfoMembership> memberShipList = memberShipDao.findList(parms);
+			List<UserInfoMembership> memberShipList = userInfoMembershipDao.findList(parms);
 			for (UserInfoMembership  memberShip : memberShipList) {
 				BigDecimal gradeMoney = memberShip.getGradeMoney();
 				if(ContactUtils.isBiggerOrEqual(gradeMoney,maxAmount)){

@@ -16,4 +16,6 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 public interface UserAccountDao extends CrudDao<UserAccount> {
 
     long updateAccountMoney(UserAccount userAccount);
+
+    long updateAccountClaimable();
 }

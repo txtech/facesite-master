@@ -17,7 +17,7 @@ public class I18nCode {
     public static final String CODE_10006 = "10006"; //请求失败,获取数据为空！
     public static final String CODE_10007 = "10007"; //请求失败,非法的请求!
     public static final String CODE_10008 = "10008"; //请求失败,请勿重复操作！
-    public static final String CODE_10009 = "10009";
+    public static final String CODE_10009 = "10009"; //请求失败,获取账户失败！
 
     //用户、账户、任务部分
     public static final String CODE_10010 = "10010"; //请求失败,验证码错误！

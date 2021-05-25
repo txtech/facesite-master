@@ -48,13 +48,21 @@ public class UserAccountApiService extends SimpleUserService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failed(I18nCode.CODE_10001);
 			}
 			UserAccount userAccount = this.getUserAccountByUserId(userId);
 			if(userAccount == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failed(I18nCode.CODE_10009);
 			}
-			return ResultUtil.success(true);
+			BigDecimal claimableMoney = userAccount.getClaimableMoney();
+			if(ContactUtils.isLesserOrEqualZero(claimableMoney)){
+				return ResultUtil.failed(I18nCode.CODE_10104);
+			}
+			long dbResult = userAccountDao.updateAccountClaimable();
+			if(ContactUtils.dbResult(dbResult)){
+				return ResultUtil.success(true);
+			}
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
 			logger.error("用户认领增值账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
@@ -77,8 +85,8 @@ public class UserAccountApiService extends SimpleUserService {
 				userAccountDetail.setLedgerType(ledgerType);
 			}
 			userAccountDetail.setUserId(userId);
-			List<UserAccountDetail> userAccountDetailList = userAccountDetailDao.findList(userAccountDetail);
-			return ResultUtil.success(userAccountDetailList,true);
+			List<UserAccountDetail> result = userAccountDetailDao.findList(userAccountDetail);
+			return ResultUtil.success(result,true);
 		} catch (Exception e) {
 			logger.error("获取收支总账记录异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
