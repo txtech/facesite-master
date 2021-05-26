@@ -17,5 +17,4 @@ public interface UserAccountDao extends CrudDao<UserAccount> {
 
     long updateAccountMoney(UserAccount userAccount);
 
-    long updateAccountClaimable();
 }

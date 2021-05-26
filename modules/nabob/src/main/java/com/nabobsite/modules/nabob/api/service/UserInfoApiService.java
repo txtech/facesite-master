@@ -3,7 +3,6 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.modules.sys.entity.User;
 import com.jeesite.modules.sys.service.UserService;
@@ -21,7 +20,6 @@ import com.nabobsite.modules.nabob.cms.sys.entity.SysNotice;
 import com.nabobsite.modules.nabob.cms.sys.service.SequenceCodeService;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
-import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;

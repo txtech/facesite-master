@@ -39,19 +39,40 @@ public class UserAccountApiService extends SimpleUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean>  updateAccountClaim(String token) {
 		try {
-			UserAccount userAccount = this.getUserAccountByToken(token);
-			if(userAccount == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			BigDecimal claimableMoney = userAccount.getClaimableMoney();
-			if(ContactUtils.isLesserOrEqualZero(claimableMoney)){
-				return ResultUtil.failed(I18nCode.CODE_10104);
-			}
-			long dbResult = userAccountDao.updateAccountClaimable();
-			if(ContactUtils.dbResult(dbResult)){
+			synchronized (token){
+				UserAccount oldUserAccount = this.getUserAccountByToken(token);
+				if(oldUserAccount == null){
+					return ResultUtil.failed(I18nCode.CODE_10005);
+				}
+				BigDecimal claimableMoney = oldUserAccount.getClaimableMoney();
+				if(ContactUtils.isLesserOrEqualZero(claimableMoney)){
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
+				String title = "领取奖励";
+				String userId = oldUserAccount.getUserId();
+				String accountId = oldUserAccount.getId();
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_1,accountId,title);
+				userAccountDetail.setTotalMoney(claimableMoney);
+				userAccountDetail.setAvailableMoney(claimableMoney);
+				userAccountDetail.setClaimableMoney(claimableMoney.negate());
+				Boolean isPrepareOk = this.prepareUpdateAccount(title,claimableMoney,userAccountDetail);
+				if(!isPrepareOk){
+					logger.error("修改充值订单到账户失败,记录明细失败:{},{}",userId,claimableMoney);
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
+
+				UserAccount userAccount = new UserAccount();
+				userAccount.setUserId(userId);
+				userAccount.setTotalMoney(claimableMoney);
+				userAccount.setAvailableMoney(claimableMoney);
+				userAccount.setClaimableMoney(claimableMoney.negate());
+				long dbResult = userAccountDao.updateAccountMoney(userAccount);
+				if(!ContactUtils.dbResult(dbResult)){
+					logger.error("修改充值订单到账户失败,修改账户失败:{},{}",userId,claimableMoney);
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
 				return ResultUtil.success(true);
 			}
-			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
 			logger.error("用户认领增值账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
