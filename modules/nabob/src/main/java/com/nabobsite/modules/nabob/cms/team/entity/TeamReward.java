@@ -50,6 +50,7 @@ public class TeamReward extends DataEntity<TeamReward> {
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	private Integer validNum;		// 有效直推个数
+	private int rewardStatus; // 状态 1：未领取 2：已经领取
 
 	public TeamReward() {
 		this(null);
@@ -129,5 +130,13 @@ public class TeamReward extends DataEntity<TeamReward> {
 
 	public void setValidNum(Integer validNum) {
 		this.validNum = validNum;
+	}
+
+	public int getRewardStatus() {
+		return rewardStatus;
+	}
+
+	public void setRewardStatus(int rewardStatus) {
+		this.rewardStatus = rewardStatus;
 	}
 }

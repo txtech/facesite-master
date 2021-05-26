@@ -123,6 +123,10 @@ public class ContactUtils {
     //订单类型
     public final static int ORDER_TYPE_RECHANGE = 1;//充值
 
+    //团队奖励领取状态
+    public final static int TEAM_USER_REWARD_STATUS_1 = 1;//未领取
+    public final static int TEAM_USER_REWARD_STATUS_2 = 2;//已经领取
+
     /**
      * @desc 订单支付类型
      * @author nada

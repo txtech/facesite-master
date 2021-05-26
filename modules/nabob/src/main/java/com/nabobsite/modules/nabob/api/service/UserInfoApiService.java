@@ -20,6 +20,7 @@ import com.nabobsite.modules.nabob.cms.sys.entity.SysNotice;
 import com.nabobsite.modules.nabob.cms.sys.service.SequenceCodeService;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountDetail;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -421,6 +422,13 @@ public class UserInfoApiService extends SimpleUserService {
 			List<TeamReward> result = new ArrayList<>();
 			List<TeamReward> teamRewardList = teamRewardDao.findList(teamReward);
 			for (TeamReward teamReward2 : teamRewardList) {
+				int rewardStatus = ContactUtils.TEAM_USER_REWARD_STATUS_1;
+				String rewardId = teamReward2.getId();
+				TeamUserReward oldTeamUserReward = this.getTeamUserReward(userId,rewardId);
+				if(oldTeamUserReward !=null){
+					rewardStatus = ContactUtils.TEAM_USER_REWARD_STATUS_2;
+				}
+				teamReward2.setRewardStatus(rewardStatus);
 				teamReward2.setValidNum(validNum);
 				result.add(teamReward2);
 			}
