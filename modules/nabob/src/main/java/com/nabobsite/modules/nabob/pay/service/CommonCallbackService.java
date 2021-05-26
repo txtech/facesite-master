@@ -112,7 +112,7 @@ public class CommonCallbackService extends SimpleOrderService {
 				logger.error("充值订单回调失败,更新账户失败:{},{}",orderNo,pOrderNo);
 				return false;
 			}
-			triggerApiService.balanceTrigger(userId,type,payMoney);
+			triggerApiService.payAmountTrigger(userId,type,payMoney);
 			return true;
 		} catch (Exception e) {
 			logger.error("执行回调逻辑异常,{}",orderNo,e);

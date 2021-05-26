@@ -38,7 +38,8 @@ public class UserCommissionTrigger extends TriggerOperation {
 		if(userAccount == null){
 			return;
 		}
-		logicService.memberProfit(userInfo,userAccount,type,updateMoney);
+		Boolean isProfitOk  = logicService.memberProfit(userInfo,userAccount,type,updateMoney);
+		logger.info("用户刷单佣金触发器分润:{},{}",userId,isProfitOk);
 	}
 
 	@Override

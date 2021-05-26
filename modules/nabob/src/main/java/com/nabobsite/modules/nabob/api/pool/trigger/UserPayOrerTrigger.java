@@ -8,17 +8,17 @@ import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import java.math.BigDecimal;
 
 /**
- * @desc 用户余额触发
+ * @desc 用户充值订单触发
  * @author nada
  * @create 2021/5/12 5:41 下午
 */
-public class UserBalanceTrigger extends TriggerOperation {
+public class UserPayOrerTrigger extends TriggerOperation {
 
 	private int type;
 	private BigDecimal updateMoney;
 	private LogicService logicService;
 
-	public UserBalanceTrigger(String userId,int type,BigDecimal updateMoney, UserInfoDao userInfoDao,LogicService logicService) {
+	public UserPayOrerTrigger(String userId, int type, BigDecimal updateMoney, UserInfoDao userInfoDao, LogicService logicService) {
 		super(userId,userInfoDao);
 		this.type = type;
 		this.userId = userId;
@@ -28,7 +28,7 @@ public class UserBalanceTrigger extends TriggerOperation {
 
 	@Override
 	public void execute() {
-		logger.info("用户余额触发器，userId:{},type:{},money:{}",userId,type,updateMoney);
+		logger.info("用户充值订单发器，userId:{},type:{},money:{}",userId,type,updateMoney);
 		UserInfo userInfo = logicService.getUserInfoByUserId(userId);
 		if(userInfo == null){
 			return;
@@ -37,9 +37,8 @@ public class UserBalanceTrigger extends TriggerOperation {
 		if(userAccount == null){
 			return;
 		}
-
 		boolean levelUpOK = logicService.memberLevelUp(userInfo,userAccount,type,updateMoney);
-		logger.info("触发器会员升级:{},{}",userId,levelUpOK);
+		logger.info("充值订单触发器会员升级:{},{}",userId,levelUpOK);
 	}
 
 	@Override

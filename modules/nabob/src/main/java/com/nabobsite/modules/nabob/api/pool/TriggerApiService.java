@@ -1,14 +1,13 @@
 package com.nabobsite.modules.nabob.api.pool;
 
 import com.nabobsite.modules.nabob.api.pool.trigger.InitLoadDbDataTrigger;
-import com.nabobsite.modules.nabob.api.pool.trigger.UserBalanceTrigger;
+import com.nabobsite.modules.nabob.api.pool.trigger.UserPayOrerTrigger;
 import com.nabobsite.modules.nabob.api.pool.trigger.UserCommissionTrigger;
 import com.nabobsite.modules.nabob.api.pool.trigger.UserRegisterTrigger;
 import com.nabobsite.modules.nabob.api.pool.manager.TriggerPoolManagerImpl;
 import com.nabobsite.modules.nabob.api.pool.manager.TriggerThread;
 import com.nabobsite.modules.nabob.api.service.core.LogicService;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysI18nDao;
-import com.nabobsite.modules.nabob.cms.user.dao.UserAccountDao;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,8 +64,8 @@ public class TriggerApiService {
      * @create 2021/5/11 10:33 下午
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
-    public void balanceTrigger(String userId, int type, BigDecimal updateMoney) {
-        TriggerThread callback = new UserBalanceTrigger(userId,type,updateMoney, userInfoDao,logicService);
+    public void payAmountTrigger(String userId, int type, BigDecimal updateMoney) {
+        TriggerThread callback = new UserPayOrerTrigger(userId,type,updateMoney, userInfoDao,logicService);
         triggerPoolManager.submit(callback);
     }
 
