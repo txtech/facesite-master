@@ -12,10 +12,12 @@ import com.nabobsite.modules.nabob.cms.product.entity.ProductUserWarehouse;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,8 +65,18 @@ public class UserAccountApiService extends SimpleUserService {
 				if(validNum < taskNumber){
 					return ResultUtil.failed(I18nCode.CODE_10100);
 				}
-
+				TeamUserReward oldTeamUserReward = this.getTeamUserReward(userId,rewardId);
+				if(oldTeamUserReward !=null){
+					return ResultUtil.failed(I18nCode.CODE_10008);
+				}
 				String title = "领取团队奖励";
+				TeamUserReward teamUserReward = InstanceUtils.initTeamUserReward(userId,rewardId,title,taskNumber,rewardMoney);
+				long dbResult = teamUserRewardDao.insert(teamUserReward);
+				if(ContactUtils.dbResult(dbResult)){
+					logger.error("领取团队奖励失败,保存记录失败:{},{}",userId,rewardMoney);
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
+
 				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_60,rewardId,title);
 				userAccountDetail.setTotalMoney(rewardMoney);
 				userAccountDetail.setAvailableMoney(rewardMoney);
@@ -78,7 +90,7 @@ public class UserAccountApiService extends SimpleUserService {
 				userAccount.setUserId(userId);
 				userAccount.setTotalMoney(rewardMoney);
 				userAccount.setAvailableMoney(rewardMoney);
-				long dbResult = userAccountDao.updateAccountMoney(userAccount);
+				dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("领取团队奖励失败,修改账户失败:{},{}",userId,rewardMoney);
 					return ResultUtil.failed(I18nCode.CODE_10104);

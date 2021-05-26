@@ -24,6 +24,7 @@ import com.nabobsite.modules.nabob.cms.team.dao.TeamUserDao;
 import com.nabobsite.modules.nabob.cms.team.dao.TeamUserRewardDao;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountTask;
@@ -653,17 +654,27 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 		try {
 			TeamReward parms = new TeamReward();
 			parms.setId(id);
-			TeamReward teamReward  = teamRewardDao.getByEntity(parms);
-			if(teamReward == null){
-				return null;
-			}
-			return teamReward;
+			return teamRewardDao.getByEntity(parms);
 		} catch (Exception e) {
 			logger.error("获取邀请码异常",e);
 			return null;
 		}
 	}
 
+	/**
+	 * 获取用户团队奖励记录
+	 */
+	public TeamUserReward getTeamUserReward(String userId,String rewardId){
+		try {
+			TeamUserReward parms = new TeamUserReward();
+			parms.setUserId(userId);
+			parms.setRewardId(rewardId);
+			return teamUserRewardDao.getByEntity(parms);
+		} catch (Exception e) {
+			logger.error("获取邀请码异常",e);
+			return null;
+		}
+	}
 
 
 	/**

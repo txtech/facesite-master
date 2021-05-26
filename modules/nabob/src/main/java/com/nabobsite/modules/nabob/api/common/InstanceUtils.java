@@ -11,6 +11,7 @@ import com.nabobsite.modules.nabob.cms.product.entity.ProductUserWarehouseLog;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskUserReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -301,6 +302,25 @@ public class InstanceUtils {
             return userTeam;
         }
     }
+
+    /**
+     * 初始化团队用户奖励
+     * @param userId
+     * @return
+     */
+    public static TeamUserReward initTeamUserReward(String userId,String rewardId,String title,Integer finishNum,BigDecimal rewardMoney){
+        synchronized (userId){
+            TeamUserReward  teamUserReward = new TeamUserReward();
+            teamUserReward.setIsNewRecord(true);
+            teamUserReward.setUserId(userId);
+            teamUserReward.setRewardId(rewardId);
+            teamUserReward.setTitle(title);
+            teamUserReward.setFinishNum(finishNum);
+            teamUserReward.setRewardMoney(rewardMoney);
+            return teamUserReward;
+        }
+    }
+
 
     /**
      * 初始化分润
