@@ -23,6 +23,7 @@ import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskInfoDao;
 import com.nabobsite.modules.nabob.cms.task.dao.TaskUserRewardDao;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
+import com.nabobsite.modules.nabob.cms.team.dao.TeamRewardDao;
 import com.nabobsite.modules.nabob.cms.team.dao.TeamUserDao;
 import com.nabobsite.modules.nabob.cms.team.dao.TeamUserRewardDao;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
@@ -82,6 +83,8 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public TeamUserDao teamUserDao;
 	@Autowired
 	public TeamUserRewardDao teamUserRewardDao;
+	@Autowired
+	public TeamRewardDao teamRewardDao;
 
 	/**
 	 * @desc 保存用户

@@ -8,6 +8,7 @@ import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -74,9 +75,16 @@ public class UserApiController extends BaseController {
 
 	@ApiOperation(value = "用户获取团队奖励列表")
 	@PostMapping(value = {"getUserTeamRewardList"})
-	public CommonResult<List<TeamUserReward>> getTeamUserRewardList(HttpServletRequest request){
+	public CommonResult<List<TeamReward>> getTeamUserRewardList(HttpServletRequest request){
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return userInfoApiService.getTeamUserRewardList(token);
+	}
+
+	@ApiOperation(value = "领取团队奖励")
+	@PostMapping(value = {"claimTeamReward/{rewardId}"})
+	public CommonResult<Boolean> claimTeamReward(@PathVariable String rewardId, HttpServletRequest request){
+		String token = request.getHeader(ContactUtils.AUTHORIZATION);
+		return userInfoApiService.updateAccountClaim(token,rewardId);
 	}
 
 	@ApiOperation(value = "用户邀请好友链接")

@@ -4,6 +4,8 @@
 package com.nabobsite.modules.nabob.cms.team.entity;
 
 import javax.validation.constraints.NotBlank;
+
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -34,7 +36,8 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
-	}, orderBy="a.id DESC"
+	},
+		orderBy="a.id DESC"
 )
 public class TeamReward extends DataEntity<TeamReward> {
 	
@@ -46,7 +49,8 @@ public class TeamReward extends DataEntity<TeamReward> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+	private Integer validNum;		// 有效直推个数
+
 	public TeamReward() {
 		this(null);
 	}
@@ -118,5 +122,12 @@ public class TeamReward extends DataEntity<TeamReward> {
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
+	public Integer getValidNum() {
+		return validNum;
+	}
+
+	public void setValidNum(Integer validNum) {
+		this.validNum = validNum;
+	}
 }

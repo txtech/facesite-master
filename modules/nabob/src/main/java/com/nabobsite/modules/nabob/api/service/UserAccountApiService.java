@@ -37,7 +37,7 @@ public class UserAccountApiService extends SimpleUserService {
 	 * @create 2021/5/11 10:33 下午ø
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> claimToAccountBalance(String token) {
+	public CommonResult<Boolean>  updateAccountClaim(String token) {
 		try {
 			UserAccount userAccount = this.getUserAccountByToken(token);
 			if(userAccount == null){
@@ -59,48 +59,121 @@ public class UserAccountApiService extends SimpleUserService {
 	}
 
 	/**
-	 * @desc 修改账户总余额
+	 * @desc 修改充值订单到账户
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean updateAccountBalance(String userId,int type,BigDecimal updateMoney,String uniqueId,String title) {
+	public boolean updateAccountPayOrder(String userId,BigDecimal updateMoney,String uniqueId,String title) {
 		try {
 			synchronized (userId){
-				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,type,uniqueId,title);
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_1,uniqueId,title);
 				userAccountDetail.setTotalMoney(updateMoney);
-				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
+				userAccountDetail.setAvailableMoney(updateMoney);
+				userAccountDetail.setRechargeMoney(updateMoney);
+				Boolean isPrepareOk = this.prepareUpdateAccount(title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
-					logger.error("修改账户总余额失败,记录明细失败:{},{}",userId,updateMoney);
+					logger.error("修改充值订单到账户失败,记录明细失败:{},{}",userId,updateMoney);
 					return false;
 				}
 				UserAccount userAccount = new UserAccount();
 				userAccount.setUserId(userId);
 				userAccount.setTotalMoney(updateMoney);
 				userAccount.setAvailableMoney(updateMoney);
-				if(type == ContactUtils.USER_ACCOUNT_DETAIL_TYPE_1 || type == ContactUtils.USER_ACCOUNT_DETAIL_TYPE_2){
-					userAccount.setRechargeMoney(updateMoney);
-				}
+				userAccount.setRechargeMoney(updateMoney);
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
-					logger.error("修改账户总余额失败,修改账户失败:{},{}",userId,updateMoney);
+					logger.error("修改充值订单到账户失败,修改账户失败:{},{}",userId,updateMoney);
 					return false;
 				}
 				return true;
 			}
 		} catch (Exception e) {
-			logger.error("修改账户总余额异常,{}",userId,e);
+			logger.error("修改充值订单到账户异常,{}",userId,e);
 			return false;
 		}
 	}
 
 	/**
-	 * @desc 修改佣金账户
+	 * @desc 修改注册奖励到账户
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean updateAccountCommissionMoney(String userId,BigDecimal commissionMoney,String uniqueId, String title) {
+	public boolean updateAccountRegister(String userId,BigDecimal updateMoney,String uniqueId,String title) {
+		try {
+			synchronized (userId){
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_2,uniqueId,title);
+				userAccountDetail.setTotalMoney(updateMoney);
+				userAccountDetail.setAvailableMoney(updateMoney);
+				userAccountDetail.setRechargeMoney(updateMoney);
+				Boolean isPrepareOk = this.prepareUpdateAccount(title,updateMoney,userAccountDetail);
+				if(!isPrepareOk){
+					logger.error("修改注册奖励到账户失败,记录明细失败:{},{}",userId,updateMoney);
+					return false;
+				}
+				UserAccount userAccount = new UserAccount();
+				userAccount.setUserId(userId);
+				userAccount.setTotalMoney(updateMoney);
+				userAccount.setAvailableMoney(updateMoney);
+				userAccount.setRechargeMoney(updateMoney);
+				long dbResult = userAccountDao.updateAccountMoney(userAccount);
+				if(!ContactUtils.dbResult(dbResult)){
+					logger.error("修改注册奖励到账户失败,修改账户失败:{},{}",userId,updateMoney);
+					return false;
+				}
+				return true;
+			}
+		} catch (Exception e) {
+			logger.error("修改注册奖励到账户异常,{}",userId,e);
+			return false;
+		}
+	}
+
+	/**
+	 * @desc 修改分润收益到账户
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public boolean updateAccountProfit(String userId,BigDecimal profitMoney,String uniqueId, String title) {
+		try {
+			if(ContactUtils.isOkUserId(userId)){
+				return false;
+			}
+			synchronized (userId){
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_50,uniqueId,title);
+				userAccountDetail.setTotalMoney(profitMoney);
+				userAccountDetail.setAvailableMoney(profitMoney);
+				Boolean isPrepareOk = this.prepareUpdateAccount(title,profitMoney,userAccountDetail);
+				if(!isPrepareOk){
+					logger.error("修改分润收益到账户失败,记录明细失败:{},{}",userId,profitMoney);
+					return false;
+				}
+				UserAccount userAccount = new UserAccount();
+				userAccount.setUserId(userId);
+				userAccount.setTotalMoney(profitMoney);
+				userAccount.setAvailableMoney(profitMoney);
+				long dbResult = userAccountDao.updateAccountMoney(userAccount);
+				if(!ContactUtils.dbResult(dbResult)){
+					logger.error("修改分润收益到账户失败,修改账户失败:{},{}",userId,profitMoney);
+					return false;
+				}
+				return true;
+			}
+		} catch (Exception e) {
+			logger.error("修改分润收益到账户异常:{},{}",userId,e);
+			return false;
+		}
+	}
+
+	/**
+	 * @desc 修改无人机佣金账户
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public boolean updateAccountBotCommissionMoney(String userId,BigDecimal commissionMoney,String uniqueId, String title) {
 		try {
 			if(StringUtils.isEmpty(userId)){
 				return false;
@@ -108,25 +181,30 @@ public class UserAccountApiService extends SimpleUserService {
 			synchronized (userId){
 				int type = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_20;
 				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,type,uniqueId,title);
+				userAccountDetail.setTotalMoney(commissionMoney);
+				userAccountDetail.setAvailableMoney(commissionMoney);
 				userAccountDetail.setCommissionMoney(commissionMoney);
-				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,commissionMoney,userAccountDetail);
+				userAccountDetail.setIncrementMoney(ContactUtils.multiply(commissionMoney,new BigDecimal("0.5")));
+				Boolean isPrepareOk = this.prepareUpdateAccount(title,commissionMoney,userAccountDetail);
 				if(!isPrepareOk){
-					logger.error("修改佣金账户失败,记录明细失败:{},{}",userId,commissionMoney);
+					logger.error("修改无人机佣金账户失败,记录明细失败:{},{}",userId,commissionMoney);
 					return false;
 				}
 				UserAccount userAccount = new UserAccount();
 				userAccount.setUserId(userId);
 				userAccount.setTotalMoney(commissionMoney);
+				userAccount.setAvailableMoney(commissionMoney);
 				userAccount.setCommissionMoney(commissionMoney);
+				userAccount.setIncrementMoney(ContactUtils.multiply(commissionMoney,new BigDecimal("0.5")));
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
-					logger.error("修改佣金账户失败,修改账户失败:{},{}",userId,commissionMoney);
+					logger.error("修改无人机佣金账户失败,修改账户失败:{},{}",userId,commissionMoney);
 					return false;
 				}
 				return true;
 			}
 		} catch (Exception e) {
-			logger.error("增加佣金账户余额异常:{},{}",userId,e);
+			logger.error("修改无人机佣金账户异常:{},{}",userId,e);
 			return false;
 		}
 	}
@@ -143,10 +221,10 @@ public class UserAccountApiService extends SimpleUserService {
 				return false;
 			}
 			synchronized (userId){
-				int detailType = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_30;
-				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,detailType,uniqueId,title);
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_30,uniqueId,title);
+				userAccountDetail.setTotalMoney(updateMoney);
 				userAccountDetail.setAvailableMoney(updateMoney);
-				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
+				Boolean isPrepareOk = this.prepareUpdateAccount(title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
 					logger.error("修改云仓库账户失败,记录明细失败:{},{}",userId,updateMoney);
 					return false;
@@ -177,9 +255,10 @@ public class UserAccountApiService extends SimpleUserService {
 	public boolean updateAccountRewardMoney(String userId,BigDecimal updateMoney,String uniqueId, String title) {
 		try {
 			synchronized (userId){
-				int type = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_40;
-				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,type,uniqueId,title);
-				Boolean isPrepareOk = this.prepareUpdateAccount(userId,title,updateMoney,userAccountDetail);
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_40,uniqueId,title);
+				userAccountDetail.setAvailableMoney(updateMoney);
+				userAccountDetail.setTotalMoney(updateMoney);
+				Boolean isPrepareOk = this.prepareUpdateAccount(title,updateMoney,userAccountDetail);
 				if(!isPrepareOk){
 					logger.error("修改奖励账户失败,记录明细失败:{},{}",userId,updateMoney);
 					return false;
@@ -203,14 +282,18 @@ public class UserAccountApiService extends SimpleUserService {
 
 
 	/**
-	 * @desc 修改账户余额验证
+	 * @desc 修改账户验证
 	 * @author nada
 	 * @create 2021/5/14 10:56 上午
 	*/
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public boolean prepareUpdateAccount(String userId,String title,BigDecimal updateMoney,UserAccountDetail userAccountDetail) {
+	public boolean prepareUpdateAccount(String title,BigDecimal updateMoney,UserAccountDetail userAccountDetail) {
 		try {
-			if(StringUtils.isEmpty(userId)){
+			if(userAccountDetail == null){
+				return false;
+			}
+			String userId = userAccountDetail.getUserId();
+			if(ContactUtils.isOkUserId(userId)){
 				return false;
 			}
 			if(ContactUtils.isEqualZero(updateMoney)){
@@ -238,7 +321,7 @@ public class UserAccountApiService extends SimpleUserService {
 				return true;
 			}
 		} catch (Exception e) {
-			logger.error("修改账户余额验证异常:{}",userId,e);
+			logger.error("修改账户验证异常:{}",e);
 			return false;
 		}
 	}

@@ -25,7 +25,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 @Table(name="t1_team_user_reward", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
 		@Column(name="user_id", attrName="userId", label="用户id"),
-		@Column(name="account_id", attrName="accountId", label="账户ID"),
 		@Column(name="reward_id", attrName="rewardId", label="任务ID"),
 		@Column(name="title", attrName="title", label="标题", queryType=QueryType.LIKE),
 		@Column(name="finish_num", attrName="finishNum", label="完成个数"),
@@ -42,7 +41,6 @@ public class TeamUserReward extends DataEntity<TeamUserReward> {
 	
 	private static final long serialVersionUID = 1L;
 	private String userId;		// 用户id
-	private String accountId;		// 账户ID
 	private String rewardId;		// 任务ID
 	private String title;		// 标题
 	private Integer finishNum;		// 完成个数
@@ -67,16 +65,6 @@ public class TeamUserReward extends DataEntity<TeamUserReward> {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-	
-	@NotBlank(message="账户ID不能为空")
-	@Length(min=0, max=50, message="账户ID长度不能超过 50 个字符")
-	public String getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
 	}
 	
 	@NotBlank(message="任务ID不能为空")

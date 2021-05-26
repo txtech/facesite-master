@@ -19,8 +19,10 @@ import com.nabobsite.modules.nabob.api.service.simple.SimpleUserService;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysConfig;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysNotice;
 import com.nabobsite.modules.nabob.cms.sys.service.SequenceCodeService;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
@@ -30,6 +32,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,6 +55,33 @@ public class UserInfoApiService extends SimpleUserService {
 	private SmsCodeApiService smsCodeApiService;
 	@Autowired
 	private UserService userService;
+
+	/**
+	 * @desc 增值收益提取账户
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午ø
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean>  updateAccountClaim(String token,String rewardId) {
+		try {
+			UserAccount userAccount = this.getUserAccountByToken(token);
+			if(userAccount == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			BigDecimal claimableMoney = userAccount.getClaimableMoney();
+			if(ContactUtils.isLesserOrEqualZero(claimableMoney)){
+				return ResultUtil.failed(I18nCode.CODE_10104);
+			}
+			long dbResult = userAccountDao.updateAccountClaimable();
+			if(ContactUtils.dbResult(dbResult)){
+				return ResultUtil.success(true);
+			}
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		} catch (Exception e) {
+			logger.error("用户认领增值账户异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
 
 	/**
 	 * @desc 用户忘记密码
@@ -305,8 +336,7 @@ public class UserInfoApiService extends SimpleUserService {
 				}
 				//注册新用户送奖励
 				String userId = initUser.getId();
-				int type = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_2;
-				Boolean isOk = userAccountApiService.updateAccountBalance(userId,type, ContactUtils.USER_REGISTER_REWARD,userId, ContactUtils.USER_ACCOUNT_DETAIL_TITLE_2);
+				Boolean isOk = userAccountApiService.updateAccountRegister(userId,ContactUtils.USER_REGISTER_REWARD,userId, ContactUtils.USER_ACCOUNT_DETAIL_TITLE_2);
 				if(!isOk){
 					logger.error("注册用户成功,用户送奖励失败,{}",userId);
 				}
@@ -402,21 +432,30 @@ public class UserInfoApiService extends SimpleUserService {
 	}
 
 	/**
-	 * @desc 获取用户团队信息
+	 * @desc 获取用户团队奖励列表
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<TeamUserReward>> getTeamUserRewardList(String token) {
+	public CommonResult<List<TeamReward>> getTeamUserRewardList(String token) {
 		try {
-			UserInfo userInfo = this.getUserInfoByToken(token);
-			if(userInfo == null){
+			String userId = this.getUserIdByToken(token);
+			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			TeamUserReward parms = new TeamUserReward();
-			List<TeamUserReward> result = teamUserRewardDao.findList(parms);
+			int validNum = 0;
+			TeamUser teamUser = this.getTeamUserByUserId(userId);
+			if(teamUser != null){
+				validNum = teamUser.getValidNum();
+			}
+			List<TeamReward> result = new ArrayList<>();
+			List<TeamReward> teamRewardList = teamRewardDao.findList(new TeamReward());
+			for (TeamReward teamReward : teamRewardList) {
+				teamReward.setValidNum(validNum);
+				result.add(teamReward);
+			}
 			return ResultUtil.success(result);
 		} catch (Exception e) {
-			logger.error("获取用户团队信息异常",e);
+			logger.error("获取用户团队奖励列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}

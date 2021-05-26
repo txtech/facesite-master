@@ -382,7 +382,7 @@ public class ProductApiService extends SimpleProductService {
 						return ResultUtil.failed(I18nCode.CODE_10004);
 					}
 				}
-				Boolean isOk = userAccountApiService.updateAccountCommissionMoney(userId,commissionMoney,botId,title);
+				Boolean isOk = userAccountApiService.updateAccountBotCommissionMoney(userId,commissionMoney,botId,title);
 				if(isOk){
 					triggerApiService.commissionTrigger(userId,commissionMoney);
 					return ResultUtil.success(true);

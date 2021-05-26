@@ -52,7 +52,7 @@ public class LogicService extends SimpleUserService {
 						long dbResult = userProfitDetailDao.insert(userProfitDetail);
 						if(ContactUtils.dbResult(dbResult)){
 							String profitId = userProfitDetail.getId();
-							userAccountApiService.updateAccountCommissionMoney(userId,prifitMoney,profitId,title);
+							userAccountApiService.updateAccountProfit(userId,prifitMoney,profitId,title);
 						}
 					}
 				}
@@ -67,7 +67,7 @@ public class LogicService extends SimpleUserService {
 						long dbResult = userProfitDetailDao.insert(userProfitDetail);
 						if(ContactUtils.dbResult(dbResult)){
 							String profitId = userProfitDetail.getId();
-							userAccountApiService.updateAccountCommissionMoney(userId,prifitMoney,profitId,title);
+							userAccountApiService.updateAccountProfit(userId,prifitMoney,profitId,title);
 						}
 					}
 				}
@@ -82,7 +82,7 @@ public class LogicService extends SimpleUserService {
 						long dbResult = userProfitDetailDao.insert(userProfitDetail);
 						if(ContactUtils.dbResult(dbResult)){
 							String profitId = userProfitDetail.getId();
-							userAccountApiService.updateAccountCommissionMoney(userId,prifitMoney,profitId,title);
+							userAccountApiService.updateAccountProfit(userId,prifitMoney,profitId,title);
 						}
 					}
 				}

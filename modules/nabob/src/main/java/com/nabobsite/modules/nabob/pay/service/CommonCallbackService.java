@@ -106,8 +106,7 @@ public class CommonCallbackService extends SimpleOrderService {
 				logger.error("充值订单回调失败,更新订单失败:{},{}",orderNo,pOrderNo);
 				return false;
 			}
-			int updateType = ContactUtils.USER_ACCOUNT_DETAIL_TYPE_1;
-			isOk = userAccountApiService.updateAccountBalance(userId,updateType,payMoney,orderNo, ContactUtils.USER_ACCOUNT_DETAIL_TITLE_1);
+			isOk = userAccountApiService.updateAccountPayOrder(userId,payMoney,orderNo, ContactUtils.USER_ACCOUNT_DETAIL_TITLE_1);
 			if(!isOk){
 				logger.error("充值订单回调失败,更新账户失败:{},{}",orderNo,pOrderNo);
 				return false;

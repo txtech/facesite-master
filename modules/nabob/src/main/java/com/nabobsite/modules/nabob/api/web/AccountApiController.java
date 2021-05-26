@@ -35,7 +35,7 @@ public class AccountApiController extends BaseController {
 	@ApiOperation(value = "认领增值账户")
 	public CommonResult<Boolean> claim(HttpServletRequest request){
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return userAccountApiService.claimToAccountBalance(token);
+		return userAccountApiService.updateAccountClaim(token);
 	}
 
 	@PostMapping(value = {"getUserAccountInfo"})
