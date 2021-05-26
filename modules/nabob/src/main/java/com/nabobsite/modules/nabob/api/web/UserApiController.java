@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
@@ -35,6 +36,8 @@ public class UserApiController extends BaseController {
 
 	@Autowired
 	private UserInfoApiService userInfoApiService;
+	@Autowired
+	private UserAccountApiService userAccountApiService;
 
 	@PostMapping(value = {"logout"})
 	@ApiOperation(value = "用户退出")
@@ -84,7 +87,7 @@ public class UserApiController extends BaseController {
 	@PostMapping(value = {"claimTeamReward/{rewardId}"})
 	public CommonResult<Boolean> claimTeamReward(@PathVariable String rewardId, HttpServletRequest request){
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return userInfoApiService.updateAccountClaim(token,rewardId);
+		return userAccountApiService.claimTeamReward(token,rewardId);
 	}
 
 	@ApiOperation(value = "用户邀请好友链接")

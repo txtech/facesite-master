@@ -91,6 +91,7 @@ public class ContactUtils {
     public final static int USER_ACCOUNT_DETAIL_TYPE_30 = 30;//仓库资金
     public final static int USER_ACCOUNT_DETAIL_TYPE_40 = 40;//奖励账户
     public final static int USER_ACCOUNT_DETAIL_TYPE_50 = 50;//分润收益
+    public final static int USER_ACCOUNT_DETAIL_TYPE_60 = 60;//团队领取奖励
 
     //账户明细标题
     public final static String USER_ACCOUNT_DETAIL_TITLE_1 = "用户充值";

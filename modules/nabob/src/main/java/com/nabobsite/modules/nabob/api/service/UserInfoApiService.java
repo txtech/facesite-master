@@ -21,6 +21,7 @@ import com.nabobsite.modules.nabob.cms.sys.service.SequenceCodeService;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountDetail;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
@@ -53,33 +54,6 @@ public class UserInfoApiService extends SimpleUserService {
 	private SmsCodeApiService smsCodeApiService;
 	@Autowired
 	private UserService userService;
-
-	/**
-	 * @desc 增值收益提取账户
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午ø
-	 */
-	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean>  updateAccountClaim(String token,String rewardId) {
-		try {
-			UserAccount userAccount = this.getUserAccountByToken(token);
-			if(userAccount == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			BigDecimal claimableMoney = userAccount.getClaimableMoney();
-			if(ContactUtils.isLesserOrEqualZero(claimableMoney)){
-				return ResultUtil.failed(I18nCode.CODE_10104);
-			}
-			long dbResult = userAccountDao.updateAccountClaimable();
-			if(ContactUtils.dbResult(dbResult)){
-				return ResultUtil.success(true);
-			}
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		} catch (Exception e) {
-			logger.error("用户认领增值账户异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
 
 	/**
 	 * @desc 用户忘记密码

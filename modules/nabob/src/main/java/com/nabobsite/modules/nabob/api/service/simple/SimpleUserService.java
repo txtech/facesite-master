@@ -3,7 +3,6 @@
  */
 package com.nabobsite.modules.nabob.api.service.simple;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.codec.DesUtils;
 import com.jeesite.common.config.Global;
@@ -12,9 +11,6 @@ import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.common.RedisPrefixContant;
-import com.nabobsite.modules.nabob.api.common.response.I18nCode;
-import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
-import com.nabobsite.modules.nabob.cms.product.dao.ProductWarehouseProgressDao;
 import com.nabobsite.modules.nabob.cms.sys.dao.SequenceCodeDao;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysConfigDao;
 import com.nabobsite.modules.nabob.cms.sys.dao.SysNoticeDao;
@@ -26,9 +22,13 @@ import com.nabobsite.modules.nabob.cms.task.entity.TaskInfo;
 import com.nabobsite.modules.nabob.cms.team.dao.TeamRewardDao;
 import com.nabobsite.modules.nabob.cms.team.dao.TeamUserDao;
 import com.nabobsite.modules.nabob.cms.team.dao.TeamUserRewardDao;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
-import com.nabobsite.modules.nabob.cms.user.entity.*;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountTask;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -640,6 +640,24 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 				return null;
 			}
 			return sequenceCode.getName();
+		} catch (Exception e) {
+			logger.error("获取邀请码异常",e);
+			return null;
+		}
+	}
+
+	/**
+	 * 获取团队奖励
+	 */
+	public TeamReward getTeamReward(String id){
+		try {
+			TeamReward parms = new TeamReward();
+			parms.setId(id);
+			TeamReward teamReward  = teamRewardDao.getByEntity(parms);
+			if(teamReward == null){
+				return null;
+			}
+			return teamReward;
 		} catch (Exception e) {
 			logger.error("获取邀请码异常",e);
 			return null;

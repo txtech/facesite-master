@@ -10,6 +10,8 @@ import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductUserWarehouse;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
+import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
 import com.nabobsite.modules.nabob.cms.user.entity.*;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
@@ -32,6 +34,64 @@ import java.util.List;
 public class UserAccountApiService extends SimpleUserService {
 
 	/**
+	 * @desc 领取团队奖励到账户
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午ø
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean>  claimTeamReward(String token,String rewardId) {
+		try {
+			synchronized (token){
+				if(!ContactUtils.isOkUserId(rewardId)){
+					return ResultUtil.failed(I18nCode.CODE_10007);
+				}
+				String userId = this.getUserIdByToken(token);
+				if(!ContactUtils.isOkUserId(userId)){
+					return ResultUtil.failed(I18nCode.CODE_10005);
+				}
+				TeamReward teamReward = this.getTeamReward(rewardId);
+				if(teamReward == null){
+					return ResultUtil.failed(I18nCode.CODE_10006);
+				}
+				int taskNumber = teamReward.getTaskNumber();
+				BigDecimal rewardMoney = teamReward.getRewardMoney();
+				TeamUser teamUser = this.getTeamUserByUserId(userId);
+				if(teamUser == null){
+					return ResultUtil.failed(I18nCode.CODE_10006);
+				}
+				int validNum = teamUser.getValidNum();
+				if(validNum < taskNumber){
+					return ResultUtil.failed(I18nCode.CODE_10100);
+				}
+
+				String title = "领取团队奖励";
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_60,rewardId,title);
+				userAccountDetail.setTotalMoney(rewardMoney);
+				userAccountDetail.setAvailableMoney(rewardMoney);
+				Boolean isPrepareOk = this.prepareUpdateAccount(title,rewardMoney,userAccountDetail);
+				if(!isPrepareOk){
+					logger.error("领取团队奖励失败,记录明细失败:{},{}",userId,rewardMoney);
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
+
+				UserAccount userAccount = new UserAccount();
+				userAccount.setUserId(userId);
+				userAccount.setTotalMoney(rewardMoney);
+				userAccount.setAvailableMoney(rewardMoney);
+				long dbResult = userAccountDao.updateAccountMoney(userAccount);
+				if(!ContactUtils.dbResult(dbResult)){
+					logger.error("领取团队奖励失败,修改账户失败:{},{}",userId,rewardMoney);
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
+				return ResultUtil.success(true);
+			}
+		} catch (Exception e) {
+			logger.error("领取团队奖励异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
 	 * @desc 增值收益提取账户
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午ø
@@ -48,7 +108,7 @@ public class UserAccountApiService extends SimpleUserService {
 				if(ContactUtils.isLesserOrEqualZero(claimableMoney)){
 					return ResultUtil.failed(I18nCode.CODE_10104);
 				}
-				String title = "领取奖励";
+				String title = "增值收益提取";
 				String userId = oldUserAccount.getUserId();
 				String accountId = oldUserAccount.getId();
 				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_1,accountId,title);
@@ -57,7 +117,7 @@ public class UserAccountApiService extends SimpleUserService {
 				userAccountDetail.setClaimableMoney(claimableMoney.negate());
 				Boolean isPrepareOk = this.prepareUpdateAccount(title,claimableMoney,userAccountDetail);
 				if(!isPrepareOk){
-					logger.error("修改充值订单到账户失败,记录明细失败:{},{}",userId,claimableMoney);
+					logger.error("增值收益提取失败,记录明细失败:{},{}",userId,claimableMoney);
 					return ResultUtil.failed(I18nCode.CODE_10104);
 				}
 
@@ -68,13 +128,13 @@ public class UserAccountApiService extends SimpleUserService {
 				userAccount.setClaimableMoney(claimableMoney.negate());
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
-					logger.error("修改充值订单到账户失败,修改账户失败:{},{}",userId,claimableMoney);
+					logger.error("增值收益提取失败,修改账户失败:{},{}",userId,claimableMoney);
 					return ResultUtil.failed(I18nCode.CODE_10104);
 				}
 				return ResultUtil.success(true);
 			}
 		} catch (Exception e) {
-			logger.error("用户认领增值账户异常",e);
+			logger.error("增值收益提取异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
