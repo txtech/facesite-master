@@ -300,4 +300,19 @@ public class InstanceUtils {
             return userTeam;
         }
     }
+
+
+    public static UserProfitDetail initUserProfitDetail(String userId,String parent1UserId,String parent2UserId,String parent3UserId,BigDecimal profitRate,BigDecimal prifitMoney,BigDecimal updateMoney){
+        synchronized (userId){
+            UserProfitDetail userProfitDetail = new UserProfitDetail();
+            userProfitDetail.setUserId(userId);
+            userProfitDetail.setMoney(updateMoney);
+            userProfitDetail.setProfitRate(profitRate);
+            userProfitDetail.setProfitMoney(prifitMoney);
+            userProfitDetail.setParent1UserId(parent1UserId);
+            userProfitDetail.setParent2UserId(parent2UserId);
+            userProfitDetail.setParent3UserId(parent3UserId);
+            return userProfitDetail;
+        }
+    }
 }

@@ -40,12 +40,6 @@ public class UserBalanceTrigger extends TriggerOperation {
 
 		boolean levelUpOK = logicService.memberLevelUp(userInfo,userAccount,type,updateMoney);
 		logger.info("触发器会员升级:{},{}",userId,levelUpOK);
-
-		boolean memberProfitOK = logicService.memberProfit(userInfo,userAccount,type,updateMoney);
-		logger.info("触发器会员分润:{},{}",userId,memberProfitOK);
-
-		boolean teamProfitOK = logicService.teamProfit(userInfo,userAccount,type,updateMoney);
-		logger.info("触发器团队分润:{},{}",userId,teamProfitOK);
 	}
 
 	@Override

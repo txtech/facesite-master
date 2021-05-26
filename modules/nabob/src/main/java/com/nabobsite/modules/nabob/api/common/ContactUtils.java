@@ -258,6 +258,21 @@ public class ContactUtils {
         }
     }
 
+    public static BigDecimal parsePercentage(String amount) {
+        try {
+            if(StringUtils.isEmpty(amount)){
+                return new BigDecimal("0");
+            }
+            if(amount.contains("%")){
+                return new BigDecimal(amount.replaceAll("%","")).divide(new BigDecimal("100"));
+            }
+            return new BigDecimal(amount);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BigDecimal("0");
+        }
+    }
+
     /**
      * 给时间加上几个小时
      * @return

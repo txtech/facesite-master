@@ -55,6 +55,8 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public SysConfigDao sysConfigDao;
 	@Autowired
 	public SysNoticeDao sysNoticeDao;
+	@Autowired
+	public UserProfitDetailDao userProfitDetailDao;
 
 	@Autowired
 	public UserInfoDao userInfoDao;

@@ -38,7 +38,7 @@ public class UserCommissionTrigger extends TriggerOperation {
 		if(userAccount == null){
 			return;
 		}
-
+		logicService.memberProfit(userInfo,userAccount,type,updateMoney);
 	}
 
 	@Override

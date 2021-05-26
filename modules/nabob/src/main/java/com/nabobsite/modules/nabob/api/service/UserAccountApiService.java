@@ -35,12 +35,12 @@ public class UserAccountApiService extends SimpleUserService {
 	private TriggerApiService triggerApiService;
 
 	/**
-	 * @desc 用户认领增值账户
+	 * @desc 增值收益提取账户
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午ø
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> claim(String token) {
+	public CommonResult<Boolean> claimToAccountBalance(String token) {
 		try {
 			UserAccount userAccount = this.getUserAccountByToken(token);
 			if(userAccount == null){
@@ -57,49 +57,6 @@ public class UserAccountApiService extends SimpleUserService {
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
 			logger.error("用户认领增值账户异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 获取收支总账记录
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(String token,int ledgerType) {
-		try {
-			String userId  = this.getUserIdByToken(token);
-			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			UserAccountDetail userAccountDetail = new UserAccountDetail();
-			if(ledgerType >0){
-				userAccountDetail.setLedgerType(ledgerType);
-			}
-			userAccountDetail.setUserId(userId);
-			List<UserAccountDetail> result = userAccountDetailDao.findList(userAccountDetail);
-			return ResultUtil.success(result,true);
-		} catch (Exception e) {
-			logger.error("获取收支总账记录异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
-		}
-	}
-
-	/**
-	 * @desc 获取用户账户
-	 * @author nada
-	 * @create 2021/5/11 10:33 下午
-	 */
-	public CommonResult<UserAccount> getUserAccountInfo(String token) {
-		try {
-			String userId  = this.getUserIdByToken(token);
-			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
-			}
-			UserAccount result = this.getUserAccountByUserId(userId);
-			return ResultUtil.success(result);
-		} catch (Exception e) {
-			logger.error("获取用户账户异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
@@ -180,7 +137,7 @@ public class UserAccountApiService extends SimpleUserService {
 	}
 
 	/**
-	 * @desc 修改云仓库账户
+	 * @desc 云仓库收益提取到账户
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
@@ -201,6 +158,8 @@ public class UserAccountApiService extends SimpleUserService {
 				}
 				UserAccount userAccount = new UserAccount();
 				userAccount.setUserId(userId);
+				userAccount.setAvailableMoney(updateMoney);
+				userAccount.setTotalMoney(updateMoney);
 				long dbResult = userAccountDao.updateAccountMoney(userAccount);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改云仓库账户失败,修改账户失败:{},{}",userId,updateMoney);
@@ -215,7 +174,7 @@ public class UserAccountApiService extends SimpleUserService {
 	}
 
 	/**
-	 * @desc 修改奖励账户
+	 * @desc 奖励金额提取到账户
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午
 	 */
@@ -286,6 +245,49 @@ public class UserAccountApiService extends SimpleUserService {
 		} catch (Exception e) {
 			logger.error("修改账户余额验证异常:{}",userId,e);
 			return false;
+		}
+	}
+
+	/**
+	 * @desc 获取用户账户
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	public CommonResult<UserAccount> getUserAccountInfo(String token) {
+		try {
+			String userId  = this.getUserIdByToken(token);
+			if(!ContactUtils.isOkUserId(userId)){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			UserAccount result = this.getUserAccountByUserId(userId);
+			return ResultUtil.success(result);
+		} catch (Exception e) {
+			logger.error("获取用户账户异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * @desc 获取收支总账记录
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(String token,int ledgerType) {
+		try {
+			String userId  = this.getUserIdByToken(token);
+			if(!ContactUtils.isOkUserId(userId)){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			UserAccountDetail userAccountDetail = new UserAccountDetail();
+			if(ledgerType >0){
+				userAccountDetail.setLedgerType(ledgerType);
+			}
+			userAccountDetail.setUserId(userId);
+			List<UserAccountDetail> result = userAccountDetailDao.findList(userAccountDetail);
+			return ResultUtil.success(result,true);
+		} catch (Exception e) {
+			logger.error("获取收支总账记录异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
 		}
 	}
 }

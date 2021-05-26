@@ -23,16 +23,18 @@ public class NabobTest {
     @Test
     public void Test1(){
         ////0.01/24/60/60*10*100
-        BigDecimal warehouseMoney = new BigDecimal("100.00000");
-        BigDecimal dailyInterestRate = new BigDecimal("0.010000");
-        BigDecimal incomeMoney = dailyInterestRate.multiply(new BigDecimal(10)).multiply(warehouseMoney);
-        System.out.println(incomeMoney);
-         incomeMoney = incomeMoney.divide(ContactUtils.HOUR,5, BigDecimal.ROUND_HALF_UP);
-        System.out.println(incomeMoney);
-        incomeMoney = incomeMoney.divide(ContactUtils.MINUTE,5, BigDecimal.ROUND_HALF_UP);
-        System.out.println(incomeMoney);
-        incomeMoney = incomeMoney.divide(ContactUtils.SECOND,5, BigDecimal.ROUND_HALF_UP);
-        System.out.println(incomeMoney);
+//        BigDecimal warehouseMoney = new BigDecimal("100.00000");
+//        BigDecimal dailyInterestRate = new BigDecimal("0.010000");
+//        BigDecimal incomeMoney = dailyInterestRate.multiply(new BigDecimal(10)).multiply(warehouseMoney);
+//        System.out.println(incomeMoney);
+//         incomeMoney = incomeMoney.divide(ContactUtils.HOUR,5, BigDecimal.ROUND_HALF_UP);
+//        System.out.println(incomeMoney);
+//        incomeMoney = incomeMoney.divide(ContactUtils.MINUTE,5, BigDecimal.ROUND_HALF_UP);
+//        System.out.println(incomeMoney);
+//        incomeMoney = incomeMoney.divide(ContactUtils.SECOND,5, BigDecimal.ROUND_HALF_UP);
+//        System.out.println(incomeMoney);
+
+        System.out.println(new BigDecimal("13%"));
 
     }
 

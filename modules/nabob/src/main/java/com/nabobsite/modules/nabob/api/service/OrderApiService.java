@@ -73,10 +73,12 @@ public class OrderApiService extends SimpleOrderService {
 				if(ContactUtils.isOkResult(resData)){
 					JSONObject result = new JSONObject();
 					result.put("orderNo",orderNo);
+					result.put("openUrl","http://104.149.202.6:8084/api/upi?orderNo=1357176536242847744");
 					return ResultUtil.success(result);
 				}else{
 					JSONObject result = new JSONObject();
 					result.put("orderNo",orderNo);
+					result.put("openUrl","");
 					return ResultUtil.failed(I18nCode.CODE_10103);
 				}
 			}
