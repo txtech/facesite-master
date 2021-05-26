@@ -293,6 +293,7 @@ public class InstanceUtils {
             userTeam.setTeam1Num(0);
             userTeam.setTeam2Num(0);
             userTeam.setTeam3Num(0);
+            userTeam.setTeamDepositMoney(new BigDecimal("0"));
             userTeam.setTeamMoney(new BigDecimal("0"));
             userTeam.setTeam1Money(new BigDecimal("0"));
             userTeam.setTeam2Money(new BigDecimal("0"));
@@ -301,11 +302,16 @@ public class InstanceUtils {
         }
     }
 
-
-    public static UserProfitDetail initUserProfitDetail(String userId,String parent1UserId,String parent2UserId,String parent3UserId,BigDecimal profitRate,BigDecimal prifitMoney,BigDecimal updateMoney){
+    /**
+     * 初始化分润
+     * @return
+     */
+    public static UserProfitDetail initUserProfitDetail(String userId,String title,int type,String parent1UserId,String parent2UserId,String parent3UserId,BigDecimal profitRate,BigDecimal prifitMoney,BigDecimal updateMoney){
         synchronized (userId){
             UserProfitDetail userProfitDetail = new UserProfitDetail();
             userProfitDetail.setUserId(userId);
+            userProfitDetail.setType(type);
+            userProfitDetail.setTitle(title);
             userProfitDetail.setMoney(updateMoney);
             userProfitDetail.setProfitRate(profitRate);
             userProfitDetail.setProfitMoney(prifitMoney);

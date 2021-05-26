@@ -373,7 +373,7 @@ public class UserInfoApiService extends SimpleUserService {
 			UserInfo parms = new UserInfo();
 			parms.setParent1UserId(userInfo.getId());
 			List<UserInfo> userInfoList = userInfoDao.findList(parms);
-			return ResultUtil.success(userInfoList);
+			return ResultUtil.success(userInfoList,true);
 		} catch (Exception e) {
 			logger.error("获取直推用户列表异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);

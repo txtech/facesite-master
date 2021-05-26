@@ -1,9 +1,6 @@
 package com.nabobsite.modules.nabob.api.pool;
 
-import com.nabobsite.modules.nabob.api.pool.trigger.InitLoadDbDataTrigger;
-import com.nabobsite.modules.nabob.api.pool.trigger.UserPayOrerTrigger;
-import com.nabobsite.modules.nabob.api.pool.trigger.UserCommissionTrigger;
-import com.nabobsite.modules.nabob.api.pool.trigger.UserRegisterTrigger;
+import com.nabobsite.modules.nabob.api.pool.trigger.*;
 import com.nabobsite.modules.nabob.api.pool.manager.TriggerPoolManagerImpl;
 import com.nabobsite.modules.nabob.api.pool.manager.TriggerThread;
 import com.nabobsite.modules.nabob.api.service.core.LogicService;
@@ -59,7 +56,7 @@ public class TriggerApiService {
     }
 
     /**
-     * @desc 用户余额触发器
+     * @desc 用户充值订单触发器
      * @author nada
      * @create 2021/5/11 10:33 下午
      */
@@ -75,8 +72,19 @@ public class TriggerApiService {
      * @create 2021/5/11 10:33 下午
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
-    public void commissionTrigger(String userId, int type, BigDecimal updateMoney) {
-        UserCommissionTrigger callback = new UserCommissionTrigger(userId,type,updateMoney, userInfoDao,logicService);
+    public void commissionTrigger(String userId,BigDecimal updateMoney) {
+        UserBotCommissionTrigger callback = new UserBotCommissionTrigger(userId,updateMoney, userInfoDao,logicService);
+        triggerPoolManager.submit(callback);
+    }
+
+    /**
+     * @desc 用户刷单佣金触发器
+     * @author nada
+     * @create 2021/5/11 10:33 下午
+     */
+    @Transactional(readOnly = false, rollbackFor = Exception.class)
+    public void warehouseIncomeTrigger(String userId,BigDecimal updateMoney) {
+        UserWarehouseIncomeTrigger callback = new UserWarehouseIncomeTrigger(userId,updateMoney, userInfoDao,logicService);
         triggerPoolManager.submit(callback);
     }
 }

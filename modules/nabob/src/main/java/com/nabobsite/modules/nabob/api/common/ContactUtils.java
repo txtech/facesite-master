@@ -2,6 +2,7 @@ package com.nabobsite.modules.nabob.api.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.common.response.ResultCode;
+import com.nabobsite.modules.nabob.cms.user.entity.UserProfitDetail;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,6 +112,11 @@ public class ContactUtils {
     //用户账户状态
     public final static int USER_ACCOUNT_STATUS_1 = 1;//正常
     public final static int USER_ACCOUNT_STATUS_2 = 2;//冻结
+
+    //分润类型
+    public final static int USER_PROFIT_TYPE_1 = 1;//佣金分润
+    public final static int USER_PROFIT_TYPE_2 = 2;//充值分润
+    public final static int USER_PROFIT_TYPE_3 = 3;//云仓库分润
 
     //订单类型
     public final static int ORDER_TYPE_RECHANGE = 1;//充值

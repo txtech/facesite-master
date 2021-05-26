@@ -25,7 +25,7 @@ import com.nabobsite.modules.nabob.cms.team.service.TeamUserService;
 /**
  * 用户团队Controller
  * @author face
- * @version 2021-05-24
+ * @version 2021-05-26
  */
 @Controller
 @RequestMapping(value = "${adminPath}/team/teamUser")

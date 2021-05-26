@@ -33,62 +33,64 @@ public class LogicService extends SimpleUserService {
 	 * @desc 会员分润
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean memberProfit(UserInfo userInfo,UserAccount userAccount,int  type,BigDecimal updateMoney) {
-		String userId = userInfo.getId();
-		String parent1UserId = userInfo.getParent1UserId();
-		String parent2UserId = userInfo.getParent2UserId();
-		String parent3UserId = userInfo.getParent3UserId();
+	public Boolean memberProfit(String title,int type,UserInfo userInfo,UserAccount userAccount,BigDecimal updateMoney) {
+		try {
+			String userId = userInfo.getId();
+			String parent1UserId = userInfo.getParent1UserId();
+			String parent2UserId = userInfo.getParent2UserId();
+			String parent3UserId = userInfo.getParent3UserId();
 
-		synchronized (userId) {
-			if(ContactUtils.isOkUserId(parent1UserId)){
-				UserInfo parent1UserInfo =  this.getUserInfoByUserId(parent1UserId);
-				int level = parent1UserInfo.getLevel();
-				UserInfoMembership userInfoMembership = this.getMemberShipByLevel(level);
-				BigDecimal commissionRate1 = ContactUtils.parsePercentage(userInfoMembership.getCommissionRate1());
-				if(!ContactUtils.isLesserOrEqualZero(commissionRate1)){
-					BigDecimal prifitMoney = updateMoney.multiply(commissionRate1);
-					UserProfitDetail userProfitDetail = InstanceUtils.initUserProfitDetail(userId,parent1UserId,parent2UserId,parent3UserId,commissionRate1,prifitMoney,updateMoney);
-					long dbResult = userProfitDetailDao.insert(userProfitDetail);
-					if(ContactUtils.dbResult(dbResult)){
-						String profitId = userProfitDetail.getId();
-						String title = "刷单佣金分成";
-						userAccountApiService.updateAccountCommissionMoney(userId,prifitMoney,profitId,title);
+			synchronized (userId) {
+				if(ContactUtils.isOkUserId(parent1UserId)){
+					UserInfo parent1UserInfo =  this.getUserInfoByUserId(parent1UserId);
+					int level = parent1UserInfo.getLevel();
+					UserInfoMembership userInfoMembership = this.getMemberShipByLevel(level);
+					BigDecimal commissionRate1 = ContactUtils.parsePercentage(userInfoMembership.getCommissionRate1());
+					if(!ContactUtils.isLesserOrEqualZero(commissionRate1)){
+						BigDecimal prifitMoney = updateMoney.multiply(commissionRate1);
+						UserProfitDetail userProfitDetail = InstanceUtils.initUserProfitDetail(userId,title,type,parent1UserId,parent2UserId,parent3UserId,commissionRate1,prifitMoney,updateMoney);
+						long dbResult = userProfitDetailDao.insert(userProfitDetail);
+						if(ContactUtils.dbResult(dbResult)){
+							String profitId = userProfitDetail.getId();
+							userAccountApiService.updateAccountCommissionMoney(userId,prifitMoney,profitId,title);
+						}
 					}
 				}
-			}
-			if(ContactUtils.isOkUserId(parent2UserId)){
-				UserInfo parent2UserInfo =  this.getUserInfoByUserId(parent2UserId);
-				int level = parent2UserInfo.getLevel();
-				UserInfoMembership userInfoMembership = this.getMemberShipByLevel(level);
-				BigDecimal commissionRate2 = ContactUtils.parsePercentage(userInfoMembership.getCommissionRate2());
-				if(!ContactUtils.isLesserOrEqualZero(commissionRate2)){
-					BigDecimal prifitMoney = updateMoney.multiply(commissionRate2);
-					UserProfitDetail userProfitDetail = InstanceUtils.initUserProfitDetail(userId,parent1UserId,parent2UserId,parent3UserId,commissionRate2,prifitMoney,updateMoney);
-					long dbResult = userProfitDetailDao.insert(userProfitDetail);
-					if(ContactUtils.dbResult(dbResult)){
-						String profitId = userProfitDetail.getId();
-						String title = "刷单佣金分成";
-						userAccountApiService.updateAccountCommissionMoney(userId,prifitMoney,profitId,title);
+				if(ContactUtils.isOkUserId(parent2UserId)){
+					UserInfo parent2UserInfo =  this.getUserInfoByUserId(parent2UserId);
+					int level = parent2UserInfo.getLevel();
+					UserInfoMembership userInfoMembership = this.getMemberShipByLevel(level);
+					BigDecimal commissionRate2 = ContactUtils.parsePercentage(userInfoMembership.getCommissionRate2());
+					if(!ContactUtils.isLesserOrEqualZero(commissionRate2)){
+						BigDecimal prifitMoney = updateMoney.multiply(commissionRate2);
+						UserProfitDetail userProfitDetail = InstanceUtils.initUserProfitDetail(userId,title,type,parent1UserId,parent2UserId,parent3UserId,commissionRate2,prifitMoney,updateMoney);
+						long dbResult = userProfitDetailDao.insert(userProfitDetail);
+						if(ContactUtils.dbResult(dbResult)){
+							String profitId = userProfitDetail.getId();
+							userAccountApiService.updateAccountCommissionMoney(userId,prifitMoney,profitId,title);
+						}
 					}
 				}
-			}
-			if(ContactUtils.isOkUserId(parent3UserId)){
-				UserInfo parent3UserInfo =  this.getUserInfoByUserId(parent3UserId);
-				int level = parent3UserInfo.getLevel();
-				UserInfoMembership userInfoMembership = this.getMemberShipByLevel(level);
-				BigDecimal commissionRate3 = ContactUtils.parsePercentage(userInfoMembership.getCommissionRate3());
-				if(!ContactUtils.isLesserOrEqualZero(commissionRate3)){
-					BigDecimal prifitMoney = updateMoney.multiply(commissionRate3);
-					UserProfitDetail userProfitDetail = InstanceUtils.initUserProfitDetail(userId,parent1UserId,parent2UserId,parent3UserId,commissionRate3,prifitMoney,updateMoney);
-					long dbResult = userProfitDetailDao.insert(userProfitDetail);
-					if(ContactUtils.dbResult(dbResult)){
-						String profitId = userProfitDetail.getId();
-						String title = "刷单佣金分成";
-						userAccountApiService.updateAccountCommissionMoney(userId,prifitMoney,profitId,title);
+				if(ContactUtils.isOkUserId(parent3UserId)){
+					UserInfo parent3UserInfo =  this.getUserInfoByUserId(parent3UserId);
+					int level = parent3UserInfo.getLevel();
+					UserInfoMembership userInfoMembership = this.getMemberShipByLevel(level);
+					BigDecimal commissionRate3 = ContactUtils.parsePercentage(userInfoMembership.getCommissionRate3());
+					if(!ContactUtils.isLesserOrEqualZero(commissionRate3)){
+						BigDecimal prifitMoney = updateMoney.multiply(commissionRate3);
+						UserProfitDetail userProfitDetail = InstanceUtils.initUserProfitDetail(userId,title,type,parent1UserId,parent2UserId,parent3UserId,commissionRate3,prifitMoney,updateMoney);
+						long dbResult = userProfitDetailDao.insert(userProfitDetail);
+						if(ContactUtils.dbResult(dbResult)){
+							String profitId = userProfitDetail.getId();
+							userAccountApiService.updateAccountCommissionMoney(userId,prifitMoney,profitId,title);
+						}
 					}
 				}
+				return true;
 			}
-			return true;
+		} catch (Exception e) {
+			logger.error("会员分润分润异常",e);
+			return false;
 		}
 	}
 

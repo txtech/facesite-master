@@ -1,5 +1,6 @@
 package com.nabobsite.modules.nabob.api.pool.trigger;
 
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.pool.manager.TriggerOperation;
 import com.nabobsite.modules.nabob.api.service.core.LogicService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
@@ -13,15 +14,13 @@ import java.math.BigDecimal;
  * @author nada
  * @create 2021/5/12 5:41 下午
 */
-public class UserCommissionTrigger extends TriggerOperation {
+public class UserBotCommissionTrigger extends TriggerOperation {
 
-	private int type;
 	private BigDecimal updateMoney;
 	private LogicService logicService;
 
-	public UserCommissionTrigger(String userId, int type, BigDecimal updateMoney, UserInfoDao userInfoDao, LogicService logicService) {
+	public UserBotCommissionTrigger(String userId, BigDecimal updateMoney, UserInfoDao userInfoDao, LogicService logicService) {
 		super(userId,userInfoDao);
-		this.type = type;
 		this.userId = userId;
 		this.updateMoney = updateMoney;
 		this.logicService = logicService;
@@ -29,7 +28,7 @@ public class UserCommissionTrigger extends TriggerOperation {
 
 	@Override
 	public void execute() {
-		logger.info("用户刷单佣金触发器，userId:{},type:{},money:{}",userId,type,updateMoney);
+		logger.info("用户刷单佣金触发器，userId:{},type:{},money:{}",userId,updateMoney);
 		UserInfo userInfo = logicService.getUserInfoByUserId(userId);
 		if(userInfo == null){
 			return;
@@ -38,7 +37,9 @@ public class UserCommissionTrigger extends TriggerOperation {
 		if(userAccount == null){
 			return;
 		}
-		Boolean isProfitOk  = logicService.memberProfit(userInfo,userAccount,type,updateMoney);
+		String title = "动态收益分润";
+		int type = ContactUtils.USER_PROFIT_TYPE_1;
+		Boolean isProfitOk  = logicService.memberProfit(title,type,userInfo,userAccount,updateMoney);
 		logger.info("用户刷单佣金触发器分润:{},{}",userId,isProfitOk);
 	}
 
@@ -58,13 +59,5 @@ public class UserCommissionTrigger extends TriggerOperation {
 
 	public void setUpdateMoney(BigDecimal updateMoney) {
 		this.updateMoney = updateMoney;
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
 	}
 }

@@ -20,7 +20,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 用户团队Entity
  * @author face
- * @version 2021-05-24
+ * @version 2021-05-26
  */
 @Table(name="t1_team_user", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
@@ -40,6 +40,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
+		@Column(name="team_deposit_money", attrName="teamDepositMoney", label="团队总投资"),
 	}, orderBy="a.id DESC"
 )
 public class TeamUser extends DataEntity<TeamUser> {
@@ -58,6 +59,7 @@ public class TeamUser extends DataEntity<TeamUser> {
 	private Date updated;		// 更新时间
 	private BigDecimal team3Money;		// 三级团队收益
 	private String delFlag;		// 删除标志
+	private BigDecimal teamDepositMoney;		// 团队总投资
 	
 	public TeamUser() {
 		this(null);
@@ -183,6 +185,15 @@ public class TeamUser extends DataEntity<TeamUser> {
 
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
+	}
+	
+	@NotNull(message="团队总投资不能为空")
+	public BigDecimal getTeamDepositMoney() {
+		return teamDepositMoney;
+	}
+
+	public void setTeamDepositMoney(BigDecimal teamDepositMoney) {
+		this.teamDepositMoney = teamDepositMoney;
 	}
 	
 }

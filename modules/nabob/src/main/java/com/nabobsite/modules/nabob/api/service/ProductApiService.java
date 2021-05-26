@@ -10,6 +10,7 @@ import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.common.InstanceUtils;
+import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleProductService;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
 import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
@@ -36,6 +37,8 @@ public class ProductApiService extends SimpleProductService {
 
 	@Autowired
 	protected UserAccountApiService userAccountApiService;
+	@Autowired
+	protected TriggerApiService triggerApiService;
 
 	/**
 	 * @desc 云仓库收益提取到余额
@@ -243,7 +246,12 @@ public class ProductApiService extends SimpleProductService {
 
 			if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_3){
 				String title = ContactUtils.USER_ACCOUNT_DETAIL_TITLE_5;
-				return userAccountApiService.updateAccountWarehouseMoney(userId,incomeMoney,warehouseId,title);
+				Boolean isOk = userAccountApiService.updateAccountWarehouseMoney(userId,incomeMoney,warehouseId,title);
+				if(isOk){
+					triggerApiService.warehouseIncomeTrigger(userId,incomeMoney);
+					return false;
+				}
+				return false;
 			}
 			return true;
 		} catch (Exception e) {
@@ -376,6 +384,7 @@ public class ProductApiService extends SimpleProductService {
 				}
 				Boolean isOk = userAccountApiService.updateAccountCommissionMoney(userId,commissionMoney,botId,title);
 				if(isOk){
+					triggerApiService.commissionTrigger(userId,commissionMoney);
 					return ResultUtil.success(true);
 				}
 				return ResultUtil.failed(I18nCode.CODE_10004);
