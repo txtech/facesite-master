@@ -61,9 +61,9 @@ public class UserApiController extends BaseController {
 
 	@ApiOperation(value = "用户获取直接团队列表")
 	@PostMapping(value = {"getUserDirectTeamList"})
-	public CommonResult<List<UserInfo>> getUserDirectTeamList(HttpServletRequest request){
+	public CommonResult<List<UserInfo>> getUserDirectTeamList(@RequestBody UserInfo userInfo,HttpServletRequest request){
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return userInfoApiService.getUserDirectTeamList(token);
+		return userInfoApiService.getUserDirectTeamList(token,userInfo);
 	}
 
 	@ApiOperation(value = "用户获取团队信息")
@@ -75,9 +75,9 @@ public class UserApiController extends BaseController {
 
 	@ApiOperation(value = "用户获取团队奖励列表")
 	@PostMapping(value = {"getUserTeamRewardList"})
-	public CommonResult<List<TeamReward>> getTeamUserRewardList(HttpServletRequest request){
+	public CommonResult<List<TeamReward>> getTeamUserRewardList(@RequestBody TeamReward teamReward, HttpServletRequest request){
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return userInfoApiService.getTeamUserRewardList(token);
+		return userInfoApiService.getTeamUserRewardList(token,teamReward);
 	}
 
 	@ApiOperation(value = "领取团队奖励")

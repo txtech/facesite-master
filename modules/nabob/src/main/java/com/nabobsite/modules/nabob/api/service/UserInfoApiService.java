@@ -394,13 +394,12 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<UserInfo>> getUserDirectTeamList(String token) {
+	public CommonResult<List<UserInfo>> getUserDirectTeamList(String token,UserInfo parms) {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserInfo parms = new UserInfo();
 			parms.setParent1UserId(userInfo.getId());
 			List<UserInfo> userInfoList = userInfoDao.findList(parms);
 			return ResultUtil.success(userInfoList,true);
@@ -436,7 +435,7 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<TeamReward>> getTeamUserRewardList(String token) {
+	public CommonResult<List<TeamReward>> getTeamUserRewardList(String token,TeamReward teamReward) {
 		try {
 			String userId = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
@@ -448,10 +447,10 @@ public class UserInfoApiService extends SimpleUserService {
 				validNum = teamUser.getValidNum();
 			}
 			List<TeamReward> result = new ArrayList<>();
-			List<TeamReward> teamRewardList = teamRewardDao.findList(new TeamReward());
-			for (TeamReward teamReward : teamRewardList) {
-				teamReward.setValidNum(validNum);
-				result.add(teamReward);
+			List<TeamReward> teamRewardList = teamRewardDao.findList(teamReward);
+			for (TeamReward teamReward2 : teamRewardList) {
+				teamReward2.setValidNum(validNum);
+				result.add(teamReward2);
 			}
 			return ResultUtil.success(result);
 		} catch (Exception e) {
@@ -482,9 +481,9 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/19 9:25 下午
 	 */
-	public CommonResult<List<UserInfoMembership>> getMemberShipList() {
+	public CommonResult<List<UserInfoMembership>> getUserMemberShipList(UserInfoMembership userInfoMembership) {
 		try {
-			List<UserInfoMembership> result = this.getMemberShipList(new UserInfoMembership());
+			List<UserInfoMembership> result = this.getMemberShipList(userInfoMembership);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取会员资格列表异常",e);
@@ -532,9 +531,9 @@ public class UserInfoApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<SysNotice>> getSysNotice() {
+	public CommonResult<List<SysNotice>> getSysNotice(SysNotice sysNotice) {
 		try {
-			List<SysNotice> result = sysNoticeDao.findList(new SysNotice());
+			List<SysNotice> result = sysNoticeDao.findList(sysNotice);
 			return ResultUtil.success(result);
 		} catch (Exception e) {
 			logger.error("获取系统通知异常",e);

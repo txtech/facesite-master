@@ -216,13 +216,12 @@ public class UserTaskApiService extends ProductApiService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<TaskUserReward>> getTaskRewardList(String token) {
+	public CommonResult<List<TaskUserReward>> getTaskRewardList(String token,TaskUserReward taskUserReward) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			TaskUserReward taskUserReward = new TaskUserReward();
 			taskUserReward.setUserId(userId);
 			List<TaskUserReward> userTaskRewardList = taskUserRewardDao.findList(taskUserReward);
 			return ResultUtil.success(userTaskRewardList,true);
@@ -238,9 +237,9 @@ public class UserTaskApiService extends ProductApiService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<ProductWarehouseProgress>> getCompletings() {
+	public CommonResult<List<ProductWarehouseProgress>> getCompletingsList(ProductWarehouseProgress productWarehouseProgress) {
 		try {
-			List<ProductWarehouseProgress> result = userTaskProgressDao.findList(new ProductWarehouseProgress());
+			List<ProductWarehouseProgress> result = userTaskProgressDao.findList(productWarehouseProgress);
 			if(result == null || result.size()<100){
 				this.autoInitUserTaskProgress(5);
 			}else{
@@ -286,7 +285,7 @@ public class UserTaskApiService extends ProductApiService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<TaskInfo>> getTaskList(String token) {
+	public CommonResult<List<TaskInfo>> getTaskList(String token,TaskInfo taskInfo) {
 		try {
 			JSONObject taskJson = new JSONObject();
 			if(StringUtils.isNotEmpty(token)){
@@ -294,7 +293,7 @@ public class UserTaskApiService extends ProductApiService {
 				taskJson = this.getUserTaskNumJsonByUserId(userId);
 			}
 			List<TaskInfo> newList = new ArrayList<>();
-			List<TaskInfo> taskInfoList = taskInfoDao.findList(new TaskInfo());
+			List<TaskInfo> taskInfoList = taskInfoDao.findList(taskInfo);
 			for (TaskInfo entity : taskInfoList) {
 				int	finishNum = 0;
 				if(taskJson !=null){

@@ -109,22 +109,22 @@ public class ProductApiController extends BaseController {
 	//云仓库明细接口
 	@RequestMapping(value = {"getUserWarehousePersonalIncomeList/{productType}"})
 	@ApiOperation(value = "用户云仓库个人收入记录列表")
-	public CommonResult<List<ProductUserWarehouseLog>> getUserWarehousePersonalIncomeList(@PathVariable int productType, HttpServletRequest request) {
+	public CommonResult<List<ProductUserWarehouseLog>> getUserWarehousePersonalIncomeList(@PathVariable int productType,@RequestBody ProductUserWarehouseLog userProductWarehouseLog, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		int type = ContactUtils.WAREHOUSE_TYPE_1;
-		return productApiService.getUserWarehouseIncomeList(token,type,productType);
+		return productApiService.getUserWarehouseIncomeList(token,type,productType,userProductWarehouseLog);
 	}
 	@RequestMapping(value = {"getUserWarehouseTeamIncomeList/{productType}"})
 	@ApiOperation(value = "用户云仓库团队收入记录列表")
-	public CommonResult<List<ProductUserWarehouseLog>> getUserWarehouseTeamIncomeList(@PathVariable int productType,HttpServletRequest request) {
+	public CommonResult<List<ProductUserWarehouseLog>> getUserWarehouseTeamIncomeList(@PathVariable int productType,@RequestBody ProductUserWarehouseLog userProductWarehouseLog, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		int type = ContactUtils.WAREHOUSE_TYPE_2;
-		return productApiService.getUserWarehouseIncomeList(token,type,productType);
+		return productApiService.getUserWarehouseIncomeList(token,type,productType,userProductWarehouseLog);
 	}
 	@RequestMapping(value = {"getUserWarehouseOperationList/{warehouseId}"})
 	@ApiOperation(value = "用户云仓库操纵记录列表")
-	public CommonResult<List<ProductUserWarehouseRecord>> getUserWarehouseOperationList(@PathVariable String warehouseId, HttpServletRequest request) {
+	public CommonResult<List<ProductUserWarehouseRecord>> getUserWarehouseOperationList(@PathVariable String warehouseId,@RequestBody ProductUserWarehouseRecord userProductWarehouseRecord, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return productApiService.getUserWarehouseOperationList(token,warehouseId);
+		return productApiService.getUserWarehouseOperationList(token,warehouseId,userProductWarehouseRecord);
 	}
 }

@@ -350,13 +350,12 @@ public class UserAccountApiService extends SimpleUserService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(String token,int ledgerType) {
+	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(String token,int ledgerType,UserAccountDetail userAccountDetail ) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			UserAccountDetail userAccountDetail = new UserAccountDetail();
 			if(ledgerType >0){
 				userAccountDetail.setLedgerType(ledgerType);
 			}

@@ -15,10 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -60,9 +57,9 @@ public class UserTaskApiController extends BaseController {
 
 	@RequestMapping(value = {"getTaskRewardList"})
 	@ApiOperation(value = "获取任务奖励列表")
-	public CommonResult<List<TaskUserReward>> getTaskRewardList(HttpServletRequest request) {
+	public CommonResult<List<TaskUserReward>> getTaskRewardList(@RequestBody TaskUserReward taskUserReward, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return userTaskApiService.getTaskRewardList(token);
+		return userTaskApiService.getTaskRewardList(token,taskUserReward);
 	}
 
 	@RequestMapping(value = {"getTaskInfo/{taskId}"})
@@ -75,7 +72,7 @@ public class UserTaskApiController extends BaseController {
 
 	@RequestMapping(value = {"getCompletings"})
 	@ApiOperation(value = "获取任务进行中列表")
-	public CommonResult<List<ProductWarehouseProgress>> getCompletings(HttpServletRequest request) {
-		return userTaskApiService.getCompletings();
+	public CommonResult<List<ProductWarehouseProgress>> getCompletingsList(@RequestBody ProductWarehouseProgress productWarehouseProgress, HttpServletRequest request) {
+		return userTaskApiService.getCompletingsList(productWarehouseProgress);
 	}
 }

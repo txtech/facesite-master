@@ -47,8 +47,8 @@ public class AccountApiController extends BaseController {
 
 	@PostMapping(value = {"getLedgerRecordList/{ledgerType}"})
 	@ApiOperation(value = "获取收支总账记录列表")
-	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(@PathVariable int ledgerType,HttpServletRequest request){
+	public CommonResult<List<UserAccountDetail>> getLedgerRecordList(@PathVariable int ledgerType,@RequestBody UserAccountDetail userAccountDetail, HttpServletRequest request){
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return userAccountApiService.getLedgerRecordList(token,ledgerType);
+		return userAccountApiService.getLedgerRecordList(token,ledgerType,userAccountDetail);
 	}
 }

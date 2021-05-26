@@ -538,13 +538,12 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<ProductUserWarehouseLog>> getUserWarehouseIncomeList(String token,int type,int productType) {
+	public CommonResult<List<ProductUserWarehouseLog>> getUserWarehouseIncomeList(String token,int type,int productType,ProductUserWarehouseLog userProductWarehouseLog) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			ProductUserWarehouseLog userProductWarehouseLog = new ProductUserWarehouseLog();
 			userProductWarehouseLog.setUserId(userId);
 			userProductWarehouseLog.setType(type);
 			userProductWarehouseLog.setProductType(productType);
@@ -560,13 +559,12 @@ public class ProductApiService extends SimpleProductService {
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午
 	 */
-	public CommonResult<List<ProductUserWarehouseRecord>> getUserWarehouseOperationList(String token,String warehouseId) {
+	public CommonResult<List<ProductUserWarehouseRecord>> getUserWarehouseOperationList(String token,String warehouseId,ProductUserWarehouseRecord userProductWarehouseRecord) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failed(I18nCode.CODE_10005);
 			}
-			ProductUserWarehouseRecord userProductWarehouseRecord = new ProductUserWarehouseRecord();
 			userProductWarehouseRecord.setUserId(userId);
 			userProductWarehouseRecord.setWarehouseId(warehouseId);
 			List<ProductUserWarehouseRecord> result = productUserWarehouseRecordDao.findList(userProductWarehouseRecord);

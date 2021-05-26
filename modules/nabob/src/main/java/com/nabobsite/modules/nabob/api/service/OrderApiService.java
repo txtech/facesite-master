@@ -94,7 +94,7 @@ public class OrderApiService extends SimpleOrderService {
 	 * @create 2021/5/12 1:10 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<List<OrderPay>> getOrderList(OrderPay order, String token) {
+	public CommonResult<List<OrderPay>> getOrderList(String token,OrderPay order) {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){

@@ -44,9 +44,9 @@ public class OrderApiController extends BaseController {
 
 	@PostMapping(value = {"getOrderList"})
 	@ApiOperation(value = "获取订单列表")
-	public CommonResult<List<OrderPay>> getOrderList(HttpServletRequest request) {
+	public CommonResult<List<OrderPay>> getOrderList(@RequestBody OrderPay orderPay, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return orderApiService.getOrderList(new OrderPay(),token);
+		return orderApiService.getOrderList(token,orderPay);
 	}
 
 	@PostMapping(value = {"getOrderInfo/{orderNo}"})

@@ -3,7 +3,6 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
@@ -12,8 +11,8 @@ import com.nabobsite.modules.nabob.api.model.SmsModel;
 import com.nabobsite.modules.nabob.api.model.VerificationCodeModel;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
 import com.nabobsite.modules.nabob.api.service.SmsCodeApiService;
-import com.nabobsite.modules.nabob.api.service.UserTaskApiService;
 import com.nabobsite.modules.nabob.api.service.UserInfoApiService;
+import com.nabobsite.modules.nabob.api.service.UserTaskApiService;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductBot;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysNotice;
@@ -94,15 +93,15 @@ public class OpenApiController extends BaseController {
 
 	@PostMapping(value = {"getSysNotice"})
 	@ApiOperation(value = "获取通知信息")
-	public CommonResult<List<SysNotice>> getSysNotice(HttpServletRequest request){
-		return userInfoApiService.getSysNotice();
+	public CommonResult<List<SysNotice>> getSysNotice(@RequestBody SysNotice sysNotice, HttpServletRequest request){
+		return userInfoApiService.getSysNotice(sysNotice);
 	}
 
 
 	@PostMapping(value = {"getMemberShipList"})
 	@ApiOperation(value = "获取会员资格列表")
-	public CommonResult<List<UserInfoMembership>> getMemberShipList(HttpServletRequest request){
-		return userInfoApiService.getMemberShipList();
+	public CommonResult<List<UserInfoMembership>> getMemberShipList(@RequestBody UserInfoMembership userInfoMembership, HttpServletRequest request){
+		return userInfoApiService.getUserMemberShipList(userInfoMembership);
 	}
 
 	@PostMapping(value = {"getMemberShipInfo/{id}"})
@@ -113,22 +112,22 @@ public class OpenApiController extends BaseController {
 
 	@RequestMapping(value = {"getTaskList"})
 	@ApiOperation(value = "获取任务列表")
-	public CommonResult<List<TaskInfo>> getTaskList(HttpServletRequest request) {
+	public CommonResult<List<TaskInfo>> getTaskList(@RequestBody TaskInfo taskInfo, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return userTaskApiService.getTaskList(token);
+		return userTaskApiService.getTaskList(token,taskInfo);
 	}
 
 	@RequestMapping(value = {"getProductWarehouseList"})
 	@ApiOperation(value = "云仓库产品列表")
-	public CommonResult<List<ProductWarehouse>> getProductWarehouseList(HttpServletRequest request) {
+	public CommonResult<List<ProductWarehouse>> getProductWarehouseList(@RequestBody ProductWarehouse productWarehouse, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		return productApiService.getProductWarehouseList(token,new ProductWarehouse());
+		return productApiService.getProductWarehouseList(token,productWarehouse);
 	}
 
 	@RequestMapping(value = {"getProductBotList"})
 	@ApiOperation(value = "无人机产品列表")
-	public CommonResult<List<ProductBot>> getProductBotList(HttpServletRequest request) {
-		return productApiService.getProductBotList(new ProductBot());
+	public CommonResult<List<ProductBot>> getProductBotList(@RequestBody ProductBot productBot, HttpServletRequest request) {
+		return productApiService.getProductBotList(productBot);
 	}
 
 	@RequestMapping(value = {"sendSms"})
