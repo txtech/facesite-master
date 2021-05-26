@@ -18,7 +18,6 @@ import java.util.Map;
 public class InitLoadDbDataTrigger extends TriggerOperation {
 
 	private SysI18nDao sysI18nDao;
-	private UserInfoDao userInfoDao;
 
 	public InitLoadDbDataTrigger(SysI18nDao sysI18nDao,UserInfoDao userInfoDao) {
 		super("",userInfoDao);
