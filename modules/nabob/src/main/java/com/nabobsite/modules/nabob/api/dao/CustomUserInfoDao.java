@@ -1,7 +1,6 @@
 package com.nabobsite.modules.nabob.api.dao;
 
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
-import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 
 public interface CustomUserInfoDao  {
