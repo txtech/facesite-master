@@ -293,7 +293,7 @@ public class UserAccountApiService extends SimpleUserService {
 				return false;
 			}
 			String userId = userAccountDetail.getUserId();
-			if(ContactUtils.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return false;
 			}
 			if(ContactUtils.isEqualZero(updateMoney)){
