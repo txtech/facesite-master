@@ -5,6 +5,7 @@ package com.nabobsite.modules.nabob.pay.service;
 
 import com.jeesite.common.service.CrudService;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
 import com.nabobsite.modules.nabob.api.service.OrderApiService;
 import com.nabobsite.modules.nabob.api.service.UserAccountApiService;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleOrderService;
@@ -25,6 +26,8 @@ import java.math.BigDecimal;
 @Transactional(readOnly=true)
 public class CommonCallbackService extends SimpleOrderService {
 
+	@Autowired
+	private TriggerApiService triggerApiService;
 	@Autowired
 	private UserAccountApiService userAccountApiService;
 
@@ -109,6 +112,7 @@ public class CommonCallbackService extends SimpleOrderService {
 				logger.error("充值订单回调失败,更新账户失败:{},{}",orderNo,pOrderNo);
 				return false;
 			}
+			triggerApiService.balanceTrigger(userId,type,payMoney);
 			return true;
 		} catch (Exception e) {
 			logger.error("执行回调逻辑异常,{}",orderNo,e);

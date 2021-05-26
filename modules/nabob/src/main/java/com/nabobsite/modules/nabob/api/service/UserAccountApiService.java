@@ -31,9 +31,6 @@ import java.util.List;
 @Transactional(readOnly=true)
 public class UserAccountApiService extends SimpleUserService {
 
-	@Autowired
-	private TriggerApiService triggerApiService;
-
 	/**
 	 * @desc 增值收益提取账户
 	 * @author nada
@@ -89,7 +86,6 @@ public class UserAccountApiService extends SimpleUserService {
 					logger.error("修改账户总余额失败,修改账户失败:{},{}",userId,updateMoney);
 					return false;
 				}
-				triggerApiService.balanceTrigger(userId,type,updateMoney);
 				return true;
 			}
 		} catch (Exception e) {
@@ -127,7 +123,6 @@ public class UserAccountApiService extends SimpleUserService {
 					logger.error("修改佣金账户失败,修改账户失败:{},{}",userId,commissionMoney);
 					return false;
 				}
-				triggerApiService.commissionTrigger(userId,type,commissionMoney);
 				return true;
 			}
 		} catch (Exception e) {
