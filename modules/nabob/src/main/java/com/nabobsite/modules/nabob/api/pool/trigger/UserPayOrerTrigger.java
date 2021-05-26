@@ -1,5 +1,6 @@
 package com.nabobsite.modules.nabob.api.pool.trigger;
 
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
 import com.nabobsite.modules.nabob.api.pool.manager.TriggerOperation;
 import com.nabobsite.modules.nabob.api.service.core.LogicService;
 import com.nabobsite.modules.nabob.cms.user.dao.UserInfoDao;
@@ -39,6 +40,11 @@ public class UserPayOrerTrigger extends TriggerOperation {
 		}
 		boolean levelUpOK = logicService.memberLevelUp(userInfo,userAccount,type,updateMoney);
 		logger.info("充值订单触发器会员升级:{},{}",userId,levelUpOK);
+
+		String title = "用户充值分润";
+		int type = ContactUtils.USER_PROFIT_TYPE_1;
+		Boolean isProfitOk  = logicService.memberProfit(title,type,userInfo,userAccount,updateMoney);
+		logger.info("用户充值分润:{},{}",userId,isProfitOk);
 	}
 
 	@Override
