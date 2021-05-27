@@ -124,7 +124,7 @@ public class LogicService extends SimpleUserService {
 					Boolean isUpLevelOk = this.updateUpLevelAdnLock(userId,maxLevel,userLock,valid);
 					logger.info("会员等级升级且解锁:{},{}",userId,isUpLevelOk);
 					if(isUpLevelOk){
-						boolean isOK = this.updateDirectTeamNum(userId,num);
+						boolean isOK = this.updateDirectTeamNum(parent1Id,num);
 						logger.info("充值修改团队数:{},{}",parent1Id,isOK);
 
 						int teamNum = this.getTeamUserValidNum(parent1Id);

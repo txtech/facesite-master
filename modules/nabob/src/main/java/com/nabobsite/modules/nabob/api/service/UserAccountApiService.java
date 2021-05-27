@@ -231,7 +231,7 @@ public class UserAccountApiService extends SimpleUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public boolean updateAccountProfit(String userId,BigDecimal profitMoney,String uniqueId, String title) {
 		try {
-			if(ContactUtils.isOkUserId(userId)){
+			if(!ContactUtils.isOkUserId(userId)){
 				return false;
 			}
 			synchronized (userId){

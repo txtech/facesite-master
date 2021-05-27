@@ -172,7 +172,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public Boolean updateLock(String userId,int userLock) {
 		try {
 			if(!ContactUtils.isOkUserId(userId)){
-				return null;
+				return false;
 			}
 			UserInfo userInfo = new UserInfo();
 			userInfo.setId(userId);
@@ -181,7 +181,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("用户解锁异常",e);
-			return null;
+			return false;
 		}
 	}
 
@@ -194,7 +194,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public Boolean updateTeamNum(String userId,int num) {
 		try {
 			if(!ContactUtils.isOkUserId(userId)){
-				return null;
+				return false;
 			}
 			TeamUser teamUser = new TeamUser();
 			teamUser.setId(userId);
@@ -203,7 +203,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("修改团队数量异常",e);
-			return null;
+			return false;
 		}
 	}
 
@@ -216,7 +216,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public Boolean updateDirectTeamNum(String userId,int num) {
 		try {
 			if(!ContactUtils.isOkUserId(userId)){
-				return null;
+				return false;
 			}
 			TeamUser teamUser = new TeamUser();
 			teamUser.setUserId(userId);
@@ -225,7 +225,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("修改团队数量异常",e);
-			return null;
+			return false;
 		}
 	}
 
@@ -238,7 +238,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	public Boolean updateUpLevelAdnLock(String userId,int upLevel,int userLock,int valid) {
 		try {
 			if(!ContactUtils.isOkUserId(userId)){
-				return null;
+				return false;
 			}
 			UserInfo userInfo = new UserInfo();
 			userInfo.setId(userId);
@@ -252,7 +252,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("账号等级升级和解锁异常",e);
-			return null;
+			return false;
 		}
 	}
 
@@ -611,7 +611,7 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 				return maxLevel;
 			}
 			UserInfoMembership parms = new UserInfoMembership();
-			parms.getSqlMap().getWhere().and("grade_money", QueryType.GTE, maxAmount);
+			parms.getSqlMap().getWhere().and("grade_money", QueryType.LTE, maxAmount);
 			List<UserInfoMembership> memberShipList = userInfoMembershipDao.findList(parms);
 			for (UserInfoMembership  memberShip : memberShipList) {
 				BigDecimal gradeMoney = memberShip.getGradeMoney();

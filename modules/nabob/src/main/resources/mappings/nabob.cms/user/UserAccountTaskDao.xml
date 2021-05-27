@@ -28,7 +28,7 @@
 			updated = sysdate()
 		</set>
 		<where>
-			<if test="totalMoney != null and totalMoney !=0">
+			<if test="taskInitialNum != null and taskInitialNum !=0">
 				(task_initial_num + #{taskInitialNum}) >= 0 and
 			</if>
 			user_id = #{userId}

@@ -5,6 +5,8 @@ package com.nabobsite.modules.nabob.api.service;
 
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONObject;
+import com.jeesite.common.codec.DesUtils;
+import com.jeesite.common.config.Global;
 import com.jeesite.common.image.CaptchaUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
@@ -17,6 +19,7 @@ import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 import java.net.URLEncoder;
 import java.util.Map;
@@ -50,7 +53,11 @@ public class SmsCodeApiService extends SimpleUserService {
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
 			String codeKey = UUID.randomUUID().toString().replaceAll("-","");
+
+			String secretKey = Global.getConfig("shiro.loginSubmit.secretKey");
+			String imgCodeSecret = DesUtils.decode(imgCode, secretKey);
 			JSONObject result = new JSONObject();
+			result.put("imgCode",imgCodeSecret);
 			result.put("codeKey",codeKey);
 			result.put("imgBase64",imgBase64);
 			String cacheKey = RedisPrefixContant.FRONT_USER_RANDOM_CODE_CACHE + codeKey;

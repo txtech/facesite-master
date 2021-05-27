@@ -83,7 +83,6 @@ public class CommonCallbackService extends SimpleOrderService {
 			int type = oldOrder.getType();
 			String userId = oldOrder.getUserId();
 			BigDecimal payMoney = oldOrder.getPayMoney();
-			BigDecimal actualMoney = oldOrder.getActualMoney();
 			OrderPay newOrder = new OrderPay();
 			newOrder.setId(id);
 			newOrder.setPorderNo(pOrderNo);
@@ -92,18 +91,13 @@ public class CommonCallbackService extends SimpleOrderService {
 				newOrder.setOrderStatus(ContactUtils.ORDER_STATUS_3);
 			}else if(backStatus == ContactUtils.ORDER_STATUS_4){
 				newOrder.setOrderStatus(ContactUtils.ORDER_STATUS_4);
+			}else{
+				logger.error("充值订单回调失败,订单未知状态:{},{},{}",orderNo,pOrderNo,backStatus);
+				return false;
 			}
 			Boolean isOk = this.updateOrderById(id,newOrder);
 			if(!isOk){
-				logger.error("充值订单回调失败,更新订单失败:{},{}",orderNo,pOrderNo);
-				return false;
-			}
-			if(backStatus == ContactUtils.ORDER_STATUS_3){
-				logger.error("充值订单回调失败,更新订单成功:{},{}",orderNo,pOrderNo);
-				return true;
-			}
-			if(backStatus != ContactUtils.ORDER_STATUS_4){
-				logger.error("充值订单回调失败,更新订单失败:{},{}",orderNo,pOrderNo);
+				logger.error("充值订单回调失败,更新订单失败:{},{},{}",orderNo,pOrderNo,backStatus);
 				return false;
 			}
 			isOk = userAccountApiService.updateAccountPayOrder(userId,payMoney,orderNo, ContactUtils.USER_ACCOUNT_DETAIL_TITLE_1);

@@ -40,15 +40,15 @@ public class SimpleOrderService extends SimpleUserService {
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
 	public Boolean updateOrderById(String id,OrderPay order) {
 		try {
-			if(StringUtils.isEmpty(id)){
-				return null;
+			if(!ContactUtils.isOkUserId(id)){
+				return false;
 			}
 			order.setId(id);
 			long dbResult = orderPayDao.update(order);
 			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("根据ID修改异常",e);
-			return null;
+			return false;
 		}
 	}
 
