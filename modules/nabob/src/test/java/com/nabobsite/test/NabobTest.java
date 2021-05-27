@@ -154,17 +154,18 @@ public class NabobTest {
 
     @Test
     public void testEntryPassward(){
-        String pidAndSid = "{pid:123456,sid:234234}";
-        JSONObject jsonObject = JSONObject.parseObject(pidAndSid);
-
-        System.out.println( jsonObject.getString("pid"));
-        System.out.println( jsonObject.getString("sid"));
+//        String pidAndSid = "{pid:123456,sid:234234}";
+//        JSONObject jsonObject = JSONObject.parseObject(pidAndSid);
+//
+//        System.out.println( jsonObject.getString("pid"));
+//        System.out.println( jsonObject.getString("sid"));
+//
+//        String secretKey = "NabobBase64";
+//        String username = DesUtils.encode("15118135523", secretKey);
+//        String password = DesUtils.encode("123456", secretKey);
+//        System.out.println("&username=" + username + "&password=" + password);
 
         String secretKey = "NabobBase64";
-        String username = DesUtils.encode("15118135523", secretKey);
-        String password = DesUtils.encode("123456", secretKey);
-        System.out.println("&username=" + username + "&password=" + password);
-
         String username1 = DesUtils.decode("424A6C6BCB75439B5206D0A6F88A90C1", secretKey);
         String password2 = DesUtils.decode("BC7CE71528D97E942E10D117E6EAFFCC", secretKey);
         System.out.println("&username=" + username1 + "&password=" + password2);

@@ -54,8 +54,8 @@ public class SmsCodeApiService extends SimpleUserService {
 			}
 			String codeKey = UUID.randomUUID().toString().replaceAll("-","");
 
-			String secretKey = Global.getConfig("shiro.loginSubmit.smxSecretKey");
-			String imgCodeSecret = DesUtils.decode(imgCode, secretKey);
+			String secretKey = Global.getConfig("shiro.loginSubmit.secretKey");
+			String imgCodeSecret =  DesUtils.encode(imgCode, secretKey);
 			JSONObject result = new JSONObject();
 			result.put("imgCode",imgCodeSecret);
 			result.put("codeKey",codeKey);
