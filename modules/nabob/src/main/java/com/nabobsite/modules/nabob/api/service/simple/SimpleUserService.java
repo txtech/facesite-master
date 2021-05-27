@@ -682,14 +682,11 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	 * @author nada
 	 * @create 2021/5/12 11:07 上午
 	*/
-	public String decodeAccountAndPwd(String accountNoEntry, String passwordEntry) {
-		if(StringUtils.isAnyBlank(accountNoEntry,passwordEntry)){
-			return "账号或密码不能为空";
+	public String decodePwd(String passwordEntry) {
+		if(StringUtils.isAnyBlank(passwordEntry)){
+			return passwordEntry;
 		}
 		String secretKey = Global.getConfig("shiro.loginSubmit.secretKey");
-		String accountNo = DesUtils.decode(accountNoEntry, secretKey);
-		String password = DesUtils.decode(passwordEntry, secretKey);
-		String md5Pass = DigestUtils.md5DigestAsHex(password.getBytes());
-		return md5Pass;
+		return DesUtils.decode(passwordEntry, secretKey);
 	}
 }

@@ -21,8 +21,6 @@ import com.nabobsite.modules.nabob.cms.sys.service.SequenceCodeService;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccountDetail;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
@@ -32,7 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -66,7 +63,7 @@ public class UserInfoApiService extends SimpleUserService {
 		try {
 			String smsCode = userInfo.getSmsCode();
 			String accountNo = userInfo.getAccountNo();
-			String newPassword = userInfo.getPassword();
+			String newPassword = this.decodePwd(userInfo.getPassword());
 			if(StringUtils.isAnyEmpty(accountNo,smsCode,newPassword)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
@@ -102,8 +99,8 @@ public class UserInfoApiService extends SimpleUserService {
 	public CommonResult<Boolean> updatePwd(String token,UserInfo userInfo) {
 		try {
 			String accountNo = userInfo.getAccountNo();
-			String oldPassword = userInfo.getOldPassword();
-			String newPassword = userInfo.getPassword();
+			String oldPassword = this.decodePwd(userInfo.getOldPassword());
+			String newPassword = this.decodePwd(userInfo.getPassword());
 			if(StringUtils.isAnyEmpty(accountNo,oldPassword,newPassword)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
@@ -167,7 +164,7 @@ public class UserInfoApiService extends SimpleUserService {
 			}
 			String loginIp = userInfo.getLoginIp();
 			String accountNo = userInfo.getAccountNo();
-			String password = userInfo.getPassword();
+			String password = this.decodePwd(userInfo.getPassword());
 			String imgCodeKey = userInfo.getCodeKey();
 			String imgCode = userInfo.getImgCode();
 			if(StringUtils.isAnyBlank(accountNo,password)){
@@ -224,7 +221,7 @@ public class UserInfoApiService extends SimpleUserService {
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			String accountNo = userInfo.getAccountNo();
-			String password = userInfo.getPassword();
+			String password = this.decodePwd(userInfo.getPassword());
 			String inviteSecret = userInfo.getInviteSecret();
 			String parentInviteCode = userInfo.getInviteCode();
 			if(StringUtils.isAnyBlank(accountNo,password)){
