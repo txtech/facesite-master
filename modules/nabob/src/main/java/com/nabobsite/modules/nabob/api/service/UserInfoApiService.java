@@ -167,12 +167,14 @@ public class UserInfoApiService extends SimpleUserService {
 			String password = this.decodePwd(userInfo.getPassword());
 			String imgCodeKey = userInfo.getCodeKey();
 			String imgCode = userInfo.getImgCode();
-			if(StringUtils.isAnyBlank(accountNo,password,imgCode)){
+			if(StringUtils.isAnyBlank(accountNo,password)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			Boolean isOk = smsCodeApiService.verifImgRandomCode(imgCodeKey,imgCode);
-			if(!isOk){
-				return ResultUtil.failed(I18nCode.CODE_10010);
+			if(StringUtils.isNotEmpty(imgCode)){
+				Boolean isOk = smsCodeApiService.verifImgRandomCode(imgCodeKey,imgCode);
+				if(!isOk){
+					return ResultUtil.failed(I18nCode.CODE_10010);
+				}
 			}
 			UserInfo loginUserInfo = this.getUserInfoByAccountNo(accountNo);
 			if(loginUserInfo == null){
@@ -226,10 +228,10 @@ public class UserInfoApiService extends SimpleUserService {
 			if(StringUtils.isAnyBlank(accountNo,password,smsCode)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			if(accountNo.length() < 10 || accountNo.length() > 20 || password.length()<6  || password.length() > 20){
+			if(accountNo.length() < 8 || accountNo.length() > 20 || password.length()<4  || password.length() > 20){
 				return ResultUtil.failed(I18nCode.CODE_10016);
 			}
-			Boolean checkOk = smsCodeApiService.verifImgRandomCode(accountNo,smsCode);
+			Boolean checkOk = smsCodeApiService.verifSmsCode(accountNo,smsCode);
 			if(!checkOk){
 				return ResultUtil.failed(I18nCode.CODE_10010);
 			}
