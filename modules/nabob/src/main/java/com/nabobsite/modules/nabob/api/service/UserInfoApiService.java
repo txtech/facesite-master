@@ -167,14 +167,12 @@ public class UserInfoApiService extends SimpleUserService {
 			String password = this.decodePwd(userInfo.getPassword());
 			String imgCodeKey = userInfo.getCodeKey();
 			String imgCode = userInfo.getImgCode();
-			if(StringUtils.isAnyBlank(accountNo,password)){
+			if(StringUtils.isAnyBlank(accountNo,password,imgCode)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			if(StringUtils.isNotEmpty(imgCodeKey) && StringUtils.isNotEmpty(imgCode)){
-				Boolean isOk = smsCodeApiService.verifImgRandomCode(imgCodeKey,imgCode);
-				if(!isOk){
-					return ResultUtil.failed(I18nCode.CODE_10010);
-				}
+			Boolean isOk = smsCodeApiService.verifImgRandomCode(imgCodeKey,imgCode);
+			if(!isOk){
+				return ResultUtil.failed(I18nCode.CODE_10010);
 			}
 			UserInfo loginUserInfo = this.getUserInfoByAccountNo(accountNo);
 			if(loginUserInfo == null){
@@ -224,13 +222,17 @@ public class UserInfoApiService extends SimpleUserService {
 			String password = this.decodePwd(userInfo.getPassword());
 			String inviteSecret = userInfo.getInviteSecret();
 			String parentInviteCode = userInfo.getInviteCode();
-			if(StringUtils.isAnyBlank(accountNo,password)){
+			String smsCode = userInfo.getSmsCode();
+			if(StringUtils.isAnyBlank(accountNo,password,smsCode)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
 			if(accountNo.length() < 10 || accountNo.length() > 20 || password.length()<6  || password.length() > 20){
 				return ResultUtil.failed(I18nCode.CODE_10016);
 			}
-
+			Boolean checkOk = smsCodeApiService.verifImgRandomCode(accountNo,smsCode);
+			if(!checkOk){
+				return ResultUtil.failed(I18nCode.CODE_10010);
+			}
 			synchronized (accountNo){
 				UserInfo checkUserInfo = this.getUserInfoByAccountNo(accountNo);
 				if(checkUserInfo !=null){

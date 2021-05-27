@@ -36,6 +36,42 @@ import java.util.List;
 public class UserAccountApiService extends SimpleUserService {
 
 	/**
+	 * @desc 修改AI智能任务到账户
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public boolean updateAccountAiBot(String userId,BigDecimal updateMoney,String uniqueId,String title) {
+		try {
+			synchronized (userId){
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_2,uniqueId,title);
+				userAccountDetail.setTotalMoney(updateMoney.negate());
+				userAccountDetail.setAvailableMoney(updateMoney.negate());
+				userAccountDetail.setAiAssetsMoney(updateMoney);
+				Boolean isPrepareOk = this.prepareUpdateAccount(title,updateMoney,userAccountDetail);
+				if(!isPrepareOk){
+					logger.error("修改AI智能任务到账户失败,记录明细失败:{},{}",userId,updateMoney);
+					return false;
+				}
+				UserAccount userAccount = new UserAccount();
+				userAccount.setUserId(userId);
+				userAccount.setTotalMoney(updateMoney.negate());
+				userAccount.setAvailableMoney(updateMoney.negate());
+				userAccountDetail.setAiAssetsMoney(updateMoney);
+				long dbResult = userAccountDao.updateAccountMoney(userAccount);
+				if(!ContactUtils.dbResult(dbResult)){
+					logger.error("修改AI智能任务到账户失败,修改账户失败:{},{}",userId,updateMoney);
+					return false;
+				}
+				return true;
+			}
+		} catch (Exception e) {
+			logger.error("修改AI智能任务到账户异常,{}",userId,e);
+			return false;
+		}
+	}
+
+	/**
 	 * @desc 领取团队奖励到账户
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午ø
@@ -405,7 +441,7 @@ public class UserAccountApiService extends SimpleUserService {
 					return false;
 				}
 				String detailId = userAccountDetail.getId();
-				UserAccountBackup userAccountBackup = InstanceUtils.initUserAccountLog(detailId,title,oldUserAccount);
+				UserAccountBackup userAccountBackup = InstanceUtils.initUserAccountBackup(detailId,title,oldUserAccount);
 				dbResult = userAccountBackupDao.insert(userAccountBackup);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("修改账失败,记录日志失败:{},{},{}",userId,accountId,updateMoney);

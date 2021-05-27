@@ -39,8 +39,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
-		@Column(name="income_money", attrName="incomeMoney", label="当前总收益"),
-		@Column(name="ai_assets_money", attrName="aiAssetsMoney", label="云资产"),
+		@Column(name="income_money", attrName="incomeMoney", label="当前总收益")
 	}, orderBy="a.id DESC"
 )
 public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
@@ -59,8 +58,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	private Date teamUpdateTime;		// 团队动态收益更新时间
 	private String delFlag;		// 删除标志
 	private BigDecimal incomeMoney;		// 当前总收益
-	private BigDecimal aiAssetsMoney;		// 云资产
-	
+
 	public UserAccountWarehouse() {
 		this(null);
 	}
@@ -187,15 +185,6 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 
 	public void setIncomeMoney(BigDecimal incomeMoney) {
 		this.incomeMoney = incomeMoney;
-	}
-	
-	@NotNull(message="云资产不能为空")
-	public BigDecimal getAiAssetsMoney() {
-		return aiAssetsMoney;
-	}
-
-	public void setAiAssetsMoney(BigDecimal aiAssetsMoney) {
-		this.aiAssetsMoney = aiAssetsMoney;
 	}
 	
 }

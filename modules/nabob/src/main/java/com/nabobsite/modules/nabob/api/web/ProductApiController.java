@@ -34,12 +34,11 @@ public class ProductApiController extends BaseController {
 	private ProductApiService productApiService;
 
 	//操作接口
-	@PostMapping(value = {"aiStartWarehouseDeposit"})
-	@ApiOperation(value = "aiStart云仓库定投产品存款")
-	public CommonResult<Boolean> doAiStartWarehouseDeposit(@RequestBody ProductUserWarehouseRecord userProductWarehouseRecord, HttpServletRequest request) {
+	@PostMapping(value = {"doBotAiStart"})
+	@ApiOperation(value = "无人机AI任务")
+	public CommonResult<Boolean> doBotAiStart(@RequestBody ProductUserBotAistart productUserBotAistart, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
-		userProductWarehouseRecord.setMoney(new BigDecimal("100"));
-		return productApiService.doWarehouseDeposit(token,userProductWarehouseRecord);
+		return productApiService.doBotAiStart(token,productUserBotAistart);
 	}
 	@PostMapping(value = {"doWarehouseDeposit"})
 	@ApiOperation(value = "云仓库定投产品存款")

@@ -1,0 +1,160 @@
+<% layout('/layouts/default.html', {title: '用户产品机器人智能任务管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa icon-notebook"></i> ${text('用户产品机器人智能任务管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('product:productUserBotAistart:edit')){ %>
+					<a href="${ctx}/product/productUserBotAistart/form" class="btn btn-default btnTool" title="${text('新增用户产品机器人智能任务')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+				<a href="#" class="btn btn-default" id="btnSetting" title="${text('设置')}"><i class="fa fa-navicon"></i></a>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${productUserBotAistart}" action="${ctx}/product/productUserBotAistart/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('用户ID')}：</label>
+					<div class="control-inline">
+						<#form:input path="userId" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('产品ID')}：</label>
+					<div class="control-inline">
+						<#form:input path="botId" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('当前等级')}：</label>
+					<div class="control-inline">
+						<#form:input path="level" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('任务天数')}：</label>
+					<div class="control-inline">
+						<#form:input path="aiDay" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('每日执行次数')}：</label>
+					<div class="control-inline">
+						<#form:input path="dailyNum" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ai费率')}：</label>
+					<div class="control-inline">
+						<#form:input path="aiRate" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ai收入')}：</label>
+					<div class="control-inline">
+						<#form:input path="aiMoney" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ai增值费率')}：</label>
+					<div class="control-inline">
+						<#form:input path="aiRateOther" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('开始时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="startDate" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('结束时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="endDate" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('创建时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('更新时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('备注信息')}：</label>
+					<div class="control-inline">
+						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('删除标志')}：</label>
+					<div class="control-inline">
+						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ai状态 1')}：</label>
+					<div class="control-inline">
+						<#form:input path="aiStatus" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/product/productUserBotAistart/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户产品机器人智能任务")}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text("产品ID")}', name:'botId', index:'a.bot_id', width:150, align:"left"},
+		{header:'${text("当前等级")}', name:'level', index:'a.level', width:150, align:"center"},
+		{header:'${text("任务天数")}', name:'aiDay', index:'a.ai_day', width:150, align:"center"},
+		{header:'${text("每日执行次数")}', name:'dailyNum', index:'a.daily_num', width:150, align:"center"},
+		{header:'${text("ai费率")}', name:'aiRate', index:'a.ai_rate', width:150, align:"left"},
+		{header:'${text("ai收入")}', name:'aiMoney', index:'a.ai_money', width:150, align:"left"},
+		{header:'${text("ai增值费率")}', name:'aiRateOther', index:'a.ai_rate_other', width:150, align:"left"},
+		{header:'${text("开始时间")}', name:'startDate', index:'a.start_date', width:150, align:"center"},
+		{header:'${text("结束时间")}', name:'endDate', index:'a.end_date', width:150, align:"center"},
+		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
+		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
+		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
+		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
+		{header:'${text("ai状态 1")}', name:'aiStatus', index:'a.ai_status', width:150, align:"center"},
+		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('product:productUserBotAistart:edit')){ %>
+				actions.push('<a href="${ctx}/product/productUserBotAistart/form?id='+row.id+'" class="btnList" title="${text("编辑用户产品机器人智能任务")}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/product/productUserBotAistart/delete?id='+row.id+'" class="btnList" title="${text("删除用户产品机器人智能任务")}" data-confirm="${text("确认要删除该用户产品机器人智能任务吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

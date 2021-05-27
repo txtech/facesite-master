@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.cms.order.entity.OrderCash;
 import com.nabobsite.modules.nabob.cms.order.entity.OrderPay;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductUserBot;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductUserBotLog;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductUserWarehouse;
-import com.nabobsite.modules.nabob.cms.product.entity.ProductUserWarehouseLog;
+import com.nabobsite.modules.nabob.cms.product.entity.*;
 import com.nabobsite.modules.nabob.cms.sys.entity.SysChannel;
 import com.nabobsite.modules.nabob.cms.task.entity.TaskUserReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
@@ -78,6 +75,7 @@ public class InstanceUtils {
             userAccount.setCommissionMoney(new BigDecimal("0"));
             userAccount.setClaimableMoney(new BigDecimal("0"));
             userAccount.setRechargeMoney(new BigDecimal("0"));
+            userAccount.setAiAssetsMoney(new BigDecimal("0"));
             userAccount.setAccountStatus(ContactUtils.USER_ACCOUNT_STATUS_1);
             return userAccount;
         }
@@ -96,6 +94,7 @@ public class InstanceUtils {
             userAccountDetail.setTitle(title);
             userAccountDetail.setType(type);
             userAccountDetail.setUnique(uniqueId);
+            userAccountDetail.setAiAssetsMoney(new BigDecimal("0"));
             userAccountDetail.setTotalMoney(new BigDecimal("0"));
             userAccountDetail.setAvailableMoney(new BigDecimal("0"));
             userAccountDetail.setIncrementMoney(new BigDecimal("0"));
@@ -112,7 +111,7 @@ public class InstanceUtils {
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
-    public static UserAccountBackup initUserAccountLog(String detailId,String title,UserAccount olduUerAccount){
+    public static UserAccountBackup initUserAccountBackup(String detailId,String title,UserAccount olduUerAccount){
         UserAccountBackup userAccountLog = new UserAccountBackup();
         BeanUtils.copyProperties(olduUerAccount, userAccountLog);
         userAccountLog.setIsNewRecord(true);
@@ -253,7 +252,6 @@ public class InstanceUtils {
             userAccountWarehouse.setTeamIncomeMoney(new BigDecimal("0"));
             userAccountWarehouse.setTeamAccumulativeIncomeMoney(new BigDecimal("0"));
             userAccountWarehouse.setIncomeMoney(new BigDecimal("0"));
-            userAccountWarehouse.setAiAssetsMoney(new BigDecimal("0"));
             return userAccountWarehouse;
         }
     }
@@ -339,6 +337,29 @@ public class InstanceUtils {
             userProfitDetail.setParent2UserId(parent2UserId);
             userProfitDetail.setParent3UserId(parent3UserId);
             return userProfitDetail;
+        }
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    public static ProductUserBotAistart initProductUserBotAistart(String userId,String botId,int level,ProductBot productBot){
+        synchronized (userId){
+            ProductUserBotAistart productUserBotAistart = new ProductUserBotAistart();
+            productUserBotAistart.setIsNewRecord(true);
+            productUserBotAistart.setUserId(userId);
+            productUserBotAistart.setBotId(botId);
+            productUserBotAistart.setLevel(level);
+            productUserBotAistart.setAiDay(7);
+            productUserBotAistart.setDailyNum(0);
+            productUserBotAistart.setStartDate(new Date());
+            productUserBotAistart.setEndDate(ContactUtils.addDateHour(24*7));
+            productUserBotAistart.setAiRate(productBot.getCommissionRate());
+            productUserBotAistart.setAiRateOther(productBot.getCommissionRateOther());
+            productUserBotAistart.setAiMoney(productBot.getPrice());
+            productUserBotAistart.setAiStatus(2);
+            return productUserBotAistart;
         }
     }
 }

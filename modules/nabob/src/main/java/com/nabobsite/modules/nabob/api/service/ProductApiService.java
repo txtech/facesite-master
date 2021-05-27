@@ -41,6 +41,64 @@ public class ProductApiService extends SimpleProductService {
 	protected TriggerApiService triggerApiService;
 
 	/**
+	 * @desc 无人机AI任务
+	 * @author nada
+	 * @create 2021/5/11 10:33 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public CommonResult<Boolean> doBotAiStart(String token,ProductUserBotAistart productUserBotAistart) {
+		try {
+			UserInfo userInfo  = this.getUserInfoByToken(token);
+			if(userInfo == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			String userId = userInfo.getId();
+			int currentLevel = userInfo.getLevel();
+			String botId = productUserBotAistart.getBotId();
+			if(!ContactUtils.isOkUserId(botId)){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
+			UserAccount userAccount = this.getUserAccountByUserId(userId);
+			if(userAccount == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			BigDecimal availableMoney = userAccount.getAvailableMoney();
+			if(ContactUtils.isLesserOrEqualZero(availableMoney)){
+				return ResultUtil.failed(I18nCode.CODE_10104);
+			}
+			ProductBot productBot = this.getProductBotById(botId);
+			if(productBot == null){
+				return ResultUtil.failed(I18nCode.CODE_10005);
+			}
+			BigDecimal price = productBot.getPrice();
+			if(ContactUtils.isLesser(availableMoney,price)){
+				return ResultUtil.failed(I18nCode.CODE_10104);
+			}
+			ProductUserBotAistart checkPrmas = new ProductUserBotAistart();
+			checkPrmas.setUserId(userId);
+			checkPrmas.setBotId(botId);
+			ProductUserBotAistart checkBotAistart = productUserBotAistartDao.getByEntity(checkPrmas);
+			if(checkBotAistart !=null){
+				return ResultUtil.failed(I18nCode.CODE_10008);
+			}
+			ProductUserBotAistart prmas = InstanceUtils.initProductUserBotAistart(userId,botId,currentLevel,productBot);
+			long dbResult = productUserBotAistartDao.insert(prmas);
+			if(!ContactUtils.dbResult(dbResult)){
+				return ResultUtil.failed(I18nCode.CODE_10004);
+			}
+			String title = "AI智能任务";
+			boolean isOk = userAccountApiService.updateAccountAiBot(userId,price,prmas.getId(),title);
+			if(isOk){
+				return ResultUtil.success(true);
+			}
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		} catch (Exception e) {
+			logger.error("无人机AI任务异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
 	 * @desc 云仓库收益提取到余额
 	 * @author nada
 	 * @create 2021/5/11 10:33 下午

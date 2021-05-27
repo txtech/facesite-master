@@ -38,6 +38,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="recharge_money", attrName="rechargeMoney", label="充值资金"),
+		@Column(name="ai_assets_money", attrName="aiAssetsMoney", label="云资产"),
 	},
 	joinTable={
 			@JoinTable(type=Type.LEFT_JOIN, entity=UserAccountWarehouse.class, alias="g",
@@ -61,6 +62,7 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private String delFlag;		// 删除标志
 	private BigDecimal rechargeMoney;		// 充值资金
 	private UserAccountWarehouse userAccountWarehouse;
+	private BigDecimal aiAssetsMoney;		// 云资产
 
 	public UserAccount() {
 		this(null);
@@ -178,4 +180,13 @@ public class UserAccount extends DataEntity<UserAccount> {
 	public void setUserAccountWarehouse(UserAccountWarehouse userAccountWarehouse) {
 		this.userAccountWarehouse = userAccountWarehouse;
 	}
+	@NotNull(message="云资产不能为空")
+	public BigDecimal getAiAssetsMoney() {
+		return aiAssetsMoney;
+	}
+
+	public void setAiAssetsMoney(BigDecimal aiAssetsMoney) {
+		this.aiAssetsMoney = aiAssetsMoney;
+	}
+
 }

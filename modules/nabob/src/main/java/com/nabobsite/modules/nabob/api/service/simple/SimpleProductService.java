@@ -27,6 +27,8 @@ public class SimpleProductService extends SimpleUserService {
 	public ProductUserBotDao productUserBotDao;
 	@Autowired
 	public ProductUserBotLogDao userProductBotLogDao;
+	@Autowired
+	public ProductUserBotAistartDao productUserBotAistartDao;
 
 	@Autowired
 	public ProductWarehouseDao productWarehouseDao;

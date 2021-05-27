@@ -42,6 +42,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="ledger_type", attrName="ledgerType", label="收入支出"),
 		@Column(name="recharge_money", attrName="rechargeMoney", label="充值资金"),
+		@Column(name="ai_assets_money", attrName="aiAssetsMoney", label="云资产"),
 	}, orderBy="a.id DESC"
 )
 public class UserAccountDetail extends DataEntity<UserAccountDetail> {
@@ -62,6 +63,7 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	private String delFlag;		// 删除标志
 	private Integer ledgerType;		// 收入支出
 	private BigDecimal rechargeMoney;		// 充值资金
+	private BigDecimal aiAssetsMoney;		// 云资产
 	
 	public UserAccountDetail() {
 		this(null);
@@ -209,5 +211,14 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	public void setRechargeMoney(BigDecimal rechargeMoney) {
 		this.rechargeMoney = rechargeMoney;
 	}
-	
+
+	@NotNull(message="云资产不能为空")
+	public BigDecimal getAiAssetsMoney() {
+		return aiAssetsMoney;
+	}
+
+	public void setAiAssetsMoney(BigDecimal aiAssetsMoney) {
+		this.aiAssetsMoney = aiAssetsMoney;
+	}
+
 }
