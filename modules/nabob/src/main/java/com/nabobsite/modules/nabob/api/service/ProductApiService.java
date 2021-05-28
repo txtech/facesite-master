@@ -209,7 +209,7 @@ public class ProductApiService extends SimpleProductService {
 					return ResultUtil.failed(I18nCode.CODE_10100);
 				}
 				BigDecimal availableMoney = userAccount.getAvailableMoney();
-				if(ContactUtils.isLesser(money,availableMoney)){
+				if(ContactUtils.isLesser(availableMoney,money)){
 					return ResultUtil.failed(I18nCode.CODE_10104);
 				}
 				ProductUserWarehouse productUserWarehouse = this.getProductUserWarehouseByUserIdAndId(userId,warehouseId);
