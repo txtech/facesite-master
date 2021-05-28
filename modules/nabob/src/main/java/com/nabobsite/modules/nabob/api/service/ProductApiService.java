@@ -438,7 +438,7 @@ public class ProductApiService extends SimpleProductService {
 				ProductUserBot oldUserProductBot =	this.getProductUserBotByUserAndId(userId,botId);
 				if(oldUserProductBot != null){
 					int doTaskNum = oldUserProductBot.getTodayOrders();
-					if(doTaskNum > dailyNum){
+					if(doTaskNum >= dailyNum){
 						return ResultUtil.failed(I18nCode.CODE_10102);
 					}
 				}
@@ -480,6 +480,20 @@ public class ProductApiService extends SimpleProductService {
 		} catch (Exception e) {
 			logger.error("无人机产品做任务异常",e);
 			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * 无人机任务定时任务
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean doBotTaskJob() {
+		try {
+			productUserBotDao.updateProductUserBotJob();
+			return true;
+		} catch (Exception e) {
+			logger.error("无人机任务定时任务异常",e);
+			return false;
 		}
 	}
 

@@ -9,12 +9,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Application
  * @author ThinkGem
  * @version 2018-10-13
  */
+@EnableScheduling
 @SpringBootApplication(scanBasePackages={"com.jeesite.modules","com.nabobsite.modules.nabob"})
 public class Application extends SpringBootServletInitializer {
 
@@ -28,4 +30,5 @@ public class Application extends SpringBootServletInitializer {
 		this.setRegisterErrorPageFilter(false);
 		return builder.sources(Application.class);
 	}
+
 }

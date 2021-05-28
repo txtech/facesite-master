@@ -11,5 +11,16 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+
+	<update id="updateProductUserBotJob" parameterType="com.nabobsite.modules.nabob.cms.product.entity.ProductUserBot">
+		update
+			t1_product_user_bot
+		<set>
+			yesterday_team_income_money = today_team_income,
+			yesterday_income_money = today_income_money,
+			today_team_income = 0,
+			today_income_money = 0,
+			today_orders = 0
+		</set>
+	</update>
 </mapper>
