@@ -7,6 +7,8 @@ import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.nabobsite.modules.nabob.cms.product.entity.ProductUserBotAistart;
 
+import java.util.List;
+
 /**
  * 用户产品机器人智能任务DAO接口
  * @author face
@@ -14,5 +16,6 @@ import com.nabobsite.modules.nabob.cms.product.entity.ProductUserBotAistart;
  */
 @MyBatisDao
 public interface ProductUserBotAistartDao extends CrudDao<ProductUserBotAistart> {
-	
+
+    List<ProductUserBotAistart> getProductUserBotAistartList();
 }

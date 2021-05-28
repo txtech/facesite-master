@@ -14,12 +14,12 @@
 
 
 	<!--获取达到等级的直推团队人数-->
-	<update id="getOkLevelTeam1Num" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
+	<select id="getOkLevelTeam1Num" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserInfo">
 		SELECT
 			IFNULL(count(id),0)
 		FROM
 			t1_user_info
 		where
 			parent_user_id = #{id} and  level &lt;= (select IFNULL(level-1,0) from t1_user_info where id = #{id} and lock =2 and level>1)
-	</update>
+	</select>
 </mapper>

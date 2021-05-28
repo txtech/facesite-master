@@ -35,7 +35,7 @@ public class TimerCronJob {
     public void autodoJob3(){
         try {
             logger.info("3分钟定时更新开始");
-            Boolean isOK = userTaskApiService.doUserTaskJob();
+            Boolean isOK = productApiService.doAiBotTaskJob();
             logger.info("3分钟定时更新结束,{}",isOK);
         } catch (Exception e) {
             logger.error("定时更新结束异常", e);
@@ -63,7 +63,7 @@ public class TimerCronJob {
     public void autodoBotTaskJob(){
         try {
             logger.info("凌晨更新定时更新开始");
-            Boolean isOK = productApiService.doBotTaskJob();
+            Boolean isOK = productApiService.doBotCleanTaskJob();
             logger.info("凌晨更新定时更新结束,{}",isOK);
         } catch (Exception e) {
             logger.error("定时更新结束异常", e);

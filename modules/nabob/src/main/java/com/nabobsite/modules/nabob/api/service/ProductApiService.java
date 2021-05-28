@@ -17,6 +17,7 @@ import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
+import com.nabobsite.modules.nabob.utils.SnowFlakeIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -418,6 +419,43 @@ public class ProductApiService extends SimpleProductService {
 			if(productBot == null){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
+			int userLevel = userInfo.getLevel();
+			int mustLevel = productBot.getLevel();
+			if(userLevel < mustLevel){
+				return ResultUtil.failed(I18nCode.CODE_10101);
+			}
+			ProductUserBotLog checkUserProductBotLog =	this.getProductUserBotLogByOrderNo(orderNo);
+			if(checkUserProductBotLog!=null){
+				return ResultUtil.failed(I18nCode.CODE_10008);
+			}
+			Boolean isOK =  this.doBotTaskExecute(userId,botId,orderNo);
+			if(isOK){
+				return ResultUtil.success(true);
+			}
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		} catch (Exception e) {
+			logger.error("无人机产品做任务异常",e);
+			return ResultUtil.failed(I18nCode.CODE_10004);
+		}
+	}
+
+	/**
+	 * 无人级任务执行
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean doBotTaskExecute(String userId,String botId,String orderNo) {
+		try {
+			if(StringUtils.isAnyEmpty(botId,orderNo)){
+				return false;
+			}
+			UserInfo userInfo = this.getUserInfoByUserId(userId);
+			if(userInfo== null){
+				return false;
+			}
+			ProductBot productBot = this.getProductBotById(botId);
+			if(productBot == null){
+				return false;
+			}
 			synchronized (userId) {
 				int userLevel = userInfo.getLevel();
 				int mustLevel = productBot.getLevel();
@@ -426,37 +464,37 @@ public class ProductApiService extends SimpleProductService {
 				BigDecimal productBotPrice = productBot.getPrice();
 				BigDecimal commissionRate = productBot.getCommissionRate();
 				if(userLevel < mustLevel){
-					return ResultUtil.failed(I18nCode.CODE_10101);
+					return false;
 				}
 				//佣金
 				String title = ContactUtils.USER_ACCOUNT_DETAIL_TITLE_4;
 				BigDecimal commissionMoney = ContactUtils.multiply(productBotPrice,commissionRate);
-				ProductUserBotLog checkUserProductBotLog =	this.getProductUserBotLogByOrderNo(orderNo);
-				if(checkUserProductBotLog!=null){
-					return ResultUtil.failed(I18nCode.CODE_10008);
-				}
+
 				ProductUserBot oldUserProductBot =	this.getProductUserBotByUserAndId(userId,botId);
 				if(oldUserProductBot != null){
 					int doTaskNum = oldUserProductBot.getTodayOrders();
 					if(doTaskNum >= dailyNum){
-						return ResultUtil.failed(I18nCode.CODE_10102);
+						return false;
 					}
 				}
+				ProductUserBotLog userProductBotLog = new ProductUserBotLog();
+				userProductBotLog.setBotId(botId);
 				userProductBotLog.setUserId(userId);
+				userProductBotLog.setOrderNo(orderNo);
 				userProductBotLog.setOrderAmount(mustPrice);
 				userProductBotLog.setIncomeMoney(commissionMoney);
 				userProductBotLog.setIncomeRate(commissionRate);
 				long dbResult = userProductBotLogDao.insert(userProductBotLog);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("无人机刷单记录失败:{},{},{},{}",userId,orderNo,userId,botId);
-					return ResultUtil.failed(I18nCode.CODE_10004);
+					return false;
 				}
 				if(oldUserProductBot == null){
 					ProductUserBot userProductBot = InstanceUtils.initProductUserBot(userProductBotLog);
 					dbResult = productUserBotDao.insert(userProductBot);
 					if(!ContactUtils.dbResult(dbResult)){
 						logger.error("用户无人机刷单汇总初始化失败:{},{},{},{}",userId,orderNo,userId,botId);
-						return ResultUtil.failed(I18nCode.CODE_10004);
+						return false;
 					}
 				}else{
 					BigDecimal todayIncomeMoney = ContactUtils.add(oldUserProductBot.getTodayIncomeMoney(),commissionMoney);
@@ -467,27 +505,60 @@ public class ProductApiService extends SimpleProductService {
 					dbResult = productUserBotDao.update(userProductBot);
 					if(!ContactUtils.dbResult(dbResult)){
 						logger.error("用户无人机刷单汇总更新失败:{},{},{},{}",userId,orderNo,userId,botId);
-						return ResultUtil.failed(I18nCode.CODE_10004);
+						return true;
 					}
 				}
 				Boolean isOk = userAccountApiService.updateAccountBotCommissionMoney(userId,commissionMoney,botId,title);
 				if(isOk){
 					triggerApiService.commissionTrigger(userId,commissionMoney);
-					return ResultUtil.success(true);
+					return true;
 				}
-				return ResultUtil.failed(I18nCode.CODE_10004);
+				return false;
 			}
 		} catch (Exception e) {
 			logger.error("无人机产品做任务异常",e);
-			return ResultUtil.failed(I18nCode.CODE_10004);
+			return false;
 		}
 	}
 
 	/**
-	 * 无人机任务定时任务
+	 * 无人机AI任务定时任务
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean doBotTaskJob() {
+	public Boolean doAiBotTaskJob() {
+		try {
+			List<ProductUserBotAistart> list = productUserBotAistartDao.getProductUserBotAistartList();
+			for(ProductUserBotAistart productUserBotAistart : list){
+				String userId = productUserBotAistart.getUserId();
+				String botId = productUserBotAistart.getBotId();
+				String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
+				Boolean isOK =  this.doBotTaskExecute(userId,botId,orderNo);
+				if(isOK){
+					int dailyNum = productUserBotAistart.getDailyNum()+1;
+					ProductUserBotAistart updateBot = new ProductUserBotAistart();
+					updateBot.setId(productUserBotAistart.getId());
+					updateBot.setDailyNum(dailyNum);
+					if(dailyNum >= 7){
+						updateBot.setAiStatus(3);
+					}
+					long dbResult = productUserBotAistartDao.update(updateBot);
+					if(ContactUtils.dbResult(dbResult)){
+						logger.error("无人机AI任务定时任务结果",dbResult);
+					}
+				}
+			}
+			return false;
+		} catch (Exception e) {
+			logger.error("无人机AI任务定时任务异常",e);
+			return false;
+		}
+	}
+
+	/**
+	 * 无人机统计清空任务定时任务
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean doBotCleanTaskJob() {
 		try {
 			long dbResult = productUserBotDao.updateCleantUserBotJob();
 			return ContactUtils.dbResult(dbResult);

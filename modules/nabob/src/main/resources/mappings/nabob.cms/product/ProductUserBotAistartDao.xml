@@ -11,5 +11,13 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+
+	<select id="getProductUserBotAistartList" parameterType="com.nabobsite.modules.nabob.cms.product.entity.ProductUserBotAistart">
+		SELECT
+			${sqlMap.column.toSql()}
+		FROM
+			${sqlMap.table.toSql()}
+		where
+			daily_num &lt;= 10 and ai_status !=3  AND now() BETWEEN start_date AND end_date
+	</select>
 </mapper>
