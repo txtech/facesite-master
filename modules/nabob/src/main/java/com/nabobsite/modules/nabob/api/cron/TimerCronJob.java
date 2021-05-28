@@ -5,9 +5,8 @@
  */
 package com.nabobsite.modules.nabob.api.cron;
 
-import com.alibaba.fastjson.JSONObject;
 import com.nabobsite.modules.nabob.api.service.ProductApiService;
-import com.nabobsite.modules.nabob.cms.product.dao.ProductUserBotDao;
+import com.nabobsite.modules.nabob.api.service.UserTaskApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +25,32 @@ public class TimerCronJob {
 
     @Autowired
     private ProductApiService productApiService;
+    @Autowired
+    private UserTaskApiService userTaskApiService;
 
     /**
      * @描述:定时更新（3分钟/次）
      */
     @Scheduled(cron = "0 */1 * * * ?")
-    public void autoSyncCallBackErrorOrder(){
+    public void autodoJob3(){
         try {
             logger.info("3分钟定时更新开始");
-            //Boolean isOK = productApiService.doBotTaskJob();
-            logger.info("3分钟定时更新结束");
+            Boolean isOK = userTaskApiService.doUserTaskJob();
+            logger.info("3分钟定时更新结束,{}",isOK);
+        } catch (Exception e) {
+            logger.error("定时更新结束异常", e);
+        }
+    }
+
+    /**
+     * @描述:定时更新（15分钟/次）
+     */
+    @Scheduled(cron = "0 */15 * * * ?")
+    public void autodoUserTaskJob(){
+        try {
+            logger.info("15分钟定时更新开始");
+            Boolean isOK = userTaskApiService.doUserTaskJob();
+            logger.info("15分钟定时更新结束,{}",isOK);
         } catch (Exception e) {
             logger.error("定时更新结束异常", e);
         }
@@ -45,11 +60,11 @@ public class TimerCronJob {
      * @描述:凌晨更新
      */
     @Scheduled(cron = "59 59 23 * * ?")
-    public void autoSubnoBalanceTotal(){
+    public void autodoBotTaskJob(){
         try {
             logger.info("凌晨更新定时更新开始");
             Boolean isOK = productApiService.doBotTaskJob();
-            logger.info("凌晨更新定时更新结束");
+            logger.info("凌晨更新定时更新结束,{}",isOK);
         } catch (Exception e) {
             logger.error("定时更新结束异常", e);
         }

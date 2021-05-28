@@ -12,6 +12,21 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 
+	<update id="updateCleantAccountTaskJob" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccountTask">
+		update
+			t1_user_account_task
+		<set>
+			task_initial_num = 990,
+			task_order_num = 0,
+			task_start_day = sysdate(),
+			task_end_day = date_add(now(), interval 48 hour),
+			task_finish_data = '{}'
+		</set>
+		<where>
+			task_status !=3 and task_end_day>= now()
+		</where>
+	</update>
+
 	<update id="updateUserAccountTask" parameterType="com.nabobsite.modules.nabob.cms.user.entity.UserAccountTask">
 		update
 			t1_user_account_task

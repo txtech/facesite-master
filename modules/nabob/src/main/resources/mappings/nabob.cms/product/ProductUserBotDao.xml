@@ -12,7 +12,7 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 
-	<update id="updateProductUserBotJob" parameterType="com.nabobsite.modules.nabob.cms.product.entity.ProductUserBot">
+	<update id="updateCleantUserBotJob" parameterType="com.nabobsite.modules.nabob.cms.product.entity.ProductUserBot">
 		update
 			t1_product_user_bot
 		<set>

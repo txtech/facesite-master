@@ -148,6 +148,21 @@ public class UserTaskApiService extends ProductApiService {
 	}
 
 	/**
+	 * 用户任务奖励
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public Boolean doUserTaskJob() {
+		try {
+			long dbResult = userAccountTaskDao.updateCleantAccountTaskJob();
+			return ContactUtils.dbResult(dbResult);
+		} catch (Exception e) {
+			logger.error("用户任务奖励异常",e);
+			return false;
+		}
+	}
+
+
+	/**
 	 * @desc 完成任务送奖励
 	 * @author nada
 	 * @create 2021/5/13 8:16 下午

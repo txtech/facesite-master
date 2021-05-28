@@ -15,5 +15,5 @@ import com.nabobsite.modules.nabob.cms.product.entity.ProductUserBot;
 @MyBatisDao
 public interface ProductUserBotDao extends CrudDao<ProductUserBot> {
 
-	long updateProductUserBotJob();
+	long updateCleantUserBotJob();
 }

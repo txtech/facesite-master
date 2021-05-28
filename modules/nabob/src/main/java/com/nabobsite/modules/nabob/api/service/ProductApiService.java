@@ -489,8 +489,8 @@ public class ProductApiService extends SimpleProductService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean doBotTaskJob() {
 		try {
-			productUserBotDao.updateProductUserBotJob();
-			return true;
+			long dbResult = productUserBotDao.updateCleantUserBotJob();
+			return ContactUtils.dbResult(dbResult);
 		} catch (Exception e) {
 			logger.error("无人机任务定时任务异常",e);
 			return false;
