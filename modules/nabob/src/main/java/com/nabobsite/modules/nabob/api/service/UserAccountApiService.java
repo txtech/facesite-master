@@ -85,7 +85,7 @@ public class UserAccountApiService extends SimpleUserService {
 				}
 				String userId = this.getUserIdByToken(token);
 				if(!ContactUtils.isOkUserId(userId)){
-					return ResultUtil.failed(I18nCode.CODE_10005);
+					return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 				}
 				TeamReward teamReward = this.getTeamReward(rewardId);
 				if(teamReward == null){
@@ -150,7 +150,7 @@ public class UserAccountApiService extends SimpleUserService {
 			synchronized (token){
 				UserAccount oldUserAccount = this.getUserAccountByToken(token);
 				if(oldUserAccount == null){
-					return ResultUtil.failed(I18nCode.CODE_10005);
+					return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 				}
 				BigDecimal claimableMoney = oldUserAccount.getClaimableMoney();
 				if(ContactUtils.isLesserOrEqualZero(claimableMoney)){
@@ -464,7 +464,7 @@ public class UserAccountApiService extends SimpleUserService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			UserAccount result = this.getUserAccountByUserId(userId);
 			return ResultUtil.success(result);
@@ -483,7 +483,7 @@ public class UserAccountApiService extends SimpleUserService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			if(ledgerType >0){
 				userAccountDetail.setLedgerType(ledgerType);

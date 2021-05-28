@@ -49,7 +49,7 @@ public class UserTaskApiService extends ProductApiService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			UserAccountTask oldUserAccountTask = this.getUserAccountTaskByUserId(userId);
 			if(oldUserAccountTask == null){
@@ -95,7 +95,7 @@ public class UserTaskApiService extends ProductApiService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			TaskInfo taskInfo = this.getTaskInfoById(taskId);
 			if(taskInfo == null){
@@ -220,7 +220,7 @@ public class UserTaskApiService extends ProductApiService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			taskUserReward.setUserId(userId);
 			List<TaskUserReward> userTaskRewardList = taskUserRewardDao.findList(taskUserReward);
@@ -334,7 +334,7 @@ public class UserTaskApiService extends ProductApiService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			UserAccountTask result = this.getUserAccountTaskByUserId(userId);
 			return ResultUtil.success(result);

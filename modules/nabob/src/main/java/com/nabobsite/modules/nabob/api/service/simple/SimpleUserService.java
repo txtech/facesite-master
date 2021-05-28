@@ -689,4 +689,12 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 		String secretKey = Global.getConfig("shiro.loginSubmit.secretKey");
 		return DesUtils.decode(passwordEntry, secretKey);
 	}
+
+	public String decodeCode(String imgCode) {
+		if(StringUtils.isAnyBlank(imgCode)){
+			return imgCode;
+		}
+		String secretKey = Global.getConfig("shiro.loginSubmit.smxSecretKey");
+		return  DesUtils.decode(imgCode, secretKey);
+	}
 }

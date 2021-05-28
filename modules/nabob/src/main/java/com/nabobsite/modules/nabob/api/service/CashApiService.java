@@ -62,7 +62,7 @@ public class CashApiService extends SimpleOrderService {
 			}
 			UserInfo userInfo  = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			String userId = userInfo.getId();
 			if(!ContactUtils.isOkUserId(userId)){

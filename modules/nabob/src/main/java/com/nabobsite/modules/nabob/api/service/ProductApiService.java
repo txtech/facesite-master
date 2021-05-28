@@ -50,7 +50,7 @@ public class ProductApiService extends SimpleProductService {
 		try {
 			UserInfo userInfo  = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			String userId = userInfo.getId();
 			int currentLevel = userInfo.getLevel();
@@ -108,7 +108,7 @@ public class ProductApiService extends SimpleProductService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			List<ProductUserWarehouse> productUserWarehouseList = this.getProductUserWarehouseListByUserId(userId);
 			if(productUserWarehouseList == null || productUserWarehouseList.isEmpty()){
@@ -152,7 +152,7 @@ public class ProductApiService extends SimpleProductService {
 			}
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			synchronized (userId) {
 				ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
@@ -193,7 +193,7 @@ public class ProductApiService extends SimpleProductService {
 			}
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			synchronized (userId) {
 				ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
@@ -386,7 +386,7 @@ public class ProductApiService extends SimpleProductService {
 			}
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo== null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			String userId = userInfo.getId();
 			ProductBot productBot = this.getProductBotById(botId);
@@ -490,7 +490,7 @@ public class ProductApiService extends SimpleProductService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			ProductUserBot result = this.getProductUserBotByUserAndId(userId,botId);
 			if(result ==  null){
@@ -563,7 +563,7 @@ public class ProductApiService extends SimpleProductService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			ProductUserWarehouse result = this.getProductUserWarehouseByUserIdAndId(userId,warehouseId);
 			return ResultUtil.success(result);
@@ -581,7 +581,7 @@ public class ProductApiService extends SimpleProductService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			UserAccountWarehouse result = this.getUserAccountWarehouseByUserId(userId);
 			return ResultUtil.success(result);
@@ -600,7 +600,7 @@ public class ProductApiService extends SimpleProductService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			userProductWarehouseLog.setUserId(userId);
 			userProductWarehouseLog.setType(type);
@@ -621,7 +621,7 @@ public class ProductApiService extends SimpleProductService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			userProductWarehouseRecord.setUserId(userId);
 			userProductWarehouseRecord.setWarehouseId(warehouseId);

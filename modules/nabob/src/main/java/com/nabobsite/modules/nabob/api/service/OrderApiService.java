@@ -55,7 +55,7 @@ public class OrderApiService extends SimpleOrderService {
 			}
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			SysChannel channel = this.getOneChannel();
 			if(channel == null){
@@ -98,7 +98,7 @@ public class OrderApiService extends SimpleOrderService {
 		try {
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			order.setUserId(userId);
 			List<OrderPay> result = orderPayDao.findList(order);
@@ -121,7 +121,7 @@ public class OrderApiService extends SimpleOrderService {
 			}
 			String userId  = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			OrderPay result = this.getOrderByOrderNo(orderNo);
 			return ResultUtil.success(result);

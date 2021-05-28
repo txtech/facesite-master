@@ -60,6 +60,14 @@ public class ResultUtil<T> {
     /**
      * 授权失败返回结果
      */
+    public static <T> CommonResult<T> failedAuthorization(String i18nCode) {
+        int code = ResultCode.ERROR_AUTHOR.getCode();
+        return new CommonResult<T>(code, i18nCode);
+    }
+
+    /**
+     * 授权失败返回结果
+     */
     public static <T> CommonResult<T> failedAuthorization(String i18nCode,String defaultValue) {
         int code = ResultCode.ERROR_AUTHOR.getCode();
         return new CommonResult<T>(code, i18nCode,defaultValue);

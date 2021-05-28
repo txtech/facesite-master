@@ -165,9 +165,19 @@ public class NabobTest {
 //        String password = DesUtils.encode("123456", secretKey);
 //        System.out.println("&username=" + username + "&password=" + password);
 
-        String secretKey = "NabobBase64";
-        String username1 = DesUtils.decode("424A6C6BCB75439B5206D0A6F88A90C1", secretKey);
-        String password2 = DesUtils.decode("BC7CE71528D97E942E10D117E6EAFFCC", secretKey);
-        System.out.println("&username=" + username1 + "&password=" + password2);
+        String secretKey = "Base64";
+        String username1 = DesUtils.decode("MTIzNDU2Nzg", secretKey);
+        System.out.println(username1);
+    }
+
+
+    @Test
+    public void testEntryCode(){
+        String secretKey = "NabobSms&34sd*s";
+        String encode = DesUtils.encode("1234", secretKey);
+        System.out.println(encode);
+
+        String decode = DesUtils.decode("9A13E3901EEE7EA0", secretKey);
+        System.out.println(decode);
     }
 }

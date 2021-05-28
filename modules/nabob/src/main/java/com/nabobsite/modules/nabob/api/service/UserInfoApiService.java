@@ -106,7 +106,7 @@ public class UserInfoApiService extends SimpleUserService {
 			}
 			UserInfo oldUserInfo = this.getUserInfoByToken(token);
 			if(oldUserInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			if (oldPassword.equalsIgnoreCase(newPassword)) {
 				return ResultUtil.failed(I18nCode.CODE_10012);
@@ -159,22 +159,18 @@ public class UserInfoApiService extends SimpleUserService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<JSONObject> login(UserInfo userInfo) {
 		try {
-			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10007);
-			}
 			String loginIp = userInfo.getLoginIp();
 			String accountNo = userInfo.getAccountNo();
-			String password = this.decodePwd(userInfo.getPassword());
 			String imgCodeKey = userInfo.getCodeKey();
 			String imgCode = userInfo.getImgCode();
-			if(StringUtils.isAnyBlank(accountNo,password)){
+			String password = this.decodePwd(userInfo.getPassword());
+			if(StringUtils.isAnyBlank(accountNo,password,imgCode)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			if(StringUtils.isNotEmpty(imgCode)){
-				Boolean isOk = smsCodeApiService.verifImgRandomCode(imgCodeKey,imgCode);
-				if(!isOk){
-					return ResultUtil.failed(I18nCode.CODE_10010);
-				}
+			imgCode = this.decodeCode(imgCode);
+			Boolean isOk = smsCodeApiService.verifImgRandomCode(imgCodeKey,imgCode);
+			if(!isOk){
+				return ResultUtil.failed(I18nCode.CODE_10010);
 			}
 			UserInfo loginUserInfo = this.getUserInfoByAccountNo(accountNo);
 			if(loginUserInfo == null){
@@ -333,7 +329,7 @@ public class UserInfoApiService extends SimpleUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			String registerUrl = "param_parent="+ userInfo.getInviteSecret();
 			JSONObject result = new JSONObject();
@@ -354,7 +350,7 @@ public class UserInfoApiService extends SimpleUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			return ResultUtil.success(userInfo);
 		} catch (Exception e) {
@@ -392,7 +388,7 @@ public class UserInfoApiService extends SimpleUserService {
 		try {
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo == null){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			TeamUser parms = new TeamUser();
 			parms.setUserId(userInfo.getId());
@@ -413,7 +409,7 @@ public class UserInfoApiService extends SimpleUserService {
 		try {
 			String userId = this.getUserIdByToken(token);
 			if(!ContactUtils.isOkUserId(userId)){
-				return ResultUtil.failed(I18nCode.CODE_10005);
+				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
 			int validNum = 0;
 			TeamUser teamUser = this.getTeamUserByUserId(userId);
