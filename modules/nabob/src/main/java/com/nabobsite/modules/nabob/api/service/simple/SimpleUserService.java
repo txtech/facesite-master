@@ -26,10 +26,7 @@ import com.nabobsite.modules.nabob.cms.team.entity.TeamReward;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUser;
 import com.nabobsite.modules.nabob.cms.team.entity.TeamUserReward;
 import com.nabobsite.modules.nabob.cms.user.dao.*;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
-import com.nabobsite.modules.nabob.cms.user.entity.UserAccountTask;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
-import com.nabobsite.modules.nabob.cms.user.entity.UserInfoMembership;
+import com.nabobsite.modules.nabob.cms.user.entity.*;
 import com.nabobsite.modules.nabob.config.RedisOpsUtil;
 import com.nabobsite.modules.nabob.utils.HiDesUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,13 +47,13 @@ import java.util.List;
 @Service
 public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 	@Autowired
-	public RedisOpsUtil redisOpsUtil;
-	@Autowired
-	public SequenceCodeDao sequenceCodeDao;
-	@Autowired
 	public SysConfigDao sysConfigDao;
 	@Autowired
 	public SysNoticeDao sysNoticeDao;
+	@Autowired
+	public RedisOpsUtil redisOpsUtil;
+	@Autowired
+	public SequenceCodeDao sequenceCodeDao;
 	@Autowired
 	public UserProfitDetailDao userProfitDetailDao;
 
@@ -523,13 +520,32 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 				return null;
 			}
 			TeamUser teamUser = new TeamUser();
-			teamUser.setId(userId);
+			teamUser.setUserId(userId);
 			return teamUserDao.get(teamUser);
 		} catch (Exception e) {
 			logger.error("获取用户团队个数异常",e);
 			return null;
 		}
 	}
+	/**
+	 * 获取团队用户信息
+	 * @param userId
+	 * @return
+	 */
+	public UserAccountWarehouse getUserAccountWarehouseByUserId(String userId){
+		try {
+			if(!ContactUtils.isOkUserId(userId)){
+				return null;
+			}
+			UserAccountWarehouse userAccountWarehouse = new UserAccountWarehouse();
+			userAccountWarehouse.setUserId(userId);
+			return userAccountWarehouseDao.get(userAccountWarehouse);
+		} catch (Exception e) {
+			logger.error("获取用户团队个数异常",e);
+			return null;
+		}
+	}
+
 	/**
 	 * @desc 团队直推有效个数
 	 * @author nada

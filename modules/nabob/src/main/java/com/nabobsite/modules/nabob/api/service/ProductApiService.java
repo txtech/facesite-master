@@ -163,6 +163,14 @@ public class ProductApiService extends SimpleProductService {
 				if(ContactUtils.isLesser(money,limitPrice)){
 					return ResultUtil.failed(I18nCode.CODE_10100);
 				}
+				UserAccountWarehouse userAccountWarehouse = this.getUserAccountWarehouseByUserId(userId);
+				if(userAccountWarehouse == null){
+					return ResultUtil.failed(I18nCode.CODE_10100);
+				}
+				BigDecimal asstesHeldMoney = userAccountWarehouse.getAsstesHeldMoney();
+				if(ContactUtils.isLesser(asstesHeldMoney,money)){
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
 				Boolean isOk = this.doWarehouseDepositAndWithdraw(userId,warehouseId,money,ContactUtils.WAREHOUSE_RECORD_TYPE_2);
 				if(isOk){
 					return ResultUtil.success(true);
@@ -314,7 +322,7 @@ public class ProductApiService extends SimpleProductService {
 				Boolean isOk = userAccountApiService.updateAccountWarehouseMoney(userId,incomeMoney,warehouseId,title);
 				if(isOk){
 					triggerApiService.warehouseIncomeTrigger(userId,incomeMoney);
-					return false;
+					return true;
 				}
 				return false;
 			}
