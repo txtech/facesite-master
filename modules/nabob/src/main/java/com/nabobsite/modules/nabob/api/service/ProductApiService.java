@@ -36,9 +36,9 @@ import java.util.List;
 public class ProductApiService extends SimpleProductService {
 
 	@Autowired
-	protected UserAccountApiService userAccountApiService;
-	@Autowired
 	protected TriggerApiService triggerApiService;
+	@Autowired
+	protected UserAccountApiService userAccountApiService;
 
 	/**
 	 * @desc 无人机AI任务
