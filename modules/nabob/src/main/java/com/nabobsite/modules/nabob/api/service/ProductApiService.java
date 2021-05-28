@@ -183,8 +183,8 @@ public class ProductApiService extends SimpleProductService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public CommonResult<Boolean> doWarehouseDeposit(String token,ProductUserWarehouseRecord productUserWarehouseRecord) {
 		try {
-			String warehouseId = productUserWarehouseRecord.getWarehouseId();
 			BigDecimal money = productUserWarehouseRecord.getMoney();
+			String warehouseId = productUserWarehouseRecord.getWarehouseId();
 			if(StringUtils.isAnyEmpty(warehouseId)){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
@@ -195,6 +195,10 @@ public class ProductApiService extends SimpleProductService {
 			if(!ContactUtils.isOkUserId(userId)){
 				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
 			}
+			UserAccount userAccount = this.getUserAccountByUserId(userId);
+			if(userAccount == null){
+				return ResultUtil.failed(I18nCode.CODE_10006);
+			}
 			synchronized (userId) {
 				ProductWarehouse productWarehouse = this.getProductWarehouseById(warehouseId);
 				if(productWarehouse == null){
@@ -204,7 +208,10 @@ public class ProductApiService extends SimpleProductService {
 				if(ContactUtils.isLesser(money,limitPrice)){
 					return ResultUtil.failed(I18nCode.CODE_10100);
 				}
-
+				BigDecimal availableMoney = userAccount.getAvailableMoney();
+				if(ContactUtils.isLesser(money,availableMoney)){
+					return ResultUtil.failed(I18nCode.CODE_10104);
+				}
 				ProductUserWarehouse productUserWarehouse = this.getProductUserWarehouseByUserIdAndId(userId,warehouseId);
 				if(productUserWarehouse == null){
 					productUserWarehouse = InstanceUtils.initProductUserWarehouse(userId,warehouseId,new BigDecimal("0"));
@@ -353,15 +360,22 @@ public class ProductApiService extends SimpleProductService {
 			}
 
 			//更新仓库账户 类型 1:存款 2:撤资
+			String title = "云仓库操作";
 			UserAccountWarehouse userAccountWarehouse = new UserAccountWarehouse();
 			userAccountWarehouse.setUserId(userId);
 			if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
+				title = "云仓库存款";
 				userAccountWarehouse.setAsstesHeldMoney(money); //仓库持有资产
 			}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
+				title = "云仓库撤资";
 				userAccountWarehouse.setAsstesHeldMoney(money.negate());//仓库持有资产
 			}
 			dbResult = userAccountWarehouseDao.updateAccountWarehouse(userAccountWarehouse);
 			if(!ContactUtils.dbResult(dbResult)){
+				return false;
+			}
+			Boolean isOk = userAccountApiService.updateAccountWarehouse(userId,type,money,warehouseId,title);
+			if(!isOk){
 				return false;
 			}
 			return true;

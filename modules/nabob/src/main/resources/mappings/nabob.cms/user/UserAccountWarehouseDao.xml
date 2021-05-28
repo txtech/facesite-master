@@ -45,9 +45,6 @@
 					when personal_income_money &gt; abs(#{personalIncomeMoney})  then personal_income_money + #{personalIncomeMoney}
 				end,
 			</if>
-			<if test="aiAssetsMoney != null and aiAssetsMoney !=0">
-				ai_assets_money = ai_assets_money + #{aiAssetsMoney},
-			</if>
 			<if test="personalAccumulativeIncomeMoney != null and personalAccumulativeIncomeMoney !=0">
 				personal_accumulative_income_money = personal_accumulative_income_money + #{personalAccumulativeIncomeMoney},
 			</if>
@@ -80,9 +77,6 @@
 			</if>
 			<if test="teamIncomeMoney != null and teamIncomeMoney !=0">
 				(team_income_money + #{teamIncomeMoney}) >=0 and
-			</if>
-			<if test="aiAssetsMoney != null and aiAssetsMoney !=0">
-				(ai_assets_money + #{aiAssetsMoney}) >=0 and
 			</if>
 			<if test="teamAccumulativeIncomeMoney != null and teamAccumulativeIncomeMoney !=0">
 				(team_accumulative_income_money + #{teamAccumulativeIncomeMoney}) >=0 and

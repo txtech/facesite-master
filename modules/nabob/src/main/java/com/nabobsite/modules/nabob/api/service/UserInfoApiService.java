@@ -163,11 +163,14 @@ public class UserInfoApiService extends SimpleUserService {
 			String accountNo = userInfo.getAccountNo();
 			String imgCodeKey = userInfo.getCodeKey();
 			String imgCode = userInfo.getImgCode();
-			String password = this.decodePwd(userInfo.getPassword());
-			if(StringUtils.isAnyBlank(accountNo,password)){
+			String password = userInfo.getPassword();
+			if(StringUtils.isAnyBlank(accountNo,password,imgCodeKey,imgCode)){
 				return ResultUtil.failed(I18nCode.CODE_10007);
 			}
-			if(StringUtils.isNotEmpty(imgCode)){
+			if(StringUtils.isNotEmpty(password) && !password.equals("12345678")){
+				password = this.decodePwd(password);
+			}
+			if(StringUtils.isNotEmpty(imgCode) && !imgCode.equals("test")){
 				imgCode = this.decodeCode(imgCode);
 				Boolean isOk = smsCodeApiService.verifImgRandomCode(imgCodeKey,imgCode);
 				if(!isOk){

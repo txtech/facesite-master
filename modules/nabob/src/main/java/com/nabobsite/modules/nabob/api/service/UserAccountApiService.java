@@ -36,6 +36,46 @@ import java.util.List;
 public class UserAccountApiService extends SimpleUserService {
 
 	/**
+	 * @desc 云仓库定投和撤资
+	 * @author nada
+	 * @create 2021/5/11 2:55 下午
+	 */
+	@Transactional (readOnly = false, rollbackFor = Exception.class)
+	public boolean updateAccountWarehouse(String userId,int type, BigDecimal updateMoney,String uniqueId,String title) {
+		try {
+			synchronized (userId){
+				UserAccountDetail userAccountDetail = InstanceUtils.initUserAccountDetail(userId,ContactUtils.USER_ACCOUNT_DETAIL_TYPE_30,uniqueId,title);
+				if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
+					userAccountDetail.setAvailableMoney(updateMoney.negate());
+				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
+					userAccountDetail.setAvailableMoney(updateMoney);
+				}
+				Boolean isPrepareOk = this.prepareUpdateAccount(title,updateMoney,userAccountDetail);
+				if(!isPrepareOk){
+					logger.error("云仓库定投和撤资失败,记录明细失败:{},{}",userId,updateMoney);
+					return false;
+				}
+				UserAccount userAccount = new UserAccount();
+				userAccount.setUserId(userId);
+				if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_1){
+					userAccount.setAvailableMoney(updateMoney.negate());
+				}else if(type == ContactUtils.WAREHOUSE_RECORD_TYPE_2){
+					userAccount.setAvailableMoney(updateMoney);
+				}
+				long dbResult = userAccountDao.updateAccountMoney(userAccount);
+				if(!ContactUtils.dbResult(dbResult)){
+					logger.error("云仓库定投和撤资失败,修改账户失败:{},{}",userId,updateMoney);
+					return false;
+				}
+				return true;
+			}
+		} catch (Exception e) {
+			logger.error("云仓库定投和撤资异常,{}",userId,e);
+			return false;
+		}
+	}
+
+	/**
 	 * @desc 修改AI智能任务到账户
 	 * @author nada
 	 * @create 2021/5/11 2:55 下午

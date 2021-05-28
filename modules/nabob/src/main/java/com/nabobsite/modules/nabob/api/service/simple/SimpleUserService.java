@@ -687,7 +687,11 @@ public class SimpleUserService extends CrudService<UserInfoDao, UserInfo> {
 			return passwordEntry;
 		}
 		String secretKey = Global.getConfig("shiro.loginSubmit.secretKey");
-		return DesUtils.decode(passwordEntry, secretKey);
+		String pwd = DesUtils.decode(passwordEntry, secretKey);
+		if(StringUtils.isEmpty(pwd)){
+			return passwordEntry;
+		}
+		return pwd;
 	}
 
 	public String decodeCode(String imgCode) {
