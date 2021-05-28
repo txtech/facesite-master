@@ -270,6 +270,9 @@ public class ProductApiService extends SimpleProductService {
 					return false;
 				}
 			}
+			if(ContactUtils.isLesserOrEqualZero(incomeMoney)){
+				return true;
+			}
 
 			ProductUserWarehouse updateWarehouse = new ProductUserWarehouse();
 			updateWarehouse.setUserId(userId);
