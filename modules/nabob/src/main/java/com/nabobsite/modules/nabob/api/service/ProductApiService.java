@@ -435,13 +435,22 @@ public class ProductApiService extends SimpleProductService {
 				if(checkUserProductBotLog!=null){
 					return ResultUtil.failed(I18nCode.CODE_10008);
 				}
+				ProductUserBot oldUserProductBot =	this.getProductUserBotByUserAndId(userId,botId);
+				if(oldUserProductBot != null){
+					int doTaskNum = oldUserProductBot.getTodayOrders();
+					if(doTaskNum > dailyNum){
+						return ResultUtil.failed(I18nCode.CODE_10102);
+					}
+				}
 				userProductBotLog.setUserId(userId);
+				userProductBotLog.setOrderAmount(mustPrice);
+				userProductBotLog.setIncomeMoney(commissionMoney);
+				userProductBotLog.setIncomeRate(commissionRate);
 				long dbResult = userProductBotLogDao.insert(userProductBotLog);
 				if(!ContactUtils.dbResult(dbResult)){
 					logger.error("无人机刷单记录失败:{},{},{},{}",userId,orderNo,userId,botId);
 					return ResultUtil.failed(I18nCode.CODE_10004);
 				}
-				ProductUserBot oldUserProductBot =	this.getProductUserBotByUserAndId(userId,botId);
 				if(oldUserProductBot == null){
 					ProductUserBot userProductBot = InstanceUtils.initProductUserBot(userProductBotLog);
 					dbResult = productUserBotDao.insert(userProductBot);
@@ -450,10 +459,6 @@ public class ProductApiService extends SimpleProductService {
 						return ResultUtil.failed(I18nCode.CODE_10004);
 					}
 				}else{
-					int doTaskNum = oldUserProductBot.getTodayOrders();
-					if(doTaskNum > dailyNum){
-						return ResultUtil.failed(I18nCode.CODE_10102);
-					}
 					BigDecimal todayIncomeMoney = ContactUtils.add(oldUserProductBot.getTodayIncomeMoney(),commissionMoney);
 					ProductUserBot userProductBot = new ProductUserBot();
 					userProductBot.setId(oldUserProductBot.getId());

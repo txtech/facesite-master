@@ -18,6 +18,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,6 +57,7 @@ public class I18nInterceptor implements HandlerInterceptor {
             }
             if(StringUtils.isEmpty(token) && !isOpenApi){
                 logger.error("请求被拦截，获取授权信息为空:{},{},{}",token,ip,reqUrl);
+                this.getHeders(request);
                 CommonResult<JSONObject> result = ResultUtil.failedAuthorization(I18nCode.CODE_10001,"Failed to request,User not authorized");
                 this.writeResponse(response,result);
                 return false;
@@ -138,6 +140,15 @@ public class I18nInterceptor implements HandlerInterceptor {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void getHeders(HttpServletRequest request){
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while(headerNames.hasMoreElements()) {
+            String nextElement = headerNames.nextElement();
+            String header2 = request.getHeader(nextElement);
+            System.out.println(nextElement+":"+header2);
         }
     }
 }
