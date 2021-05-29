@@ -14,7 +14,7 @@
 	<name>JeeSite aurora web</name>
 
 	<properties>
-		<finalName>aurora</finalName>
+		<finalName>auroracms</finalName>
 		<start-class>com.jeesite.modules.Application</start-class>
 		<!--<eclipse-plugin-download-sources>false</eclipse-plugin-download-sources>
 		<eclipse-plugin-download-javadocs>false</eclipse-plugin-download-javadocs>-->

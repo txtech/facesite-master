@@ -1,6 +1,6 @@
 #======================================#
 #Project settings
-productName: Aurora
+productName: Aurora CMS
 companyName: nada
 productVersion: V4.2
 copyrightYear: 2021
@@ -11,7 +11,7 @@ demoMode: false
 server:
   port: 9999
   servlet:
-    context-path: /aurora
+    context-path: /auroracms
   tomcat:
     uri-encoding: UTF-8
   #将请求协议转换为 https
