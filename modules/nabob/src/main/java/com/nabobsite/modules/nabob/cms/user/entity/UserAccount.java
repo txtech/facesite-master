@@ -42,8 +42,11 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 	},
 	joinTable={
 			@JoinTable(type=Type.LEFT_JOIN, entity=UserAccountWarehouse.class, alias="g",
-					on="g.user_id = a.user_id", attrName="userAccountWarehouse",
+					on="a.user_id = g.user_id", attrName="userAccountWarehouse",
 					columns={@Column(includeEntity=UserAccountWarehouse.class)}),
+			@JoinTable(type=Type.LEFT_JOIN, entity=UserInfo.class, alias="b",
+					on="a.user_id = b.id", attrName="userInfo",
+					columns={@Column(includeEntity=UserInfo.class)}),
 	},
 	orderBy="a.id DESC"
 )
@@ -63,6 +66,7 @@ public class UserAccount extends DataEntity<UserAccount> {
 	private BigDecimal rechargeMoney;		// 充值资金
 	private UserAccountWarehouse userAccountWarehouse;
 	private BigDecimal aiAssetsMoney;		// 云资产
+	private UserInfo userInfo;
 
 	public UserAccount() {
 		this(null);
@@ -189,4 +193,11 @@ public class UserAccount extends DataEntity<UserAccount> {
 		this.aiAssetsMoney = aiAssetsMoney;
 	}
 
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
 }

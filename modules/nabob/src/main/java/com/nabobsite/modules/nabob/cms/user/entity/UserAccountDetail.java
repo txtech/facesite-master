@@ -43,7 +43,13 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="ledger_type", attrName="ledgerType", label="收入支出"),
 		@Column(name="recharge_money", attrName="rechargeMoney", label="充值资金"),
 		@Column(name="ai_assets_money", attrName="aiAssetsMoney", label="云资产"),
-	}, orderBy="a.id DESC"
+	},
+	joinTable={
+			@JoinTable(type=Type.LEFT_JOIN, entity=UserInfo.class, alias="b",
+					on="a.user_id = b.id", attrName="userInfo",
+					columns={@Column(includeEntity=UserInfo.class)}),
+	},
+	orderBy="a.id DESC"
 )
 public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	
@@ -64,7 +70,8 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 	private Integer ledgerType;		// 收入支出
 	private BigDecimal rechargeMoney;		// 充值资金
 	private BigDecimal aiAssetsMoney;		// 云资产
-	
+	private UserInfo userInfo;
+
 	public UserAccountDetail() {
 		this(null);
 	}
@@ -221,4 +228,11 @@ public class UserAccountDetail extends DataEntity<UserAccountDetail> {
 		this.aiAssetsMoney = aiAssetsMoney;
 	}
 
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
 }

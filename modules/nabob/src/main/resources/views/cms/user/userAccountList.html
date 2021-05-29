@@ -17,93 +17,15 @@
 			<#form:form id="searchForm" model="${userAccount}" action="${ctx}/user/userAccount/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('用户id')}：</label>
+					<label class="control-label">${text('用户名称')}：</label>
 					<div class="control-inline">
-						<#form:input path="userId" maxlength="30" class="form-control width-120"/>
+						<#form:input path="userInfo.accountNo" maxlength="30" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('账户状态 1')}：</label>
-					<div class="control-inline">
-						<#form:input path="accountStatus" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('总资金')}：</label>
-					<div class="control-inline">
-						<#form:input path="totalMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('可用资金')}：</label>
-					<div class="control-inline">
-						<#form:input path="availableMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('仓库资金')}：</label>
-					<div class="control-inline">
-						<#form:input path="warehouseMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('收入资金')}：</label>
-					<div class="control-inline">
-						<#form:input path="incomeMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('云资产')}：</label>
-					<div class="control-inline">
-						<#form:input path="aiAssetsMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('佣金账户')}：</label>
-					<div class="control-inline">
-						<#form:input path="commissionMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('增值账户')}：</label>
-					<div class="control-inline">
-						<#form:input path="incrementMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('可提取账户')}：</label>
-					<div class="control-inline">
-						<#form:input path="claimableMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('奖励账户')}：</label>
-					<div class="control-inline">
-						<#form:input path="rewardMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('团队收益')}：</label>
-					<div class="control-inline">
-						<#form:input path="teamMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('一级团队收益')}：</label>
-					<div class="control-inline">
-						<#form:input path="team1Money" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('二级团队收益')}：</label>
-					<div class="control-inline">
-						<#form:input path="team2Money" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('三级团队收益')}：</label>
-					<div class="control-inline">
-						<#form:input path="team3Money" class="form-control width-120"/>
+					<label class="control-label">${text('账户状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="accountStatus" dictType="aurora_user_status" blankOption="true" class="form-control isQuick"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -111,31 +33,6 @@
 					<div class="control-inline">
 						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('更新时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('备注信息')}：</label>
-					<div class="control-inline">
-						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('删除标志')}：</label>
-					<div class="control-inline">
-						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('充值资金')}：</label>
-					<div class="control-inline">
-						<#form:input path="rechargeMoney" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -154,28 +51,23 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("用户id")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+		{header:'${text("用户名称")}', name:'userInfo.accountNo', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/user/userAccount/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户账户")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("账户状态 1")}', name:'accountStatus', index:'a.account_status', width:150, align:"center"},
+		{header:'${text("账户状态")}', name:'accountStatus', index:'a.account_status', width:150, align:"center", formatter: function(val, obj, row, act){
+				return js.getDictLabel(${@DictUtils.getDictListJson('aurora_user_status')}, val, '${text("未知")}', true);
+		}},
 		{header:'${text("总资金")}', name:'totalMoney', index:'a.total_money', width:150, align:"left"},
 		{header:'${text("可用资金")}', name:'availableMoney', index:'a.available_money', width:150, align:"left"},
-		{header:'${text("仓库资金")}', name:'warehouseMoney', index:'a.warehouse_money', width:150, align:"left"},
-		{header:'${text("收入资金")}', name:'incomeMoney', index:'a.income_money', width:150, align:"left"},
-		{header:'${text("云资产")}', name:'aiAssetsMoney', index:'a.ai_assets_money', width:150, align:"left"},
+		{header:'${text("充值资金")}', name:'rechargeMoney', index:'a.recharge_money', width:150, align:"left"},
+		{header:'${text("仓库资金")}', name:'userAccountWarehouse.warehouseMoney', index:'a.warehouse_money', width:150, align:"left"},
+		{header:'${text("动态收益")}', name:'userAccountWarehouse.incomeMoney', index:'a.income_money', width:150, align:"left"},
+		{header:'${text("云资产")}', name:'userAccountWarehouse.aiAssetsMoney', index:'a.ai_assets_money', width:150, align:"left"},
 		{header:'${text("佣金账户")}', name:'commissionMoney', index:'a.commission_money', width:150, align:"left"},
 		{header:'${text("增值账户")}', name:'incrementMoney', index:'a.increment_money', width:150, align:"left"},
 		{header:'${text("可提取账户")}', name:'claimableMoney', index:'a.claimable_money', width:150, align:"left"},
 		{header:'${text("奖励账户")}', name:'rewardMoney', index:'a.reward_money', width:150, align:"left"},
-		{header:'${text("团队收益")}', name:'teamMoney', index:'a.team_money', width:150, align:"left"},
-		{header:'${text("一级团队收益")}', name:'team1Money', index:'a.team1_money', width:150, align:"left"},
-		{header:'${text("二级团队收益")}', name:'team2Money', index:'a.team2_money', width:150, align:"left"},
-		{header:'${text("三级团队收益")}', name:'team3Money', index:'a.team3_money', width:150, align:"left"},
-		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
-		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
-		{header:'${text("充值资金")}', name:'rechargeMoney', index:'a.recharge_money', width:150, align:"left"},
+		{header:'${text("创建时间")}', name:'created', index:'a.created', width:250, align:"center"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('user:userAccount:edit')){ %>
