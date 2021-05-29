@@ -41,7 +41,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="team_deposit_money", attrName="teamDepositMoney", label="团队总投资"),
-	}, orderBy="a.id DESC"
+	},
+		extWhereKeys="dsfOffice",
+		orderBy="a.id DESC"
 )
 public class TeamUser extends DataEntity<TeamUser> {
 	

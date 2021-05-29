@@ -6,6 +6,7 @@ package com.nabobsite.modules.nabob.cms.product.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nabobsite.modules.nabob.cms.base.BaseDataScopeFilter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,9 @@ public class ProductUserBotAistartController extends BaseController {
 
 	@Autowired
 	private ProductUserBotAistartService productUserBotAistartService;
-	
+	@Autowired
+	private BaseDataScopeFilter baseDataScopeFilter;
+
 	/**
 	 * 获取数据
 	 */
@@ -60,6 +63,8 @@ public class ProductUserBotAistartController extends BaseController {
 	@ResponseBody
 	public Page<ProductUserBotAistart> listData(ProductUserBotAistart productUserBotAistart, HttpServletRequest request, HttpServletResponse response) {
 		productUserBotAistart.setPage(new Page<>(request, response));
+		// 调用数据权限过滤方法（重点）
+		baseDataScopeFilter.addDataScopeFilter(productUserBotAistart);
 		Page<ProductUserBotAistart> page = productUserBotAistartService.findPage(productUserBotAistart);
 		return page;
 	}

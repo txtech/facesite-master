@@ -44,6 +44,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="ai_status", attrName="aiStatus", label="ai状态 1", comment="ai状态 1:已经启动 2:已结束"),
 	},
+		extWhereKeys="dsfOffice",
 		joinTable={
 				@JoinTable(type=Type.LEFT_JOIN, entity= UserInfo.class, alias="b",
 						on="a.user_id = b.id", attrName="userInfo",

@@ -6,6 +6,7 @@ package com.nabobsite.modules.nabob.cms.order.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nabobsite.modules.nabob.cms.base.BaseDataScopeFilter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,8 @@ public class OrderCashController extends BaseController {
 
 	@Autowired
 	private OrderCashService orderCashService;
+	@Autowired
+	private BaseDataScopeFilter baseDataScopeFilter;
 	
 	/**
 	 * 获取数据
@@ -60,6 +63,8 @@ public class OrderCashController extends BaseController {
 	@ResponseBody
 	public Page<OrderCash> listData(OrderCash orderCash, HttpServletRequest request, HttpServletResponse response) {
 		orderCash.setPage(new Page<>(request, response));
+		// 调用数据权限过滤方法（重点）
+		baseDataScopeFilter.addDataScopeFilter(orderCash);
 		Page<OrderCash> page = orderCashService.findPage(orderCash);
 		return page;
 	}

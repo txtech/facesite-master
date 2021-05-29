@@ -6,6 +6,7 @@ package com.nabobsite.modules.nabob.cms.team.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nabobsite.modules.nabob.cms.base.BaseDataScopeFilter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,9 @@ public class TeamUserRewardController extends BaseController {
 
 	@Autowired
 	private TeamUserRewardService teamUserRewardService;
-	
+	@Autowired
+	private BaseDataScopeFilter baseDataScopeFilter;
+
 	/**
 	 * 获取数据
 	 */
@@ -60,6 +63,8 @@ public class TeamUserRewardController extends BaseController {
 	@ResponseBody
 	public Page<TeamUserReward> listData(TeamUserReward teamUserReward, HttpServletRequest request, HttpServletResponse response) {
 		teamUserReward.setPage(new Page<>(request, response));
+		// 调用数据权限过滤方法（重点）
+		baseDataScopeFilter.addDataScopeFilter(teamUserReward);
 		Page<TeamUserReward> page = teamUserRewardService.findPage(teamUserReward);
 		return page;
 	}

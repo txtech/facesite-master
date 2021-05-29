@@ -40,6 +40,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 	},
+		extWhereKeys="dsfOffice",
 		joinTable={
 				@JoinTable(type=Type.LEFT_JOIN, entity= UserInfo.class, alias="b",
 						on="a.user_id = b.id", attrName="userInfo",

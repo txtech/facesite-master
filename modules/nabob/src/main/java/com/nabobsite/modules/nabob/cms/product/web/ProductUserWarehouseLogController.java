@@ -6,6 +6,7 @@ package com.nabobsite.modules.nabob.cms.product.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nabobsite.modules.nabob.cms.base.BaseDataScopeFilter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,9 @@ public class ProductUserWarehouseLogController extends BaseController {
 
 	@Autowired
 	private ProductUserWarehouseLogService productUserWarehouseLogService;
-	
+	@Autowired
+	private BaseDataScopeFilter baseDataScopeFilter;
+
 	/**
 	 * 获取数据
 	 */
@@ -60,6 +63,8 @@ public class ProductUserWarehouseLogController extends BaseController {
 	@ResponseBody
 	public Page<ProductUserWarehouseLog> listData(ProductUserWarehouseLog productUserWarehouseLog, HttpServletRequest request, HttpServletResponse response) {
 		productUserWarehouseLog.setPage(new Page<>(request, response));
+		// 调用数据权限过滤方法（重点）
+		baseDataScopeFilter.addDataScopeFilter(productUserWarehouseLog);
 		Page<ProductUserWarehouseLog> page = productUserWarehouseLogService.findPage(productUserWarehouseLog);
 		return page;
 	}

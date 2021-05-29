@@ -6,6 +6,7 @@ package com.nabobsite.modules.nabob.cms.product.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nabobsite.modules.nabob.cms.base.BaseDataScopeFilter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,8 @@ public class ProductWarehouseController extends BaseController {
 
 	@Autowired
 	private ProductWarehouseService productWarehouseService;
-	
+
+
 	/**
 	 * 获取数据
 	 */
