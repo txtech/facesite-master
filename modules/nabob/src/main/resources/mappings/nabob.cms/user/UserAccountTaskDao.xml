@@ -23,7 +23,7 @@
 			task_finish_data = '{}'
 		</set>
 		<where>
-			task_status !=3 and task_end_day &lt; now()
+			task_status =1 and task_end_day &lt; now()
 		</where>
 	</update>
 

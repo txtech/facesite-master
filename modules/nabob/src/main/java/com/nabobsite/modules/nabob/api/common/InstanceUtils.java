@@ -42,22 +42,21 @@ public class InstanceUtils {
             userInfo.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().getBytes()));
             userInfo.setLock(ContactUtils.USER_LOCK_1);
             userInfo.setUserStatus(ContactUtils.USER_STATUS_1);
-            if(StringUtils.isEmpty(userInfo.getParentSysId())){
+            if(!ContactUtils.isOkUserId(userInfo.getParentSysId())){
                 userInfo.setParentSysId("0");
             }
-            if(StringUtils.isEmpty(userInfo.getParent1UserId())){
+            if(!ContactUtils.isOkUserId(userInfo.getParent1UserId())){
                 userInfo.setParent1UserId("0");
             }
-            if(StringUtils.isEmpty(userInfo.getParent2UserId())){
+            if(!ContactUtils.isOkUserId(userInfo.getParent2UserId())){
                 userInfo.setParent2UserId("0");
             }
-            if(StringUtils.isEmpty(userInfo.getParent3UserId())){
+            if(!ContactUtils.isOkUserId(userInfo.getParent3UserId())){
                 userInfo.setParent3UserId("0");
             }
             return userInfo;
         }
     }
-
 
     /**
      * @desc 初始化用户账户
@@ -69,13 +68,13 @@ public class InstanceUtils {
             UserAccount userAccount = new UserAccount();
             userAccount.setIsNewRecord(true);
             userAccount.setUserId(userId);
-            userAccount.setTotalMoney(new BigDecimal("0"));
-            userAccount.setAvailableMoney(new BigDecimal("0"));
-            userAccount.setIncrementMoney(new BigDecimal("0"));
-            userAccount.setCommissionMoney(new BigDecimal("0"));
-            userAccount.setClaimableMoney(new BigDecimal("0"));
-            userAccount.setRechargeMoney(new BigDecimal("0"));
-            userAccount.setAiAssetsMoney(new BigDecimal("0"));
+            userAccount.setTotalMoney(ContactUtils.ZERO);
+            userAccount.setAvailableMoney(ContactUtils.ZERO);
+            userAccount.setIncrementMoney(ContactUtils.ZERO);
+            userAccount.setCommissionMoney(ContactUtils.ZERO);
+            userAccount.setClaimableMoney(ContactUtils.ZERO);
+            userAccount.setRechargeMoney(ContactUtils.ZERO);
+            userAccount.setAiAssetsMoney(ContactUtils.ZERO);
             userAccount.setAccountStatus(ContactUtils.USER_ACCOUNT_STATUS_1);
             return userAccount;
         }
@@ -94,20 +93,20 @@ public class InstanceUtils {
             userAccountDetail.setTitle(title);
             userAccountDetail.setType(type);
             userAccountDetail.setUnique(uniqueId);
-            userAccountDetail.setAiAssetsMoney(new BigDecimal("0"));
-            userAccountDetail.setTotalMoney(new BigDecimal("0"));
-            userAccountDetail.setAvailableMoney(new BigDecimal("0"));
-            userAccountDetail.setIncrementMoney(new BigDecimal("0"));
-            userAccountDetail.setCommissionMoney(new BigDecimal("0"));
-            userAccountDetail.setClaimableMoney(new BigDecimal("0"));
-            userAccountDetail.setRechargeMoney(new BigDecimal("0"));
-            userAccountDetail.setLedgerType(1);
+            userAccountDetail.setAiAssetsMoney(ContactUtils.ZERO);
+            userAccountDetail.setTotalMoney(ContactUtils.ZERO);
+            userAccountDetail.setAvailableMoney(ContactUtils.ZERO);
+            userAccountDetail.setIncrementMoney(ContactUtils.ZERO);
+            userAccountDetail.setCommissionMoney(ContactUtils.ZERO);
+            userAccountDetail.setClaimableMoney(ContactUtils.ZERO);
+            userAccountDetail.setRechargeMoney(ContactUtils.ZERO);
+            userAccountDetail.setLedgerType(ContactUtils.USER_ACCOUNT_LEDGER_TYPE_1);
             return userAccountDetail;
         }
     }
 
     /**
-     * @desc 初始化用户账户日志
+     * @desc 初始化用户账户备份
      * @author nada
      * @create 2021/5/12 2:58 下午
      */
@@ -122,7 +121,7 @@ public class InstanceUtils {
     }
 
     /**
-     * @desc 初始化订单信息
+     * @desc 初始充值化订单信息
      * @author nada
      * @create 2021/5/12 2:59 下午
     */
@@ -131,16 +130,16 @@ public class InstanceUtils {
         order.setIsNewRecord(true);
         order.setOrderNo(orderNo);
         order.setPayRate(sysChannel.getPayRate());
-        order.setPayType(ContactUtils.ORDER_PAY_TYPE_1);
         order.setChannelId(sysChannel.getId());
         order.setActualMoney(params.getPayMoney());
+        order.setPayType(ContactUtils.ORDER_PAY_TYPE_1);
         order.setType(ContactUtils.ORDER_TYPE_RECHANGE);
         order.setOrderStatus(ContactUtils.ORDER_STATUS_1);
         return order;
     }
 
     /**
-     * @desc 初始化订单信息
+     * @desc 初始化提款订单信息
      * @author nada
      * @create 2021/5/12 2:59 下午
      */
@@ -151,7 +150,7 @@ public class InstanceUtils {
         order.setCashRate(sysChannel.getPayRate());
         order.setChannelId(sysChannel.getId());
         order.setCashMoney(params.getCashMoney());
-        order.setType(ContactUtils.ORDER_TYPE_RECHANGE);
+        order.setType(ContactUtils.ORDER_TYPE_CASH_1);
         order.setCashStatus(ContactUtils.ORDER_STATUS_1);
         order.setServiceCharge(params.getCashMoney().multiply(sysChannel.getPayRate()));
         return order;
@@ -186,10 +185,10 @@ public class InstanceUtils {
         userProductBot.setUserId(userProductBotLog.getUserId());
         userProductBot.setBotId(userProductBotLog.getBotId());
         userProductBot.setTodayOrders(1);
+        userProductBot.setTodayTeamIncome(ContactUtils.ZERO);
+        userProductBot.setYesterdayIncomeMoney(ContactUtils.ZERO);
+        userProductBot.setYesterdayTeamIncomeMoney(ContactUtils.ZERO);
         userProductBot.setTodayIncomeMoney(userProductBotLog.getIncomeMoney());
-        userProductBot.setTodayTeamIncome(new BigDecimal("0"));
-        userProductBot.setYesterdayIncomeMoney(new BigDecimal("0"));
-        userProductBot.setYesterdayTeamIncomeMoney(new BigDecimal("0"));
         return userProductBot;
     }
 
@@ -204,13 +203,13 @@ public class InstanceUtils {
         userProductWarehouse.setUserId(userId);
         userProductWarehouse.setWarehouseId(warehouseId);
         userProductWarehouse.setAsstesHeldMoney(asstesHeldMoney);
-        userProductWarehouse.setTeamIncomeMoney(new BigDecimal("0"));
-        userProductWarehouse.setPersonalIncomeMoney(new BigDecimal("0"));
-        userProductWarehouse.setAccumulativeIncomeMoney(new BigDecimal("0"));
-        userProductWarehouse.setTeamAccumulativeIncomeMoney(new BigDecimal("0"));
-        userProductWarehouse.setPersonalAccumulativeIncomeMoney(new BigDecimal("0"));
-        userProductWarehouse.setAiAssetsMoney(new BigDecimal("0"));
-        userProductWarehouse.setIncomeMoney(new BigDecimal("0"));
+        userProductWarehouse.setTeamIncomeMoney(ContactUtils.ZERO);
+        userProductWarehouse.setPersonalIncomeMoney(ContactUtils.ZERO);
+        userProductWarehouse.setAccumulativeIncomeMoney(ContactUtils.ZERO);
+        userProductWarehouse.setTeamAccumulativeIncomeMoney(ContactUtils.ZERO);
+        userProductWarehouse.setPersonalAccumulativeIncomeMoney(ContactUtils.ZERO);
+        userProductWarehouse.setAiAssetsMoney(ContactUtils.ZERO);
+        userProductWarehouse.setIncomeMoney(ContactUtils.ZERO);
         userProductWarehouse.setTeamUpdateTime(new Date());
         userProductWarehouse.setPsersonUpdateTime(new Date());
         return userProductWarehouse;
@@ -226,10 +225,10 @@ public class InstanceUtils {
         productUserWarehouseLog.setIsNewRecord(true);
         productUserWarehouseLog.setUserId(userId);
         productUserWarehouseLog.setWarehouseId(warehouseId);
-        productUserWarehouseLog.setType(logType);
-        productUserWarehouseLog.setProductType(productType);
         productUserWarehouseLog.setTitle(title);
         productUserWarehouseLog.setIncomeMoney(money);
+        productUserWarehouseLog.setType(logType);
+        productUserWarehouseLog.setProductType(productType);
         return productUserWarehouseLog;
     }
 
@@ -245,13 +244,13 @@ public class InstanceUtils {
             userAccountWarehouse.setUserId(userId);
             userAccountWarehouse.setTeamUpdateTime(new Date());
             userAccountWarehouse.setPsersonUpdateTime(new Date());
-            userAccountWarehouse.setAsstesHeldMoney(new BigDecimal("0"));
-            userAccountWarehouse.setAccumulativeIncomeMoney(new BigDecimal("0"));
-            userAccountWarehouse.setPersonalIncomeMoney(new BigDecimal("0"));
-            userAccountWarehouse.setPersonalAccumulativeIncomeMoney(new BigDecimal("0"));
-            userAccountWarehouse.setTeamIncomeMoney(new BigDecimal("0"));
-            userAccountWarehouse.setTeamAccumulativeIncomeMoney(new BigDecimal("0"));
-            userAccountWarehouse.setIncomeMoney(new BigDecimal("0"));
+            userAccountWarehouse.setAsstesHeldMoney(ContactUtils.ZERO);
+            userAccountWarehouse.setPersonalIncomeMoney(ContactUtils.ZERO);
+            userAccountWarehouse.setAccumulativeIncomeMoney(ContactUtils.ZERO);
+            userAccountWarehouse.setPersonalAccumulativeIncomeMoney(ContactUtils.ZERO);
+            userAccountWarehouse.setIncomeMoney(ContactUtils.ZERO);
+            userAccountWarehouse.setTeamIncomeMoney(ContactUtils.ZERO);
+            userAccountWarehouse.setTeamAccumulativeIncomeMoney(ContactUtils.ZERO);
             return userAccountWarehouse;
         }
     }
@@ -266,12 +265,12 @@ public class InstanceUtils {
             UserAccountTask userTask = new UserAccountTask();
             userTask.setIsNewRecord(true);
             userTask.setUserId(userId);
+            userTask.setTaskStartDay(new Date());
+            userTask.setTaskEndDay(ContactUtils.addDateHour(ContactUtils.USET_TASK_HOUR));
+            userTask.setTaskOrderNum(ContactUtils.DEFAULT_INT_ZERO);
             userTask.setTaskStatus(ContactUtils.USER_TASK_STATUS_1);
             userTask.setTaskInitialNum(ContactUtils.USER_TACK_BASE_MONEY);
-            userTask.setTaskOrderNum(0);
-            userTask.setTaskStartDay(new Date());
-            userTask.setTotalRewardMoney(new BigDecimal("1000"));
-            userTask.setTaskEndDay(ContactUtils.addDateHour(24));
+            userTask.setTotalRewardMoney(ContactUtils.USER_TACK_RECEIVE_BASE_MONEY);
             userTask.setTaskFinishData(new JSONObject().toJSONString());
             return userTask;
         }
@@ -287,24 +286,22 @@ public class InstanceUtils {
             TeamUser userTeam = new TeamUser();
             userTeam.setIsNewRecord(true);
             userTeam.setUserId(userId);
-            userTeam.setValidNum(0);
-            userTeam.setTeamNum(0);
-            userTeam.setTeam1Num(0);
-            userTeam.setTeam2Num(0);
-            userTeam.setTeam3Num(0);
-            userTeam.setTeamDepositMoney(new BigDecimal("0"));
-            userTeam.setTeamMoney(new BigDecimal("0"));
-            userTeam.setTeam1Money(new BigDecimal("0"));
-            userTeam.setTeam2Money(new BigDecimal("0"));
-            userTeam.setTeam3Money(new BigDecimal("0"));
+            userTeam.setValidNum(ContactUtils.DEFAULT_INT_ZERO);
+            userTeam.setTeamNum(ContactUtils.DEFAULT_INT_ZERO);
+            userTeam.setTeam1Num(ContactUtils.DEFAULT_INT_ZERO);
+            userTeam.setTeam2Num(ContactUtils.DEFAULT_INT_ZERO);
+            userTeam.setTeam3Num(ContactUtils.DEFAULT_INT_ZERO);
+            userTeam.setTeamDepositMoney(ContactUtils.ZERO);
+            userTeam.setTeamMoney(ContactUtils.ZERO);
+            userTeam.setTeam1Money(ContactUtils.ZERO);
+            userTeam.setTeam2Money(ContactUtils.ZERO);
+            userTeam.setTeam3Money(ContactUtils.ZERO);
             return userTeam;
         }
     }
 
     /**
      * 初始化团队用户奖励
-     * @param userId
-     * @return
      */
     public static TeamUserReward initTeamUserReward(String userId,String rewardId,String title,Integer finishNum,BigDecimal rewardMoney){
         synchronized (userId){
@@ -319,10 +316,8 @@ public class InstanceUtils {
         }
     }
 
-
     /**
      * 初始化分润
-     * @return
      */
     public static UserProfitDetail initUserProfitDetail(String userId,String title,int type,String parent1UserId,String parent2UserId,String parent3UserId,BigDecimal profitRate,BigDecimal prifitMoney,BigDecimal updateMoney){
         synchronized (userId){
@@ -341,8 +336,7 @@ public class InstanceUtils {
     }
 
     /**
-     * @param userId
-     * @return
+     * 初始化无人机AI任务
      */
     public static ProductUserBotAistart initProductUserBotAistart(String userId,String botId,int level,ProductBot productBot){
         synchronized (userId){
@@ -351,14 +345,14 @@ public class InstanceUtils {
             productUserBotAistart.setUserId(userId);
             productUserBotAistart.setBotId(botId);
             productUserBotAistart.setLevel(level);
-            productUserBotAistart.setAiDay(7);
-            productUserBotAistart.setDailyNum(0);
-            productUserBotAistart.setStartDate(new Date());
-            productUserBotAistart.setEndDate(ContactUtils.addDateHour(24*7));
+            productUserBotAistart.setAiMoney(productBot.getPrice());
             productUserBotAistart.setAiRate(productBot.getCommissionRate());
             productUserBotAistart.setAiRateOther(productBot.getCommissionRateOther());
-            productUserBotAistart.setAiMoney(productBot.getPrice());
-            productUserBotAistart.setAiStatus(2);
+            productUserBotAistart.setDailyNum(ContactUtils.DEFAULT_INT_ZERO);
+            productUserBotAistart.setAiDay(ContactUtils.PRODUCT_BOT_AI_TASK_DAY);
+            productUserBotAistart.setAiStatus(ContactUtils.PRODUCT_BOT_AI_TASK_STATUS_1);
+            productUserBotAistart.setStartDate(new Date());
+            productUserBotAistart.setEndDate(ContactUtils.addDateHour(ContactUtils.PRODUCT_BOT_AI_TASK_HOUR));
             return productUserBotAistart;
         }
     }

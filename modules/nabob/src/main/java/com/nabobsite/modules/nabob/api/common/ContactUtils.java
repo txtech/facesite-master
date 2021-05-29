@@ -30,18 +30,33 @@ public class ContactUtils {
     public final static BigDecimal HOUR = new BigDecimal("24");
     public final static BigDecimal MINUTE = new BigDecimal("60");
     public final static BigDecimal SECOND = new BigDecimal("60");
+
     public static String CHART_UTF ="UTF-8";
     public final static String LANG = "lang";
     public final static String TOKEN = "token";
     public final static String USERID = "userId";
     public final static String AUTHORIZATION = "Authorization";
 
+    //默认值
+    public final static int DEFAULT_INT_ZERO = 0;
+    public final static int DEFAULT_INT_HOUR = 24;
+
     //用户升级人数
     public final static int USER_LEVEL_UP_TEAM_NUM = 5;
+    //用户任务有效期
+    public final static int USET_TASK_HOUR = 2*24;
     //用户注册送现金
     public final static BigDecimal USER_REGISTER_REWARD = new BigDecimal("100");
     //用户注册奖励
     public final static BigDecimal USER_TACK_BASE_MONEY = new BigDecimal("990");
+    //用户注册可以奖励
+    public final static BigDecimal USER_TACK_RECEIVE_BASE_MONEY = new BigDecimal("1000");
+
+    //ai任务默认执行天数
+    public final static int PRODUCT_BOT_AI_TASK_DAY = 7;
+    public final static int PRODUCT_BOT_AI_TASK_HOUR = 7*24;
+    public final static int PRODUCT_BOT_AI_TASK_STATUS_1 = 1;   //ai开启
+    public final static int PRODUCT_BOT_AI_TASK_STATUS_2 = 2;  //ai结束
 
     //用户等级
     public final static int USER_LEVEL_0 = 0;
@@ -58,7 +73,7 @@ public class ContactUtils {
     public final static int USER_STATUS_1 = 1;//正常
     public final static int USER_STATUS_3 = 3;//禁用
 
-    //用户状态
+    //用户是否有效状态(充值金额判断)
     public final static int USER_VALID_1 = 1;//有效
     public final static int USER_VALID_2 = 2;//未生效
 
@@ -66,14 +81,16 @@ public class ContactUtils {
     public final static int USER_LOCK_1 = 1;//正常
     public final static int USER_LOCK_2 = 2;//锁定
 
-    //用户任务 1:未开始 2:进行中 3:完成
+    //用户任务 1:进行中 2:已完成
     public final static int USER_TASK_STATUS_1 = 1;
     public final static int USER_TASK_STATUS_2 = 2;
-    public final static int USER_TASK_STATUS_3 = 3;
 
     //用户云仓库日志类型
     public final static int WAREHOUSE_TYPE_1 = 1;//个人
     public final static int WAREHOUSE_TYPE_2 = 2;//团队
+
+    public final static int USER_ACCOUNT_LEDGER_TYPE_1 = 1;//账户收入
+    public final static int USER_ACCOUNT_LEDGER_TYPE_2 = 2;//账户支出
 
     //用户云仓库产品类型
     public final static int WAREHOUSE_PRODUCT_TYPE_1 = 1;//随存随取
@@ -122,6 +139,7 @@ public class ContactUtils {
 
     //订单类型
     public final static int ORDER_TYPE_RECHANGE = 1;//充值
+    public final static int ORDER_TYPE_CASH_1 = 1;//提现
 
     //团队奖励领取状态
     public final static int TEAM_USER_REWARD_STATUS_1 = 1;//未领取
@@ -151,6 +169,7 @@ public class ContactUtils {
     public final static int CASH_STATUS_4 = 4;
     public final static int CASH_STATUS_9 = 9;
 
+    //手机号码区
     public final static Set<String> PHONE_NUM_AREA_CODE  =  new HashSet<>();
     static {
         PHONE_NUM_AREA_CODE.add("74");

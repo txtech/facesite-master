@@ -114,7 +114,7 @@ public class UserTaskApiService extends ProductApiService {
 				String userTaskId = userAccountTask.getId();
 				int taskStatus = userAccountTask.getTaskStatus();
 				String taskFinishData = userAccountTask.getTaskFinishData();
-				if(taskStatus == ContactUtils.USER_TASK_STATUS_3){
+				if(taskStatus == ContactUtils.USER_TASK_STATUS_2){
 					logger.error("任务已经完成:{},{}",userId,taskId);
 					return ResultUtil.failed(I18nCode.CODE_10102);
 				}
@@ -214,9 +214,9 @@ public class UserTaskApiService extends ProductApiService {
 			userTaskPrams.setTaskOrderNum(finishNumber);
 			userTaskPrams.setTaskFinishData(taskJson.toJSONString());
 			if(isFishTask){
-				userTaskPrams.setTaskStatus(ContactUtils.USER_TASK_STATUS_3);
-			}else{
 				userTaskPrams.setTaskStatus(ContactUtils.USER_TASK_STATUS_2);
+			}else{
+				userTaskPrams.setTaskStatus(ContactUtils.USER_TASK_STATUS_1);
 			}
 			long dbResult = userAccountTaskDao.update(userTaskPrams);
 			return ContactUtils.dbResult(dbResult);

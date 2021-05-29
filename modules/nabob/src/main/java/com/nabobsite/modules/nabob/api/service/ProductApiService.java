@@ -223,7 +223,7 @@ public class ProductApiService extends SimpleProductService {
 				}
 				ProductUserWarehouse productUserWarehouse = this.getProductUserWarehouseByUserIdAndId(userId,warehouseId);
 				if(productUserWarehouse == null){
-					productUserWarehouse = InstanceUtils.initProductUserWarehouse(userId,warehouseId,new BigDecimal("0"));
+					productUserWarehouse = InstanceUtils.initProductUserWarehouse(userId,warehouseId,ContactUtils.ZERO);
 					long dbResult = productUserWarehouseDao.insert(productUserWarehouse);
 					if(!ContactUtils.dbResult(dbResult)){
 						return ResultUtil.failed(I18nCode.CODE_10004);
@@ -639,7 +639,7 @@ public class ProductApiService extends SimpleProductService {
 			List<ProductWarehouse> list = productWarehouseDao.findList(productWarehouse);
 			for (ProductWarehouse entity : list) {
 				String warehouseId = entity.getId();
-				BigDecimal asstesHeldMoney = new BigDecimal("0");
+				BigDecimal asstesHeldMoney = ContactUtils.ZERO;
 				if(ContactUtils.isOkUserId(userId)){
 					ProductUserWarehouse userProductWarehouse = this.getProductUserWarehouseByUserIdAndId(userId,warehouseId);
 					if(userProductWarehouse != null && !ContactUtils.isLesserOrEqualZero(userProductWarehouse.getAsstesHeldMoney())){
