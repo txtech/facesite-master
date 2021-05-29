@@ -111,7 +111,7 @@ jdbc:
 #Spring settings
 spring:
   application:
-    name: jeesite-web
+    name: nabob-web
   profiles:
     active: default
   main:
@@ -452,16 +452,16 @@ mybatis:
   # @MyBatisDao、Aliases 扫描基础包，如果多个，用“,”分隔
   scanBasePackage: com.jeesite.modules,com.nabobsite.modules.nabob
 
-#  # TypeHandlers 扫描基础包，如果多个，用“,”分隔
-#  scanTypeHandlersPackage: ~
-#
-#  # Mapper文件刷新线程
-#  mapper:
-#    refresh:
-#      enabled: true
-#      delaySeconds: 60
-#      sleepSeconds: 3
-#      mappingPath: mappings
+  # TypeHandlers 扫描基础包，如果多个，用“,”分隔
+  scanTypeHandlersPackage: ~
+
+  # Mapper文件刷新线程
+  mapper:
+    refresh:
+      enabled: true
+      delaySeconds: 60
+      sleepSeconds: 3
+      mappingPath: mappings
 
 # Web 相关
 web:

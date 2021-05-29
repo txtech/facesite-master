@@ -23,14 +23,6 @@ import java.math.BigDecimal;
 public class TriggerApiService {
 
     private static Logger logger = LoggerFactory.getLogger(TriggerApiService.class);
-    @Autowired
-    private UserInfoDao userInfoDao;
-    @Autowired
-    private SysI18nDao sysI18nDao;
-    @Autowired
-    private LogicService logicService;
-    @Autowired
-    private TriggerPoolManagerImpl triggerPoolManager;
 
     /**
      * @desc 系统启动触发器
