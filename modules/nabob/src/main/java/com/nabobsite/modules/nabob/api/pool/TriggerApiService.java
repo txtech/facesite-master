@@ -40,8 +40,8 @@ public class TriggerApiService {
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void systemStartTrigger() {
         logger.info("系统启动成功,开始加载数据到内存");
-        TriggerThread callback = new InitLoadDbDataTrigger(sysI18nDao,userInfoDao);
-        triggerPoolManager.submit(callback);
+        //TriggerThread callback = new InitLoadDbDataTrigger(sysI18nDao,userInfoDao);
+        //triggerPoolManager.submit(callback);
     }
 
     /**
@@ -51,8 +51,8 @@ public class TriggerApiService {
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void registerTrigger(String userId) {
-        TriggerThread callback = new UserRegisterTrigger(userId,userInfoDao,logicService);
-        triggerPoolManager.submit(callback);
+        //TriggerThread callback = new UserRegisterTrigger(userId,userInfoDao,logicService);
+        //triggerPoolManager.submit(callback);
     }
 
     /**
@@ -62,8 +62,8 @@ public class TriggerApiService {
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void payAmountTrigger(String userId, int type, BigDecimal updateMoney) {
-        TriggerThread callback = new UserPayOrerTrigger(userId,type,updateMoney, userInfoDao,logicService);
-        triggerPoolManager.submit(callback);
+        //TriggerThread callback = new UserPayOrerTrigger(userId,type,updateMoney, userInfoDao,logicService);
+        //triggerPoolManager.submit(callback);
     }
 
     /**
@@ -73,8 +73,8 @@ public class TriggerApiService {
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void commissionTrigger(String userId,BigDecimal updateMoney) {
-        UserBotCommissionTrigger callback = new UserBotCommissionTrigger(userId,updateMoney, userInfoDao,logicService);
-        triggerPoolManager.submit(callback);
+        //UserBotCommissionTrigger callback = new UserBotCommissionTrigger(userId,updateMoney, userInfoDao,logicService);
+        //triggerPoolManager.submit(callback);
     }
 
     /**
@@ -84,7 +84,7 @@ public class TriggerApiService {
      */
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void warehouseIncomeTrigger(String userId,BigDecimal updateMoney) {
-        UserWarehouseIncomeTrigger callback = new UserWarehouseIncomeTrigger(userId,updateMoney, userInfoDao,logicService);
-        triggerPoolManager.submit(callback);
+        //UserWarehouseIncomeTrigger callback = new UserWarehouseIncomeTrigger(userId,updateMoney, userInfoDao,logicService);
+        //triggerPoolManager.submit(callback);
     }
 }
