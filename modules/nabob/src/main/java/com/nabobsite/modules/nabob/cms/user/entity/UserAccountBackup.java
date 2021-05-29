@@ -41,7 +41,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="recharge_money", attrName="rechargeMoney", label="充值资金"),
 		@Column(name="ai_assets_money", attrName="aiAssetsMoney", label="云资产"),
-	}, orderBy="a.id DESC"
+	},
+		extWhereKeys="dsfOffice",
+		orderBy="a.id DESC"
 )
 public class UserAccountBackup extends DataEntity<UserAccountBackup> {
 	

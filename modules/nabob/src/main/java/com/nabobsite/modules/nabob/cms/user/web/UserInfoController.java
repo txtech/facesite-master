@@ -6,6 +6,7 @@ package com.nabobsite.modules.nabob.cms.user.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nabobsite.modules.nabob.cms.base.BaseDataScopeFilter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,9 @@ public class UserInfoController extends BaseController {
 
 	@Autowired
 	private UserInfoService userInfoService;
-	
+	@Autowired
+	private BaseDataScopeFilter baseDataScopeFilter;
+
 	/**
 	 * 获取数据
 	 */
@@ -60,6 +63,7 @@ public class UserInfoController extends BaseController {
 	@ResponseBody
 	public Page<UserInfo> listData(UserInfo userInfo, HttpServletRequest request, HttpServletResponse response) {
 		userInfo.setPage(new Page<>(request, response));
+		baseDataScopeFilter.addDataScopeFilter(userInfo);
 		Page<UserInfo> page = userInfoService.findPage(userInfo);
 		return page;
 	}

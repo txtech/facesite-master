@@ -6,6 +6,9 @@ package com.nabobsite.modules.nabob.cms.user.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeesite.common.entity.DataScope;
+import com.nabobsite.modules.nabob.cms.base.BaseDataScopeFilter;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +36,9 @@ public class UserAccountController extends BaseController {
 
 	@Autowired
 	private UserAccountService userAccountService;
-	
+	@Autowired
+	private BaseDataScopeFilter baseDataScopeFilter;
+
 	/**
 	 * 获取数据
 	 */
@@ -60,6 +65,8 @@ public class UserAccountController extends BaseController {
 	@ResponseBody
 	public Page<UserAccount> listData(UserAccount userAccount, HttpServletRequest request, HttpServletResponse response) {
 		userAccount.setPage(new Page<>(request, response));
+		// 调用数据权限过滤方法（重点）
+		baseDataScopeFilter.addDataScopeFilter(userAccount);
 		Page<UserAccount> page = userAccountService.findPage(userAccount);
 		return page;
 	}
@@ -95,5 +102,6 @@ public class UserAccountController extends BaseController {
 		userAccountService.delete(userAccount);
 		return renderResult(Global.TRUE, text("删除用户账户成功！"));
 	}
-	
+
+
 }

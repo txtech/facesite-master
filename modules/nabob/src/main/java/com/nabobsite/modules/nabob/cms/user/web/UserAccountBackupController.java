@@ -6,6 +6,7 @@ package com.nabobsite.modules.nabob.cms.user.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nabobsite.modules.nabob.cms.base.BaseDataScopeFilter;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,9 @@ public class UserAccountBackupController extends BaseController {
 
 	@Autowired
 	private UserAccountBackupService userAccountBackupService;
-	
+	@Autowired
+	private BaseDataScopeFilter baseDataScopeFilter;
+
 	/**
 	 * 获取数据
 	 */
@@ -60,6 +63,7 @@ public class UserAccountBackupController extends BaseController {
 	@ResponseBody
 	public Page<UserAccountBackup> listData(UserAccountBackup userAccountBackup, HttpServletRequest request, HttpServletResponse response) {
 		userAccountBackup.setPage(new Page<>(request, response));
+		baseDataScopeFilter.addDataScopeFilter(userAccountBackup);
 		Page<UserAccountBackup> page = userAccountBackupService.findPage(userAccountBackup);
 		return page;
 	}

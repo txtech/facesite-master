@@ -5,6 +5,10 @@ package com.nabobsite.modules.nabob.cms.user.service;
 
 import java.util.List;
 
+import com.jeesite.common.entity.DataScope;
+import com.jeesite.modules.sys.entity.User;
+import com.jeesite.modules.sys.utils.UserUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +39,6 @@ public class UserAccountService extends CrudService<UserAccountDao, UserAccount>
 	/**
 	 * 查询分页数据
 	 * @param userAccount 查询条件
-	 * @param userAccount.page 分页对象
 	 * @return
 	 */
 	@Override
@@ -72,5 +75,7 @@ public class UserAccountService extends CrudService<UserAccountDao, UserAccount>
 	public void delete(UserAccount userAccount) {
 		super.delete(userAccount);
 	}
-	
+
+
+
 }

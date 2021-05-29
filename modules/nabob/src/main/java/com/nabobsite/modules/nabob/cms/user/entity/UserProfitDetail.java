@@ -39,7 +39,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
-	}, orderBy="a.id DESC"
+	},
+		extWhereKeys="dsfOffice",
+		orderBy="a.id DESC"
 )
 public class UserProfitDetail extends DataEntity<UserProfitDetail> {
 	

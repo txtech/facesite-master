@@ -44,6 +44,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="recharge_money", attrName="rechargeMoney", label="充值资金"),
 		@Column(name="ai_assets_money", attrName="aiAssetsMoney", label="云资产"),
 	},
+		extWhereKeys="dsfOffice",
 	joinTable={
 			@JoinTable(type=Type.LEFT_JOIN, entity=UserInfo.class, alias="b",
 					on="a.user_id = b.id", attrName="userInfo",
