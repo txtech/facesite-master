@@ -17,18 +17,6 @@
 			<#form:form id="searchForm" model="${sysConfig}" action="${ctx}/sys/sysConfig/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('配置类型 1')}：</label>
-					<div class="control-inline">
-						<#form:input path="type" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('配置状态 1')}：</label>
-					<div class="control-inline width-120">
-						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control isQuick"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('配置key')}：</label>
 					<div class="control-inline">
 						<#form:input path="key" maxlength="250" class="form-control width-120"/>
@@ -43,27 +31,11 @@
 				<div class="form-group">
 					<label class="control-label">${text('创建时间')}：</label>
 					<div class="control-inline">
-						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('更新时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('备注信息')}：</label>
-					<div class="control-inline">
-						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('删除标志')}：</label>
-					<div class="control-inline">
-						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
+						<#form:input path="created_gte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm" data-done="created_lte.click()"/>
+						&nbsp;-&nbsp;
+						<#form:input path="created_lte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -82,18 +54,9 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("配置类型 1")}', name:'type', index:'a.type', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
-			return '<a href="${ctx}/sys/sysConfig/form?id='+row.id+'" class="btnList" data-title="${text("编辑系统配置")}">'+(val||row.id)+'</a>';
-		}},
-		{header:'${text("配置状态 1")}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
-			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text("未知")}', true);
-		}},
 		{header:'${text("配置key")}', name:'key', index:'a.key', width:150, align:"left"},
 		{header:'${text("配置value")}', name:'value', index:'a.value', width:150, align:"left"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
-		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('sys:sysConfig:edit')){ %>

@@ -17,71 +17,25 @@
 			<#form:form id="searchForm" model="${sysChannel}" action="${ctx}/sys/sysChannel/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('类型 1,卡支付 2,扫码支付')}：</label>
-					<div class="control-inline">
-						<#form:input path="type" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('通道名称')}：</label>
 					<div class="control-inline">
 						<#form:input path="name" maxlength="250" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('来源')}：</label>
-					<div class="control-inline">
-						<#form:input path="channelSource" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('配置no')}：</label>
+					<label class="control-label">${text('商户号')}：</label>
 					<div class="control-inline">
 						<#form:input path="merchNo" maxlength="250" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('配置key')}：</label>
-					<div class="control-inline">
-						<#form:input path="merchKey" maxlength="2048" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('支付费率')}：</label>
-					<div class="control-inline">
-						<#form:input path="payRate" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('出款费率')}：</label>
-					<div class="control-inline">
-						<#form:input path="cashRate" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('创建时间')}：</label>
 					<div class="control-inline">
-						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('更新时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('备注信息')}：</label>
-					<div class="control-inline">
-						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('删除标志')}：</label>
-					<div class="control-inline">
-						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
+						<#form:input path="created_gte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm" data-done="created_lte.click()"/>
+						&nbsp;-&nbsp;
+						<#form:input path="created_lte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -100,19 +54,19 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("类型 1,卡支付 2,扫码支付")}', name:'type', index:'a.type', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+		{header:'${text("通道名称")}', name:'name', index:'a.name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/sys/sysChannel/form?id='+row.id+'" class="btnList" data-title="${text("编辑通道配置")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("通道名称")}', name:'name', index:'a.name', width:150, align:"left"},
-		{header:'${text("来源")}', name:'channelSource', index:'a.channel_source', width:150, align:"center"},
-		{header:'${text("配置no")}', name:'merchNo', index:'a.merch_no', width:150, align:"left"},
-		{header:'${text("配置key")}', name:'merchKey', index:'a.merch_key', width:150, align:"left"},
+
+		{header:'${text("通道类型")}', name:'type', index:'a.type', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('aurora_channel_type')}, val, '${text("未知")}', true);
+		}},
+		{header:'${text("通道来源")}', name:'channelSource', index:'a.channel_source', width:150, align:"center"},
+		{header:'${text("商户号")}', name:'merchNo', index:'a.merch_no', width:150, align:"left"},
+		{header:'${text("商户密钥")}', name:'merchKey', index:'a.merch_key', width:150, align:"left"},
 		{header:'${text("支付费率")}', name:'payRate', index:'a.pay_rate', width:150, align:"left"},
 		{header:'${text("出款费率")}', name:'cashRate', index:'a.cash_rate', width:150, align:"center"},
 		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
-		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
 		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('sys:sysChannel:edit')){ %>

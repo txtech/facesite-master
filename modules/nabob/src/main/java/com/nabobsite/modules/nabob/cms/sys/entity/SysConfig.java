@@ -23,8 +23,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
  */
 @Table(name="t1_sys_config", alias="a", columns={
 		@Column(name="id", attrName="id", label="主键ID", isPK=true),
-		@Column(name="type", attrName="type", label="配置类型 1", comment="配置类型 1:时间控制"),
-		@Column(name="status", attrName="status", label="配置状态 1", comment="配置状态 1:启用 2:禁用", isUpdate=false),
 		@Column(name="key", attrName="key", label="配置key"),
 		@Column(name="value", attrName="value", label="配置value"),
 		@Column(name="created", attrName="created", label="创建时间"),
@@ -38,7 +36,6 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 public class SysConfig extends DataEntity<SysConfig> {
 	
 	private static final long serialVersionUID = 1L;
-	private Integer type;		// 配置类型 1:时间控制
 	private String key;		// 配置key
 	private String value;		// 配置value
 	private Date created;		// 创建时间
@@ -51,15 +48,6 @@ public class SysConfig extends DataEntity<SysConfig> {
 
 	public SysConfig(String id){
 		super(id);
-	}
-	
-	@NotNull(message="配置类型 1不能为空")
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
 	}
 	
 	@NotBlank(message="配置key不能为空")

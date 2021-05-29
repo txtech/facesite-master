@@ -17,15 +17,9 @@
 			<#form:form id="searchForm" model="${productUserBotLog}" action="${ctx}/product/productUserBotLog/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('用户ID')}：</label>
+					<label class="control-label">${text('用户名称')}：</label>
 					<div class="control-inline">
-						<#form:input path="userId" maxlength="50" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('产品ID')}：</label>
-					<div class="control-inline">
-						<#form:input path="botId" maxlength="50" class="form-control width-120"/>
+						<#form:input path="userInfo.accountNo" maxlength="30" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -35,49 +29,16 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('刷单金额')}：</label>
-					<div class="control-inline">
-						<#form:input path="orderAmount" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('收入金额')}：</label>
-					<div class="control-inline">
-						<#form:input path="incomeMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('收益比例')}：</label>
-					<div class="control-inline">
-						<#form:input path="incomeRate" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('创建时间')}：</label>
 					<div class="control-inline">
-						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
+						<#form:input path="created_gte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm" data-done="created_lte.click()"/>
+						&nbsp;-&nbsp;
+						<#form:input path="created_lte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="control-label">${text('更新时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('备注信息')}：</label>
-					<div class="control-inline">
-						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('删除标志')}：</label>
-					<div class="control-inline">
-						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
-					</div>
-				</div>
+
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
 					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
@@ -94,26 +55,15 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+		{header:'${text("用户名称")}', name:'userInfo.accountNo', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/product/productUserBotLog/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户产品机器人记录")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("产品ID")}', name:'botId', index:'a.bot_id', width:150, align:"left"},
+		{header:'${text("产品名称")}', name:'productBot.name', index:'a.bot_id', width:150, align:"left"},
 		{header:'${text("订单号")}', name:'orderNo', index:'a.order_no', width:150, align:"left"},
 		{header:'${text("刷单金额")}', name:'orderAmount', index:'a.order_amount', width:150, align:"left"},
 		{header:'${text("收入金额")}', name:'incomeMoney', index:'a.income_money', width:150, align:"left"},
 		{header:'${text("收益比例")}', name:'incomeRate', index:'a.income_rate', width:150, align:"left"},
-		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
-		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
-		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
-			var actions = [];
-			<% if(hasPermi('product:productUserBotLog:edit')){ %>
-				actions.push('<a href="${ctx}/product/productUserBotLog/form?id='+row.id+'" class="btnList" title="${text("编辑用户产品机器人记录")}"><i class="fa fa-pencil"></i></a>&nbsp;');
-				actions.push('<a href="${ctx}/product/productUserBotLog/delete?id='+row.id+'" class="btnList" title="${text("删除用户产品机器人记录")}" data-confirm="${text("确认要删除该用户产品机器人记录吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
-			<% } %>
-			return actions.join('');
-		}}
+		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"}
 	],
 	// 加载成功后执行事件
 	ajaxSuccess: function(data){

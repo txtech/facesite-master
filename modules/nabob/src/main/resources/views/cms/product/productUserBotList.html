@@ -17,71 +17,19 @@
 			<#form:form id="searchForm" model="${productUserBot}" action="${ctx}/product/productUserBot/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('用户ID')}：</label>
+					<label class="control-label">${text('用户名称')}：</label>
 					<div class="control-inline">
-						<#form:input path="userId" maxlength="50" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('产品ID')}：</label>
-					<div class="control-inline">
-						<#form:input path="botId" maxlength="50" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('今日订单数')}：</label>
-					<div class="control-inline">
-						<#form:input path="todayOrders" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('今天收入')}：</label>
-					<div class="control-inline">
-						<#form:input path="todayIncomeMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('今天团队收入')}：</label>
-					<div class="control-inline">
-						<#form:input path="todayTeamIncome" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('昨日收入')}：</label>
-					<div class="control-inline">
-						<#form:input path="yesterdayIncomeMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('昨日团队收入')}：</label>
-					<div class="control-inline">
-						<#form:input path="yesterdayTeamIncomeMoney" class="form-control width-120"/>
+						<#form:input path="userInfo.accountNo" maxlength="30" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('创建时间')}：</label>
 					<div class="control-inline">
-						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('更新时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('备注信息')}：</label>
-					<div class="control-inline">
-						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('删除标志')}：</label>
-					<div class="control-inline">
-						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
+						<#form:input path="created_gte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm" data-done="created_lte.click()"/>
+						&nbsp;-&nbsp;
+						<#form:input path="created_lte" readonly="true" maxlength="20" class="form-control laydate width-datetime"
+						dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -100,27 +48,16 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+		{header:'${text("用户名称")}', name:'userInfo.accountNo', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/product/productUserBot/form?id='+row.id+'" class="btnList" data-title="${text("编辑用户产品机器人信息")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("产品ID")}', name:'botId', index:'a.bot_id', width:150, align:"left"},
+		{header:'${text("产品名称")}', name:'productBot.name', index:'a.bot_id', width:150, align:"left"},
 		{header:'${text("今日订单数")}', name:'todayOrders', index:'a.today_orders', width:150, align:"center"},
 		{header:'${text("今天收入")}', name:'todayIncomeMoney', index:'a.today_income_money', width:150, align:"left"},
-		{header:'${text("今天团队收入")}', name:'todayTeamIncome', index:'a.today_team_income', width:150, align:"left"},
 		{header:'${text("昨日收入")}', name:'yesterdayIncomeMoney', index:'a.yesterday_income_money', width:150, align:"left"},
+		{header:'${text("今天团队收入")}', name:'todayTeamIncome', index:'a.today_team_income', width:150, align:"left"},
 		{header:'${text("昨日团队收入")}', name:'yesterdayTeamIncomeMoney', index:'a.yesterday_team_income_money', width:150, align:"left"},
-		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
-		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
-		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
-			var actions = [];
-			<% if(hasPermi('product:productUserBot:edit')){ %>
-				actions.push('<a href="${ctx}/product/productUserBot/form?id='+row.id+'" class="btnList" title="${text("编辑用户产品机器人信息")}"><i class="fa fa-pencil"></i></a>&nbsp;');
-				actions.push('<a href="${ctx}/product/productUserBot/delete?id='+row.id+'" class="btnList" title="${text("删除用户产品机器人信息")}" data-confirm="${text("确认要删除该用户产品机器人信息吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
-			<% } %>
-			return actions.join('');
-		}}
+		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"}
 	],
 	// 加载成功后执行事件
 	ajaxSuccess: function(data){

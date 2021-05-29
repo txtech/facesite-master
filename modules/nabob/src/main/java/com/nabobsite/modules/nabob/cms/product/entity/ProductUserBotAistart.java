@@ -4,6 +4,8 @@
 package com.nabobsite.modules.nabob.cms.product.entity;
 
 import javax.validation.constraints.NotBlank;
+
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -41,7 +43,16 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="ai_status", attrName="aiStatus", label="ai状态 1", comment="ai状态 1:已经启动 2:已结束"),
-	}, orderBy="a.id DESC"
+	},
+		joinTable={
+				@JoinTable(type=Type.LEFT_JOIN, entity= UserInfo.class, alias="b",
+						on="a.user_id = b.id", attrName="userInfo",
+						columns={@Column(includeEntity=UserInfo.class)}),
+				@JoinTable(type=Type.LEFT_JOIN, entity= ProductBot.class, alias="c",
+						on="a.bot_id = c.id", attrName="productBot",
+						columns={@Column(includeEntity=ProductBot.class)}),
+		},
+		orderBy="a.id DESC"
 )
 public class ProductUserBotAistart extends DataEntity<ProductUserBotAistart> {
 	
@@ -60,6 +71,8 @@ public class ProductUserBotAistart extends DataEntity<ProductUserBotAistart> {
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	private Integer aiStatus;		// ai状态 1:已经启动 2:已结束
+	private UserInfo userInfo;
+	private ProductBot productBot;
 	
 	public ProductUserBotAistart() {
 		this(null);
@@ -198,5 +211,20 @@ public class ProductUserBotAistart extends DataEntity<ProductUserBotAistart> {
 	public void setAiStatus(Integer aiStatus) {
 		this.aiStatus = aiStatus;
 	}
-	
+
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
+
+	public ProductBot getProductBot() {
+		return productBot;
+	}
+
+	public void setProductBot(ProductBot productBot) {
+		this.productBot = productBot;
+	}
 }

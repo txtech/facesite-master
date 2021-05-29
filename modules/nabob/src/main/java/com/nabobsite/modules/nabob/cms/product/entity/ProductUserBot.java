@@ -4,6 +4,9 @@
 package com.nabobsite.modules.nabob.cms.product.entity;
 
 import javax.validation.constraints.NotBlank;
+
+import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -37,7 +40,16 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
-	}, orderBy="a.id DESC"
+	},
+		joinTable={
+				@JoinTable(type=Type.LEFT_JOIN, entity=UserInfo.class, alias="b",
+						on="a.user_id = b.id", attrName="userInfo",
+						columns={@Column(includeEntity=UserInfo.class)}),
+				@JoinTable(type=Type.LEFT_JOIN, entity= ProductBot.class, alias="c",
+						on="a.bot_id = c.id", attrName="productBot",
+						columns={@Column(includeEntity=ProductBot.class)}),
+		},
+		orderBy="a.id DESC"
 )
 public class ProductUserBot extends DataEntity<ProductUserBot> {
 	
@@ -53,7 +65,9 @@ public class ProductUserBot extends DataEntity<ProductUserBot> {
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
 	private Integer DailyNum;
-	
+	private UserInfo userInfo;
+	private ProductBot productBot;
+
 	public ProductUserBot() {
 		this(null);
 	}
@@ -160,5 +174,21 @@ public class ProductUserBot extends DataEntity<ProductUserBot> {
 
 	public void setDailyNum(Integer dailyNum) {
 		DailyNum = dailyNum;
+	}
+
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
+
+	public ProductBot getProductBot() {
+		return productBot;
+	}
+
+	public void setProductBot(ProductBot productBot) {
+		this.productBot = productBot;
 	}
 }
