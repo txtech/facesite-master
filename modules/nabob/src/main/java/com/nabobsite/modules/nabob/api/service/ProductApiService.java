@@ -515,7 +515,7 @@ public class ProductApiService extends SimpleProductService {
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
 	public Boolean doAiBotTaskJob() {
 		try {
-			List<ProductUserBotAistart> list = productUserBotAistartDao.getProductUserBotAistartList();
+			List<ProductUserBotAistart> list = productUserBotAistartDao.getProductUserBotAistartList(new ProductUserBotAistart());
 			for(ProductUserBotAistart productUserBotAistart : list){
 				String userId = productUserBotAistart.getUserId();
 				String botId = productUserBotAistart.getBotId();
@@ -545,7 +545,7 @@ public class ProductApiService extends SimpleProductService {
 					updateBot.setId(productUserBotAistart.getId());
 					long dbResult = productUserBotAistartDao.updateUserBotAistart(updateBot);
 					if(ContactUtils.dbResult(dbResult)){
-						logger.error("无人机AI任务定时任务结果",dbResult);
+						logger.error("无人机AI任务定时任务结果,{}",dbResult);
 					}
 				}
 			}

@@ -28,7 +28,7 @@
 		</where>
 	</update>
 
-	<select id="getProductUserBotAistartList" parameterType="com.nabobsite.modules.nabob.cms.product.entity.ProductUserBotAistart">
+	<select id="getProductUserBotAistartList" resultType="ProductUserBotAistart">
 		SELECT
 			${sqlMap.column.toSql()}
 		FROM

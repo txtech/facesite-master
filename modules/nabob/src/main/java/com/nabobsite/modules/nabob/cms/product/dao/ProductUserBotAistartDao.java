@@ -19,5 +19,5 @@ public interface ProductUserBotAistartDao extends CrudDao<ProductUserBotAistart>
 
     long updateUserBotAistart(ProductUserBotAistart productUserBotAistart);
 
-    List<ProductUserBotAistart> getProductUserBotAistartList();
+    List<ProductUserBotAistart> getProductUserBotAistartList(ProductUserBotAistart productUserBotAistart);
 }

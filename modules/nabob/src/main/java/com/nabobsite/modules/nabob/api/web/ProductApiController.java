@@ -3,6 +3,7 @@
  */
 package com.nabobsite.modules.nabob.api.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.web.BaseController;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.ContactUtils;
@@ -60,7 +61,7 @@ public class ProductApiController extends BaseController {
 	}
 	@PostMapping(value = {"doBotTask"})
 	@ApiOperation(value = "无人机产品刷单接口")
-	public CommonResult<Boolean> doBotTask(@RequestBody ProductUserBotLog userProductBotLog, HttpServletRequest request) {
+	public CommonResult<JSONObject> doBotTask(@RequestBody ProductUserBotLog userProductBotLog, HttpServletRequest request) {
 		String token = request.getHeader(ContactUtils.AUTHORIZATION);
 		return productApiService.doBotTask(token,userProductBotLog);
 	}
