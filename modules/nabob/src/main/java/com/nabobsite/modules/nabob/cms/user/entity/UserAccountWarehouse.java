@@ -4,6 +4,8 @@
 package com.nabobsite.modules.nabob.cms.user.entity;
 
 import javax.validation.constraints.NotBlank;
+
+import com.nabobsite.modules.nabob.cms.product.entity.ProductWarehouse;
 import org.hibernate.validator.constraints.Length;
 import java.math.BigDecimal;
 import com.jeesite.common.mybatis.annotation.JoinTable;
@@ -40,7 +42,13 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="income_money", attrName="incomeMoney", label="当前总收益")
-	}, orderBy="a.id DESC"
+	},
+		joinTable={
+				@JoinTable(type=Type.LEFT_JOIN, entity= UserInfo.class, alias="b",
+						on="a.user_id = b.id", attrName="userInfo",
+						columns={@Column(includeEntity=UserInfo.class)}),
+		},
+		orderBy="a.id DESC"
 )
 public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	
@@ -58,6 +66,7 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	private Date teamUpdateTime;		// 团队动态收益更新时间
 	private String delFlag;		// 删除标志
 	private BigDecimal incomeMoney;		// 当前总收益
+	private UserInfo userInfo;
 
 	public UserAccountWarehouse() {
 		this(null);
@@ -186,5 +195,12 @@ public class UserAccountWarehouse extends DataEntity<UserAccountWarehouse> {
 	public void setIncomeMoney(BigDecimal incomeMoney) {
 		this.incomeMoney = incomeMoney;
 	}
-	
+
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
 }

@@ -4,6 +4,8 @@
 package com.nabobsite.modules.nabob.cms.product.entity;
 
 import javax.validation.constraints.NotBlank;
+
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -36,7 +38,16 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
-	}, orderBy="a.id DESC"
+	},
+		joinTable={
+				@JoinTable(type=Type.LEFT_JOIN, entity= UserInfo.class, alias="b",
+						on="a.user_id = b.id", attrName="userInfo",
+						columns={@Column(includeEntity=UserInfo.class)}),
+				@JoinTable(type=Type.LEFT_JOIN, entity= ProductWarehouse.class, alias="c",
+						on="a.warehouse_id = c.id", attrName="productWarehouse",
+						columns={@Column(includeEntity=ProductWarehouse.class)}),
+		},
+		orderBy="a.id DESC"
 )
 public class ProductUserWarehouseLog extends DataEntity<ProductUserWarehouseLog> {
 	
@@ -50,6 +61,8 @@ public class ProductUserWarehouseLog extends DataEntity<ProductUserWarehouseLog>
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
+	private UserInfo userInfo;
+	private ProductWarehouse productWarehouse;
 	
 	public ProductUserWarehouseLog() {
 		this(null);
@@ -142,5 +155,20 @@ public class ProductUserWarehouseLog extends DataEntity<ProductUserWarehouseLog>
 	public void setDelFlag(String delFlag) {
 		this.delFlag = delFlag;
 	}
-	
+
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
+
+	public ProductWarehouse getProductWarehouse() {
+		return productWarehouse;
+	}
+
+	public void setProductWarehouse(ProductWarehouse productWarehouse) {
+		this.productWarehouse = productWarehouse;
+	}
 }

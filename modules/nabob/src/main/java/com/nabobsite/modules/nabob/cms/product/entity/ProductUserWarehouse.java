@@ -4,6 +4,8 @@
 package com.nabobsite.modules.nabob.cms.product.entity;
 
 import javax.validation.constraints.NotBlank;
+
+import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
 import org.hibernate.validator.constraints.Length;
 import java.math.BigDecimal;
 import com.jeesite.common.mybatis.annotation.JoinTable;
@@ -42,7 +44,16 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
 		@Column(name="income_money", attrName="incomeMoney", label="当前总收益"),
 		@Column(name="ai_assets_money", attrName="aiAssetsMoney", label="云资产"),
-	}, orderBy="a.id DESC"
+	},
+		joinTable={
+				@JoinTable(type=Type.LEFT_JOIN, entity= UserInfo.class, alias="b",
+						on="a.user_id = b.id", attrName="userInfo",
+						columns={@Column(includeEntity=UserInfo.class)}),
+				@JoinTable(type=Type.LEFT_JOIN, entity= ProductWarehouse.class, alias="c",
+						on="a.warehouse_id = c.id", attrName="productWarehouse",
+						columns={@Column(includeEntity=ProductWarehouse.class)}),
+		},
+		orderBy="a.id DESC"
 )
 public class ProductUserWarehouse extends DataEntity<ProductUserWarehouse> {
 	
@@ -62,6 +73,9 @@ public class ProductUserWarehouse extends DataEntity<ProductUserWarehouse> {
 	private String delFlag;		// 删除标志
 	private BigDecimal incomeMoney;		// 当前总收益
 	private BigDecimal aiAssetsMoney;		// 云资产
+	private UserInfo userInfo;
+	private ProductWarehouse productWarehouse;
+
 	
 	public ProductUserWarehouse() {
 		this(null);
@@ -208,5 +222,20 @@ public class ProductUserWarehouse extends DataEntity<ProductUserWarehouse> {
 	public void setAiAssetsMoney(BigDecimal aiAssetsMoney) {
 		this.aiAssetsMoney = aiAssetsMoney;
 	}
-	
+
+	public ProductWarehouse getProductWarehouse() {
+		return productWarehouse;
+	}
+
+	public void setProductWarehouse(ProductWarehouse productWarehouse) {
+		this.productWarehouse = productWarehouse;
+	}
+
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
 }

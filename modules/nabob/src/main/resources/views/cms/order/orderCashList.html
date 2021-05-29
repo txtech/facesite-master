@@ -17,15 +17,9 @@
 			<#form:form id="searchForm" model="${orderCash}" action="${ctx}/order/orderCash/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('用户ID')}：</label>
+					<label class="control-label">${text('用户名称')}：</label>
 					<div class="control-inline">
-						<#form:input path="userId" maxlength="30" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('通道ID')}：</label>
-					<div class="control-inline">
-						<#form:input path="channelId" maxlength="50" class="form-control width-120"/>
+						<#form:input path="userInfo.accountNo" maxlength="30" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -35,45 +29,15 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('上游订单号')}：</label>
+					<label class="control-label">${text('平台订单号')}：</label>
 					<div class="control-inline">
 						<#form:input path="porderNo" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('类型 1')}：</label>
-					<div class="control-inline">
-						<#form:input path="type" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('状态 1')}：</label>
-					<div class="control-inline">
-						<#form:input path="cashStatus" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('提现金额')}：</label>
-					<div class="control-inline">
-						<#form:input path="cashMoney" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('提现手续费')}：</label>
-					<div class="control-inline">
-						<#form:input path="serviceCharge" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('提现地址')}：</label>
-					<div class="control-inline">
-						<#form:input path="ipaddress" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('出款费率')}：</label>
-					<div class="control-inline">
-						<#form:input path="cashRate" class="form-control width-120"/>
+					<label class="control-label">${text('订单状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="cashStatus" dictType="aurora_cash_order_status" blankOption="true" class="form-control isQuick"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -83,47 +47,10 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label">${text('账户卡号')}：</label>
-					<div class="control-inline">
-						<#form:input path="accountCard" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('邮箱')}：</label>
-					<div class="control-inline">
-						<#form:input path="email" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('手机号码')}：</label>
-					<div class="control-inline">
-						<#form:input path="phoneNumber" maxlength="20" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
 					<label class="control-label">${text('创建时间')}：</label>
 					<div class="control-inline">
 						<#form:input path="created" readonly="true" maxlength="20" class="form-control laydate width-datetime"
 							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('更新时间')}：</label>
-					<div class="control-inline">
-						<#form:input path="updated" readonly="true" maxlength="20" class="form-control laydate width-datetime"
-							dataFormat="datetime" data-type="datetime" data-format="yyyy-MM-dd HH:mm"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('备注信息')}：</label>
-					<div class="control-inline">
-						<#form:input path="remarks" maxlength="255" class="form-control width-120"/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="control-label">${text('删除标志')}：</label>
-					<div class="control-inline">
-						<#form:input path="delFlag" maxlength="1" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -142,34 +69,22 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text("用户ID")}', name:'userId', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+		{header:'${text("用户名称")}', name:'userInfo.accountNo', index:'a.user_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/order/orderCash/form?id='+row.id+'" class="btnList" data-title="${text("编辑出款订单")}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text("通道ID")}', name:'channelId', index:'a.channel_id', width:150, align:"left"},
 		{header:'${text("订单号")}', name:'orderNo', index:'a.order_no', width:150, align:"left"},
 		{header:'${text("上游订单号")}', name:'porderNo', index:'a.p_order_no', width:150, align:"left"},
-		{header:'${text("类型 1")}', name:'type', index:'a.type', width:150, align:"center"},
-		{header:'${text("状态 1")}', name:'cashStatus', index:'a.cash_status', width:150, align:"center"},
+		{header:'${text("订单状态")}', name:'cashStatus', index:'a.cash_status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('aurora_cash_order_status')}, val, '${text("未知")}', true);
+		}},
 		{header:'${text("提现金额")}', name:'cashMoney', index:'a.cash_money', width:150, align:"left"},
 		{header:'${text("提现手续费")}', name:'serviceCharge', index:'a.service_charge', width:150, align:"left"},
-		{header:'${text("提现地址")}', name:'ipaddress', index:'a.ipaddress', width:150, align:"left"},
 		{header:'${text("出款费率")}', name:'cashRate', index:'a.cash_rate', width:150, align:"left"},
 		{header:'${text("账户名称")}', name:'accountName', index:'a.account_name', width:150, align:"left"},
 		{header:'${text("账户卡号")}', name:'accountCard', index:'a.account_card', width:150, align:"left"},
-		{header:'${text("邮箱")}', name:'email', index:'a.email', width:150, align:"left"},
+		{header:'${text("账户邮箱")}', name:'email', index:'a.email', width:150, align:"left"},
 		{header:'${text("手机号码")}', name:'phoneNumber', index:'a.phone_number', width:150, align:"left"},
-		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"},
-		{header:'${text("更新时间")}', name:'updated', index:'a.updated', width:150, align:"center"},
-		{header:'${text("备注信息")}', name:'remarks', index:'a.REMARKS', width:150, align:"left"},
-		{header:'${text("删除标志")}', name:'delFlag', index:'a.DEL_FLAG', width:150, align:"left"},
-		{header:'${text("操作")}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
-			var actions = [];
-			<% if(hasPermi('order:orderCash:edit')){ %>
-				actions.push('<a href="${ctx}/order/orderCash/form?id='+row.id+'" class="btnList" title="${text("编辑出款订单")}"><i class="fa fa-pencil"></i></a>&nbsp;');
-				actions.push('<a href="${ctx}/order/orderCash/delete?id='+row.id+'" class="btnList" title="${text("删除出款订单")}" data-confirm="${text("确认要删除该出款订单吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
-			<% } %>
-			return actions.join('');
-		}}
+		{header:'${text("创建时间")}', name:'created', index:'a.created', width:150, align:"center"}
 	],
 	// 加载成功后执行事件
 	ajaxSuccess: function(data){

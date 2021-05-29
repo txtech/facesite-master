@@ -81,7 +81,6 @@ $('#dataGrid').dataGrid({
 			var actions = [];
 			<% if(hasPermi('user:userInfo:edit')){ %>
 				actions.push('<a href="${ctx}/user/userInfo/form?id='+row.id+'" class="btnList" title="${text("编辑会员用户")}"><i class="fa fa-pencil"></i></a>&nbsp;');
-				actions.push('<a href="${ctx}/user/userInfo/delete?id='+row.id+'" class="btnList" title="${text("删除会员用户")}" data-confirm="${text("确认要删除该会员用户吗？")}"><i class="fa fa-trash-o"></i></a>&nbsp;');
 			<% } %>
 			return actions.join('');
 		}}
