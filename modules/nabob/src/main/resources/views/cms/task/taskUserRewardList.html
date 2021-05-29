@@ -59,6 +59,9 @@ $('#dataGrid').dataGrid({
 		}},
 		{header:'${text("任务名称")}', name:'taskInfo.name', index:'a.task_id', width:150, align:"left"},
 		{header:'${text("奖励标题")}', name:'title', index:'a.title', width:150, align:"left"},
+		{header:'${text("任务类型")}', name:'type', index:'a.type', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('aurora_reward_task_type')}, val, '${text("未知")}', true);
+		}},
 		{header:'${text("完成个数")}', name:'finishNum', index:'a.finish_num', width:150, align:"center"},
 		{header:'${text("任务个数")}', name:'taskNumber', index:'a.task_number', width:150, align:"center"},
 		{header:'${text("奖励金额")}', name:'rewardMoney', index:'a.reward_money', width:150, align:"left"},
