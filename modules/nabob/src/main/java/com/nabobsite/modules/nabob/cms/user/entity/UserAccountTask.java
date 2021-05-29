@@ -38,7 +38,13 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="CREATE_BY", attrName="createBy", label="创建人", isUpdate=false, isQuery=false),
 		@Column(name="UPDATE_BY", attrName="updateBy", label="修改人", isQuery=false),
 		@Column(name="DEL_FLAG", attrName="delFlag", label="删除标志"),
-	}, orderBy="a.id DESC"
+	},
+		joinTable={
+				@JoinTable(type=Type.LEFT_JOIN, entity=UserInfo.class, alias="b",
+						on="a.user_id = b.id", attrName="userInfo",
+						columns={@Column(includeEntity=UserInfo.class)}),
+		},
+		orderBy="a.id DESC"
 )
 public class UserAccountTask extends DataEntity<UserAccountTask> {
 	
@@ -54,7 +60,8 @@ public class UserAccountTask extends DataEntity<UserAccountTask> {
 	private Date created;		// 创建时间
 	private Date updated;		// 更新时间
 	private String delFlag;		// 删除标志
-	
+	private UserInfo userInfo;
+
 	public UserAccountTask() {
 		this(null);
 	}
@@ -163,5 +170,13 @@ public class UserAccountTask extends DataEntity<UserAccountTask> {
 
 	public void setTotalRewardMoney(BigDecimal totalRewardMoney) {
 		this.totalRewardMoney = totalRewardMoney;
+	}
+
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
 	}
 }
