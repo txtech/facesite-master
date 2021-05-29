@@ -17,5 +17,7 @@ import java.util.List;
 @MyBatisDao
 public interface ProductUserBotAistartDao extends CrudDao<ProductUserBotAistart> {
 
+    long updateUserBotAistart(ProductUserBotAistart productUserBotAistart);
+
     List<ProductUserBotAistart> getProductUserBotAistartList();
 }

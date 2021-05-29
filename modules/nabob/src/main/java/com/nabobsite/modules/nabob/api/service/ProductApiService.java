@@ -3,17 +3,16 @@
  */
 package com.nabobsite.modules.nabob.api.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jeesite.common.lang.StringUtils;
-import com.jeesite.common.shiro.realms.Da;
+import com.nabobsite.modules.nabob.api.common.ContactUtils;
+import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.common.response.CommonResult;
 import com.nabobsite.modules.nabob.api.common.response.I18nCode;
 import com.nabobsite.modules.nabob.api.common.response.ResultUtil;
-import com.nabobsite.modules.nabob.api.common.ContactUtils;
-import com.nabobsite.modules.nabob.api.common.InstanceUtils;
 import com.nabobsite.modules.nabob.api.pool.TriggerApiService;
 import com.nabobsite.modules.nabob.api.service.simple.SimpleProductService;
 import com.nabobsite.modules.nabob.cms.product.entity.*;
-import com.nabobsite.modules.nabob.cms.user.dao.UserAccountWarehouseDao;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccount;
 import com.nabobsite.modules.nabob.cms.user.entity.UserAccountWarehouse;
 import com.nabobsite.modules.nabob.cms.user.entity.UserInfo;
@@ -403,13 +402,14 @@ public class ProductApiService extends SimpleProductService {
 	 * @create 2021/5/11 10:33 下午
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public CommonResult<Boolean> doBotTask(String token,ProductUserBotLog userProductBotLog) {
+	public CommonResult<JSONObject> doBotTask(String token, ProductUserBotLog userProductBotLog) {
 		try {
 			String botId = userProductBotLog.getBotId();
 			String orderNo = userProductBotLog.getOrderNo();
 			if(StringUtils.isAnyEmpty(botId,orderNo)){
 				return ResultUtil.failed(I18nCode.CODE_10006);
 			}
+
 			UserInfo userInfo = this.getUserInfoByToken(token);
 			if(userInfo== null){
 				return ResultUtil.failedAuthorization(I18nCode.CODE_10001);
@@ -421,16 +421,23 @@ public class ProductApiService extends SimpleProductService {
 			}
 			int userLevel = userInfo.getLevel();
 			int mustLevel = productBot.getLevel();
+			int dailyNum = productBot.getDailyNum();
+			BigDecimal productPrice = productBot.getPrice();
+			BigDecimal commissionRate = productBot.getCommissionRate();
+			BigDecimal commissionMoney = ContactUtils.multiply(productPrice,commissionRate);
 			if(userLevel < mustLevel){
 				return ResultUtil.failed(I18nCode.CODE_10101);
 			}
+
 			ProductUserBotLog checkUserProductBotLog =	this.getProductUserBotLogByOrderNo(orderNo);
 			if(checkUserProductBotLog!=null){
 				return ResultUtil.failed(I18nCode.CODE_10008);
 			}
-			Boolean isOK =  this.doBotTaskExecute(userId,botId,orderNo);
+			Boolean isOK =  this.doBotTaskExecute(userId,botId,orderNo,productPrice,commissionRate,commissionMoney,dailyNum);
 			if(isOK){
-				return ResultUtil.success(true);
+				JSONObject result = new JSONObject();
+				result.put("commissionMoney",commissionMoney);
+				return ResultUtil.success(result);
 			}
 			return ResultUtil.failed(I18nCode.CODE_10004);
 		} catch (Exception e) {
@@ -443,33 +450,12 @@ public class ProductApiService extends SimpleProductService {
 	 * 无人级任务执行
 	 */
 	@Transactional (readOnly = false, rollbackFor = Exception.class)
-	public Boolean doBotTaskExecute(String userId,String botId,String orderNo) {
+	public Boolean doBotTaskExecute(String userId,String botId,String orderNo,BigDecimal productPrice,BigDecimal commissionRate,BigDecimal commissionMoney,int dailyNum) {
 		try {
 			if(StringUtils.isAnyEmpty(botId,orderNo)){
 				return false;
 			}
-			UserInfo userInfo = this.getUserInfoByUserId(userId);
-			if(userInfo== null){
-				return false;
-			}
-			ProductBot productBot = this.getProductBotById(botId);
-			if(productBot == null){
-				return false;
-			}
 			synchronized (userId) {
-				int userLevel = userInfo.getLevel();
-				int mustLevel = productBot.getLevel();
-				int dailyNum = productBot.getDailyNum();
-				BigDecimal mustPrice = productBot.getPrice();
-				BigDecimal productBotPrice = productBot.getPrice();
-				BigDecimal commissionRate = productBot.getCommissionRate();
-				if(userLevel < mustLevel){
-					return false;
-				}
-				//佣金
-				String title = ContactUtils.USER_ACCOUNT_DETAIL_TITLE_4;
-				BigDecimal commissionMoney = ContactUtils.multiply(productBotPrice,commissionRate);
-
 				ProductUserBot oldUserProductBot =	this.getProductUserBotByUserAndId(userId,botId);
 				if(oldUserProductBot != null){
 					int doTaskNum = oldUserProductBot.getTodayOrders();
@@ -477,11 +463,13 @@ public class ProductApiService extends SimpleProductService {
 						return false;
 					}
 				}
+				//佣金
+				String title = ContactUtils.USER_ACCOUNT_DETAIL_TITLE_4;
 				ProductUserBotLog userProductBotLog = new ProductUserBotLog();
 				userProductBotLog.setBotId(botId);
 				userProductBotLog.setUserId(userId);
 				userProductBotLog.setOrderNo(orderNo);
-				userProductBotLog.setOrderAmount(mustPrice);
+				userProductBotLog.setOrderAmount(productPrice);
 				userProductBotLog.setIncomeMoney(commissionMoney);
 				userProductBotLog.setIncomeRate(commissionRate);
 				long dbResult = userProductBotLogDao.insert(userProductBotLog);
@@ -532,16 +520,30 @@ public class ProductApiService extends SimpleProductService {
 				String userId = productUserBotAistart.getUserId();
 				String botId = productUserBotAistart.getBotId();
 				String orderNo = SnowFlakeIDGenerator.getSnowFlakeNo();
-				Boolean isOK =  this.doBotTaskExecute(userId,botId,orderNo);
+
+				UserInfo userInfo = this.getUserInfoByUserId(userId);
+				if(userInfo== null){
+					continue;
+				}
+				ProductBot productBot = this.getProductBotById(botId);
+				if(productBot == null){
+					continue;
+				}
+				int userLevel = userInfo.getLevel();
+				int mustLevel = productBot.getLevel();
+				int dailyNum = productBot.getDailyNum();
+				BigDecimal productPrice = productBot.getPrice();
+				BigDecimal commissionRate = productBot.getCommissionRate();
+				BigDecimal commissionMoney = ContactUtils.multiply(productPrice,commissionRate);
+				if(userLevel < mustLevel){
+					continue;
+				}
+
+				Boolean isOK =  this.doBotTaskExecute(userId,botId,orderNo,productPrice,commissionRate,commissionMoney,dailyNum);
 				if(isOK){
-					int dailyNum = productUserBotAistart.getDailyNum()+1;
 					ProductUserBotAistart updateBot = new ProductUserBotAistart();
 					updateBot.setId(productUserBotAistart.getId());
-					updateBot.setDailyNum(dailyNum);
-					if(dailyNum >= 7){
-						updateBot.setAiStatus(3);
-					}
-					long dbResult = productUserBotAistartDao.update(updateBot);
+					long dbResult = productUserBotAistartDao.updateUserBotAistart(updateBot);
 					if(ContactUtils.dbResult(dbResult)){
 						logger.error("无人机AI任务定时任务结果",dbResult);
 					}

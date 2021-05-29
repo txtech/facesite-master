@@ -12,6 +12,22 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 
+	<update id="updateUserBotAistart" parameterType="com.nabobsite.modules.nabob.cms.product.entity.ProductUserBotAistart">
+		update
+			t1_product_user_bot_aistart
+		<set>
+			daily_num = daily_num+1,
+			ai_status =
+			case
+				when daily_num &lt; 7  then 1
+				when ai_status &gt;= 7  then 2
+			end
+		</set>
+		<where>
+			id = ${id}
+		</where>
+	</update>
+
 	<select id="getProductUserBotAistartList" parameterType="com.nabobsite.modules.nabob.cms.product.entity.ProductUserBotAistart">
 		SELECT
 			${sqlMap.column.toSql()}
