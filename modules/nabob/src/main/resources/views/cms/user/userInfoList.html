@@ -14,6 +14,14 @@
 			</div>
 		</div>
 		<div class="box-body">
+			<div class="form-group">
+				<label class="control-label">${text('我的邀请链接')}：</label>
+				<div class="control-inline">
+					<#form:input path="shareUrl" class="form-control width-250"/>
+				</div>
+			</div>
+		</div>
+		<div class="box-body">
 			<#form:form id="searchForm" model="${userInfo}" action="${ctx}/user/userInfo/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 			<div class="form-group">
@@ -56,6 +64,10 @@
 </div>
 <% } %>
 <script>
+$.get('${ctx}/user/userInfo/getShareUrl', function(data){
+	$('#shareUrl').val(data.shareUrl);
+});
+
 // 初始化DataGrid对象
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
@@ -87,7 +99,6 @@ $('#dataGrid').dataGrid({
 	],
 	// 加载成功后执行事件
 	ajaxSuccess: function(data){
-		
 	}
 });
 </script>
